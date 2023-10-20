@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="Create jar file">
+    <output-path>$PROJECT_DIR$/</output-path>
+    <root id="archive" name="TerraformingMadeEasy.jar">
+      <element id="module-output" name="terraforming-made-easy" />
+    </root>
+  </artifact>
+</component>
