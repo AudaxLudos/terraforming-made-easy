@@ -1,0 +1,2 @@
+id,name,cost mult,build time,income,upkeep,downgrade,upgrade,tags,data,image,plugin,desc,order,disruptDanger
+TMEAtmosphereRegulator,Atmosphere Regulator,60,120,,6,,,"structure, unraidable",,graphics/icons/industry/techmining.png,terraformingmadeeasy.industry.TMEAtmosphereRegulator,"Massive vents scattered through out the planet capable of harvesting, storing, combining and releasing stored gasses deep within the planet and use it to control the atmosphere.",,
