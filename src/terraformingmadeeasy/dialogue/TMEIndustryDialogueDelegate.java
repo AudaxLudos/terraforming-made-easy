@@ -10,6 +10,7 @@ import com.fs.starfarer.api.ui.ButtonAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import org.lwjgl.util.vector.Vector2f;
 import terraformingmadeeasy.industry.TMEBaseIndustry;
 
 import java.awt.*;
@@ -87,6 +88,7 @@ public class TMEIndustryDialogueDelegate implements CustomDialogDelegate {
     @Override
     public void customDialogConfirm() {
         if (this.selected == null) return;
+        Global.getSoundPlayer().playSound("ui_upgrade_industry", 1f, 1f, Global.getSoundPlayer().getListenerPos(), new Vector2f());
         Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(this.selected.cost);
         this.industry.startUpgrading(this.selected);
     }

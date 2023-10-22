@@ -4,7 +4,6 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.comm.CommMessageAPI;
 import com.fs.starfarer.api.characters.MarketConditionSpecAPI;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
-import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.util.Misc;
@@ -39,6 +38,29 @@ public class TMEBaseIndustry extends BaseIndustry {
         return building && modifiableCondition != null;
     }
 
+    @Override
+    public String getBuildOrUpgradeProgressText() {
+        if (isDisrupted()) {
+            int left = (int) getDisruptedDays();
+            if (left < 1) left = 1;
+            String days = "days";
+            if (left == 1) days = "day";
+
+            return "Disrupted: " + left + " " + days + " left";
+        }
+
+        int left = (int) (buildTime - buildProgress);
+        if (left < 1) left = 1;
+        String days = "days";
+        if (left == 1) days = "day";
+
+        if (isUpgrading()) {
+            return "Terraforming: " + left + " " + days + " left";
+        } else {
+            return "Building: " + left + " " + days + " left";
+        }
+    }
+
     public void finishBuildingOrUpgrading() {
         building = false;
         buildProgress = 0;
@@ -68,6 +90,12 @@ public class TMEBaseIndustry extends BaseIndustry {
         buildTime = condition.buildTime;
     }
 
+    public void cancelUpgrade() {
+        building = false;
+        buildProgress = 0;
+        modifiableCondition = null;
+    }
+
     public void sendTerraformingMessage() {
         if (market.isPlayerOwned()) {
             MessageIntel intel = new MessageIntel(getCurrentName() + " at " + market.getName(), Misc.getBasePlayerColor());
@@ -79,7 +107,7 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     public void changePlanetConditions(ModifiableCondition condition) {
-        if(getMarket().hasCondition(condition.spec.getId()))
+        if (getMarket().hasCondition(condition.spec.getId()))
             getMarket().removeCondition(condition.spec.getId());
         else
             getMarket().addCondition(condition.spec.getId());
