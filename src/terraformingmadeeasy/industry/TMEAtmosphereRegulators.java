@@ -2,8 +2,8 @@ package terraformingmadeeasy.industry;
 
 import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 
-public class TMEAtmosphereRegulator extends TMEBaseIndustry {
-    public TMEAtmosphereRegulator() {
+public class TMEAtmosphereRegulators extends TMEBaseIndustry {
+    public TMEAtmosphereRegulators() {
         this.modifiableConditions.add(new ModifiableCondition(Conditions.NO_ATMOSPHERE, 100000f, 180f));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.THIN_ATMOSPHERE, 100000f, 365f));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.DENSE_ATMOSPHERE, 100000f, 550f));

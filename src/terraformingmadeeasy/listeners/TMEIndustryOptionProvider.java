@@ -31,7 +31,12 @@ public class TMEIndustryOptionProvider extends BaseIndustryOptionProvider {
     }
 
     public boolean isSuitable(Industry ind) {
-        boolean isTMEIndustry = ind.getId().equals("TMEAtmosphereRegulator");
+        List<String> tmeIndustries = new ArrayList<>();
+        tmeIndustries.add("TMEAtmosphereRegulators");
+        tmeIndustries.add("TMEStellarFactoryRelays");
+        tmeIndustries.add("TMETerrestrialCoreEngine");
+        tmeIndustries.add("TMEScientificMilitaryBases");
+        boolean isTMEIndustry = tmeIndustries.contains(ind.getId());
         boolean isPlayerOwned = ind.getMarket().isPlayerOwned();
         return isTMEIndustry && isPlayerOwned;
     }
