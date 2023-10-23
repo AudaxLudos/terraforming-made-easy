@@ -1,3 +1,7 @@
+### 0.5.3
+- Add github action script
+- Add version check files
+- Update CHANGELOG, CREDITS & mod_info
 ### 0.5.0
 - Add README.md
 - Update modifiable conditions cost and build time
