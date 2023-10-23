@@ -1,2 +1,13 @@
+### 0.5.0
+- Add README.md
+- Update modifiable conditions cost and build time
+- Update UI implementation
+- Update TMEConfirmDialogueDelegate full implementation
+- Add sound cues when pressing confirm buttons
+- Add scientific military bases industry
+- Add terrestrial core engines industry
+- Add stellar factory relays
+- Add initial mod implementations
+- Add kotlin library
 ### 0.0.1
 - Add initial mod files

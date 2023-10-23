@@ -1,2 +1,4 @@
+SirHartley: for the implementation of industry dialogues for starsector.
+Wispborne: for the starsector intellij mod template and the github action script.
 starsector community: for many resources in regard to modding and spriting.
-Alex and his company: for making a great game and community.
+Alex and Co: for making a great game and community.
