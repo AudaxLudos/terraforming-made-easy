@@ -4,11 +4,11 @@ import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 
 public class TMEStellarFactoryRelays extends TMEBaseIndustry {
     public TMEStellarFactoryRelays() {
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.HOT, 100000f, 180f));
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.VERY_HOT, 100000f, 365f));
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.COLD, 100000f, 180f));
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.VERY_COLD, 100000f, 365f));
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.POOR_LIGHT, 100000f, 180f));
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.DARK, 100000f, 365f));
+        this.modifiableConditions.add(new ModifiableCondition(Conditions.HOT, 1000000f, 180f));
+        this.modifiableConditions.add(new ModifiableCondition(Conditions.VERY_HOT, 2000000f, 360f));
+        this.modifiableConditions.add(new ModifiableCondition(Conditions.COLD, 1000000f, 180f));
+        this.modifiableConditions.add(new ModifiableCondition(Conditions.VERY_COLD, 2000000f, 360f));
+        this.modifiableConditions.add(new ModifiableCondition(Conditions.POOR_LIGHT, 1000000f, 180f));
+        this.modifiableConditions.add(new ModifiableCondition(Conditions.DARK, 2000000f, 360f));
     }
 }
