@@ -19,10 +19,12 @@ public class TMEBaseIndustry extends BaseIndustry {
         public List<String> restrictions = new ArrayList<>();
         public List<String> requirements = new ArrayList<>();
 
-        public ModifiableCondition(String conditionSpecId, float cost, float buildTime) {
+        public ModifiableCondition(String conditionSpecId, float cost, float buildTime, List<String> restrictions, List<String> requirements) {
             this.spec = Global.getSettings().getMarketConditionSpec(conditionSpecId);
             this.cost = cost;
             this.buildTime = buildTime;
+            if(restrictions != null) this.restrictions = restrictions;
+            if(requirements != null) this.requirements = requirements;
         }
     }
 
@@ -107,16 +109,18 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     public void changePlanetConditions(ModifiableCondition condition) {
-        if (getMarket().hasCondition(condition.spec.getId()))
+        if (getMarket().hasCondition(condition.spec.getId())) {
             getMarket().removeCondition(condition.spec.getId());
-        else
+        } else {
             getMarket().addCondition(condition.spec.getId());
+            for (String restriction : condition.restrictions) {
+                if (getMarket().hasCondition(restriction))
+                    getMarket().removeCondition(restriction);
+            }
+        }
     }
 
     public Boolean canTerraformCondition(ModifiableCondition condition) {
-        for (String restriction : condition.restrictions)
-            if (getMarket().hasCondition(restriction))
-                return false;
         for (String requirement : condition.requirements)
             if (!getMarket().hasCondition(requirement))
                 return false;
