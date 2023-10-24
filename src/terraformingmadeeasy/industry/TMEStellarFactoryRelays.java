@@ -23,9 +23,7 @@ public class TMEStellarFactoryRelays extends TMEBaseIndustry {
                         Conditions.HABITABLE,
                         Conditions.MILD_CLIMATE),
                 // requirements
-                Arrays.asList(new String[]{
-                        Conditions.HOT
-                })
+                Arrays.asList(Conditions.HOT)
         ));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.COLD, 1000000f, 180f,
                 // restrictions
@@ -43,21 +41,19 @@ public class TMEStellarFactoryRelays extends TMEBaseIndustry {
                         Conditions.HABITABLE,
                         Conditions.MILD_CLIMATE),
                 // requirements
-                Arrays.asList(Conditions.COLD)
+                Collections.singletonList(Conditions.COLD)
         ));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.POOR_LIGHT, 1000000f, 180f,
                 // restrictions
-                Arrays.asList(new String[]{
-                        Conditions.DARK,
-                }),
+                Arrays.asList(Conditions.DARK),
                 // requirements
                 null
         ));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.DARK, 2000000f, 360f,
                 // restrictions
-                Arrays.asList(Conditions.POOR_LIGHT),
+                Collections.singletonList(Conditions.POOR_LIGHT),
                 // requirements
-                Arrays.asList(Conditions.POOR_LIGHT)
+                Collections.singletonList(Conditions.POOR_LIGHT)
         ));
     }
 }

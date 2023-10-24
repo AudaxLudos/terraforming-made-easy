@@ -1,7 +1,6 @@
 package terraformingmadeeasy.listeners;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.CustomDialogDelegate;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.listeners.BaseIndustryOptionProvider;
 import com.fs.starfarer.api.campaign.listeners.DialogCreatorUI;
@@ -51,11 +50,11 @@ public class TMEIndustryOptionProvider extends BaseIndustryOptionProvider {
 
         if (!ind.isUpgrading()) {
             IndustryOptionProvider.IndustryOptionData opt = new IndustryOptionProvider.IndustryOptionData(
-                    "Terraform planet...", CUSTOM_PLUGIN, ind, (IndustryOptionProvider) this);
+                    "Terraform planet...", CUSTOM_PLUGIN, ind, this);
             result.add(opt);
         } else {
             IndustryOptionProvider.IndustryOptionData opt = new IndustryOptionProvider.IndustryOptionData(
-                    "Cancel project...", CUSTOM_PLUGIN, ind, (IndustryOptionProvider) this);
+                    "Cancel project...", CUSTOM_PLUGIN, ind, this);
             result.add(opt);
         }
 
@@ -74,10 +73,10 @@ public class TMEIndustryOptionProvider extends BaseIndustryOptionProvider {
     public void optionSelected(IndustryOptionProvider.IndustryOptionData opt, DialogCreatorUI ui) {
         if (opt.id == CUSTOM_PLUGIN && !opt.ind.isUpgrading()) {
             TMEIndustryDialogueDelegate tmeIndustryDialogueDelegate = new TMEIndustryDialogueDelegate(opt.ind);
-            ui.showDialog(TMEIndustryDialogueDelegate.WIDTH, TMEIndustryDialogueDelegate.HEIGHT, (CustomDialogDelegate) tmeIndustryDialogueDelegate);
+            ui.showDialog(TMEIndustryDialogueDelegate.WIDTH, TMEIndustryDialogueDelegate.HEIGHT, tmeIndustryDialogueDelegate);
         } else if (opt.id == CUSTOM_PLUGIN && opt.ind.isUpgrading()) {
             TMEConfirmDialgueDelegate tmeConfirmDialgueDelegate = new TMEConfirmDialgueDelegate(opt.ind);
-            ui.showDialog(TMEConfirmDialgueDelegate.WIDTH, TMEConfirmDialgueDelegate.HEIGHT, (CustomDialogDelegate) tmeConfirmDialgueDelegate);
+            ui.showDialog(TMEConfirmDialgueDelegate.WIDTH, TMEConfirmDialgueDelegate.HEIGHT, tmeConfirmDialgueDelegate);
         }
     }
 }

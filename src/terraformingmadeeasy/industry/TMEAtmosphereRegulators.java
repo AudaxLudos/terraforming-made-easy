@@ -65,17 +65,5 @@ public class TMEAtmosphereRegulators extends TMEBaseIndustry {
                 // requirements
                 null
         ));
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.HABITABLE, 12000000f, 720f,
-                // restrictions
-                Arrays.asList(Conditions.EXTREME_WEATHER,
-                        Conditions.NO_ATMOSPHERE,
-                        Conditions.THIN_ATMOSPHERE,
-                        Conditions.DENSE_ATMOSPHERE,
-                        Conditions.TOXIC_ATMOSPHERE,
-                        Conditions.VERY_HOT,
-                        Conditions.VERY_COLD),
-                // requirements
-                null
-        ));
     }
 }
