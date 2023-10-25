@@ -104,6 +104,20 @@ public class TMEBaseIndustry extends BaseIndustry {
         modifiableCondition = null;
     }
 
+    @Override
+    public boolean isAvailableToBuild() {
+        if (!super.isAvailableToBuild()) return false;
+        if (getMarket().getPlanetEntity() == null) return false;
+        return !getMarket().getPlanetEntity().isGasGiant();
+    }
+
+    @Override
+    public String getUnavailableReason() {
+        if (!super.isAvailableToBuild()) return super.getUnavailableReason();
+        if (getMarket().getPlanetEntity() == null) return "Requires a planet";
+        return "Can not be built on gas giants";
+    }
+
     public void sendTerraformingMessage() {
         if (market.isPlayerOwned()) {
             MessageIntel intel = new MessageIntel(getCurrentName() + " at " + market.getName(), Misc.getBasePlayerColor());
