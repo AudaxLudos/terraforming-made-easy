@@ -4,9 +4,11 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.PlanetSpecAPI;
 import com.fs.starfarer.api.campaign.comm.CommMessageAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import com.fs.starfarer.api.campaign.econ.MutableCommodityQuantity;
 import com.fs.starfarer.api.characters.MarketConditionSpecAPI;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Conditions;
+import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.util.Misc;
@@ -132,88 +134,73 @@ public class TMEBaseIndustry extends BaseIndustry {
                 && !m.hasCondition(Conditions.THIN_ATMOSPHERE) && !m.hasCondition(Conditions.DENSE_ATMOSPHERE)
                 && !m.hasCondition(Conditions.TOXIC_ATMOSPHERE) && !m.hasCondition(Conditions.IRRADIATED)
                 && !m.hasCondition(Conditions.DARK)) {
+            addOrImproveOrganicsAndFarming();
             m.addCondition(Conditions.HABITABLE);
         }
         if (m.hasCondition(Conditions.NO_ATMOSPHERE)) {
-            // change planet to barren
-            // remove farming and organics
-            changePlanetVisuals("barren");
-            System.out.println("terraform to barren world");
+            removeOrganicsAndFarming();
+            String[] poorBarrenTypes = {"barren", "barren2", "barren3", "barren_castiron", "barren_venuslike", "rocky_metallic", "barren-bombarded"};
+            changePlanetVisuals(poorBarrenTypes[Misc.random.nextInt(poorBarrenTypes.length)]);
+            if (m.hasCondition(Conditions.TECTONIC_ACTIVITY) || m.hasCondition(Conditions.EXTREME_TECTONIC_ACTIVITY)) {
+                changePlanetVisuals("rocky_unstable");
+            }
         }
         if (m.hasCondition(Conditions.THIN_ATMOSPHERE)) {
-            // change planet to barren-dessert
+            removeFarming();
+            reduceOrganicsToCommon();
             changePlanetVisuals("barren-desert");
-            System.out.println("terraform to barren-dessert world");
         }
         if (m.hasCondition(Conditions.TOXIC_ATMOSPHERE)) {
-            // change planet to toxic
-            // lower organics down to organics common
-            // remove farming
+            removeFarming();
+            reduceOrganicsToCommon();
             changePlanetVisuals("toxic");
-            System.out.println("terraform to toxic world");
         }
         if (m.hasCondition(Conditions.IRRADIATED)) {
-            // change planet to irradiated
-            // remove farming and organics
+            removeOrganicsAndFarming();
             changePlanetVisuals("irradiated");
-            System.out.println("terraform to irradiated world");
         }
         if (m.hasCondition(Conditions.TECTONIC_ACTIVITY) || m.hasCondition(Conditions.EXTREME_TECTONIC_ACTIVITY)) {
             if ((m.hasCondition(Conditions.VERY_HOT) || m.hasCondition(Conditions.HOT))
                     && (m.hasCondition(Conditions.TOXIC_ATMOSPHERE) || m.hasCondition(Conditions.THIN_ATMOSPHERE) || m.hasCondition(Conditions.DENSE_ATMOSPHERE))
                     && (m.hasCondition(Conditions.ORE_ABUNDANT) || m.hasCondition(Conditions.ORE_RICH) || m.hasCondition(Conditions.ORE_ULTRARICH))
                     && (m.hasCondition(Conditions.RARE_ORE_ABUNDANT) || m.hasCondition(Conditions.RARE_ORE_RICH) || m.hasCondition(Conditions.RARE_ORE_ULTRARICH))) {
-                // Change planet to lava
-                // remove farming and organics
+                removeOrganicsAndFarming();
                 changePlanetVisuals("lava");
-                System.out.println("terraform to lava or lava-minor world");
             }
             if (m.hasCondition(Conditions.VERY_COLD)
                     && (m.hasCondition(Conditions.VOLATILES_TRACE) || m.hasCondition(Conditions.VOLATILES_DIFFUSE) ||
                     m.hasCondition(Conditions.VOLATILES_ABUNDANT) || m.hasCondition(Conditions.VOLATILES_PLENTIFUL))) {
-                // change planet cryovolcanic
-                // remove farming and organics
+                removeOrganicsAndFarming();
                 changePlanetVisuals("cryovolcanic");
-                System.out.println("terraform to cryovolanic world");
             }
         }
         if (m.hasCondition(Conditions.WATER_SURFACE)) {
             if (m.hasCondition(Conditions.VERY_COLD)
                     && (m.hasCondition(Conditions.VOLATILES_TRACE) || m.hasCondition(Conditions.VOLATILES_DIFFUSE)
                     || m.hasCondition(Conditions.VOLATILES_ABUNDANT) || m.hasCondition(Conditions.VOLATILES_PLENTIFUL))) {
-                // change planet frozen
-                // remove farming and organics
-                // remove water surface
-                changePlanetVisuals("frozen");
-                System.out.println("terraform to frozen world");
+                m.removeCondition(Conditions.WATER_SURFACE);
+                removeOrganicsAndFarming();
+                String[] frozenTypes = {"frozen", "frozen1", "frozen2", "frozen3"};
+                changePlanetVisuals(frozenTypes[Misc.random.nextInt(frozenTypes.length)]);
             }
             if ((m.hasCondition(Conditions.COLD) || m.hasCondition(Conditions.VERY_COLD))
                     && m.hasCondition(Conditions.NO_ATMOSPHERE)) {
-                // change planet to rocky ice
-                // remove farming and organics
-                // remove water surface
+                m.removeCondition(Conditions.WATER_SURFACE);
+                removeOrganicsAndFarming();
                 changePlanetVisuals("rocky_ice");
-                System.out.println("terraform to rocky ice world");
             }
         }
         if (m.hasCondition(Conditions.HABITABLE)) {
             if (m.hasCondition(Conditions.HOT)) {
-                // change planet to jungle or arid or desert
-                // add or improve farming or organics
-                changePlanetVisuals("jungle");
-                System.out.println("terraform to jungle or arid or desert world");
+                String[] poorHabitableTypes = {"jungle", "arid", "desert", "desert1"};
+                changePlanetVisuals(poorHabitableTypes[Misc.random.nextInt(poorHabitableTypes.length)]);
             }
             if (m.hasCondition(Conditions.COLD)) {
-                // change planet to tundra
-                // add or improve farming or organics
                 changePlanetVisuals("tundra");
-                System.out.println("terraform to tundra world");
             }
             if (!m.hasCondition(Conditions.HOT) && !m.hasCondition(Conditions.COLD)) {
-                // change planet to terran or terran-eccentric
-                // add or improve farming or organics
-                changePlanetVisuals("terran");
-                System.out.println("terraform to terran or terran-eccentric world");
+                String[] richHabitableTypes = {"terran", "terran-eccentric"};
+                changePlanetVisuals(richHabitableTypes[Misc.random.nextInt(richHabitableTypes.length)]);
             }
         }
     }
@@ -242,6 +229,91 @@ public class TMEBaseIndustry extends BaseIndustry {
             }
         }
         getMarket().getPlanetEntity().applySpecChanges();
+    }
+
+    public void removeOrganicsAndFarming() {
+        removeFarming();
+        removeOrganics();
+    }
+
+    public void removeFarming() {
+        if (getMarket().hasCondition(Conditions.FARMLAND_POOR))
+            getMarket().removeCondition(Conditions.FARMLAND_POOR);
+        else if (getMarket().hasCondition(Conditions.FARMLAND_ADEQUATE))
+            getMarket().removeCondition(Conditions.FARMLAND_ADEQUATE);
+        else if (getMarket().hasCondition(Conditions.FARMLAND_RICH))
+            getMarket().removeCondition(Conditions.FARMLAND_RICH);
+        else if (getMarket().hasCondition(Conditions.FARMLAND_BOUNTIFUL))
+            getMarket().removeCondition(Conditions.FARMLAND_BOUNTIFUL);
+
+        for (MutableCommodityQuantity SupplyStat : getMarket().getIndustry(Industries.FARMING).getAllSupply())
+            SupplyStat.getQuantity().unmodify();
+    }
+
+    public void removeOrganics() {
+        if (getMarket().hasCondition(Conditions.ORGANICS_TRACE))
+            getMarket().removeCondition(Conditions.ORGANICS_TRACE);
+        else if (getMarket().hasCondition(Conditions.ORGANICS_COMMON))
+            getMarket().removeCondition(Conditions.ORGANICS_COMMON);
+        else if (getMarket().hasCondition(Conditions.ORGANICS_ABUNDANT))
+            getMarket().removeCondition(Conditions.ORGANICS_ABUNDANT);
+        else if (getMarket().hasCondition(Conditions.ORGANICS_PLENTIFUL))
+            getMarket().removeCondition(Conditions.ORGANICS_PLENTIFUL);
+
+        for (MutableCommodityQuantity SupplyStat : getMarket().getIndustry(Industries.FARMING).getAllSupply())
+            SupplyStat.getQuantity().unmodify();
+    }
+
+    public void addOrImproveOrganicsAndFarming() {
+        addOrImproveFarming();
+        addOrImproveOrganics();
+    }
+
+    public void addOrImproveFarming() {
+        if (getMarket().hasCondition(Conditions.FARMLAND_POOR)) {
+            getMarket().removeCondition(Conditions.FARMLAND_POOR);
+            getMarket().addCondition(Conditions.FARMLAND_ADEQUATE);
+            getMarket().getFirstCondition(Conditions.FARMLAND_ADEQUATE).setSurveyed(true);
+        } else if (getMarket().hasCondition(Conditions.FARMLAND_ADEQUATE)) {
+            getMarket().removeCondition(Conditions.FARMLAND_ADEQUATE);
+            getMarket().addCondition(Conditions.FARMLAND_RICH);
+            getMarket().getFirstCondition(Conditions.FARMLAND_RICH).setSurveyed(true);
+        } else if (getMarket().hasCondition(Conditions.FARMLAND_RICH)) {
+            getMarket().removeCondition(Conditions.FARMLAND_RICH);
+            getMarket().addCondition(Conditions.FARMLAND_BOUNTIFUL);
+            getMarket().getFirstCondition(Conditions.FARMLAND_BOUNTIFUL).setSurveyed(true);
+        } else {
+            getMarket().addCondition(Conditions.FARMLAND_POOR);
+            getMarket().getFirstCondition(Conditions.FARMLAND_POOR).setSurveyed(true);
+        }
+    }
+
+    public void addOrImproveOrganics() {
+        if (getMarket().hasCondition(Conditions.ORGANICS_TRACE)) {
+            getMarket().removeCondition(Conditions.ORGANICS_TRACE);
+            getMarket().addCondition(Conditions.ORGANICS_COMMON);
+            getMarket().getFirstCondition(Conditions.ORGANICS_COMMON).setSurveyed(true);
+        } else if (getMarket().hasCondition(Conditions.ORGANICS_COMMON)) {
+            getMarket().removeCondition(Conditions.ORGANICS_COMMON);
+            getMarket().addCondition(Conditions.ORGANICS_ABUNDANT);
+            getMarket().getFirstCondition(Conditions.ORGANICS_ABUNDANT).setSurveyed(true);
+        } else if (getMarket().hasCondition(Conditions.ORGANICS_ABUNDANT)) {
+            getMarket().removeCondition(Conditions.ORGANICS_ABUNDANT);
+            getMarket().addCondition(Conditions.ORGANICS_PLENTIFUL);
+            getMarket().getFirstCondition(Conditions.ORGANICS_PLENTIFUL).setSurveyed(true);
+        } else {
+            getMarket().addCondition(Conditions.ORGANICS_TRACE);
+            getMarket().getFirstCondition(Conditions.ORGANICS_TRACE).setSurveyed(true);
+        }
+    }
+
+    public void reduceOrganicsToCommon() {
+        if (getMarket().hasCondition(Conditions.ORGANICS_ABUNDANT) || getMarket().hasCondition(Conditions.ORGANICS_PLENTIFUL)) {
+            getMarket().removeCondition(Conditions.ORGANICS_ABUNDANT);
+            getMarket().removeCondition(Conditions.ORGANICS_PLENTIFUL);
+            getMarket().addCondition(Conditions.ORGANICS_COMMON);
+            getMarket().getFirstCondition(Conditions.ORGANICS_COMMON).setSurveyed(true);
+        }
     }
 
     public Boolean canTerraformCondition(ModifiableCondition condition) {
