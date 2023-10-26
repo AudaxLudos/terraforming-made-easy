@@ -12,5 +12,7 @@ public class TMEScientificMilitaryBases extends TMEBaseIndustry {
                 null, null));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.IRRADIATED, 1000000f, 360f,
                 null, null));
+        this.modifiableConditions.add(new ModifiableCondition(Conditions.WATER_SURFACE, 1000000f, 360f,
+                null, null));
     }
 }

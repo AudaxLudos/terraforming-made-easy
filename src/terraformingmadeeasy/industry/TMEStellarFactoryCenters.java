@@ -5,8 +5,8 @@ import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class TMEStellarFactoryRelays extends TMEBaseIndustry {
-    public TMEStellarFactoryRelays() {
+public class TMEStellarFactoryCenters extends TMEBaseIndustry {
+    public TMEStellarFactoryCenters() {
         this.modifiableConditions.add(new ModifiableCondition(Conditions.HOT, 1000000f, 180f,
                 // restrictions
                 Arrays.asList(Conditions.VERY_HOT,

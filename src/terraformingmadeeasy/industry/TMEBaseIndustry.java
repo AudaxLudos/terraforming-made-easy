@@ -307,6 +307,8 @@ public class TMEBaseIndustry extends BaseIndustry {
             }
         }
         if (m.hasCondition(Conditions.WATER_SURFACE)) {
+            removeFarming();
+            changePlanetVisuals("water");
             if (m.hasCondition(Conditions.VERY_COLD)
                     && (m.hasCondition(Conditions.VOLATILES_TRACE) || m.hasCondition(Conditions.VOLATILES_DIFFUSE)
                     || m.hasCondition(Conditions.VOLATILES_ABUNDANT) || m.hasCondition(Conditions.VOLATILES_PLENTIFUL))) {
