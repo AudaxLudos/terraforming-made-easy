@@ -19,10 +19,11 @@ public class TMEIndustryOptionProvider extends BaseIndustryOptionProvider {
     public static List<String> tmeIndustries = new ArrayList<>();
 
     static {
-        tmeIndustries.add("TMEAtmosphereRegulators");
-        tmeIndustries.add("TMEStellarFactoryRelays");
-        tmeIndustries.add("TMETerrestrialCoreEngines");
-        tmeIndustries.add("TMEScientificMilitaryBases");
+        tmeIndustries.add("TMEAtmosphereRegulator");
+        tmeIndustries.add("TMEStellarFactoryCenter");
+        tmeIndustries.add("TMETerrestrialCoreEngine");
+        tmeIndustries.add("TMEScientificMilitaryBase");
+        tmeIndustries.add("TMEAgriculturalLaboratory");
     }
 
     public static Object CUSTOM_PLUGIN = new Object();

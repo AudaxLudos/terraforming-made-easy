@@ -4,8 +4,8 @@ import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 
 import java.util.Arrays;
 
-public class TMEAtmosphereRegulators extends TMEBaseIndustry {
-    public TMEAtmosphereRegulators() {
+public class TMEAtmosphereRegulator extends TMEBaseIndustry {
+    public TMEAtmosphereRegulator() {
         this.modifiableConditions.add(new ModifiableCondition(Conditions.NO_ATMOSPHERE, 1000000f, 180f,
                 // restrictions
                 Arrays.asList(Conditions.THIN_ATMOSPHERE,

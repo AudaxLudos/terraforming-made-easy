@@ -4,13 +4,13 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.PlanetSpecAPI;
 import com.fs.starfarer.api.campaign.comm.CommMessageAPI;
 import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
+import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.MutableCommodityQuantity;
 import com.fs.starfarer.api.characters.MarketConditionSpecAPI;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Conditions;
-import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
@@ -251,6 +251,7 @@ public class TMEBaseIndustry extends BaseIndustry {
             getMarket().removeCondition(condition.spec.getId());
         } else {
             getMarket().addCondition(condition.spec.getId());
+            getMarket().getFirstCondition(condition.spec.getId()).setSurveyed(true);
             for (String restriction : condition.restrictions) {
                 if (getMarket().hasCondition(restriction))
                     getMarket().removeCondition(restriction);
@@ -260,6 +261,9 @@ public class TMEBaseIndustry extends BaseIndustry {
 
     public void changePlanetClass() {
         MarketAPI m = getMarket();
+        boolean removeFarming = false;
+        boolean removeOrganics = false;
+        String planetTypeId = null;
         if (!m.getPlanetEntity().isStar() && !m.getPlanetEntity().isGasGiant()
                 && !m.hasCondition(Conditions.HABITABLE) && !m.hasCondition(Conditions.VERY_COLD)
                 && !m.hasCondition(Conditions.VERY_HOT) && !m.hasCondition(Conditions.NO_ATMOSPHERE)
@@ -269,18 +273,44 @@ public class TMEBaseIndustry extends BaseIndustry {
             addOrImproveOrganicsAndFarming();
             m.addCondition(Conditions.HABITABLE);
         }
-        if (m.hasCondition(Conditions.NO_ATMOSPHERE)) {
-            removeOrganicsAndFarming();
-            String[] poorBarrenTypes = {"barren", "barren2", "barren3", "barren_castiron", "barren_venuslike", "rocky_metallic", "barren-bombarded"};
-            changePlanetVisuals(poorBarrenTypes[Misc.random.nextInt(poorBarrenTypes.length)]);
-            if (m.hasCondition(Conditions.TECTONIC_ACTIVITY) || m.hasCondition(Conditions.EXTREME_TECTONIC_ACTIVITY)) {
-                changePlanetVisuals("rocky_unstable");
+        if (m.hasCondition(Conditions.HABITABLE)) {
+            String[] richHabitableTypes = {"terran", "terran-eccentric"};
+            changePlanetVisuals(richHabitableTypes[Misc.random.nextInt(richHabitableTypes.length)]);
+            if (m.hasCondition(Conditions.HOT)) {
+                String[] poorHabitableTypes = {"jungle", "arid", "desert", "desert1"};
+                changePlanetVisuals(poorHabitableTypes[Misc.random.nextInt(poorHabitableTypes.length)]);
+            }
+            if (m.hasCondition(Conditions.COLD)) {
+                changePlanetVisuals("tundra");
+            }
+        }
+        if (m.hasCondition(Conditions.WATER_SURFACE)) {
+            removeFarming();
+            changePlanetVisuals("water");
+            if (m.hasCondition(Conditions.VERY_COLD)) {
+                m.removeCondition(Conditions.WATER_SURFACE);
+                removeOrganicsAndFarming();
+                String[] frozenTypes = {"frozen", "frozen1", "frozen2", "frozen3"};
+                changePlanetVisuals(frozenTypes[Misc.random.nextInt(frozenTypes.length)]);
+            }
+            if ((m.hasCondition(Conditions.COLD) || m.hasCondition(Conditions.VERY_COLD)) && m.hasCondition(Conditions.NO_ATMOSPHERE)) {
+                m.removeCondition(Conditions.WATER_SURFACE);
+                removeOrganicsAndFarming();
+                changePlanetVisuals("rocky_ice");
             }
         }
         if (m.hasCondition(Conditions.THIN_ATMOSPHERE)) {
             removeFarming();
             reduceOrganicsToCommon();
             changePlanetVisuals("barren-desert");
+        }
+        if (m.hasCondition(Conditions.NO_ATMOSPHERE) || m.hasCondition(Conditions.VERY_HOT) || m.hasCondition(Conditions.VERY_COLD)) {
+            removeOrganicsAndFarming();
+            String[] poorBarrenTypes = {"barren", "barren2", "barren3", "barren_castiron", "barren_venuslike", "rocky_metallic", "barren-bombarded"};
+            changePlanetVisuals(poorBarrenTypes[Misc.random.nextInt(poorBarrenTypes.length)]);
+            if (m.hasCondition(Conditions.TECTONIC_ACTIVITY) || m.hasCondition(Conditions.EXTREME_TECTONIC_ACTIVITY)) {
+                changePlanetVisuals("rocky_unstable");
+            }
         }
         if (m.hasCondition(Conditions.TOXIC_ATMOSPHERE)) {
             removeFarming();
@@ -306,35 +336,11 @@ public class TMEBaseIndustry extends BaseIndustry {
                 changePlanetVisuals("cryovolcanic");
             }
         }
-        if (m.hasCondition(Conditions.WATER_SURFACE)) {
-            removeFarming();
-            changePlanetVisuals("water");
-            if (m.hasCondition(Conditions.VERY_COLD)
-                    && (m.hasCondition(Conditions.VOLATILES_TRACE) || m.hasCondition(Conditions.VOLATILES_DIFFUSE)
-                    || m.hasCondition(Conditions.VOLATILES_ABUNDANT) || m.hasCondition(Conditions.VOLATILES_PLENTIFUL))) {
-                m.removeCondition(Conditions.WATER_SURFACE);
-                removeOrganicsAndFarming();
-                String[] frozenTypes = {"frozen", "frozen1", "frozen2", "frozen3"};
-                changePlanetVisuals(frozenTypes[Misc.random.nextInt(frozenTypes.length)]);
-            }
-            if ((m.hasCondition(Conditions.COLD) || m.hasCondition(Conditions.VERY_COLD))
-                    && m.hasCondition(Conditions.NO_ATMOSPHERE)) {
-                m.removeCondition(Conditions.WATER_SURFACE);
-                removeOrganicsAndFarming();
-                changePlanetVisuals("rocky_ice");
-            }
-        }
-        if (m.hasCondition(Conditions.HABITABLE)) {
-            if (m.hasCondition(Conditions.HOT)) {
-                String[] poorHabitableTypes = {"jungle", "arid", "desert", "desert1"};
-                changePlanetVisuals(poorHabitableTypes[Misc.random.nextInt(poorHabitableTypes.length)]);
-            }
-            if (m.hasCondition(Conditions.COLD)) {
-                changePlanetVisuals("tundra");
-            }
-            if (!m.hasCondition(Conditions.HOT) && !m.hasCondition(Conditions.COLD)) {
-                String[] richHabitableTypes = {"terran", "terran-eccentric"};
-                changePlanetVisuals(richHabitableTypes[Misc.random.nextInt(richHabitableTypes.length)]);
+
+        // Makes sure that conditions that changed and give supply bonuses are reapplied properly
+        for (Industry ind : getMarket().getIndustries()) {
+            for (MutableCommodityQuantity supplyStat : ind.getAllSupply()) {
+                supplyStat.getQuantity().unmodify();
             }
         }
     }
@@ -379,9 +385,6 @@ public class TMEBaseIndustry extends BaseIndustry {
             getMarket().removeCondition(Conditions.FARMLAND_RICH);
         else if (getMarket().hasCondition(Conditions.FARMLAND_BOUNTIFUL))
             getMarket().removeCondition(Conditions.FARMLAND_BOUNTIFUL);
-
-        for (MutableCommodityQuantity SupplyStat : getMarket().getIndustry(Industries.FARMING).getAllSupply())
-            SupplyStat.getQuantity().unmodify();
     }
 
     public void removeOrganics() {
@@ -393,9 +396,6 @@ public class TMEBaseIndustry extends BaseIndustry {
             getMarket().removeCondition(Conditions.ORGANICS_ABUNDANT);
         else if (getMarket().hasCondition(Conditions.ORGANICS_PLENTIFUL))
             getMarket().removeCondition(Conditions.ORGANICS_PLENTIFUL);
-
-        for (MutableCommodityQuantity SupplyStat : getMarket().getIndustry(Industries.FARMING).getAllSupply())
-            SupplyStat.getQuantity().unmodify();
     }
 
     public void addOrImproveOrganicsAndFarming() {
@@ -416,7 +416,7 @@ public class TMEBaseIndustry extends BaseIndustry {
             getMarket().removeCondition(Conditions.FARMLAND_RICH);
             getMarket().addCondition(Conditions.FARMLAND_BOUNTIFUL);
             getMarket().getFirstCondition(Conditions.FARMLAND_BOUNTIFUL).setSurveyed(true);
-        } else {
+        } else if (!getMarket().hasCondition(Conditions.FARMLAND_BOUNTIFUL)) {
             getMarket().addCondition(Conditions.FARMLAND_POOR);
             getMarket().getFirstCondition(Conditions.FARMLAND_POOR).setSurveyed(true);
         }
@@ -435,7 +435,7 @@ public class TMEBaseIndustry extends BaseIndustry {
             getMarket().removeCondition(Conditions.ORGANICS_ABUNDANT);
             getMarket().addCondition(Conditions.ORGANICS_PLENTIFUL);
             getMarket().getFirstCondition(Conditions.ORGANICS_PLENTIFUL).setSurveyed(true);
-        } else {
+        } else if (!getMarket().hasCondition(Conditions.ORGANICS_PLENTIFUL)) {
             getMarket().addCondition(Conditions.ORGANICS_TRACE);
             getMarket().getFirstCondition(Conditions.ORGANICS_TRACE).setSurveyed(true);
         }

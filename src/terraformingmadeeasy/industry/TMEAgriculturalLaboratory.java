@@ -5,41 +5,41 @@ import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class TMEAgriculturalLaboratories extends TMEBaseIndustry {
-    public TMEAgriculturalLaboratories () {
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.FARMLAND_POOR, 1000000f, 90f,
+public class TMEAgriculturalLaboratory extends TMEBaseIndustry {
+    public TMEAgriculturalLaboratory() {
+        this.modifiableConditions.add(new ModifiableCondition(Conditions.FARMLAND_POOR, 2000000f, 90f,
                 // restrictions
                 Arrays.asList(Conditions.FARMLAND_ADEQUATE,
                         Conditions.FARMLAND_RICH,
                         Conditions.FARMLAND_BOUNTIFUL),
                 // requirements
-                null
+                Collections.singletonList(Conditions.HABITABLE)
         ));
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.FARMLAND_ADEQUATE, 2000000f, 180f,
+        this.modifiableConditions.add(new ModifiableCondition(Conditions.FARMLAND_ADEQUATE, 4000000f, 180f,
                 // restrictions
                 Arrays.asList(Conditions.FARMLAND_POOR,
                         Conditions.FARMLAND_RICH,
                         Conditions.FARMLAND_BOUNTIFUL),
                 // requirements
-                Collections.singletonList(Conditions.FARMLAND_POOR)
+                Collections.singletonList(Conditions.HABITABLE)
         ));
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.FARMLAND_RICH, 3000000f, 270f,
+        this.modifiableConditions.add(new ModifiableCondition(Conditions.FARMLAND_RICH, 6000000f, 270f,
                 // restrictions
                 Arrays.asList(Conditions.FARMLAND_POOR,
                         Conditions.FARMLAND_ADEQUATE,
                         Conditions.FARMLAND_BOUNTIFUL),
                 // requirements
-                Collections.singletonList(Conditions.FARMLAND_ADEQUATE)
+                Collections.singletonList(Conditions.HABITABLE)
         ));
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.FARMLAND_BOUNTIFUL, 4000000f, 360f,
+        this.modifiableConditions.add(new ModifiableCondition(Conditions.FARMLAND_BOUNTIFUL, 12000000f, 540f,
                 // restrictions
                 Arrays.asList(Conditions.FARMLAND_POOR,
                         Conditions.FARMLAND_ADEQUATE,
                         Conditions.FARMLAND_RICH),
                 // requirements
-                Collections.singletonList(Conditions.FARMLAND_RICH)
+                Collections.singletonList(Conditions.HABITABLE)
         ));
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.ORGANICS_TRACE, 1000000f, 90f,
+        this.modifiableConditions.add(new ModifiableCondition(Conditions.ORGANICS_TRACE, 2000000f, 90f,
                 // restrictions
                 Arrays.asList(Conditions.ORGANICS_COMMON,
                         Conditions.ORGANICS_ABUNDANT,
@@ -47,29 +47,29 @@ public class TMEAgriculturalLaboratories extends TMEBaseIndustry {
                 // requirements
                 null
         ));
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.ORGANICS_COMMON, 2000000f, 180f,
+        this.modifiableConditions.add(new ModifiableCondition(Conditions.ORGANICS_COMMON, 4000000f, 180f,
                 // restrictions
                 Arrays.asList(Conditions.ORGANICS_TRACE,
                         Conditions.ORGANICS_ABUNDANT,
                         Conditions.ORGANICS_PLENTIFUL),
                 // requirements
-                Collections.singletonList(Conditions.ORGANICS_TRACE)
+                null
         ));
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.ORGANICS_ABUNDANT, 3000000f, 270f,
+        this.modifiableConditions.add(new ModifiableCondition(Conditions.ORGANICS_ABUNDANT, 6000000f, 270f,
                 // restrictions
                 Arrays.asList(Conditions.ORGANICS_TRACE,
                         Conditions.ORGANICS_COMMON,
                         Conditions.ORGANICS_PLENTIFUL),
                 // requirements
-                Collections.singletonList(Conditions.ORGANICS_COMMON)
+                null
         ));
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.ORGANICS_PLENTIFUL, 4000000f, 360f,
+        this.modifiableConditions.add(new ModifiableCondition(Conditions.ORGANICS_PLENTIFUL, 12000000f, 540f,
                 // restrictions
                 Arrays.asList(Conditions.ORGANICS_TRACE,
                         Conditions.ORGANICS_COMMON,
                         Conditions.ORGANICS_ABUNDANT),
                 // requirements
-                Collections.singletonList(Conditions.ORGANICS_ABUNDANT)
+                null
         ));
     }
 }
