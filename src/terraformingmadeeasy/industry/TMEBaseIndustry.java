@@ -3,19 +3,24 @@ package terraformingmadeeasy.industry;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.PlanetSpecAPI;
 import com.fs.starfarer.api.campaign.comm.CommMessageAPI;
+import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.MutableCommodityQuantity;
 import com.fs.starfarer.api.characters.MarketConditionSpecAPI;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
+import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
+import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.loading.specs.PlanetSpec;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class TMEBaseIndustry extends BaseIndustry {
     public static class ModifiableCondition {
@@ -34,12 +39,56 @@ public class TMEBaseIndustry extends BaseIndustry {
         }
     }
 
+    public static final float GAMMA_BUILD_TIME_MULT = 0.20f;
+    public static final float BETA_BUILD_TIME_MULT = 0.30f;
+    public static final float ALPHA_BUILD_TIME_MULT = 0.50f;
+
+
     public List<ModifiableCondition> modifiableConditions = new ArrayList<>();
     public ModifiableCondition modifiableCondition = null;
+    public Boolean isAICoreBuildTimeMultApplied = false;
+    public float aiCoreCurrentBuildTimeMult = 0f;
+    public boolean firstTick = false;
+    public String prevAICoreId = null;
 
     @Override
     public void apply() {
         apply(true);
+    }
+
+    @Override
+    public void advance(float amount) {
+        super.advance(amount);
+        if (firstTick) {
+            boolean alpha = Objects.equals(aiCoreId, Commodities.ALPHA_CORE);
+            boolean beta = Objects.equals(aiCoreId, Commodities.BETA_CORE);
+            boolean gamma = Objects.equals(aiCoreId, Commodities.GAMMA_CORE);
+
+            if (alpha) {
+                aiCoreCurrentBuildTimeMult = ALPHA_BUILD_TIME_MULT;
+            } else if (beta) {
+                aiCoreCurrentBuildTimeMult = BETA_BUILD_TIME_MULT;
+            } else if (gamma) {
+                aiCoreCurrentBuildTimeMult = GAMMA_BUILD_TIME_MULT;
+            }
+
+            if (aiCoreId != null && !isAICoreBuildTimeMultApplied) {
+                buildTime = buildTime * (1f - aiCoreCurrentBuildTimeMult);
+                isAICoreBuildTimeMultApplied = true;
+            } else {
+                isAICoreBuildTimeMultApplied = false;
+                aiCoreCurrentBuildTimeMult = 0f;
+            }
+
+            prevAICoreId = getAICoreId();
+            firstTick = false;
+        }
+
+        if (!Objects.equals(getAICoreId(), prevAICoreId)) {
+            buildTime = buildTime / (1f - aiCoreCurrentBuildTimeMult);
+            isAICoreBuildTimeMultApplied = false;
+            firstTick = true;
+        }
     }
 
     public boolean isUpgrading() {
@@ -73,17 +122,13 @@ public class TMEBaseIndustry extends BaseIndustry {
         building = false;
         buildProgress = 0;
         buildTime = 1f;
+        isAICoreBuildTimeMultApplied = false;
         if (modifiableCondition != null) {
-            market.removeIndustry(getId(), null, true);
-            market.addIndustry(getId());
-            BaseIndustry industry = (BaseIndustry) market.getIndustry(getId());
-            industry.setAICoreId(getAICoreId());
-            industry.setImproved(isImproved());
             sendTerraformingMessage();
-            setSpecialItem(industry.getSpecialItem());
             changePlanetConditions(modifiableCondition);
             changePlanetClass();
-            industry.reapply();
+            reapply();
+            modifiableCondition = null;
         } else {
             buildingFinished();
             reapply();
@@ -96,12 +141,15 @@ public class TMEBaseIndustry extends BaseIndustry {
         buildProgress = 0;
         modifiableCondition = condition;
         buildTime = condition.buildTime;
+        firstTick = true;
     }
 
     public void cancelUpgrade() {
+        // Will be called from TMEConfirmDialogueDelegate to cancel terraforming
         building = false;
         buildProgress = 0;
         modifiableCondition = null;
+        isAICoreBuildTimeMultApplied = false;
     }
 
     @Override
@@ -126,6 +174,76 @@ public class TMEBaseIndustry extends BaseIndustry {
             intel.setSound(BaseIntelPlugin.getSoundStandardUpdate());
             Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.COLONY_INFO, market);
         }
+    }
+
+    @Override
+    protected void addAlphaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
+        float oPad = 10f;
+        Color highlight = Misc.getHighlightColor();
+
+        String pre = "Alpha-level AI core currently assigned. ";
+        if (mode == AICoreDescriptionMode.MANAGE_CORE_DIALOG_LIST || mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP) {
+            pre = "Alpha-level AI core. ";
+        }
+        if (mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP || mode == AICoreDescriptionMode.MANAGE_CORE_TOOLTIP) {
+            CommoditySpecAPI coreSpec = Global.getSettings().getCommoditySpec(aiCoreId);
+            TooltipMakerAPI text = tooltip.beginImageWithText(coreSpec.getIconName(), 48);
+            text.addPara(pre + "Reduces upkeep cost by %s. Reduces terraforming time by %s.", oPad, highlight,
+                    (int) ((1f - UPKEEP_MULT) * 100f) + "%", (int) (ALPHA_BUILD_TIME_MULT * 100f) + "%");
+            tooltip.addImageWithText(oPad);
+            return;
+        }
+
+        tooltip.addPara(pre + "Reduces upkeep cost by %s. Reduces terraforming time by %s.", oPad, highlight,
+                (int) ((1f - UPKEEP_MULT) * 100f) + "%", (int) (ALPHA_BUILD_TIME_MULT * 100f) + "%");
+    }
+
+    @Override
+    protected void addBetaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
+        float oPad = 10f;
+        Color highlight = Misc.getHighlightColor();
+
+        String pre = "Beta-level AI core currently assigned. ";
+        if (mode == AICoreDescriptionMode.MANAGE_CORE_DIALOG_LIST || mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP) {
+            pre = "Beta-level AI core. ";
+        }
+        if (mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP || mode == AICoreDescriptionMode.MANAGE_CORE_TOOLTIP) {
+            CommoditySpecAPI coreSpec = Global.getSettings().getCommoditySpec(aiCoreId);
+            TooltipMakerAPI text = tooltip.beginImageWithText(coreSpec.getIconName(), 48);
+            text.addPara(pre + "Reduces upkeep cost by %s. Reduces terraforming time by %s.", oPad, highlight,
+                    (int) ((1f - UPKEEP_MULT) * 100f) + "%", (int) (BETA_BUILD_TIME_MULT * 100f) + "%");
+            tooltip.addImageWithText(oPad);
+            return;
+        }
+
+        tooltip.addPara(pre + "Reduces upkeep cost by %s. Reduces terraforming time by %s.", oPad, highlight,
+                (int) ((1f - UPKEEP_MULT) * 100f) + "%", (int) (BETA_BUILD_TIME_MULT * 100f) + "%");
+    }
+
+    @Override
+    protected void addGammaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
+        float oPad = 10f;
+        Color highlight = Misc.getHighlightColor();
+
+        String pre = "Gamma-level AI core currently assigned. ";
+        if (mode == AICoreDescriptionMode.MANAGE_CORE_DIALOG_LIST || mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP) {
+            pre = "Gamma-level AI core. ";
+        }
+        if (mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP || mode == AICoreDescriptionMode.MANAGE_CORE_TOOLTIP) {
+            CommoditySpecAPI coreSpec = Global.getSettings().getCommoditySpec(aiCoreId);
+            TooltipMakerAPI text = tooltip.beginImageWithText(coreSpec.getIconName(), 48);
+            text.addPara(pre + "Reduces upkeep cost by %s. Reduces terraforming time by %s.", oPad, highlight,
+                    (int) ((1f - UPKEEP_MULT) * 100f) + "%", (int) (GAMMA_BUILD_TIME_MULT * 100f) + "%");
+            tooltip.addImageWithText(oPad);
+            return;
+        }
+
+        tooltip.addPara(pre + "Reduces upkeep cost by %s. Reduces terraforming time by %s.", oPad, highlight,
+                (int) ((1f - UPKEEP_MULT) * 100f) + "%", (int) (GAMMA_BUILD_TIME_MULT * 100f) + "%");
+    }
+
+    @Override
+    protected void updateAICoreToSupplyAndDemandModifiers() {
     }
 
     public void changePlanetConditions(ModifiableCondition condition) {

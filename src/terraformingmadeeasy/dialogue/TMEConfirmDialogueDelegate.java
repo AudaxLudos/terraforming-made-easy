@@ -12,14 +12,14 @@ import terraformingmadeeasy.industry.TMEBaseIndustry;
 
 import java.awt.*;
 
-public class TMEConfirmDialgueDelegate implements CustomDialogDelegate {
+public class TMEConfirmDialogueDelegate implements CustomDialogDelegate {
     public static final float WIDTH = 564f;
 
     public static final float HEIGHT = 104f;
 
     public TMEBaseIndustry industry;
 
-    public TMEConfirmDialgueDelegate(Industry industry) {
+    public TMEConfirmDialogueDelegate(Industry industry) {
         this.industry = (TMEBaseIndustry) industry;
     }
 

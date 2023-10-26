@@ -8,7 +8,7 @@ import com.fs.starfarer.api.campaign.listeners.IndustryOptionProvider;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import terraformingmadeeasy.dialogue.TMEConfirmDialgueDelegate;
+import terraformingmadeeasy.dialogue.TMEConfirmDialogueDelegate;
 import terraformingmadeeasy.dialogue.TMEIndustryDialogueDelegate;
 import terraformingmadeeasy.industry.TMEBaseIndustry;
 
@@ -75,8 +75,8 @@ public class TMEIndustryOptionProvider extends BaseIndustryOptionProvider {
             TMEIndustryDialogueDelegate tmeIndustryDialogueDelegate = new TMEIndustryDialogueDelegate(opt.ind);
             ui.showDialog(TMEIndustryDialogueDelegate.WIDTH, TMEIndustryDialogueDelegate.HEIGHT, tmeIndustryDialogueDelegate);
         } else if (opt.id == CUSTOM_PLUGIN && opt.ind.isUpgrading()) {
-            TMEConfirmDialgueDelegate tmeConfirmDialgueDelegate = new TMEConfirmDialgueDelegate(opt.ind);
-            ui.showDialog(TMEConfirmDialgueDelegate.WIDTH, TMEConfirmDialgueDelegate.HEIGHT, tmeConfirmDialgueDelegate);
+            TMEConfirmDialogueDelegate tmeConfirmDialgueDelegate = new TMEConfirmDialogueDelegate(opt.ind);
+            ui.showDialog(TMEConfirmDialogueDelegate.WIDTH, TMEConfirmDialogueDelegate.HEIGHT, tmeConfirmDialgueDelegate);
         }
     }
 }
