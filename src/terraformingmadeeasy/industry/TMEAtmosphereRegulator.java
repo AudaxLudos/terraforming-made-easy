@@ -14,8 +14,7 @@ public class TMEAtmosphereRegulator extends TMEBaseIndustry {
                         Conditions.MILD_CLIMATE,
                         Conditions.HABITABLE),
                 // requirements
-                null
-        ));
+                null));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.THIN_ATMOSPHERE, 2000000f, 360f,
                 // restrictions
                 Arrays.asList(Conditions.NO_ATMOSPHERE,
@@ -24,8 +23,7 @@ public class TMEAtmosphereRegulator extends TMEBaseIndustry {
                         Conditions.MILD_CLIMATE,
                         Conditions.HABITABLE),
                 // requirements
-                null
-        ));
+                null));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.DENSE_ATMOSPHERE, 3000000f, 540f,
                 // restrictions
                 Arrays.asList(Conditions.NO_ATMOSPHERE,
@@ -34,8 +32,7 @@ public class TMEAtmosphereRegulator extends TMEBaseIndustry {
                         Conditions.MILD_CLIMATE,
                         Conditions.HABITABLE),
                 // requirements
-                null
-        ));
+                null));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.TOXIC_ATMOSPHERE, 4000000f, 720f,
                 // restrictions
                 Arrays.asList(Conditions.NO_ATMOSPHERE,
@@ -44,15 +41,13 @@ public class TMEAtmosphereRegulator extends TMEBaseIndustry {
                         Conditions.MILD_CLIMATE,
                         Conditions.HABITABLE),
                 // requirements
-                null
-        ));
+                null));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.EXTREME_WEATHER, 2000000f, 360f,
                 // restrictions
                 Arrays.asList(Conditions.NO_ATMOSPHERE,
                         Conditions.MILD_CLIMATE),
                 // requirements
-                null
-        ));
+                null));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.MILD_CLIMATE, 12000000f, 720f,
                 // restrictions
                 Arrays.asList(Conditions.EXTREME_WEATHER,
@@ -63,7 +58,6 @@ public class TMEAtmosphereRegulator extends TMEBaseIndustry {
                         Conditions.VERY_HOT,
                         Conditions.VERY_COLD),
                 // requirements
-                null
-        ));
+                null));
     }
 }

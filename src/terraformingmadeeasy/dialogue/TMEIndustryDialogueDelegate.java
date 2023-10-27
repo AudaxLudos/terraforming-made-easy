@@ -44,7 +44,7 @@ public class TMEIndustryDialogueDelegate implements CustomDialogDelegate {
 
         TooltipMakerAPI headerElement = panel.createUIElement(WIDTH, 0f, false);
         headerElement.addSectionHeading("Select planet condition to terraform", Alignment.MID, 0f);
-        panel.addUIElement(headerElement).inTL(0f,0f);
+        panel.addUIElement(headerElement).inTL(0f, 0f);
 
         // list all modifiable condition of tme industry
         TooltipMakerAPI conditionsElement = panel.createUIElement(WIDTH, HEIGHT - 40f, true);
@@ -55,7 +55,7 @@ public class TMEIndustryDialogueDelegate implements CustomDialogDelegate {
             boolean canAfford = Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= cost;
             boolean canBuild = this.industry.canTerraformCondition(modifiableCondition);
             boolean canAffordAndBuild = canBuild && canAfford;
-            boolean hasCondition = this.industry.getMarket().hasCondition(modifiableCondition.spec.getId());
+            boolean hasCondition = this.industry.getMarket().hasCondition(modifiableCondition.id);
             String addOrRemoveText = hasCondition ? "Remove " : "Add ";
             if (!canAfford) {
                 baseColor = Color.darkGray;
@@ -65,17 +65,17 @@ public class TMEIndustryDialogueDelegate implements CustomDialogDelegate {
 
             CustomPanelAPI conditionPanel = panel.createCustomPanel(WIDTH, 50f, new ButtonReportingCustomPanel(this));
             TooltipMakerAPI conditionNameElement = conditionPanel.createUIElement(columnOneWidth, 40f, false);
-            TooltipMakerAPI conditionImage = conditionNameElement.beginImageWithText(modifiableCondition.spec.getIcon(), 40f);
-            conditionImage.addPara(addOrRemoveText + modifiableCondition.spec.getName(), canAffordAndBuild ? Misc.getTextColor() : Misc.getNegativeHighlightColor(),0f);
+            TooltipMakerAPI conditionImage = conditionNameElement.beginImageWithText(modifiableCondition.icon, 40f);
+            conditionImage.addPara(addOrRemoveText + modifiableCondition.name, canAffordAndBuild ? Misc.getTextColor() : Misc.getNegativeHighlightColor(), 0f);
             conditionNameElement.addImageWithText(0f);
             conditionNameElement.getPosition().inTL(-5f, 5f);
 
             TooltipMakerAPI conditionBuildTimeElement = conditionPanel.createUIElement(columnWidth, 40f, false);
-            conditionBuildTimeElement.addPara(buildTime + "", Misc.getHighlightColor(),12f).setAlignment(Alignment.MID);
+            conditionBuildTimeElement.addPara(buildTime + "", Misc.getHighlightColor(), 12f).setAlignment(Alignment.MID);
             conditionBuildTimeElement.getPosition().rightOfMid(conditionNameElement, 0f);
 
             TooltipMakerAPI conditionCostElement = conditionPanel.createUIElement(columnWidth, 40f, false);
-            conditionCostElement.addPara(Misc.getDGSCredits(cost), canAfford ? Misc.getHighlightColor() : Misc.getNegativeHighlightColor(),12f).setAlignment(Alignment.MID);
+            conditionCostElement.addPara(Misc.getDGSCredits(cost), canAfford ? Misc.getHighlightColor() : Misc.getNegativeHighlightColor(), 12f).setAlignment(Alignment.MID);
             conditionCostElement.getPosition().rightOfMid(conditionBuildTimeElement, 0f);
 
             TooltipMakerAPI conditionButton = conditionPanel.createUIElement(WIDTH, 50f, false);
@@ -126,7 +126,8 @@ public class TMEIndustryDialogueDelegate implements CustomDialogDelegate {
     }
 
     @Override
-    public void customDialogCancel() {}
+    public void customDialogCancel() {
+    }
 
     @Override
     public CustomUIPanelPlugin getCustomPanelPlugin() {
@@ -160,36 +161,36 @@ public class TMEIndustryDialogueDelegate implements CustomDialogDelegate {
         }
     }
 
-    public TooltipMakerAPI.TooltipCreator addConditionTooltip (final TMEBaseIndustry.ModifiableCondition condition) {
+    public TooltipMakerAPI.TooltipCreator addConditionTooltip(final TMEBaseIndustry.ModifiableCondition condition) {
         return new TooltipMakerAPI.TooltipCreator() {
-                @Override
-                public boolean isTooltipExpandable(Object tooltipParam) {
-                    return false;
-                }
+            @Override
+            public boolean isTooltipExpandable(Object tooltipParam) {
+                return false;
+            }
 
-                @Override
-                public float getTooltipWidth(Object tooltipParam) {
-                    return 380f;
-                }
+            @Override
+            public float getTooltipWidth(Object tooltipParam) {
+                return 380f;
+            }
 
-                @Override
-                public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-                    if (!condition.requirements.isEmpty())
-                        tooltip.addPara(
-                                "Requirements: %s", 0f, Misc.getHighlightColor(),
-                                condition.requirements.toString()
-                        );
-                    else
-                        tooltip.addPara("Requirements: %s", 0f, Misc.getHighlightColor(), "No requirements found");
-                    tooltip.addSpacer(10f);
-                    if (!condition.restrictions.isEmpty())
-                        tooltip.addPara(
-                                "Restrictions: %s", 0f, Misc.getNegativeHighlightColor(),
-                                condition.restrictions.toString()
-                        );
-                    else
-                        tooltip.addPara("Restrictions: %s", 0f, Misc.getHighlightColor(), "No restrictions found");
-                }
-            };
+            @Override
+            public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
+                if (!condition.requirements.isEmpty())
+                    tooltip.addPara(
+                            "Requirements: %s", 0f, Misc.getHighlightColor(),
+                            condition.requirements.toString()
+                    );
+                else
+                    tooltip.addPara("Requirements: %s", 0f, Misc.getHighlightColor(), "No requirements found");
+                tooltip.addSpacer(10f);
+                if (!condition.restrictions.isEmpty())
+                    tooltip.addPara(
+                            "Restrictions: %s", 0f, Misc.getNegativeHighlightColor(),
+                            condition.restrictions.toString()
+                    );
+                else
+                    tooltip.addPara("Restrictions: %s", 0f, Misc.getHighlightColor(), "No restrictions found");
+            }
+        };
     }
 }

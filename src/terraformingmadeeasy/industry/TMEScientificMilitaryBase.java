@@ -13,9 +13,14 @@ public class TMEScientificMilitaryBase extends TMEBaseIndustry {
                 // requirements
                 Arrays.asList(Conditions.HABITABLE, Conditions.THIN_ATMOSPHERE)));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.DECIVILIZED, 4000000f, 180f,
-                null, null));
+                // restrictions
+                null,
+                null));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.POLLUTION, 1000000f, 360f,
-                null, null));
+                // restrictions
+                null,
+                // restrictions
+                Arrays.asList(Conditions.HABITABLE, Conditions.THIN_ATMOSPHERE)));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.IRRADIATED, 1000000f, 360f,
                 // restrictions
                 Arrays.asList(Conditions.HABITABLE,
@@ -26,8 +31,7 @@ public class TMEScientificMilitaryBase extends TMEBaseIndustry {
                 // restrictions
                 Collections.singletonList(Conditions.IRRADIATED),
                 // requirements
-                Collections.singletonList(Conditions.HABITABLE))
-        );
+                Collections.singletonList(Conditions.HABITABLE)));
     }
 
     @Override

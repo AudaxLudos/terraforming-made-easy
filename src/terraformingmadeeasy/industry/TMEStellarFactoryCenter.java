@@ -13,8 +13,7 @@ public class TMEStellarFactoryCenter extends TMEBaseIndustry {
                         Conditions.COLD,
                         Conditions.VERY_COLD),
                 // requirements
-                null
-        ));
+                null));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.VERY_HOT, 2000000f, 360f,
                 // restrictions
                 Arrays.asList(Conditions.HOT,
@@ -23,16 +22,14 @@ public class TMEStellarFactoryCenter extends TMEBaseIndustry {
                         Conditions.HABITABLE,
                         Conditions.MILD_CLIMATE),
                 // requirements
-                null
-        ));
+                null));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.COLD, 1000000f, 180f,
                 // restrictions
                 Arrays.asList(Conditions.VERY_COLD,
                         Conditions.HOT,
                         Conditions.VERY_HOT),
                 // requirements
-                null
-        ));
+                null));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.VERY_COLD, 2000000f, 360f,
                 // restrictions
                 Arrays.asList(Conditions.COLD,
@@ -41,19 +38,16 @@ public class TMEStellarFactoryCenter extends TMEBaseIndustry {
                         Conditions.HABITABLE,
                         Conditions.MILD_CLIMATE),
                 // requirements
-                null
-        ));
+                null));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.POOR_LIGHT, 1000000f, 180f,
                 // restrictions
                 Collections.singletonList(Conditions.DARK),
                 // requirements
-                null
-        ));
+                null));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.DARK, 2000000f, 360f,
                 // restrictions
                 Collections.singletonList(Conditions.POOR_LIGHT),
                 // requirements
-                null
-        ));
+                null));
     }
 }

@@ -13,69 +13,63 @@ public class TMEAgriculturalLaboratory extends TMEBaseIndustry {
                         Conditions.FARMLAND_RICH,
                         Conditions.FARMLAND_BOUNTIFUL),
                 // requirements
-                Collections.singletonList(Conditions.HABITABLE)
-        ));
+                Collections.singletonList(Conditions.HABITABLE)));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.FARMLAND_ADEQUATE, 4000000f, 180f,
                 // restrictions
                 Arrays.asList(Conditions.FARMLAND_POOR,
                         Conditions.FARMLAND_RICH,
                         Conditions.FARMLAND_BOUNTIFUL),
                 // requirements
-                Collections.singletonList(Conditions.HABITABLE)
-        ));
+                Collections.singletonList(Conditions.HABITABLE)));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.FARMLAND_RICH, 6000000f, 270f,
                 // restrictions
                 Arrays.asList(Conditions.FARMLAND_POOR,
                         Conditions.FARMLAND_ADEQUATE,
                         Conditions.FARMLAND_BOUNTIFUL),
                 // requirements
-                Collections.singletonList(Conditions.HABITABLE)
-        ));
+                Collections.singletonList(Conditions.HABITABLE)));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.FARMLAND_BOUNTIFUL, 12000000f, 540f,
                 // restrictions
                 Arrays.asList(Conditions.FARMLAND_POOR,
                         Conditions.FARMLAND_ADEQUATE,
                         Conditions.FARMLAND_RICH),
                 // requirements
-                Collections.singletonList(Conditions.HABITABLE)
-        ));
+                Collections.singletonList(Conditions.HABITABLE)));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.ORGANICS_TRACE, 2000000f, 90f,
                 // restrictions
                 Arrays.asList(Conditions.ORGANICS_COMMON,
                         Conditions.ORGANICS_ABUNDANT,
                         Conditions.ORGANICS_PLENTIFUL),
                 // requirements
-                Arrays.asList(Conditions.HABITABLE, Conditions.THIN_ATMOSPHERE)
-        ));
+                Arrays.asList(Conditions.HABITABLE, Conditions.THIN_ATMOSPHERE, Conditions.TOXIC_ATMOSPHERE)));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.ORGANICS_COMMON, 4000000f, 180f,
                 // restrictions
                 Arrays.asList(Conditions.ORGANICS_TRACE,
                         Conditions.ORGANICS_ABUNDANT,
                         Conditions.ORGANICS_PLENTIFUL),
                 // requirements
-                Arrays.asList(Conditions.HABITABLE, Conditions.THIN_ATMOSPHERE)
-        ));
+                Arrays.asList(Conditions.HABITABLE, Conditions.THIN_ATMOSPHERE, Conditions.TOXIC_ATMOSPHERE)));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.ORGANICS_ABUNDANT, 6000000f, 270f,
                 // restrictions
                 Arrays.asList(Conditions.ORGANICS_TRACE,
                         Conditions.ORGANICS_COMMON,
                         Conditions.ORGANICS_PLENTIFUL),
                 // requirements
-                Collections.singletonList(Conditions.HABITABLE)
-        ));
+                Collections.singletonList(Conditions.HABITABLE)));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.ORGANICS_PLENTIFUL, 12000000f, 540f,
                 // restrictions
                 Arrays.asList(Conditions.ORGANICS_TRACE,
                         Conditions.ORGANICS_COMMON,
                         Conditions.ORGANICS_ABUNDANT),
                 // requirements
-                Collections.singletonList(Conditions.HABITABLE)
-        ));
+                Collections.singletonList(Conditions.HABITABLE)));
     }
 
     @Override
     public Boolean canTerraformCondition(ModifiableCondition condition) {
-        if (condition.requirements.size() == 2)
+        if (condition.requirements.size() == 3)
+            return getMarket().hasCondition(condition.requirements.get(0)) || getMarket().hasCondition(condition.requirements.get(1)) || getMarket().hasCondition(condition.requirements.get(2));
+        else if (condition.requirements.size() == 2)
             return getMarket().hasCondition(condition.requirements.get(0)) || getMarket().hasCondition(condition.requirements.get(1));
         else if (condition.requirements.size() == 1)
             return getMarket().hasCondition(condition.requirements.get(0));
