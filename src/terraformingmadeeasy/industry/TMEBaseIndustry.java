@@ -10,6 +10,7 @@ import com.fs.starfarer.api.characters.MarketConditionSpecAPI;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Conditions;
+import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
@@ -345,6 +346,30 @@ public class TMEBaseIndustry extends BaseIndustry {
                 removeFarming = true;
                 removeOrganics = true;
             }
+        }
+
+        if (m.hasCondition(Conditions.TOXIC_ATMOSPHERE) && m.hasCondition(Conditions.VERY_HOT) && m.hasCondition(Conditions.EXTREME_WEATHER) &&
+                m.hasIndustry(Industries.ORBITALWORKS) && m.hasIndustry(Industries.MINING) && m.hasIndustry(Industries.REFINING) && m.hasIndustry(Industries.HIGHCOMMAND)) {
+            removeFarming = true;
+            reduceOrganics = true;
+            planetTypeId = "forge";
+        }
+
+        if (m.hasCondition(Conditions.HABITABLE) && m.hasCondition(Conditions.MILD_CLIMATE) && m.hasCondition(Conditions.LOW_GRAVITY) &&
+                m.hasCondition(Conditions.FARMLAND_BOUNTIFUL) && m.hasCondition(Conditions.ORGANICS_PLENTIFUL) &&
+                m.hasIndustry(Industries.FARMING) && m.hasIndustry(Industries.COMMERCE) && m.hasIndustry(Industries.LIGHTINDUSTRY) &&
+                m.hasIndustry(Industries.PLANETARYSHIELD)) {
+            removeFarming = true;
+            reduceOrganics = true;
+            planetTypeId = "paradise";
+        }
+
+        if (m.hasCondition(Conditions.NO_ATMOSPHERE) && m.hasCondition(Conditions.VERY_COLD) && m.hasCondition(Conditions.AI_CORE_ADMIN) &&
+                m.hasIndustry(Industries.PLANETARYSHIELD) && m.hasIndustry(Industries.HIGHCOMMAND) && m.hasIndustry(Industries.STARFORTRESS_HIGH) &&
+                m.hasIndustry(Industries.ORBITALWORKS) && m.hasIndustry(Industries.TECHMINING) && m.hasIndustry(Industries.REFINING)) {
+            removeFarming = true;
+            reduceOrganics = true;
+            planetTypeId = "tech";
         }
 
         if (removeFarming) removeFarming();
