@@ -125,8 +125,9 @@ public class TMEBaseIndustry extends BaseIndustry {
         isAICoreBuildTimeMultApplied = false;
         if (modifiableCondition != null) {
             sendTerraformingMessage();
-            changePlanetConditions(modifiableCondition);
+            changePlanetConditions();
             changePlanetClass();
+            reapplySupplyAndDemand();
             reapply();
             modifiableCondition = null;
         } else {
@@ -246,13 +247,13 @@ public class TMEBaseIndustry extends BaseIndustry {
     protected void updateAICoreToSupplyAndDemandModifiers() {
     }
 
-    public void changePlanetConditions(ModifiableCondition condition) {
-        if (getMarket().hasCondition(condition.spec.getId())) {
-            getMarket().removeCondition(condition.spec.getId());
+    public void changePlanetConditions() {
+        if (getMarket().hasCondition(modifiableCondition.spec.getId())) {
+            getMarket().removeCondition(modifiableCondition.spec.getId());
         } else {
-            getMarket().addCondition(condition.spec.getId());
-            getMarket().getFirstCondition(condition.spec.getId()).setSurveyed(true);
-            for (String restriction : condition.restrictions) {
+            getMarket().addCondition(modifiableCondition.spec.getId());
+            getMarket().getFirstCondition(modifiableCondition.spec.getId()).setSurveyed(true);
+            for (String restriction : modifiableCondition.restrictions) {
                 if (getMarket().hasCondition(restriction))
                     getMarket().removeCondition(restriction);
             }
@@ -334,13 +335,6 @@ public class TMEBaseIndustry extends BaseIndustry {
                     m.hasCondition(Conditions.VOLATILES_ABUNDANT) || m.hasCondition(Conditions.VOLATILES_PLENTIFUL))) {
                 removeOrganicsAndFarming();
                 changePlanetVisuals("cryovolcanic");
-            }
-        }
-
-        // Makes sure that conditions that changed and give supply bonuses are reapplied properly
-        for (Industry ind : getMarket().getIndustries()) {
-            for (MutableCommodityQuantity supplyStat : ind.getAllSupply()) {
-                supplyStat.getQuantity().unmodify();
             }
         }
     }
@@ -447,6 +441,13 @@ public class TMEBaseIndustry extends BaseIndustry {
             getMarket().removeCondition(Conditions.ORGANICS_PLENTIFUL);
             getMarket().addCondition(Conditions.ORGANICS_COMMON);
             getMarket().getFirstCondition(Conditions.ORGANICS_COMMON).setSurveyed(true);
+        }
+    }
+
+    public void reapplySupplyAndDemand() {
+        for (Industry ind : getMarket().getIndustries()) {
+            ind.doPreSaveCleanup();
+            ind.doPostSaveRestore();
         }
     }
 

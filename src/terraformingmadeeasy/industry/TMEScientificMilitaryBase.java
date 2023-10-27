@@ -24,8 +24,7 @@ public class TMEScientificMilitaryBase extends TMEBaseIndustry {
                 null));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.WATER_SURFACE, 1000000f, 360f,
                 // restrictions
-                Arrays.asList(Conditions.IRRADIATED,
-                        Conditions.WATER_SURFACE),
+                Collections.singletonList(Conditions.IRRADIATED),
                 // requirements
                 Collections.singletonList(Conditions.HABITABLE))
         );
