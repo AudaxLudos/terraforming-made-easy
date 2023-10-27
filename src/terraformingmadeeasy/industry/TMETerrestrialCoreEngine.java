@@ -14,6 +14,7 @@ public class TMETerrestrialCoreEngine extends TMEBaseIndustry {
         this.modifiableConditions.add(new ModifiableCondition(Conditions.HIGH_GRAVITY, 4000000f, 720f,
                 // restrictions
                 Collections.singletonList(Conditions.LOW_GRAVITY),
+                // requirements
                 null
         ));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.TECTONIC_ACTIVITY, 2000000f, 360f,
@@ -27,7 +28,7 @@ public class TMETerrestrialCoreEngine extends TMEBaseIndustry {
                 Arrays.asList(Conditions.TECTONIC_ACTIVITY,
                         Conditions.HABITABLE),
                 // requirements
-                Collections.singletonList(Conditions.TECTONIC_ACTIVITY)
+                null
         ));
     }
 }

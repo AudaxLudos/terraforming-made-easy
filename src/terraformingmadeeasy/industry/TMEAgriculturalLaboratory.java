@@ -45,7 +45,7 @@ public class TMEAgriculturalLaboratory extends TMEBaseIndustry {
                         Conditions.ORGANICS_ABUNDANT,
                         Conditions.ORGANICS_PLENTIFUL),
                 // requirements
-                null
+                Arrays.asList(Conditions.HABITABLE, Conditions.THIN_ATMOSPHERE)
         ));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.ORGANICS_COMMON, 4000000f, 180f,
                 // restrictions
@@ -53,7 +53,7 @@ public class TMEAgriculturalLaboratory extends TMEBaseIndustry {
                         Conditions.ORGANICS_ABUNDANT,
                         Conditions.ORGANICS_PLENTIFUL),
                 // requirements
-                null
+                Arrays.asList(Conditions.HABITABLE, Conditions.THIN_ATMOSPHERE)
         ));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.ORGANICS_ABUNDANT, 6000000f, 270f,
                 // restrictions
@@ -61,7 +61,7 @@ public class TMEAgriculturalLaboratory extends TMEBaseIndustry {
                         Conditions.ORGANICS_COMMON,
                         Conditions.ORGANICS_PLENTIFUL),
                 // requirements
-                null
+                Collections.singletonList(Conditions.HABITABLE)
         ));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.ORGANICS_PLENTIFUL, 12000000f, 540f,
                 // restrictions
@@ -69,7 +69,16 @@ public class TMEAgriculturalLaboratory extends TMEBaseIndustry {
                         Conditions.ORGANICS_COMMON,
                         Conditions.ORGANICS_ABUNDANT),
                 // requirements
-                null
+                Collections.singletonList(Conditions.HABITABLE)
         ));
+    }
+
+    @Override
+    public Boolean canTerraformCondition(ModifiableCondition condition) {
+        if (condition.requirements.size() == 2)
+            return getMarket().hasCondition(condition.requirements.get(0)) || getMarket().hasCondition(condition.requirements.get(1));
+        else if (condition.requirements.size() == 1)
+            return getMarket().hasCondition(condition.requirements.get(0));
+        return true;
     }
 }

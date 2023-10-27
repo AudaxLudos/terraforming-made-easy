@@ -23,7 +23,7 @@ public class TMEStellarFactoryCenter extends TMEBaseIndustry {
                         Conditions.HABITABLE,
                         Conditions.MILD_CLIMATE),
                 // requirements
-                Collections.singletonList(Conditions.HOT)
+                null
         ));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.COLD, 1000000f, 180f,
                 // restrictions
@@ -41,7 +41,7 @@ public class TMEStellarFactoryCenter extends TMEBaseIndustry {
                         Conditions.HABITABLE,
                         Conditions.MILD_CLIMATE),
                 // requirements
-                Collections.singletonList(Conditions.COLD)
+                null
         ));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.POOR_LIGHT, 1000000f, 180f,
                 // restrictions
@@ -53,7 +53,7 @@ public class TMEStellarFactoryCenter extends TMEBaseIndustry {
                 // restrictions
                 Collections.singletonList(Conditions.POOR_LIGHT),
                 // requirements
-                Collections.singletonList(Conditions.POOR_LIGHT)
+                null
         ));
     }
 }
