@@ -1,5 +1,5 @@
 name,id,planetary,decivRemove,script,desc,icon,order
-Forge World,TMEForgeWorld,TRUE,,terraformingmadeeasy.conditions.TMEForgeWorld,A world dedicated to mass-producing high-quality ships and weapons.,,
-Paradise World,TMEParadiseWorld,TRUE,,terraformingmadeeasy.conditions.TMEParadiseWorld,"A world dedicated to commerce and trade, mostly inhabited by executives and nobility.",,
-Fortress World,TMEFortressWorld,TRUE,,terraformingmadeeasy.conditions.TMEFortressWorld,A world dedicated to defending star systems and staging attacks against hostiles.,,
+Forge World,tme_forge_world,TRUE,,terraformingmadeeasy.conditions.TMEForgeWorld,A world dedicated to mass-producing high-quality ships and weapons.,graphics/icons/markets/light_industrial.png,
+Fortress World,tme_fortress_world,TRUE,,terraformingmadeeasy.conditions.TMEFortressWorld,A world dedicated to defending star systems and staging attacks against hostiles.,graphics/icons/markets/military_base.png,
+Paradise World,tme_paradise_world,TRUE,,terraformingmadeeasy.conditions.TMEParadiseWorld,"A world dedicated to commerce and trade, mostly inhabited by executives and nobility.",graphics/icons/markets/terran_world.png,
 ,,,,,,,

@@ -1,5 +1,5 @@
 {
-	"forge":{
+	"tme_forge":{
 		"name":"Forge",
 		"descriptionId":"toxic",
 		"tilt":-27,
@@ -18,7 +18,7 @@
 		"cloudColor":[200,190,120,170],
 		"cloudRotation":8
 	},
-	"fortress":{
+	"tme_fortress":{
 		"name":"Fortress",
 		"descriptionId":"desert",
 		"tilt":30,
@@ -37,7 +37,7 @@
 		"cloudColor":[220,190,160,180],
 		"cloudRotation":-10
 	},
-	"paradise":{
+	"tme_paradise":{
 		"name":"Paradise",
 		"descriptionId":"terran",
 		"tilt":20,

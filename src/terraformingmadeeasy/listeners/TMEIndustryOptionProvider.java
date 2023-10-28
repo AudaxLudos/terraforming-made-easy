@@ -20,9 +20,9 @@ public class TMEIndustryOptionProvider extends BaseIndustryOptionProvider {
 
     static {
         tmeIndustries.add("TMEAtmosphereRegulator");
-        tmeIndustries.add("TMEStellarFactoryCenter");
-        tmeIndustries.add("TMETerrestrialCoreEngine");
-        tmeIndustries.add("TMEScientificMilitaryBase");
+        tmeIndustries.add("TMEStellarManufactory");
+        tmeIndustries.add("TMETerrestrialEngine");
+        tmeIndustries.add("TMEGeomorphologyStation");
         tmeIndustries.add("TMEAgriculturalLaboratory");
     }
 
@@ -76,8 +76,8 @@ public class TMEIndustryOptionProvider extends BaseIndustryOptionProvider {
             TMEIndustryDialogueDelegate tmeIndustryDialogueDelegate = new TMEIndustryDialogueDelegate(opt.ind);
             ui.showDialog(TMEIndustryDialogueDelegate.WIDTH, TMEIndustryDialogueDelegate.HEIGHT, tmeIndustryDialogueDelegate);
         } else if (opt.id == CUSTOM_PLUGIN && opt.ind.isUpgrading()) {
-            TMEConfirmDialogueDelegate tmeConfirmDialgueDelegate = new TMEConfirmDialogueDelegate(opt.ind);
-            ui.showDialog(TMEConfirmDialogueDelegate.WIDTH, TMEConfirmDialogueDelegate.HEIGHT, tmeConfirmDialgueDelegate);
+            TMEConfirmDialogueDelegate tmeConfirmDialogueDelegate = new TMEConfirmDialogueDelegate(opt.ind);
+            ui.showDialog(TMEConfirmDialogueDelegate.WIDTH, TMEConfirmDialogueDelegate.HEIGHT, tmeConfirmDialogueDelegate);
         }
     }
 }

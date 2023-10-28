@@ -350,21 +350,21 @@ public class TMEBaseIndustry extends BaseIndustry {
 
         if (m.hasCondition(Conditions.TOXIC_ATMOSPHERE) && m.hasCondition(Conditions.VERY_HOT) && m.hasCondition(Conditions.EXTREME_WEATHER) && m.hasCondition(Conditions.AI_CORE_ADMIN) &&
                 m.hasIndustry(Industries.ORBITALWORKS) && m.hasIndustry(Industries.MINING) && m.hasIndustry(Industries.REFINING) && m.hasIndustry(Industries.FUELPROD)) {
-            planetTypeId = "forge";
+            planetTypeId = "tme_forge";
             removeFarming = true;
             reduceOrganics = true;
         }
 
         if (m.hasCondition(Conditions.HABITABLE) && m.hasCondition(Conditions.EXTREME_WEATHER) && m.hasCondition(Conditions.HIGH_GRAVITY) && m.hasCondition(Conditions.AI_CORE_ADMIN) &&
                 m.hasIndustry(Industries.ORBITALWORKS) && m.hasIndustry(Industries.HIGHCOMMAND) && m.hasIndustry(Industries.REFINING) && m.hasIndustry(Industries.FUELPROD)) {
-            planetTypeId = "fortress";
-            removeFarming = true;
-            reduceOrganics = true;
+            planetTypeId = "tme_fortress";
+            removeFarming = false;
+            removeOrganics = false;
         }
 
         if (m.hasCondition(Conditions.HABITABLE) && m.hasCondition(Conditions.MILD_CLIMATE) && m.hasCondition(Conditions.LOW_GRAVITY) && m.hasCondition(Conditions.AI_CORE_ADMIN) &&
                 m.hasIndustry(Industries.FARMING) && m.hasIndustry(Industries.COMMERCE) && m.hasIndustry(Industries.LIGHTINDUSTRY) && m.hasIndustry(Industries.HIGHCOMMAND)) {
-            planetTypeId = "paradise";
+            planetTypeId = "tme_paradise";
             removeFarming = false;
             removeOrganics = false;
         }
@@ -378,16 +378,16 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     public void addOrRemoveTMEConditions(String planetTypeId) {
-        if (Objects.equals(planetTypeId, "forge")) {
-            getMarket().addCondition("TMEForgeWorld");
-        } else if (Objects.equals(planetTypeId, "fortress")) {
-            getMarket().addCondition("TMEFortressWorld");
-        } else if (Objects.equals(planetTypeId, "paradise")) {
-            getMarket().addCondition("TMEParadiseWorld");
+        if (Objects.equals(planetTypeId, "tme_forge")) {
+            getMarket().addCondition("tme_forge_world");
+        } else if (Objects.equals(planetTypeId, "tme_fortress")) {
+            getMarket().addCondition("tme_fortress_world");
+        } else if (Objects.equals(planetTypeId, "tme_paradise")) {
+            getMarket().addCondition("tme_paradise_world");
         } else {
-            getMarket().removeCondition("TMEForgeWorld");
-            getMarket().removeCondition("TMEFortressWorld");
-            getMarket().removeCondition("TMEParadiseWorld");
+            getMarket().removeCondition("tme_forge_world");
+            getMarket().removeCondition("tme_fortress_world");
+            getMarket().removeCondition("tme_paradise_world");
         }
     }
 
