@@ -293,8 +293,8 @@ public class TMEBaseIndustry extends BaseIndustry {
             }
         }
         if (m.hasCondition(Conditions.WATER_SURFACE)) {
-            removeFarming = true;
             planetTypeId = "water";
+            removeFarming = true;
             if (m.hasCondition(Conditions.VERY_COLD)) {
                 m.removeCondition(Conditions.WATER_SURFACE);
                 String[] frozenTypes = {"frozen", "frozen1", "frozen2", "frozen3"};
@@ -348,34 +348,47 @@ public class TMEBaseIndustry extends BaseIndustry {
             }
         }
 
-        if (m.hasCondition(Conditions.TOXIC_ATMOSPHERE) && m.hasCondition(Conditions.VERY_HOT) && m.hasCondition(Conditions.EXTREME_WEATHER) &&
-                m.hasIndustry(Industries.ORBITALWORKS) && m.hasIndustry(Industries.MINING) && m.hasIndustry(Industries.REFINING) && m.hasIndustry(Industries.HIGHCOMMAND)) {
-            removeFarming = true;
-            reduceOrganics = true;
+        if (m.hasCondition(Conditions.TOXIC_ATMOSPHERE) && m.hasCondition(Conditions.VERY_HOT) && m.hasCondition(Conditions.EXTREME_WEATHER) && m.hasCondition(Conditions.AI_CORE_ADMIN) &&
+                m.hasIndustry(Industries.ORBITALWORKS) && m.hasIndustry(Industries.MINING) && m.hasIndustry(Industries.REFINING) && m.hasIndustry(Industries.FUELPROD)) {
             planetTypeId = "forge";
-        }
-
-        if (m.hasCondition(Conditions.HABITABLE) && m.hasCondition(Conditions.MILD_CLIMATE) && m.hasCondition(Conditions.LOW_GRAVITY) &&
-                m.hasCondition(Conditions.FARMLAND_BOUNTIFUL) && m.hasCondition(Conditions.ORGANICS_PLENTIFUL) &&
-                m.hasIndustry(Industries.FARMING) && m.hasIndustry(Industries.COMMERCE) && m.hasIndustry(Industries.LIGHTINDUSTRY) &&
-                m.hasIndustry(Industries.PLANETARYSHIELD)) {
             removeFarming = true;
             reduceOrganics = true;
+        }
+
+        if (m.hasCondition(Conditions.HABITABLE) && m.hasCondition(Conditions.EXTREME_WEATHER) && m.hasCondition(Conditions.HIGH_GRAVITY) && m.hasCondition(Conditions.AI_CORE_ADMIN) &&
+                m.hasIndustry(Industries.ORBITALWORKS) && m.hasIndustry(Industries.HIGHCOMMAND) && m.hasIndustry(Industries.REFINING) && m.hasIndustry(Industries.FUELPROD)) {
+            planetTypeId = "fortress";
+            removeFarming = true;
+            reduceOrganics = true;
+        }
+
+        if (m.hasCondition(Conditions.HABITABLE) && m.hasCondition(Conditions.MILD_CLIMATE) && m.hasCondition(Conditions.LOW_GRAVITY) && m.hasCondition(Conditions.AI_CORE_ADMIN) &&
+                m.hasIndustry(Industries.FARMING) && m.hasIndustry(Industries.COMMERCE) && m.hasIndustry(Industries.LIGHTINDUSTRY) && m.hasIndustry(Industries.HIGHCOMMAND)) {
             planetTypeId = "paradise";
-        }
-
-        if (m.hasCondition(Conditions.NO_ATMOSPHERE) && m.hasCondition(Conditions.VERY_COLD) && m.hasCondition(Conditions.AI_CORE_ADMIN) &&
-                m.hasIndustry(Industries.PLANETARYSHIELD) && m.hasIndustry(Industries.HIGHCOMMAND) && m.hasIndustry(Industries.STARFORTRESS_HIGH) &&
-                m.hasIndustry(Industries.ORBITALWORKS) && m.hasIndustry(Industries.TECHMINING) && m.hasIndustry(Industries.REFINING)) {
-            removeFarming = true;
-            reduceOrganics = true;
-            planetTypeId = "tech";
+            removeFarming = false;
+            removeOrganics = false;
         }
 
         if (removeFarming) removeFarming();
         if (reduceOrganics) reduceOrganicsToCommon();
         else if (removeOrganics) removeOrganics();
+
+        addOrRemoveTMEConditions(planetTypeId);
         changePlanetVisuals(planetTypeId);
+    }
+
+    public void addOrRemoveTMEConditions(String planetTypeId) {
+        if (Objects.equals(planetTypeId, "forge")) {
+            getMarket().addCondition("TMEForgeWorld");
+        } else if (Objects.equals(planetTypeId, "fortress")) {
+            getMarket().addCondition("TMEFortressWorld");
+        } else if (Objects.equals(planetTypeId, "paradise")) {
+            getMarket().addCondition("TMEParadiseWorld");
+        } else {
+            getMarket().removeCondition("TMEForgeWorld");
+            getMarket().removeCondition("TMEFortressWorld");
+            getMarket().removeCondition("TMEParadiseWorld");
+        }
     }
 
     public void changePlanetVisuals(String planetTypeId) {
@@ -405,25 +418,17 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     public void removeFarming() {
-        if (getMarket().hasCondition(Conditions.FARMLAND_POOR))
-            getMarket().removeCondition(Conditions.FARMLAND_POOR);
-        else if (getMarket().hasCondition(Conditions.FARMLAND_ADEQUATE))
-            getMarket().removeCondition(Conditions.FARMLAND_ADEQUATE);
-        else if (getMarket().hasCondition(Conditions.FARMLAND_RICH))
-            getMarket().removeCondition(Conditions.FARMLAND_RICH);
-        else if (getMarket().hasCondition(Conditions.FARMLAND_BOUNTIFUL))
-            getMarket().removeCondition(Conditions.FARMLAND_BOUNTIFUL);
+        getMarket().removeCondition(Conditions.FARMLAND_POOR);
+        getMarket().removeCondition(Conditions.FARMLAND_ADEQUATE);
+        getMarket().removeCondition(Conditions.FARMLAND_RICH);
+        getMarket().removeCondition(Conditions.FARMLAND_BOUNTIFUL);
     }
 
     public void removeOrganics() {
-        if (getMarket().hasCondition(Conditions.ORGANICS_TRACE))
-            getMarket().removeCondition(Conditions.ORGANICS_TRACE);
-        else if (getMarket().hasCondition(Conditions.ORGANICS_COMMON))
-            getMarket().removeCondition(Conditions.ORGANICS_COMMON);
-        else if (getMarket().hasCondition(Conditions.ORGANICS_ABUNDANT))
-            getMarket().removeCondition(Conditions.ORGANICS_ABUNDANT);
-        else if (getMarket().hasCondition(Conditions.ORGANICS_PLENTIFUL))
-            getMarket().removeCondition(Conditions.ORGANICS_PLENTIFUL);
+        getMarket().removeCondition(Conditions.ORGANICS_TRACE);
+        getMarket().removeCondition(Conditions.ORGANICS_COMMON);
+        getMarket().removeCondition(Conditions.ORGANICS_ABUNDANT);
+        getMarket().removeCondition(Conditions.ORGANICS_PLENTIFUL);
     }
 
     public void addOrImproveFarming() {
