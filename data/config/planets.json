@@ -20,10 +20,48 @@
 		"cloudColor":[250,190,110,160],
 		"cloudRotation":7,
 		"doNotShowInCombat":true
+	},
+	"tech":{
+		"name":"Tech",
+		"tilt":20,
+		"pitch":15,
+		"rotation":4.5,
+		"planetColor":[200,160,240,255],
+		"atmosphereThickness":0.1,
+		"atmosphereThicknessMin":20,
+		"atmosphereColor":[210,180,245,40],
+		"texture":"graphics/planets/tme_tech.png",
+		"icon":"graphics/warroom/icon_planet.png",
+		"iconColor":[200,160,240,255],
+		"isStar":false,
+		"lightPosition":[0,0,50],
+		"glowTexture":"graphics/planets/tme_tech_glow.png",
+		"glowColor":[255,255,255,255],
+		"useReverseLightForGlow":false,
+		"cloudTexture":"graphics/planets/clouds_banded01.png",
+		"cloudColor":[200,160,240,128],
+		"cloudRotation":3,
+		"doNotShowInCombat":true
+	},
+	"paradise":{
+		"name":"Paradise",
+		"tilt":20,
+		"pitch":30,
+		"rotation":-3,
+		"planetColor":[255,255,255,255],
+		"atmosphereThickness":0.25,
+		"atmosphereThicknessMin":40,
+		"atmosphereColor":[60,160,215,160],
+		"texture":"graphics/planets/tme_paradise.png",
+		"icon":"graphics/warroom/icon_planet.png",
+		"iconColor":[155,185,255,255],
+		"isStar":false,
+		"lightPosition":[4,-1,8],
+		"glowTexture":"graphics/planets/tme_paradise_glow.png",
+		"glowColor":[255,255,255,255],
+		"useReverseLightForGlow":false,
+		"cloudTexture":"graphics/planets/clouds_banded01.png",
+		"cloudColor":[235,240,250,225],
+		"cloudRotation":-5
 	}
 }
-
-
-
-
-
