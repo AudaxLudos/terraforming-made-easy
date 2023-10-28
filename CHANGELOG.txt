@@ -1,3 +1,20 @@
+### 0.7.4
+- Update rename some of the industries
+- Add full implementation of tme conditions
+- Add tme planet condition forge world implementation
+- Add initial implementation of custom planets
+- Update improve overall code format
+- Update improve UI for selectable conditions
+- Update modifiable conditions requirements
+- Update industry names to be singular instead of plural
+- Add tme agricultural laboratories industry
+- Add images for tme industries
+- Add AI core bonuses for TME industries
+- Add unable to build tme industries on gas giants and stations
+- Add other planet types when changing planet class
+- Add planet visual and class change when certain conditions are met
+- Update modifiable conditions restrictions and requirements
+- Update mod version to latest
 ### 0.5.3
 - Add github action script
 - Add version check files
