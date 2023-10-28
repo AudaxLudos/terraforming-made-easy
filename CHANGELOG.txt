@@ -1,3 +1,6 @@
+### 0.7.5
+- Update jar file
+- Update mod version to latest
 ### 0.7.4
 - Update rename some of the industries
 - Add full implementation of tme conditions
