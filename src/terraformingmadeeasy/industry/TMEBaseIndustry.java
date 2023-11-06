@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static terraformingmadeeasy.listeners.TMEIndustryOptionProvider.tmeIndustries;
+
 public class TMEBaseIndustry extends BaseIndustry {
     public static class ModifiableCondition {
         public String id;
@@ -29,10 +31,11 @@ public class TMEBaseIndustry extends BaseIndustry {
         public String icon;
         public float cost;
         public float buildTime;
+        public boolean canChangeGasGiants;
         public List<String> restrictions = new ArrayList<>();
         public List<String> requirements = new ArrayList<>();
 
-        public ModifiableCondition(String conditionSpecId, float cost, float buildTime, List<String> restrictions, List<String> requirements) {
+        public ModifiableCondition(String conditionSpecId, float cost, float buildTime, boolean canChangeGasGiants, List<String> restrictions, List<String> requirements) {
             MarketConditionSpecAPI spec = Global.getSettings().getMarketConditionSpec(conditionSpecId);
 
             this.id = spec.getId();
@@ -40,6 +43,7 @@ public class TMEBaseIndustry extends BaseIndustry {
             this.icon = spec.getIcon();
             this.cost = cost;
             this.buildTime = buildTime;
+            this.canChangeGasGiants = canChangeGasGiants;
             if (restrictions != null) this.restrictions = restrictions;
             if (requirements != null) this.requirements = requirements;
         }
@@ -161,15 +165,13 @@ public class TMEBaseIndustry extends BaseIndustry {
     @Override
     public boolean isAvailableToBuild() {
         if (!super.isAvailableToBuild()) return false;
-        if (getMarket().getPlanetEntity() == null) return false;
-        return !getMarket().getPlanetEntity().isGasGiant();
+        return getMarket().getPlanetEntity() != null;
     }
 
     @Override
     public String getUnavailableReason() {
         if (!super.isAvailableToBuild()) return super.getUnavailableReason();
-        if (getMarket().getPlanetEntity() == null) return "Requires a planet";
-        return "Can not be built on gas giants";
+        return "Requires a planet";
     }
 
     public void sendTerraformingMessage() {
