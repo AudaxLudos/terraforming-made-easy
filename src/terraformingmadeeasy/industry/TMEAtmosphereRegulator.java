@@ -42,6 +42,11 @@ public class TMEAtmosphereRegulator extends TMEBaseIndustry {
                         Conditions.HABITABLE),
                 // requirements
                 null));
+        this.modifiableConditions.add(new ModifiableCondition(Conditions.POLLUTION, 1000000f, 360f,
+                // restrictions
+                null,
+                // restrictions
+                Arrays.asList(Conditions.HABITABLE, Conditions.THIN_ATMOSPHERE)));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.EXTREME_WEATHER, 2000000f, 360f,
                 // restrictions
                 Arrays.asList(Conditions.NO_ATMOSPHERE,

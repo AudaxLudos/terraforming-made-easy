@@ -1,5 +1,6 @@
 package terraformingmadeeasy.conditions;
 
+import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.impl.campaign.econ.BaseMarketConditionPlugin;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
@@ -9,7 +10,7 @@ import com.fs.starfarer.api.util.Misc;
 
 public class TMEForgeWorld extends BaseMarketConditionPlugin {
     public static float FLEET_QUALITY_MULT = 0.50f;
-    public static float GROUND_DEFENSE_MULT = 0.25f;
+    public static float CUSTOM_PRODUCTION_MULT = 0.50f;
     public static int SUPPLY_BONUS = 3;
     public String[] industryIds = {
             Industries.ORBITALWORKS, Industries.MINING, Industries.REFINING, Industries.FUELPROD
@@ -18,7 +19,7 @@ public class TMEForgeWorld extends BaseMarketConditionPlugin {
     @Override
     public void apply(String id) {
         market.getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).modifyFlat(id, FLEET_QUALITY_MULT, "Forge World");
-        market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).modifyMult(id, 1f + GROUND_DEFENSE_MULT, "Forge World");
+        Global.getSector().getPlayerStats().getDynamic().getMod(Stats.CUSTOM_PRODUCTION_MOD).modifyMult(id, 1f + CUSTOM_PRODUCTION_MULT, "Forge World");
         for (String industryId : industryIds) {
             if (!market.hasIndustry(industryId)) continue;
 
@@ -30,7 +31,7 @@ public class TMEForgeWorld extends BaseMarketConditionPlugin {
     @Override
     public void unapply(String id) {
         market.getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).unmodify(id);
-        market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).unmodify(id);
+        Global.getSector().getPlayerStats().getDynamic().getMod(Stats.CUSTOM_PRODUCTION_MOD).unmodify(id);
         for (String industryId : industryIds) {
             if (!market.hasIndustry(industryId)) continue;
 
@@ -44,7 +45,7 @@ public class TMEForgeWorld extends BaseMarketConditionPlugin {
         tooltip.addSpacer(10f);
         tooltip.addPara("%s ship quality", 0f, Misc.getHighlightColor(), "+" + Math.round(FLEET_QUALITY_MULT * 100f) + "%");
         tooltip.addSpacer(10f);
-        tooltip.addPara("%s ground defense", 0f, Misc.getHighlightColor(), "+" + Math.round(GROUND_DEFENSE_MULT * 100f) + "%");
+        tooltip.addPara("%s maximum value of custom ship and weapon production per month", 0f, Misc.getHighlightColor(), "+" + Math.round(CUSTOM_PRODUCTION_MULT * 100f) + "%");
         tooltip.addSpacer(10f);
         tooltip.addPara("%s production to orbital works, refining, mining and fuel production", 0f, Misc.getHighlightColor(), "+" + SUPPLY_BONUS);
     }

@@ -16,11 +16,6 @@ public class TMEGeomorphologyStation extends TMEBaseIndustry {
                 // restrictions
                 null,
                 null));
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.POLLUTION, 1000000f, 360f,
-                // restrictions
-                null,
-                // restrictions
-                Arrays.asList(Conditions.HABITABLE, Conditions.THIN_ATMOSPHERE)));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.IRRADIATED, 1000000f, 360f,
                 // restrictions
                 Arrays.asList(Conditions.HABITABLE,
