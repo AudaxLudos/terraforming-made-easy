@@ -12,15 +12,15 @@ import java.util.Objects;
 public class TMEFortressWorld extends BaseMarketConditionPlugin {
     public static float FLEET_SIZE_MULT = 0.50f;
     public static float GROUND_DEFENSE_MULT = 0.50f;
-    public static int SUPPLY_BONUS = 3;
     public static int HEAVY_PATROL_BONUS = 1;
+    public static int SUPPLY_BONUS = 3;
     public String[] industryIds = {
             Industries.ORBITALWORKS, Industries.HIGHCOMMAND, Industries.REFINING, Industries.FUELPROD
     };
 
     @Override
     public void apply(String id) {
-        market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).modifyFlat(id, FLEET_SIZE_MULT, "Fortress World");
+        market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).modifyMult(id, 1f + FLEET_SIZE_MULT, "Fortress World");
         market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).modifyMult(id, 1f + GROUND_DEFENSE_MULT, "Fortress World");
         for (String industryId : industryIds) {
             if (!market.hasIndustry(industryId)) continue;
@@ -39,14 +39,14 @@ public class TMEFortressWorld extends BaseMarketConditionPlugin {
     public void unapply(String id) {
         market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).unmodify(id);
         market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).unmodify(id);
+        market.getStats().getDynamic().getMod(Stats.PATROL_NUM_MEDIUM_MOD).unmodify(id);
+        market.getStats().getDynamic().getMod(Stats.PATROL_NUM_HEAVY_MOD).unmodify(id);
         for (String industryId : industryIds) {
             if (!market.hasIndustry(industryId)) continue;
 
             Industry ind = market.getIndustry(industryId);
             ind.getSupplyBonusFromOther().unmodify(id);
         }
-        market.getStats().getDynamic().getMod(Stats.PATROL_NUM_MEDIUM_MOD).unmodify(id);
-        market.getStats().getDynamic().getMod(Stats.PATROL_NUM_HEAVY_MOD).unmodify(id);
     }
 
     @Override

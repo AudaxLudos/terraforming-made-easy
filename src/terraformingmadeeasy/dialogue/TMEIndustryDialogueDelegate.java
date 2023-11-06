@@ -53,7 +53,9 @@ public class TMEIndustryDialogueDelegate implements CustomDialogDelegate {
             float cost = modifiableCondition.cost;
             int buildTime = Math.round(modifiableCondition.buildTime);
             boolean canAfford = Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= cost;
-            boolean canBuild = this.industry.canTerraformCondition(modifiableCondition) && modifiableCondition.canChangeGasGiants;
+            boolean canBuild = this.industry.canTerraformCondition(modifiableCondition);
+            if (this.industry.getMarket().getPlanetEntity().isGasGiant())
+                canBuild = canBuild && modifiableCondition.canChangeGasGiants;
             boolean canAffordAndBuild = canBuild && canAfford;
             boolean hasCondition = this.industry.getMarket().hasCondition(modifiableCondition.id);
             String addOrRemoveText = hasCondition ? "Remove " : "Add ";
