@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TMEIndustryDialogueDelegate implements CustomDialogDelegate {
-    public static final float WIDTH = 600f;
+    public static final float WIDTH = 800f;
 
     public static final float HEIGHT = 400f;
 
@@ -39,15 +39,22 @@ public class TMEIndustryDialogueDelegate implements CustomDialogDelegate {
         Color baseColor = Misc.getButtonTextColor();
         Color bgColour = Misc.getDarkPlayerColor();
         Color brightColor = Misc.getBrightPlayerColor();
-        float columnOneWidth = WIDTH / 3f + 40f;
+        float columnOneWidth = WIDTH / 3f + 100f;
         float columnWidth = (WIDTH - columnOneWidth) / 2f;
 
         TooltipMakerAPI headerElement = panel.createUIElement(WIDTH, 0f, false);
-        headerElement.addSectionHeading("Select planet condition to terraform", Alignment.MID, 0f);
+        headerElement.beginTable(Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(),
+                0f, false, true,
+                "Name", columnOneWidth, "Build time", columnWidth, "Cost", columnWidth - 6f);
+        headerElement.addTableHeaderTooltip(0, "Name of the condition to terraform on a planet");
+        headerElement.addTableHeaderTooltip(1, "Build time, in days. Until the terraforming project finishes.");
+        headerElement.addTableHeaderTooltip(2, "One-time cost to begin terraforming project, in credits");
+        headerElement.addTable("", 0, 0f);
+        headerElement.getPrev().getPosition().setXAlignOffset(0f);
         panel.addUIElement(headerElement).inTL(0f, 0f);
 
         // list all modifiable condition of tme industry
-        TooltipMakerAPI conditionsElement = panel.createUIElement(WIDTH, HEIGHT - 40f, true);
+        TooltipMakerAPI conditionsElement = panel.createUIElement(WIDTH, HEIGHT - 30f, true);
 
         for (final TMEBaseIndustry.ModifiableCondition modifiableCondition : this.industry.modifiableConditions) {
             float cost = modifiableCondition.cost;
@@ -82,7 +89,6 @@ public class TMEIndustryDialogueDelegate implements CustomDialogDelegate {
 
             TooltipMakerAPI conditionButton = conditionPanel.createUIElement(WIDTH, 50f, false);
             ButtonAPI areaCheckbox = conditionButton.addAreaCheckbox("", modifiableCondition, baseColor, bgColour, brightColor, WIDTH, 50f, 0f);
-            areaCheckbox.setChecked((this.selected == modifiableCondition));
             areaCheckbox.setEnabled(canAffordAndBuild);
             conditionButton.addTooltipTo(addConditionTooltip(modifiableCondition), conditionPanel, TooltipMakerAPI.TooltipLocation.RIGHT);
 
@@ -94,7 +100,7 @@ public class TMEIndustryDialogueDelegate implements CustomDialogDelegate {
             conditionsElement.addCustom(conditionPanel, 0f);
             this.buttons.add(areaCheckbox);
         }
-        panel.addUIElement(conditionsElement).inMid();
+        panel.addUIElement(conditionsElement).belowMid(headerElement, 0f);
 
         // show player credits
         TooltipMakerAPI creditsElement = panel.createUIElement(WIDTH, 0f, false);
@@ -111,7 +117,7 @@ public class TMEIndustryDialogueDelegate implements CustomDialogDelegate {
 
     @Override
     public String getConfirmText() {
-        return "Confirm";
+        return "Terraform";
     }
 
     @Override
@@ -163,6 +169,12 @@ public class TMEIndustryDialogueDelegate implements CustomDialogDelegate {
         }
     }
 
+    public static String capitalizeString(String givenString) {
+        String text = givenString.replace("_", " ");
+        text = Character.toUpperCase(text.charAt(0)) + text.substring(1);
+        return text;
+    }
+
     public TooltipMakerAPI.TooltipCreator addConditionTooltip(final TMEBaseIndustry.ModifiableCondition condition) {
         return new TooltipMakerAPI.TooltipCreator() {
             @Override
@@ -177,21 +189,43 @@ public class TMEIndustryDialogueDelegate implements CustomDialogDelegate {
 
             @Override
             public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-                if (!condition.requirements.isEmpty())
-                    tooltip.addPara(
-                            "Requirements: %s", 0f, Misc.getHighlightColor(),
-                            condition.requirements.toString()
-                    );
-                else
-                    tooltip.addPara("Requirements: %s", 0f, Misc.getHighlightColor(), "No requirements found");
+                if (!condition.requirements.isEmpty()) {
+                    int i = 0;
+                    String text = "";
+                    List<String> conditions = new ArrayList<>();
+                    for (String cond : condition.requirements) {
+                        conditions.add(capitalizeString(cond));
+                        i++;
+                        if (i != condition.requirements.size())
+                            text = text + "%s OR ";
+                        else
+                            text = text + "%s";
+                    }
+                    tooltip.addPara("Requires: " + text, 0f, Misc.getHighlightColor(), conditions.toArray(new String[0]));
+                } else {
+                    tooltip.addPara("Requires: %s", 0f, Misc.getTextColor(), "No conditions required");
+                }
                 tooltip.addSpacer(10f);
-                if (!condition.restrictions.isEmpty())
-                    tooltip.addPara(
-                            "Restrictions: %s", 0f, Misc.getNegativeHighlightColor(),
-                            condition.restrictions.toString()
-                    );
-                else
-                    tooltip.addPara("Restrictions: %s", 0f, Misc.getHighlightColor(), "No restrictions found");
+                if (!condition.restrictions.isEmpty()) {
+                    int i = 0;
+                    String text = "";
+                    List<String> conditions = new ArrayList<>();
+                    for (String cond : condition.restrictions) {
+                        conditions.add(capitalizeString(cond));
+                        i++;
+                        if (i != condition.restrictions.size())
+                            text = text + "%s, ";
+                        else
+                            text = text + "%s";
+                    }
+                    tooltip.addPara("Removes: " + text, 0f, Misc.getHighlightColor(), conditions.toArray(new String[0]));
+                } else {
+                    tooltip.addPara("Removes: %s", 0f, Misc.getTextColor(), "No conditions to remove");
+                }
+                tooltip.addSpacer(10f);
+                Color textColor = condition.canChangeGasGiants ? Misc.getHighlightColor() : Misc.getNegativeHighlightColor();
+                String textFormat = condition.canChangeGasGiants ? "Can" : "Cannot";
+                tooltip.addPara("%s be used on gas giants", 0f, textColor, textFormat);
             }
         };
     }

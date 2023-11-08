@@ -11,17 +11,17 @@ public class TMETerrestrialEngine extends TMEBaseIndustry {
                 // restrictions
                 Collections.singletonList(Conditions.HIGH_GRAVITY),
                 null));
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.HIGH_GRAVITY, 4000000f, 720f,true,
+        this.modifiableConditions.add(new ModifiableCondition(Conditions.HIGH_GRAVITY, 4000000f, 720f, true,
                 // restrictions
                 Collections.singletonList(Conditions.LOW_GRAVITY),
                 // requirements
                 null));
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.TECTONIC_ACTIVITY, 2000000f, 360f,false,
+        this.modifiableConditions.add(new ModifiableCondition(Conditions.TECTONIC_ACTIVITY, 2000000f, 360f, false,
                 // restrictions
                 Collections.singletonList(Conditions.EXTREME_TECTONIC_ACTIVITY),
                 // requirements
                 null));
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.EXTREME_TECTONIC_ACTIVITY, 4000000f, 720f,false,
+        this.modifiableConditions.add(new ModifiableCondition(Conditions.EXTREME_TECTONIC_ACTIVITY, 4000000f, 720f, false,
                 // restrictions
                 Arrays.asList(Conditions.TECTONIC_ACTIVITY,
                         Conditions.HABITABLE),

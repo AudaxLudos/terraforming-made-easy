@@ -12,7 +12,7 @@ public class TMEParadiseWorld extends BaseMarketConditionPlugin {
     public static int STABILITY_BONUS = 4;
     public static int SUPPLY_BONUS = 3;
     public String[] industryIds = {
-            Industries.POPULATION ,Industries.FARMING, Industries.LIGHTINDUSTRY, Industries.HIGHCOMMAND
+            Industries.POPULATION, Industries.FARMING, Industries.LIGHTINDUSTRY, Industries.HIGHCOMMAND
     };
 
     @Override

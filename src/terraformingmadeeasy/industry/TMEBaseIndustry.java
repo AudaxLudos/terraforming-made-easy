@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static terraformingmadeeasy.listeners.TMEIndustryOptionProvider.tmeIndustries;
-
 public class TMEBaseIndustry extends BaseIndustry {
     public static class ModifiableCondition {
         public String id;
@@ -319,6 +317,7 @@ public class TMEBaseIndustry extends BaseIndustry {
             planetTypeId = poorBarrenTypes[Misc.random.nextInt(poorBarrenTypes.length)];
             removeFarming = true;
             removeOrganics = true;
+            reduceOrganics = false;
             if (m.hasCondition(Conditions.TECTONIC_ACTIVITY) || m.hasCondition(Conditions.EXTREME_TECTONIC_ACTIVITY))
                 planetTypeId = "rocky_unstable";
         }
@@ -331,6 +330,7 @@ public class TMEBaseIndustry extends BaseIndustry {
             planetTypeId = "irradiated";
             removeFarming = true;
             removeOrganics = true;
+            reduceOrganics = false;
         }
         if (m.hasCondition(Conditions.TECTONIC_ACTIVITY) || m.hasCondition(Conditions.EXTREME_TECTONIC_ACTIVITY)) {
             if ((m.hasCondition(Conditions.VERY_HOT) || m.hasCondition(Conditions.HOT))
@@ -340,6 +340,7 @@ public class TMEBaseIndustry extends BaseIndustry {
                 planetTypeId = "lava";
                 removeFarming = true;
                 removeOrganics = true;
+                reduceOrganics = false;
             }
             if (m.hasCondition(Conditions.VERY_COLD)
                     && (m.hasCondition(Conditions.VOLATILES_TRACE) || m.hasCondition(Conditions.VOLATILES_DIFFUSE) ||
@@ -347,6 +348,7 @@ public class TMEBaseIndustry extends BaseIndustry {
                 planetTypeId = "cryovolcanic";
                 removeFarming = true;
                 removeOrganics = true;
+                reduceOrganics = false;
             }
         }
 

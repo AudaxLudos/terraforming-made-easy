@@ -20,7 +20,7 @@ public class TMEForgeWorld extends BaseMarketConditionPlugin {
     @Override
     public void apply(String id) {
         market.getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).modifyFlat(id, FLEET_QUALITY_MOD, "Forge World");
-        Global.getSector().getPlayerStats().getDynamic().getMod(Stats.CUSTOM_PRODUCTION_MOD).modifyMult(id, 1f + CUSTOM_PRODUCTION_MULT,"Forge World (" + market.getName() + ")");
+        Global.getSector().getPlayerStats().getDynamic().getMod(Stats.CUSTOM_PRODUCTION_MOD).modifyMult(id, 1f + CUSTOM_PRODUCTION_MULT, "Forge World (" + market.getName() + ")");
         market.getStats().getDynamic().getMod(Stats.MAX_INDUSTRIES).modifyFlat(id, MAX_INDUSTRIES_BONUS, "Forge World");
         for (String industryId : industryIds) {
             if (!market.hasIndustry(industryId)) continue;
