@@ -28,16 +28,4 @@ public class TMEGeomorphologyStation extends TMEBaseIndustry {
                 // requirements
                 Collections.singletonList(Conditions.HABITABLE)));
     }
-
-    @Override
-    public Boolean canTerraformCondition(ModifiableCondition condition) {
-        boolean canTerraform = false;
-        if (!condition.requirements.isEmpty()) {
-            for (String cond : condition.requirements)
-                canTerraform = canTerraform || getMarket().hasCondition(cond);
-        } else {
-            canTerraform = true;
-        }
-        return canTerraform;
-    }
 }

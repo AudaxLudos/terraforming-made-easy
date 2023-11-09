@@ -174,8 +174,9 @@ public class TMEBaseIndustry extends BaseIndustry {
 
     public void sendTerraformingMessage() {
         if (market.isPlayerOwned()) {
-            MessageIntel intel = new MessageIntel(getCurrentName() + " at " + market.getName(), Misc.getBasePlayerColor());
-            intel.addLine(BaseIntelPlugin.BULLET + "Terraforming completed");
+            String addOrRemoveText = !getMarket().hasCondition(modifiableCondition.id) ? "Added " : "Removed ";
+            MessageIntel intel = new MessageIntel("Terraforming completed at " + market.getName(), Misc.getBasePlayerColor());
+            intel.addLine(BaseIntelPlugin.BULLET + addOrRemoveText + modifiableCondition.name + " planet condition");
             intel.setIcon(Global.getSector().getPlayerFaction().getCrest());
             intel.setSound(BaseIntelPlugin.getSoundStandardUpdate());
             Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.COLONY_INFO, market);
@@ -250,6 +251,7 @@ public class TMEBaseIndustry extends BaseIndustry {
 
     @Override
     protected void updateAICoreToSupplyAndDemandModifiers() {
+        // TME industries don't supply or demand commodities for now
     }
 
     public void changePlanetConditions() {
@@ -496,10 +498,13 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     public Boolean canTerraformCondition(ModifiableCondition condition) {
-        if (!condition.requirements.isEmpty())
-            for (String requirement : condition.requirements)
-                if (!getMarket().hasCondition(requirement))
-                    return false;
-        return true;
+        boolean canTerraform = false;
+        if (!condition.requirements.isEmpty()) {
+            for (String cond : condition.requirements)
+                canTerraform = canTerraform || getMarket().hasCondition(cond);
+        } else {
+            canTerraform = true;
+        }
+        return canTerraform;
     }
 }

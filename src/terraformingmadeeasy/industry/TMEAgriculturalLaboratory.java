@@ -36,16 +36,4 @@ public class TMEAgriculturalLaboratory extends TMEBaseIndustry {
                 // requirements
                 Arrays.asList(Conditions.HABITABLE, Conditions.MILD_CLIMATE)));
     }
-
-    @Override
-    public Boolean canTerraformCondition(ModifiableCondition condition) {
-        boolean canTerraform = false;
-        if (!condition.requirements.isEmpty()) {
-            for (String cond : condition.requirements)
-                canTerraform = canTerraform || getMarket().hasCondition(cond);
-        } else {
-            canTerraform = true;
-        }
-        return canTerraform;
-    }
 }
