@@ -197,9 +197,9 @@ public class TMEIndustryDialogueDelegate implements CustomDialogDelegate {
                         conditions.add(capitalizeString(cond));
                         i++;
                         if (i != condition.requirements.size())
-                            text = text + "%s OR ";
+                            text = text + "%s or ";
                         else
-                            text = text + "%s";
+                            text = text + "%s to add";
                     }
                     tooltip.addPara("Requires: " + text, 0f, Misc.getHighlightColor(), conditions.toArray(new String[0]));
                 } else {

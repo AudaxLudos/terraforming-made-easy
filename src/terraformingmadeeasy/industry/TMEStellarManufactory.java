@@ -7,6 +7,11 @@ import java.util.Collections;
 
 public class TMEStellarManufactory extends TMEBaseIndustry {
     public TMEStellarManufactory() {
+        this.modifiableConditions.add(new ModifiableCondition(Conditions.SOLAR_ARRAY, 4000000, 360f, false,
+                // restrictions
+                null,
+                // requirements
+                Collections.singletonList(Conditions.HABITABLE)));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.HOT, 1000000f, 180f, true,
                 // restrictions
                 Arrays.asList(Conditions.VERY_HOT,

@@ -176,7 +176,7 @@ public class TMEBaseIndustry extends BaseIndustry {
         if (market.isPlayerOwned()) {
             String addOrRemoveText = !getMarket().hasCondition(modifiableCondition.id) ? "Added " : "Removed ";
             MessageIntel intel = new MessageIntel("Terraforming completed at " + market.getName(), Misc.getBasePlayerColor());
-            intel.addLine(BaseIntelPlugin.BULLET + addOrRemoveText + modifiableCondition.name + " planet condition");
+            intel.addLine(BaseIntelPlugin.BULLET + addOrRemoveText + modifiableCondition.name.toLowerCase() + " planet condition");
             intel.setIcon(Global.getSector().getPlayerFaction().getCrest());
             intel.setSound(BaseIntelPlugin.getSoundStandardUpdate());
             Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.COLONY_INFO, market);
