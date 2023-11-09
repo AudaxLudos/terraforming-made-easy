@@ -37,30 +37,33 @@ public class TMEMineralReplicator extends TMEBaseIndustry {
                 // requirements
                 Collections.singletonList(Conditions.HABITABLE)));
         // ORE
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.ORE_SPARSE, 12000000f, 540f, false,
+        this.modifiableConditions.add(new ModifiableCondition(Conditions.ORE_SPARSE, 2000000f, 90f, false,
                 // restrictions
                 Arrays.asList(Conditions.ORE_MODERATE,
                         Conditions.ORE_ABUNDANT,
                         Conditions.ORE_RICH,
                         Conditions.ORE_ULTRARICH),
                 // requirements
-                null));
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.ORE_MODERATE, 12000000f, 540f, false,
+                Arrays.asList(Conditions.TECTONIC_ACTIVITY,
+                        Conditions.HOT)));
+        this.modifiableConditions.add(new ModifiableCondition(Conditions.ORE_MODERATE, 4000000f, 180f, false,
                 // restrictions
                 Arrays.asList(Conditions.ORE_SPARSE,
                         Conditions.ORE_ABUNDANT,
                         Conditions.ORE_RICH,
                         Conditions.ORE_ULTRARICH),
                 // requirements
-                null));
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.ORE_ABUNDANT, 12000000f, 540f, false,
+                Arrays.asList(Conditions.TECTONIC_ACTIVITY,
+                        Conditions.HOT)));
+        this.modifiableConditions.add(new ModifiableCondition(Conditions.ORE_ABUNDANT, 6000000f, 270f, false,
                 // restrictions
                 Arrays.asList(Conditions.ORE_SPARSE,
                         Conditions.ORE_MODERATE,
                         Conditions.ORE_RICH,
                         Conditions.ORE_ULTRARICH),
                 // requirements
-                null));
+                Arrays.asList(Conditions.EXTREME_TECTONIC_ACTIVITY,
+                        Conditions.VERY_HOT)));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.ORE_RICH, 12000000f, 540f, false,
                 // restrictions
                 Arrays.asList(Conditions.ORE_SPARSE,
@@ -68,25 +71,28 @@ public class TMEMineralReplicator extends TMEBaseIndustry {
                         Conditions.ORE_ABUNDANT,
                         Conditions.ORE_ULTRARICH),
                 // requirements
-                null));
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.ORE_ULTRARICH, 12000000f, 540f, false,
+                Arrays.asList(Conditions.EXTREME_TECTONIC_ACTIVITY,
+                        Conditions.VERY_HOT)));
+        this.modifiableConditions.add(new ModifiableCondition(Conditions.ORE_ULTRARICH, 18000000f, 1080f, false,
                 // restrictions
                 Arrays.asList(Conditions.ORE_SPARSE,
                         Conditions.ORE_MODERATE,
                         Conditions.ORE_ABUNDANT,
                         Conditions.ORE_RICH),
                 // requirements
-                null));
+                Arrays.asList(Conditions.EXTREME_TECTONIC_ACTIVITY,
+                        Conditions.VERY_HOT)));
     }
 
     @Override
     public Boolean canTerraformCondition(ModifiableCondition condition) {
-        if (condition.requirements.size() == 3)
-            return getMarket().hasCondition(condition.requirements.get(0)) || getMarket().hasCondition(condition.requirements.get(1)) || getMarket().hasCondition(condition.requirements.get(2));
-        else if (condition.requirements.size() == 2)
-            return getMarket().hasCondition(condition.requirements.get(0)) || getMarket().hasCondition(condition.requirements.get(1));
-        else if (condition.requirements.size() == 1)
-            return getMarket().hasCondition(condition.requirements.get(0));
-        return true;
+        boolean canTerraform = false;
+        if (!condition.requirements.isEmpty()) {
+            for (String cond : condition.requirements)
+                canTerraform = canTerraform || getMarket().hasCondition(cond);
+        } else {
+            canTerraform = true;
+        }
+        return canTerraform;
     }
 }

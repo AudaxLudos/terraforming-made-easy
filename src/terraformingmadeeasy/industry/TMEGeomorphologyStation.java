@@ -31,12 +31,13 @@ public class TMEGeomorphologyStation extends TMEBaseIndustry {
 
     @Override
     public Boolean canTerraformCondition(ModifiableCondition condition) {
-        if (condition.requirements.size() == 3)
-            return getMarket().hasCondition(condition.requirements.get(0)) || getMarket().hasCondition(condition.requirements.get(1)) || getMarket().hasCondition(condition.requirements.get(2));
-        else if (condition.requirements.size() == 2)
-            return getMarket().hasCondition(condition.requirements.get(0)) || getMarket().hasCondition(condition.requirements.get(1));
-        else if (condition.requirements.size() == 1)
-            return getMarket().hasCondition(condition.requirements.get(0));
-        return true;
+        boolean canTerraform = false;
+        if (!condition.requirements.isEmpty()) {
+            for (String cond : condition.requirements)
+                canTerraform = canTerraform || getMarket().hasCondition(cond);
+        } else {
+            canTerraform = true;
+        }
+        return canTerraform;
     }
 }

@@ -45,7 +45,7 @@ public class TMEIndustryDialogueDelegate implements CustomDialogDelegate {
         TooltipMakerAPI headerElement = panel.createUIElement(WIDTH, 0f, false);
         headerElement.beginTable(Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(),
                 0f, false, true,
-                "Name", columnOneWidth, "Build time", columnWidth, "Cost", columnWidth - 6f);
+                new Object[] {"Name", columnOneWidth, "Build time", columnWidth, "Cost", columnWidth - 6f});
         headerElement.addTableHeaderTooltip(0, "Name of the condition to terraform on a planet");
         headerElement.addTableHeaderTooltip(1, "Build time, in days. Until the terraforming project finishes.");
         headerElement.addTableHeaderTooltip(2, "One-time cost to begin terraforming project, in credits");

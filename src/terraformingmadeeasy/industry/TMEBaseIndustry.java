@@ -351,26 +351,32 @@ public class TMEBaseIndustry extends BaseIndustry {
                 reduceOrganics = false;
             }
         }
-
         if (m.hasCondition(Conditions.TOXIC_ATMOSPHERE) && m.hasCondition(Conditions.VERY_HOT) && m.hasCondition(Conditions.EXTREME_WEATHER) && m.hasCondition(Conditions.AI_CORE_ADMIN) &&
                 m.hasIndustry(Industries.ORBITALWORKS) && m.hasIndustry(Industries.MINING) && m.hasIndustry(Industries.REFINING) && m.hasIndustry(Industries.FUELPROD)) {
             planetTypeId = "tme_forge";
             removeFarming = true;
             reduceOrganics = true;
         }
-
         if (m.hasCondition(Conditions.HABITABLE) && m.hasCondition(Conditions.EXTREME_WEATHER) && m.hasCondition(Conditions.HIGH_GRAVITY) && m.hasCondition(Conditions.AI_CORE_ADMIN) &&
                 m.hasIndustry(Industries.ORBITALWORKS) && m.hasIndustry(Industries.HIGHCOMMAND) && m.hasIndustry(Industries.REFINING) && m.hasIndustry(Industries.FUELPROD)) {
             planetTypeId = "tme_fortress";
             removeFarming = false;
             removeOrganics = false;
         }
-
         if (m.hasCondition(Conditions.HABITABLE) && m.hasCondition(Conditions.MILD_CLIMATE) && m.hasCondition(Conditions.LOW_GRAVITY) && m.hasCondition(Conditions.AI_CORE_ADMIN) &&
                 m.hasIndustry(Industries.FARMING) && m.hasIndustry(Industries.COMMERCE) && m.hasIndustry(Industries.LIGHTINDUSTRY) && m.hasIndustry(Industries.HIGHCOMMAND)) {
             planetTypeId = "tme_paradise";
             removeFarming = false;
             removeOrganics = false;
+        }
+        if (m.getPlanetEntity().isGasGiant()) {
+            removeFarming = true;
+            removeOrganics = true;
+            reduceOrganics = false;
+            if (m.hasCondition(Conditions.VERY_COLD))
+                planetTypeId = "ice_giant";
+            if (m.hasCondition(Conditions.VERY_HOT))
+                planetTypeId = "gas_giant";
         }
 
         if (removeFarming) removeFarming();
@@ -490,9 +496,10 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     public Boolean canTerraformCondition(ModifiableCondition condition) {
-        for (String requirement : condition.requirements)
-            if (!getMarket().hasCondition(requirement))
-                return false;
+        if (!condition.requirements.isEmpty())
+            for (String requirement : condition.requirements)
+                if (!getMarket().hasCondition(requirement))
+                    return false;
         return true;
     }
 }
