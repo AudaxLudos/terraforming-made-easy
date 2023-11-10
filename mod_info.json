@@ -2,7 +2,7 @@
     "id": "terraformingmadeeasy",
     "name": "Terraforming Made Easy",
     "author": "Audax",
-    "version": "0.7.5",
+    "version": "0.9.3",
     "description": "Allows to player to build industries that can remove or add planet conditions to a colony",
     "gameVersion": "0.96a",
     "jars": [

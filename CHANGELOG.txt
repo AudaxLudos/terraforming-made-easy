@@ -1,7 +1,26 @@
+### 0.9.3
+- Release 0.9.3
+- Add temporary planet type conditions
+- Add solar array modifiable condition to stellar manufactory
+- Update some text to be more understandable
+- Update new industries descriptions and can terraform condition checks
+- Update can terraform conditions checks
+- Update requirements for modifiable conditions of new industries
+- Add graphics icon for newly added industries
+- Update terraforming UI to have headers for modifiable conditions list
+- Fix bug where organics are reduced instead of removed for some planet types
+- Add new terraforming industry called element synthesizer
+- Add new terraforming industry called mineral replicator
+- Update move organics modifiable condition to new mineral replicator industry
+- Fix bug terraforming option not showing up
+
 ### 0.7.5
+- Release 0.7.5
 - Update jar file
 - Update mod version to latest
+
 ### 0.7.4
+- Release 0.7.4
 - Update rename some of the industries
 - Add full implementation of tme conditions
 - Add tme planet condition forge world implementation
@@ -17,11 +36,13 @@
 - Add other planet types when changing planet class
 - Add planet visual and class change when certain conditions are met
 - Update modifiable conditions restrictions and requirements
-- Update mod version to latest
+
 ### 0.5.3
+- Release 0.5.3
 - Add github action script
 - Add version check files
 - Update CHANGELOG, CREDITS & mod_info
+
 ### 0.5.0
 - Add README.md
 - Update modifiable conditions cost and build time
@@ -33,5 +54,6 @@
 - Add stellar factory relays
 - Add initial mod implementations
 - Add kotlin library
+
 ### 0.0.1
 - Add initial mod files

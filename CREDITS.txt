@@ -1,4 +1,5 @@
 SirHartley: for the implementation of industry dialogues for starsector.
 Wispborne: for the starsector intellij mod template and the github action script.
+Kentington: for the implementation of changing planet visuals in DIY planets.
 starsector community: for many resources in regard to modding and spriting.
 Alex and Co: for making a great game and community.
