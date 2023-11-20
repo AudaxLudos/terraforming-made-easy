@@ -1,3 +1,12 @@
+### 1.0.2
+- Release 1.0.2
+- Update files to match latest version
+- Update CHANGELOG.txt
+
+### 1.0.1
+- Release 1.0.1
+- Update CHANGELOG.txt
+
 ### 1.0.0
 - Release 1.0.0
 - Update fix ui text name for condition not showing up
