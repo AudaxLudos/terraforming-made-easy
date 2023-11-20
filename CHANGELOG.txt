@@ -1,3 +1,13 @@
+### 1.0.0
+- Update fix ui text name for condition not showing up
+- Update removed unused java classes
+- Update removed java classes TME prefix
+- Update renamed TMEIndustryOptionProvider to TerraformOptionProvider
+- Update renamed TMEIndustryDialogueDelegate to TerraformDialogueDelegate
+- Update renamed TMEBaseIndustry to BaseIndustry
+- Update renamed TMEModPlugin to ModPlugin
+- Update mod_info.json
+
 ### 0.9.3
 - Release 0.9.3
 - Add temporary planet type conditions
@@ -39,7 +49,7 @@
 
 ### 0.5.3
 - Release 0.5.3
-- Add github action script
+- Add GitHub action script
 - Add version check files
 - Update CHANGELOG, CREDITS & mod_info
 
