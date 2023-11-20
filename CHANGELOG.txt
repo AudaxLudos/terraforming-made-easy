@@ -1,4 +1,5 @@
 ### 1.0.0
+- Release 1.0.0
 - Update fix ui text name for condition not showing up
 - Update removed unused java classes
 - Update removed java classes TME prefix
