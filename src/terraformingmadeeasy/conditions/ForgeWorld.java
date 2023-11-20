@@ -8,7 +8,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 
-public class TMEForgeWorld extends BaseMarketConditionPlugin {
+public class ForgeWorld extends BaseMarketConditionPlugin {
     public static float FLEET_QUALITY_MOD = 0.50f;
     public static float CUSTOM_PRODUCTION_MULT = 0.50f;
     public static int MAX_INDUSTRIES_BONUS = 1;

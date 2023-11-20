@@ -5,8 +5,8 @@ import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class TMEStellarManufactory extends TMEBaseIndustry {
-    public TMEStellarManufactory() {
+public class StellarManufactory extends BaseIndustry {
+    public StellarManufactory() {
         this.modifiableConditions.add(new ModifiableCondition(Conditions.SOLAR_ARRAY, 4000000, 360f, false,
                 // restrictions
                 null,
@@ -51,7 +51,7 @@ public class TMEStellarManufactory extends TMEBaseIndustry {
                 null));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.DARK, 2000000f, 360f, true,
                 // restrictions
-                Collections.singletonList(Conditions.POOR_LIGHT),
+                Arrays.asList(Conditions.POOR_LIGHT, Conditions.HABITABLE),
                 // requirements
                 null));
     }

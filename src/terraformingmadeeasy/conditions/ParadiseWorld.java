@@ -6,7 +6,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 
-public class TMEParadiseWorld extends BaseMarketConditionPlugin {
+public class ParadiseWorld extends BaseMarketConditionPlugin {
     public static float INCOME_MULT = 0.50f;
     public static float ACCESSIBILITY_MOD = 0.50f;
     public static int STABILITY_BONUS = 4;

@@ -11,25 +11,25 @@ import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import org.lwjgl.util.vector.Vector2f;
-import terraformingmadeeasy.industry.TMEBaseIndustry;
+import terraformingmadeeasy.industry.BaseIndustry;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TMEIndustryDialogueDelegate implements CustomDialogDelegate {
+public class TerraformDialogueDelegate implements CustomDialogDelegate {
     public static final float WIDTH = 800f;
 
     public static final float HEIGHT = 400f;
 
-    public TMEBaseIndustry industry;
+    public BaseIndustry industry;
 
-    public TMEBaseIndustry.ModifiableCondition selected = null;
+    public BaseIndustry.ModifiableCondition selected = null;
 
     public List<ButtonAPI> buttons = new ArrayList<>();
 
-    public TMEIndustryDialogueDelegate(Industry industry) {
-        this.industry = (TMEBaseIndustry) industry;
+    public TerraformDialogueDelegate(Industry industry) {
+        this.industry = (BaseIndustry) industry;
     }
 
     @Override
@@ -45,7 +45,7 @@ public class TMEIndustryDialogueDelegate implements CustomDialogDelegate {
         TooltipMakerAPI headerElement = panel.createUIElement(WIDTH, 0f, false);
         headerElement.beginTable(Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(),
                 0f, false, true,
-                new Object[] {"Name", columnOneWidth, "Build time", columnWidth, "Cost", columnWidth - 6f});
+                new Object[]{"Name", columnOneWidth, "Build time", columnWidth, "Cost", columnWidth - 6f});
         headerElement.addTableHeaderTooltip(0, "Name of the condition to terraform on a planet");
         headerElement.addTableHeaderTooltip(1, "Build time, in days. Until the terraforming project finishes.");
         headerElement.addTableHeaderTooltip(2, "One-time cost to begin terraforming project, in credits");
@@ -56,16 +56,15 @@ public class TMEIndustryDialogueDelegate implements CustomDialogDelegate {
         // list all modifiable condition of tme industry
         TooltipMakerAPI conditionsElement = panel.createUIElement(WIDTH, HEIGHT - 30f, true);
 
-        for (final TMEBaseIndustry.ModifiableCondition modifiableCondition : this.industry.modifiableConditions) {
+        for (final BaseIndustry.ModifiableCondition modifiableCondition : this.industry.modifiableConditions) {
             float cost = modifiableCondition.cost;
             int buildTime = Math.round(modifiableCondition.buildTime);
             boolean canAfford = Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= cost;
-            boolean canBuild = this.industry.canTerraformCondition(modifiableCondition);
+            boolean canBeRemoved = this.industry.getMarket().hasCondition(modifiableCondition.id);
+            boolean canBuild = this.industry.canTerraformCondition(modifiableCondition) || canBeRemoved;
             if (this.industry.getMarket().getPlanetEntity().isGasGiant())
                 canBuild = canBuild && modifiableCondition.canChangeGasGiants;
             boolean canAffordAndBuild = canBuild && canAfford;
-            boolean hasCondition = this.industry.getMarket().hasCondition(modifiableCondition.id);
-            String addOrRemoveText = hasCondition ? "Remove " : "Add ";
             if (!canAfford) {
                 baseColor = Color.darkGray;
                 bgColour = Color.lightGray;
@@ -75,7 +74,7 @@ public class TMEIndustryDialogueDelegate implements CustomDialogDelegate {
             CustomPanelAPI conditionPanel = panel.createCustomPanel(WIDTH, 50f, new ButtonReportingCustomPanel(this));
             TooltipMakerAPI conditionNameElement = conditionPanel.createUIElement(columnOneWidth, 40f, false);
             TooltipMakerAPI conditionImage = conditionNameElement.beginImageWithText(modifiableCondition.icon, 40f);
-            conditionImage.addPara(addOrRemoveText + modifiableCondition.name, canAffordAndBuild ? Misc.getTextColor() : Misc.getNegativeHighlightColor(), 0f);
+            conditionImage.addPara(canBeRemoved ? "Remove " : "Add " + modifiableCondition.name, canAffordAndBuild ? Misc.getTextColor() : Misc.getNegativeHighlightColor(), 0f);
             conditionNameElement.addImageWithText(0f);
             conditionNameElement.getPosition().inTL(-5f, 5f);
 
@@ -143,8 +142,8 @@ public class TMEIndustryDialogueDelegate implements CustomDialogDelegate {
     }
 
     public void reportButtonPressed(Object id) {
-        if (id instanceof TMEBaseIndustry.ModifiableCondition)
-            this.selected = (TMEBaseIndustry.ModifiableCondition) id;
+        if (id instanceof BaseIndustry.ModifiableCondition)
+            this.selected = (BaseIndustry.ModifiableCondition) id;
         boolean anyChecked = false;
         for (ButtonAPI button : this.buttons) {
             if (button.isChecked() && button.getCustomData() != id)
@@ -157,9 +156,9 @@ public class TMEIndustryDialogueDelegate implements CustomDialogDelegate {
     }
 
     public static class ButtonReportingCustomPanel extends BaseCustomUIPanelPlugin {
-        public TMEIndustryDialogueDelegate delegate;
+        public TerraformDialogueDelegate delegate;
 
-        public ButtonReportingCustomPanel(TMEIndustryDialogueDelegate delegate) {
+        public ButtonReportingCustomPanel(TerraformDialogueDelegate delegate) {
             this.delegate = delegate;
         }
 
@@ -175,7 +174,7 @@ public class TMEIndustryDialogueDelegate implements CustomDialogDelegate {
         return text;
     }
 
-    public TooltipMakerAPI.TooltipCreator addConditionTooltip(final TMEBaseIndustry.ModifiableCondition condition) {
+    public TooltipMakerAPI.TooltipCreator addConditionTooltip(final BaseIndustry.ModifiableCondition condition) {
         return new TooltipMakerAPI.TooltipCreator() {
             @Override
             public boolean isTooltipExpandable(Object tooltipParam) {

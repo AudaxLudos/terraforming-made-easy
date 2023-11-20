@@ -5,8 +5,8 @@ import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class TMETerrestrialEngine extends TMEBaseIndustry {
-    public TMETerrestrialEngine() {
+public class TerrestrialEngine extends BaseIndustry {
+    public TerrestrialEngine() {
         this.modifiableConditions.add(new ModifiableCondition(Conditions.LOW_GRAVITY, 2000000f, 360f, false,
                 // restrictions
                 Collections.singletonList(Conditions.HIGH_GRAVITY),

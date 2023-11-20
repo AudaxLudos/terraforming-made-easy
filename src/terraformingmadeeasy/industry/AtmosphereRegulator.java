@@ -3,9 +3,10 @@ package terraformingmadeeasy.industry;
 import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 
 import java.util.Arrays;
+import java.util.Collections;
 
-public class TMEAtmosphereRegulator extends TMEBaseIndustry {
-    public TMEAtmosphereRegulator() {
+public class AtmosphereRegulator extends BaseIndustry {
+    public AtmosphereRegulator() {
         this.modifiableConditions.add(new ModifiableCondition(Conditions.NO_ATMOSPHERE, 1000000f, 90f, false,
                 // restrictions
                 Arrays.asList(Conditions.THIN_ATMOSPHERE,
@@ -55,14 +56,8 @@ public class TMEAtmosphereRegulator extends TMEBaseIndustry {
                 null));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.MILD_CLIMATE, 12000000f, 720f, false,
                 // restrictions
-                Arrays.asList(Conditions.EXTREME_WEATHER,
-                        Conditions.NO_ATMOSPHERE,
-                        Conditions.THIN_ATMOSPHERE,
-                        Conditions.DENSE_ATMOSPHERE,
-                        Conditions.TOXIC_ATMOSPHERE,
-                        Conditions.VERY_HOT,
-                        Conditions.VERY_COLD),
+                null,
                 // requirements
-                null));
+                Collections.singletonList(Conditions.HABITABLE)));
     }
 }

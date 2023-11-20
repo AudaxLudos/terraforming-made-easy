@@ -8,19 +8,19 @@ import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import org.lwjgl.util.vector.Vector2f;
-import terraformingmadeeasy.industry.TMEBaseIndustry;
+import terraformingmadeeasy.industry.BaseIndustry;
 
 import java.awt.*;
 
-public class TMEConfirmDialogueDelegate implements CustomDialogDelegate {
+public class ConfirmDialogueDelegate implements CustomDialogDelegate {
     public static final float WIDTH = 564f;
 
     public static final float HEIGHT = 104f;
 
-    public TMEBaseIndustry industry;
+    public BaseIndustry industry;
 
-    public TMEConfirmDialogueDelegate(Industry industry) {
-        this.industry = (TMEBaseIndustry) industry;
+    public ConfirmDialogueDelegate(Industry industry) {
+        this.industry = (BaseIndustry) industry;
     }
 
     @Override

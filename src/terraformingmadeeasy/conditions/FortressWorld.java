@@ -9,7 +9,7 @@ import com.fs.starfarer.api.util.Misc;
 
 import java.util.Objects;
 
-public class TMEFortressWorld extends BaseMarketConditionPlugin {
+public class FortressWorld extends BaseMarketConditionPlugin {
     public static float FLEET_SIZE_MULT = 0.50f;
     public static float GROUND_DEFENSE_MULT = 0.50f;
     public static int HEAVY_PATROL_BONUS = 1;

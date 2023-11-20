@@ -7,7 +7,6 @@ import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.characters.MarketConditionSpecAPI;
-import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
@@ -22,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class TMEBaseIndustry extends BaseIndustry {
+public class BaseIndustry extends com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry {
     public static class ModifiableCondition {
         public String id;
         public String name;
@@ -144,7 +143,7 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     public void startUpgrading(ModifiableCondition condition) {
-        // Will be called from TMEIndustryDialogueDelegate to start terraforming
+        // Will be called from TerraformDialogueDelegate to start terraforming
         building = true;
         buildProgress = 0;
         modifiableCondition = condition;
@@ -153,7 +152,7 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     public void cancelUpgrade() {
-        // Will be called from TMEConfirmDialogueDelegate to cancel terraforming
+        // Will be called from ConfirmDialogueDelegate to cancel terraforming
         building = false;
         buildProgress = 0;
         modifiableCondition = null;

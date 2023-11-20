@@ -8,5 +8,5 @@
     "jars": [
         "TerraformingMadeEasy.jar"
     ],
-    "modPlugin": "terraformingmadeeasy.TMEModPlugin"
+    "modPlugin": "terraformingmadeeasy.ModPlugin"
 }

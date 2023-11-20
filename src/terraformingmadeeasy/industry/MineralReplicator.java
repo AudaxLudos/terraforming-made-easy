@@ -5,8 +5,8 @@ import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class TMEMineralReplicator extends TMEBaseIndustry {
-    public TMEMineralReplicator() {
+public class MineralReplicator extends BaseIndustry {
+    public MineralReplicator() {
         // ORGANICS
         this.modifiableConditions.add(new ModifiableCondition(Conditions.ORGANICS_TRACE, 2000000f, 90f, false,
                 // restrictions

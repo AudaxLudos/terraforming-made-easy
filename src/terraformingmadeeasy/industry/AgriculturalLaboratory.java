@@ -5,8 +5,8 @@ import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class TMEAgriculturalLaboratory extends TMEBaseIndustry {
-    public TMEAgriculturalLaboratory() {
+public class AgriculturalLaboratory extends BaseIndustry {
+    public AgriculturalLaboratory() {
         this.modifiableConditions.add(new ModifiableCondition(Conditions.FARMLAND_POOR, 2000000f, 90f, false,
                 // restrictions
                 Arrays.asList(Conditions.FARMLAND_ADEQUATE,
@@ -27,13 +27,13 @@ public class TMEAgriculturalLaboratory extends TMEBaseIndustry {
                         Conditions.FARMLAND_ADEQUATE,
                         Conditions.FARMLAND_BOUNTIFUL),
                 // requirements
-                Arrays.asList(Conditions.HABITABLE, Conditions.MILD_CLIMATE)));
+                Collections.singletonList(Conditions.HABITABLE)));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.FARMLAND_BOUNTIFUL, 12000000f, 540f, false,
                 // restrictions
                 Arrays.asList(Conditions.FARMLAND_POOR,
                         Conditions.FARMLAND_ADEQUATE,
                         Conditions.FARMLAND_RICH),
                 // requirements
-                Arrays.asList(Conditions.HABITABLE, Conditions.MILD_CLIMATE)));
+                Collections.singletonList(Conditions.HABITABLE)));
     }
 }
