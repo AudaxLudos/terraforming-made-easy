@@ -74,7 +74,8 @@ public class TerraformDialogueDelegate implements CustomDialogDelegate {
             CustomPanelAPI conditionPanel = panel.createCustomPanel(WIDTH, 50f, new ButtonReportingCustomPanel(this));
             TooltipMakerAPI conditionNameElement = conditionPanel.createUIElement(columnOneWidth, 40f, false);
             TooltipMakerAPI conditionImage = conditionNameElement.beginImageWithText(modifiableCondition.icon, 40f);
-            conditionImage.addPara(canBeRemoved ? "Remove " : "Add " + modifiableCondition.name, canAffordAndBuild ? Misc.getTextColor() : Misc.getNegativeHighlightColor(), 0f);
+            String addOrRemoveText = canBeRemoved ? "Remove " : "Add ";
+            conditionImage.addPara(addOrRemoveText + modifiableCondition.name, canAffordAndBuild ? Misc.getTextColor() : Misc.getNegativeHighlightColor(), 0f);
             conditionNameElement.addImageWithText(0f);
             conditionNameElement.getPosition().inTL(-5f, 5f);
 
