@@ -25,14 +25,17 @@ public class BaseIndustry extends com.fs.starfarer.api.impl.campaign.econ.impl.B
     public static class ModifiableCondition {
         public String id;
         public String name;
+        public String description;
         public String icon;
         public float cost;
         public float buildTime;
         public boolean canChangeGasGiants;
-        public List<String> restrictions = new ArrayList<>();
-        public List<String> requirements = new ArrayList<>();
+        public List<String> likesConditions = new ArrayList<>();
+        public List<String> hatesConditions = new ArrayList<>();
+        public List<String> likesIndustries = new ArrayList<>();
+        public List<String> hatesIndustries = new ArrayList<>();
 
-        public ModifiableCondition(String conditionSpecId, float cost, float buildTime, boolean canChangeGasGiants, List<String> restrictions, List<String> requirements) {
+        public ModifiableCondition(String conditionSpecId, float cost, float buildTime, boolean canChangeGasGiants, List<String> likesConditions, List<String> hatesConditions) {
             MarketConditionSpecAPI spec = Global.getSettings().getMarketConditionSpec(conditionSpecId);
 
             this.id = spec.getId();
@@ -41,11 +44,10 @@ public class BaseIndustry extends com.fs.starfarer.api.impl.campaign.econ.impl.B
             this.cost = cost;
             this.buildTime = buildTime;
             this.canChangeGasGiants = canChangeGasGiants;
-            if (restrictions != null) this.restrictions = restrictions;
-            if (requirements != null) this.requirements = requirements;
+            if (likesConditions != null) this.likesConditions = likesConditions;
+            if (hatesConditions != null) this.hatesConditions = hatesConditions;
         }
     }
-
     public static final float GAMMA_BUILD_TIME_MULT = 0.20f;
     public static final float BETA_BUILD_TIME_MULT = 0.30f;
     public static final float ALPHA_BUILD_TIME_MULT = 0.50f;
@@ -259,7 +261,7 @@ public class BaseIndustry extends com.fs.starfarer.api.impl.campaign.econ.impl.B
         } else {
             getMarket().addCondition(modifiableCondition.id);
             getMarket().getFirstCondition(modifiableCondition.id).setSurveyed(true);
-            for (String restriction : modifiableCondition.restrictions) {
+            for (String restriction : modifiableCondition.hatesConditions) {
                 if (getMarket().hasCondition(restriction))
                     getMarket().removeCondition(restriction);
             }
@@ -498,8 +500,8 @@ public class BaseIndustry extends com.fs.starfarer.api.impl.campaign.econ.impl.B
 
     public Boolean canTerraformCondition(ModifiableCondition condition) {
         boolean canTerraform = false;
-        if (!condition.requirements.isEmpty()) {
-            for (String cond : condition.requirements)
+        if (!condition.likesConditions.isEmpty()) {
+            for (String cond : condition.likesConditions)
                 canTerraform = canTerraform || getMarket().hasCondition(cond);
         } else {
             canTerraform = true;

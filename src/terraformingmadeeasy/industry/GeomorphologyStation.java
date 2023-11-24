@@ -8,24 +8,25 @@ import java.util.Collections;
 public class GeomorphologyStation extends BaseIndustry {
     public GeomorphologyStation() {
         this.modifiableConditions.add(new ModifiableCondition(Conditions.INIMICAL_BIOSPHERE, 2000000f, 360f, false,
-                // restrictions
-                null,
-                // requirements
-                Arrays.asList(Conditions.HABITABLE, Conditions.THIN_ATMOSPHERE)));
+                // Likes conditions
+                Arrays.asList(Conditions.HABITABLE, Conditions.THIN_ATMOSPHERE),
+                // Hates conditions
+                null));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.DECIVILIZED, 4000000f, 180f, true,
-                // restrictions
+                // Likes conditions
                 null,
+                // Hates conditions
                 null));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.IRRADIATED, 1000000f, 360f, true,
-                // restrictions
+                // Likes conditions
+                null,
+                // Hates conditions
                 Arrays.asList(Conditions.HABITABLE,
-                        Conditions.WATER_SURFACE),
-                // requirements
-                null));
+                        Conditions.WATER_SURFACE)));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.WATER_SURFACE, 1000000f, 360f, false,
-                // restrictions
-                Collections.singletonList(Conditions.IRRADIATED),
-                // requirements
-                Collections.singletonList(Conditions.HABITABLE)));
+                // Likes conditions
+                Collections.singletonList(Conditions.HABITABLE),
+                // Hates conditions
+                Collections.singletonList(Conditions.IRRADIATED)));
     }
 }
