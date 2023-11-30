@@ -36,16 +36,16 @@ public class TerraformDialogueDelegate implements CustomDialogDelegate {
     public void createCustomDialog(CustomPanelAPI panel, CustomDialogCallback callback) {
         this.buttons.clear();
 
-        Color baseColor = Misc.getButtonTextColor();
+        Color baseColor = Misc.getDarkPlayerColor();
         Color bgColour = Misc.getDarkPlayerColor();
-        Color brightColor = Misc.getBrightPlayerColor();
+        Color brightColor = Misc.getDarkPlayerColor();
         float columnOneWidth = WIDTH / 3f + 100f;
         float columnWidth = (WIDTH - columnOneWidth) / 2f;
 
         TooltipMakerAPI headerElement = panel.createUIElement(WIDTH, 0f, false);
         headerElement.beginTable(Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(),
                 0f, false, true,
-                new Object[]{"Name", columnOneWidth, "Build time", columnWidth, "Cost", columnWidth - 6f});
+                "Name", columnOneWidth, "Build time", columnWidth, "Cost", columnWidth - 6f);
         headerElement.addTableHeaderTooltip(0, "Name of the condition to terraform on a planet");
         headerElement.addTableHeaderTooltip(1, "Build time, in days. Until the terraforming project finishes.");
         headerElement.addTableHeaderTooltip(2, "One-time cost to begin terraforming project, in credits");
@@ -66,9 +66,9 @@ public class TerraformDialogueDelegate implements CustomDialogDelegate {
                 canBuild = canBuild && modifiableCondition.canChangeGasGiants;
             boolean canAffordAndBuild = canBuild && canAfford;
             if (!canAfford) {
-                baseColor = Color.darkGray;
-                bgColour = Color.lightGray;
-                brightColor = Color.gray;
+                baseColor = Misc.getGrayColor();
+                bgColour = Misc.getGrayColor();
+                brightColor = Misc.getGrayColor();
             }
 
             CustomPanelAPI conditionPanel = panel.createCustomPanel(WIDTH, 50f, new ButtonReportingCustomPanel(this));
@@ -189,38 +189,38 @@ public class TerraformDialogueDelegate implements CustomDialogDelegate {
 
             @Override
             public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-                if (!condition.requirements.isEmpty()) {
+                if (!condition.likesConditions.isEmpty()) {
                     int i = 0;
                     String text = "";
                     List<String> conditions = new ArrayList<>();
-                    for (String cond : condition.requirements) {
+                    for (String cond : condition.likesConditions) {
                         conditions.add(capitalizeString(cond));
                         i++;
-                        if (i != condition.requirements.size())
+                        if (i != condition.likesConditions.size())
                             text = text + "%s or ";
                         else
                             text = text + "%s to add";
                     }
-                    tooltip.addPara("Requires: " + text, 0f, Misc.getHighlightColor(), conditions.toArray(new String[0]));
+                    tooltip.addPara("Requires " + text, 0f, Misc.getHighlightColor(), conditions.toArray(new String[0]));
                 } else {
-                    tooltip.addPara("Requires: %s", 0f, Misc.getTextColor(), "No conditions required");
+                    tooltip.addPara("Requires %s", 0f, Misc.getTextColor(), "no conditions");
                 }
                 tooltip.addSpacer(10f);
-                if (!condition.restrictions.isEmpty()) {
+                if (!condition.hatesConditions.isEmpty()) {
                     int i = 0;
                     String text = "";
                     List<String> conditions = new ArrayList<>();
-                    for (String cond : condition.restrictions) {
+                    for (String cond : condition.hatesConditions) {
                         conditions.add(capitalizeString(cond));
                         i++;
-                        if (i != condition.restrictions.size())
+                        if (i != condition.hatesConditions.size())
                             text = text + "%s, ";
                         else
-                            text = text + "%s";
+                            text = text + "and %s";
                     }
-                    tooltip.addPara("Removes: " + text, 0f, Misc.getHighlightColor(), conditions.toArray(new String[0]));
+                    tooltip.addPara("Removes " + text, 0f, Misc.getHighlightColor(), conditions.toArray(new String[0]));
                 } else {
-                    tooltip.addPara("Removes: %s", 0f, Misc.getTextColor(), "No conditions to remove");
+                    tooltip.addPara("Removes %s", 0f, Misc.getTextColor(), "no conditions");
                 }
                 tooltip.addSpacer(10f);
                 Color textColor = condition.canChangeGasGiants ? Misc.getHighlightColor() : Misc.getNegativeHighlightColor();

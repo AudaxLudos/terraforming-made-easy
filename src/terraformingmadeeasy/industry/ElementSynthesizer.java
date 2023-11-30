@@ -16,8 +16,7 @@ public class ElementSynthesizer extends BaseIndustry {
                 Arrays.asList(Conditions.RARE_ORE_MODERATE,
                         Conditions.RARE_ORE_ABUNDANT,
                         Conditions.RARE_ORE_RICH,
-                        Conditions.RARE_ORE_ULTRARICH)
-                ));
+                        Conditions.RARE_ORE_ULTRARICH)));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.RARE_ORE_MODERATE, 4000000f, 180f, false,
                 // Likes conditions
                 Arrays.asList(Conditions.TECTONIC_ACTIVITY,
@@ -26,8 +25,7 @@ public class ElementSynthesizer extends BaseIndustry {
                 Arrays.asList(Conditions.RARE_ORE_SPARSE,
                         Conditions.RARE_ORE_ABUNDANT,
                         Conditions.RARE_ORE_RICH,
-                        Conditions.RARE_ORE_ULTRARICH)
-                ));
+                        Conditions.RARE_ORE_ULTRARICH)));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.RARE_ORE_ABUNDANT, 6000000f, 270f, false,
                 // Likes conditions
                 Arrays.asList(Conditions.EXTREME_TECTONIC_ACTIVITY,

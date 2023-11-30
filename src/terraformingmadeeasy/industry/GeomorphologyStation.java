@@ -17,6 +17,11 @@ public class GeomorphologyStation extends BaseIndustry {
                 null,
                 // Hates conditions
                 null));
+        this.modifiableConditions.add(new ModifiableCondition(Conditions.DECIVILIZED_SUBPOP, 2000000f, 90f, true,
+                // Likes conditions
+                null,
+                // Hates conditions
+                null));
         this.modifiableConditions.add(new ModifiableCondition(Conditions.IRRADIATED, 1000000f, 360f, true,
                 // Likes conditions
                 null,
@@ -27,6 +32,11 @@ public class GeomorphologyStation extends BaseIndustry {
                 // Likes conditions
                 Collections.singletonList(Conditions.HABITABLE),
                 // Hates conditions
-                Collections.singletonList(Conditions.IRRADIATED)));
+                null));
+        this.modifiableConditions.add(new ModifiableCondition(Conditions.VOLTURNIAN_LOBSTER_PENS, 1000000f, 360f, false,
+                // Likes conditions
+                Collections.singletonList(Conditions.WATER_SURFACE),
+                // Hates conditions
+                null));
     }
 }
