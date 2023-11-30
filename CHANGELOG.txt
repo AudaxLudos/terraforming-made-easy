@@ -1,3 +1,12 @@
+### 1.1.0
+- Release 1.1.0
+- Update terraform options tooltip text
+- Update farming industry when terraforming to a water or non water world
+- Add dicivilized subpop to geomorphology station terraform options
+- Add volturnian lobster pens to geomorphology station terraform options
+- Update geomorpholgy station terraform options requirements and restrictions
+- Update modifiable conditions data
+
 ### 1.0.2
 - Release 1.0.2
 - Update files to match latest version
