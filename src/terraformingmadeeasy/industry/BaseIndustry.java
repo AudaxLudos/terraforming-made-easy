@@ -133,9 +133,9 @@ public class BaseIndustry extends com.fs.starfarer.api.impl.campaign.econ.impl.B
         buildTime = 1f;
         isAICoreBuildTimeMultApplied = false;
         if (modifiableCondition != null) {
+            sendTerraformingMessage();
             changePlanetConditions();
             changePlanetClass();
-            sendTerraformingMessage();
             reapplySupplyAndDemand();
             reapply();
             modifiableCondition = null;
