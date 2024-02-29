@@ -1,3 +1,7 @@
+### 1.1.1
+- Release 1.1.1
+- Update mod game version to latest
+
 ### 1.1.0
 - Release 1.1.0
 - Update terraform options tooltip text
