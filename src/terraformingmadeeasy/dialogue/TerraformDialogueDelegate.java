@@ -1,9 +1,8 @@
 package terraformingmadeeasy.dialogue;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.BaseCustomDialogDelegate;
 import com.fs.starfarer.api.campaign.BaseCustomUIPanelPlugin;
-import com.fs.starfarer.api.campaign.CustomDialogDelegate;
-import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.ButtonAPI;
@@ -17,19 +16,22 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TerraformDialogueDelegate implements CustomDialogDelegate {
+public class TerraformDialogueDelegate extends BaseCustomDialogDelegate {
     public static final float WIDTH = 800f;
-
     public static final float HEIGHT = 400f;
 
     public BaseIndustry industry;
-
     public BaseIndustry.ModifiableCondition selected = null;
-
     public List<ButtonAPI> buttons = new ArrayList<>();
 
     public TerraformDialogueDelegate(Industry industry) {
         this.industry = (BaseIndustry) industry;
+    }
+
+    public static String capitalizeString(String givenString) {
+        String text = givenString.replace("_", " ");
+        text = Character.toUpperCase(text.charAt(0)) + text.substring(1);
+        return text;
     }
 
     @Override
@@ -45,7 +47,7 @@ public class TerraformDialogueDelegate implements CustomDialogDelegate {
         TooltipMakerAPI headerElement = panel.createUIElement(WIDTH, 0f, false);
         headerElement.beginTable(Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(),
                 0f, false, true,
-                new Object[] { "Name", columnOneWidth, "Build time", columnWidth, "Cost", columnWidth - 6f });
+                new Object[]{"Name", columnOneWidth, "Build time", columnWidth, "Cost", columnWidth - 6f});
         headerElement.addTableHeaderTooltip(0, "Name of the condition to terraform on a planet");
         headerElement.addTableHeaderTooltip(1, "Build time, in days. Until the terraforming project finishes.");
         headerElement.addTableHeaderTooltip(2, "One-time cost to begin terraforming project, in credits");
@@ -133,15 +135,6 @@ public class TerraformDialogueDelegate implements CustomDialogDelegate {
         this.industry.startUpgrading(this.selected);
     }
 
-    @Override
-    public void customDialogCancel() {
-    }
-
-    @Override
-    public CustomUIPanelPlugin getCustomPanelPlugin() {
-        return null;
-    }
-
     public void reportButtonPressed(Object id) {
         if (id instanceof BaseIndustry.ModifiableCondition)
             this.selected = (BaseIndustry.ModifiableCondition) id;
@@ -154,25 +147,6 @@ public class TerraformDialogueDelegate implements CustomDialogDelegate {
         }
         if (!anyChecked)
             this.selected = null;
-    }
-
-    public static class ButtonReportingCustomPanel extends BaseCustomUIPanelPlugin {
-        public TerraformDialogueDelegate delegate;
-
-        public ButtonReportingCustomPanel(TerraformDialogueDelegate delegate) {
-            this.delegate = delegate;
-        }
-
-        public void buttonPressed(Object buttonId) {
-            super.buttonPressed(buttonId);
-            this.delegate.reportButtonPressed(buttonId);
-        }
-    }
-
-    public static String capitalizeString(String givenString) {
-        String text = givenString.replace("_", " ");
-        text = Character.toUpperCase(text.charAt(0)) + text.substring(1);
-        return text;
     }
 
     public TooltipMakerAPI.TooltipCreator addConditionTooltip(final BaseIndustry.ModifiableCondition condition) {
@@ -228,5 +202,18 @@ public class TerraformDialogueDelegate implements CustomDialogDelegate {
                 tooltip.addPara("%s be used on gas giants", 0f, textColor, textFormat);
             }
         };
+    }
+
+    public static class ButtonReportingCustomPanel extends BaseCustomUIPanelPlugin {
+        public TerraformDialogueDelegate delegate;
+
+        public ButtonReportingCustomPanel(TerraformDialogueDelegate delegate) {
+            this.delegate = delegate;
+        }
+
+        public void buttonPressed(Object buttonId) {
+            super.buttonPressed(buttonId);
+            this.delegate.reportButtonPressed(buttonId);
+        }
     }
 }

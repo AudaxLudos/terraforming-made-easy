@@ -8,30 +8,25 @@ import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.dialogue.ConfirmDialogueDelegate;
-import terraformingmadeeasy.dialogue.TerraformDialogueDelegate;
+import terraformingmadeeasy.dialogue.MegastructureDialogueDelegate;
 import terraformingmadeeasy.industry.BaseIndustry;
+import terraformingmadeeasy.industry.ConstructionGrid;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TerraformOptionProvider extends BaseIndustryOptionProvider {
+public class MegastructureOptionProvider extends BaseIndustryOptionProvider {
     public static List<String> tmeIndustries = new ArrayList<>();
     public static Object CUSTOM_PLUGIN = new Object();
 
     static {
-        tmeIndustries.add("tme_agricultural_laboratory");
-        tmeIndustries.add("tme_atmosphere_regulator");
-        tmeIndustries.add("tme_element_synthesizer");
-        tmeIndustries.add("tme_geomorphology_station");
-        tmeIndustries.add("tme_mineral_replicator");
-        tmeIndustries.add("tme_stellar_manufactory");
-        tmeIndustries.add("tme_terrestrial_engine");
+        tmeIndustries.add("tme_construction_grid");
     }
 
     public static void register() {
         ListenerManagerAPI listeners = Global.getSector().getListenerManager();
-        if (!listeners.hasListenerOfClass(TerraformOptionProvider.class))
-            listeners.addListener(new TerraformOptionProvider(), true);
+        if (!listeners.hasListenerOfClass(MegastructureOptionProvider.class))
+            listeners.addListener(new MegastructureOptionProvider(), true);
     }
 
     public boolean isUnsuitable(Industry ind, boolean allowUnderConstruction) {
@@ -51,11 +46,11 @@ public class TerraformOptionProvider extends BaseIndustryOptionProvider {
 
         if (!ind.isUpgrading()) {
             com.fs.starfarer.api.campaign.listeners.IndustryOptionProvider.IndustryOptionData opt = new com.fs.starfarer.api.campaign.listeners.IndustryOptionProvider.IndustryOptionData(
-                    "Terraform planet...", CUSTOM_PLUGIN, ind, this);
+                    "Build a Megastructure...", CUSTOM_PLUGIN, ind, this);
             result.add(opt);
         } else {
             com.fs.starfarer.api.campaign.listeners.IndustryOptionProvider.IndustryOptionData opt = new com.fs.starfarer.api.campaign.listeners.IndustryOptionProvider.IndustryOptionData(
-                    "Cancel project...", CUSTOM_PLUGIN, ind, this);
+                    "Cancel the Megastructure project...", CUSTOM_PLUGIN, ind, this);
             result.add(opt);
         }
 
@@ -64,17 +59,17 @@ public class TerraformOptionProvider extends BaseIndustryOptionProvider {
 
     public void createTooltip(com.fs.starfarer.api.campaign.listeners.IndustryOptionProvider.IndustryOptionData opt, TooltipMakerAPI tooltip, float width) {
         if (opt.id == CUSTOM_PLUGIN && !opt.ind.isUpgrading()) {
-            tooltip.addPara("A specialized industry capable of removing and adding hazard conditions of a planet.", 0f);
+            tooltip.addPara("A large structural grid for constructing Megastructures.", 0f);
         } else if (opt.id == CUSTOM_PLUGIN && opt.ind.isUpgrading()) {
-            tooltip.addPara("Cancel the terraforming project for a %s refund.", 0f, Misc.getHighlightColor(),
+            tooltip.addPara("Cancel the Megastructure project for a %s refund.", 0f, Misc.getHighlightColor(),
                     Misc.getDGSCredits(((BaseIndustry) opt.ind).modifiableCondition.cost));
         }
     }
 
     public void optionSelected(com.fs.starfarer.api.campaign.listeners.IndustryOptionProvider.IndustryOptionData opt, DialogCreatorUI ui) {
         if (opt.id == CUSTOM_PLUGIN && !opt.ind.isUpgrading()) {
-            TerraformDialogueDelegate dialogueDelegate = new TerraformDialogueDelegate(opt.ind);
-            ui.showDialog(TerraformDialogueDelegate.WIDTH, TerraformDialogueDelegate.HEIGHT, dialogueDelegate);
+            MegastructureDialogueDelegate dialogueDelegate = new MegastructureDialogueDelegate((ConstructionGrid) opt.ind);
+            ui.showDialog(MegastructureDialogueDelegate.WIDTH, MegastructureDialogueDelegate.HEIGHT, dialogueDelegate);
         } else if (opt.id == CUSTOM_PLUGIN && opt.ind.isUpgrading()) {
             ConfirmDialogueDelegate tmeConfirmDialogueDelegate = new ConfirmDialogueDelegate(opt.ind);
             ui.showDialog(ConfirmDialogueDelegate.WIDTH, ConfirmDialogueDelegate.HEIGHT, tmeConfirmDialogueDelegate);
