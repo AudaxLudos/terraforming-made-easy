@@ -1,4 +1,4 @@
-package terraformingmadeeasy.dialogue;
+package terraformingmadeeasy.dialogs;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.BaseCustomDialogDelegate;
@@ -7,16 +7,16 @@ import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import org.lwjgl.util.vector.Vector2f;
-import terraformingmadeeasy.industry.BaseIndustry;
+import terraformingmadeeasy.industries.BaseIndustry;
 
 import java.awt.*;
 
-public class ConfirmDialogueDelegate extends BaseCustomDialogDelegate {
+public class ConfirmDialogDelegate extends BaseCustomDialogDelegate {
     public static final float WIDTH = 564f;
     public static final float HEIGHT = 104f;
     public BaseIndustry industry;
 
-    public ConfirmDialogueDelegate(Industry industry) {
+    public ConfirmDialogDelegate(Industry industry) {
         this.industry = (BaseIndustry) industry;
     }
 

@@ -1,4 +1,4 @@
-package terraformingmadeeasy.UI;
+package terraformingmadeeasy.ui;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.BaseCustomUIPanelPlugin;

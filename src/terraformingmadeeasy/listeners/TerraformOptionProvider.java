@@ -7,9 +7,9 @@ import com.fs.starfarer.api.campaign.listeners.DialogCreatorUI;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import terraformingmadeeasy.dialogue.ConfirmDialogueDelegate;
-import terraformingmadeeasy.dialogue.TerraformDialogueDelegate;
-import terraformingmadeeasy.industry.BaseIndustry;
+import terraformingmadeeasy.dialogs.ConfirmDialogDelegate;
+import terraformingmadeeasy.dialogs.TerraformDialogDelegate;
+import terraformingmadeeasy.industries.BaseIndustry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,11 +73,11 @@ public class TerraformOptionProvider extends BaseIndustryOptionProvider {
 
     public void optionSelected(com.fs.starfarer.api.campaign.listeners.IndustryOptionProvider.IndustryOptionData opt, DialogCreatorUI ui) {
         if (opt.id == CUSTOM_PLUGIN && !opt.ind.isUpgrading()) {
-            TerraformDialogueDelegate dialogueDelegate = new TerraformDialogueDelegate(opt.ind);
-            ui.showDialog(TerraformDialogueDelegate.WIDTH, TerraformDialogueDelegate.HEIGHT, dialogueDelegate);
+            TerraformDialogDelegate dialogueDelegate = new TerraformDialogDelegate(opt.ind);
+            ui.showDialog(TerraformDialogDelegate.WIDTH, TerraformDialogDelegate.HEIGHT, dialogueDelegate);
         } else if (opt.id == CUSTOM_PLUGIN && opt.ind.isUpgrading()) {
-            ConfirmDialogueDelegate tmeConfirmDialogueDelegate = new ConfirmDialogueDelegate(opt.ind);
-            ui.showDialog(ConfirmDialogueDelegate.WIDTH, ConfirmDialogueDelegate.HEIGHT, tmeConfirmDialogueDelegate);
+            ConfirmDialogDelegate tmeConfirmDialogueDelegate = new ConfirmDialogDelegate(opt.ind);
+            ui.showDialog(ConfirmDialogDelegate.WIDTH, ConfirmDialogDelegate.HEIGHT, tmeConfirmDialogueDelegate);
         }
     }
 }

@@ -1,4 +1,4 @@
-package terraformingmadeeasy.industry;
+package terraformingmadeeasy.industries;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomEntitySpecAPI;
@@ -122,7 +122,7 @@ public class ConstructionGrid extends com.fs.starfarer.api.impl.campaign.econ.im
     }
 
     public void startUpgrading(BuildableMegastructure megastructure, OrbitData orbitData) {
-        // Will be called from MegastructureDialogueDelegate to start building megastructure
+        // Will be called from MegastructureDialogDelegate to start building megastructure
         building = true;
         buildProgress = 0;
         buildableMegastructure = megastructure;
@@ -132,7 +132,7 @@ public class ConstructionGrid extends com.fs.starfarer.api.impl.campaign.econ.im
     }
 
     public void cancelUpgrade() {
-        // Will be called from ConfirmDialogueDelegate to cancel megastructure project
+        // Will be called from ConfirmDialogDelegate to cancel megastructure project
         building = false;
         buildProgress = 0;
         buildableMegastructure = null;

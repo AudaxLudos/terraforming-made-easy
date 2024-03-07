@@ -1,4 +1,4 @@
-package terraformingmadeeasy.dialogue;
+package terraformingmadeeasy.dialogs;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.BaseCustomDialogDelegate;
@@ -10,13 +10,13 @@ import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import org.lwjgl.util.vector.Vector2f;
-import terraformingmadeeasy.industry.BaseIndustry;
+import terraformingmadeeasy.industries.BaseIndustry;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TerraformDialogueDelegate extends BaseCustomDialogDelegate {
+public class TerraformDialogDelegate extends BaseCustomDialogDelegate {
     public static final float WIDTH = 800f;
     public static final float HEIGHT = 400f;
 
@@ -24,7 +24,7 @@ public class TerraformDialogueDelegate extends BaseCustomDialogDelegate {
     public BaseIndustry.ModifiableCondition selected = null;
     public List<ButtonAPI> buttons = new ArrayList<>();
 
-    public TerraformDialogueDelegate(Industry industry) {
+    public TerraformDialogDelegate(Industry industry) {
         this.industry = (BaseIndustry) industry;
     }
 
@@ -205,9 +205,9 @@ public class TerraformDialogueDelegate extends BaseCustomDialogDelegate {
     }
 
     public static class ButtonReportingCustomPanel extends BaseCustomUIPanelPlugin {
-        public TerraformDialogueDelegate delegate;
+        public TerraformDialogDelegate delegate;
 
-        public ButtonReportingCustomPanel(TerraformDialogueDelegate delegate) {
+        public ButtonReportingCustomPanel(TerraformDialogDelegate delegate) {
             this.delegate = delegate;
         }
 

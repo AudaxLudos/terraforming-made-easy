@@ -1,4 +1,4 @@
-package terraformingmadeeasy.industry;
+package terraformingmadeeasy.industries;
 
 import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 

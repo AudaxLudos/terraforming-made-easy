@@ -1,4 +1,4 @@
-package terraformingmadeeasy.industry;
+package terraformingmadeeasy.industries;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.PlanetSpecAPI;
@@ -118,7 +118,7 @@ public class BaseIndustry extends com.fs.starfarer.api.impl.campaign.econ.impl.B
     }
 
     public void startUpgrading(ModifiableCondition condition) {
-        // Will be called from TerraformDialogueDelegate to start terraforming
+        // Will be called from TerraformDialogDelegate to start terraforming
         building = true;
         buildProgress = 0;
         modifiableCondition = condition;
@@ -127,7 +127,7 @@ public class BaseIndustry extends com.fs.starfarer.api.impl.campaign.econ.impl.B
     }
 
     public void cancelUpgrade() {
-        // Will be called from ConfirmDialogueDelegate to cancel terraforming
+        // Will be called from ConfirmDialogDelegate to cancel terraforming
         building = false;
         buildProgress = 0;
         modifiableCondition = null;
