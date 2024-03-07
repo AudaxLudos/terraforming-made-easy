@@ -25,6 +25,7 @@ public class ConstructionGrid extends com.fs.starfarer.api.impl.campaign.econ.im
     public static final float ALPHA_BUILD_TIME_MULT = 0.50f;
     public List<BuildableMegastructure> buildableMegastructures = new ArrayList<>();
     public BuildableMegastructure buildableMegastructure = null;
+    public OrbitData megastructureOrbitData = null;
     public Boolean isAICoreBuildTimeMultApplied = false;
     public float aiCoreCurrentBuildTimeMult = 0f;
     public boolean firstTick = false;
@@ -97,7 +98,7 @@ public class ConstructionGrid extends com.fs.starfarer.api.impl.campaign.econ.im
         if (left == 1) days = "day";
 
         if (isUpgrading()) {
-            return "Constructing: " + left + " " + days + " left";
+            return "Building: " + left + " " + days + " left";
         } else {
             return "Building: " + left + " " + days + " left";
         }
@@ -110,20 +111,22 @@ public class ConstructionGrid extends com.fs.starfarer.api.impl.campaign.econ.im
         isAICoreBuildTimeMultApplied = false;
         if (buildableMegastructure != null) {
             sendCompletedMessage();
-            completeMegastructure(buildableMegastructure);
-            market.removeIndustry(getId(), null, false);
+            completeMegastructure(buildableMegastructure, megastructureOrbitData);
             buildableMegastructure = null;
+            megastructureOrbitData = null;
+            market.removeIndustry(getId(), null, false);
         } else {
             buildingFinished();
             reapply();
         }
     }
 
-    public void startUpgrading(BuildableMegastructure megastructure) {
+    public void startUpgrading(BuildableMegastructure megastructure, OrbitData orbitData) {
         // Will be called from MegastructureDialogueDelegate to start building megastructure
         building = true;
         buildProgress = 0;
         buildableMegastructure = megastructure;
+        megastructureOrbitData = orbitData;
         buildTime = megastructure.buildTime;
         firstTick = true;
     }
@@ -136,7 +139,7 @@ public class ConstructionGrid extends com.fs.starfarer.api.impl.campaign.econ.im
         isAICoreBuildTimeMultApplied = false;
     }
 
-    public void completeMegastructure(BuildableMegastructure megastructure) {
+    public void completeMegastructure(BuildableMegastructure megastructure, OrbitData orbitData) {
         StarSystemAPI system = getMarket().getStarSystem();
         String customEntityId = megastructure.id;
         if (Objects.equals(customEntityId, Entities.CORONAL_TAP)) {
@@ -153,7 +156,7 @@ public class ConstructionGrid extends com.fs.starfarer.api.impl.campaign.econ.im
             coronalTap.getMemoryWithoutUpdate().set("$usable", true);
         } else if (Objects.equals(customEntityId, Entities.DERELICT_CRYOSLEEPER)) {
             SectorEntityToken cryoSleeper = system.addCustomEntity(null, null, Entities.DERELICT_CRYOSLEEPER, Factions.NEUTRAL);
-            cryoSleeper.setCircularOrbit(system.getStar(), 0f, 2000f, 200f);
+            cryoSleeper.setCircularOrbit(orbitData.entity, orbitData.orbitAngle, orbitData.orbitRadius, orbitData.orbitDays);
             cryoSleeper.getMemoryWithoutUpdate().removeAllRequired("$defenderFleet");
             cryoSleeper.getMemoryWithoutUpdate().removeAllRequired("$hasDefenders");
             cryoSleeper.getMemoryWithoutUpdate().set("$usable", true);
@@ -161,7 +164,7 @@ public class ConstructionGrid extends com.fs.starfarer.api.impl.campaign.econ.im
             cryoSleeper.getMemoryWithoutUpdate().set("$option", "salBeatDefendersContinue");
         } else if (Objects.equals(customEntityId, Entities.INACTIVE_GATE)) {
             SectorEntityToken inactiveGate = system.addCustomEntity(null, null, Entities.INACTIVE_GATE, Factions.NEUTRAL);
-            inactiveGate.setCircularOrbit(system.getStar(), 0, 2000f, 200f);
+            inactiveGate.setCircularOrbit(orbitData.entity, orbitData.orbitAngle, orbitData.orbitRadius, orbitData.orbitDays);
             inactiveGate.getMemoryWithoutUpdate().set("$gateScanned", true);
             inactiveGate.getMemoryWithoutUpdate().set("$fullName", "Active Gate");
         }
@@ -287,6 +290,20 @@ public class ConstructionGrid extends com.fs.starfarer.api.impl.campaign.econ.im
             this.icon = spec.getInteractionImage();
             this.cost = cost;
             this.buildTime = buildTime;
+        }
+    }
+
+    public static class OrbitData {
+        public SectorEntityToken entity;
+        public float orbitAngle;
+        public float orbitRadius;
+        public float orbitDays;
+
+        public OrbitData(SectorEntityToken entity, float orbitAngle, float orbitRadius, float orbitDays) {
+            this.entity = entity;
+            this.orbitAngle = orbitAngle;
+            this.orbitRadius = orbitRadius;
+            this.orbitDays = orbitDays;
         }
     }
 }

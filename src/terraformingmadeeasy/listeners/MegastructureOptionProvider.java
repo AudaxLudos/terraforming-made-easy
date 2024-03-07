@@ -69,7 +69,7 @@ public class MegastructureOptionProvider extends BaseIndustryOptionProvider {
     public void optionSelected(com.fs.starfarer.api.campaign.listeners.IndustryOptionProvider.IndustryOptionData opt, DialogCreatorUI ui) {
         if (opt.id == CUSTOM_PLUGIN && !opt.ind.isUpgrading()) {
             MegastructureDialogueDelegate dialogueDelegate = new MegastructureDialogueDelegate((ConstructionGrid) opt.ind);
-            ui.showDialog(MegastructureDialogueDelegate.WIDTH, MegastructureDialogueDelegate.HEIGHT, dialogueDelegate);
+            ui.showDialog(800f, 400f, dialogueDelegate);
         } else if (opt.id == CUSTOM_PLUGIN && opt.ind.isUpgrading()) {
             ConfirmDialogueDelegate tmeConfirmDialogueDelegate = new ConfirmDialogueDelegate(opt.ind);
             ui.showDialog(ConfirmDialogueDelegate.WIDTH, ConfirmDialogueDelegate.HEIGHT, tmeConfirmDialogueDelegate);

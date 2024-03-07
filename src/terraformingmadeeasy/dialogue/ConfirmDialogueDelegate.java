@@ -1,8 +1,7 @@
 package terraformingmadeeasy.dialogue;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.CustomDialogDelegate;
-import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
+import com.fs.starfarer.api.campaign.BaseCustomDialogDelegate;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
@@ -12,11 +11,9 @@ import terraformingmadeeasy.industry.BaseIndustry;
 
 import java.awt.*;
 
-public class ConfirmDialogueDelegate implements CustomDialogDelegate {
+public class ConfirmDialogueDelegate extends BaseCustomDialogDelegate {
     public static final float WIDTH = 564f;
-
     public static final float HEIGHT = 104f;
-
     public BaseIndustry industry;
 
     public ConfirmDialogueDelegate(Industry industry) {
@@ -55,15 +52,5 @@ public class ConfirmDialogueDelegate implements CustomDialogDelegate {
         Global.getSoundPlayer().playSound("ui_cancel_construction_or_upgrade_industry", 1f, 1f, Global.getSoundPlayer().getListenerPos(), new Vector2f());
         Global.getSector().getPlayerFleet().getCargo().getCredits().add(industry.modifiableCondition.cost);
         this.industry.cancelUpgrade();
-    }
-
-    @Override
-    public void customDialogCancel() {
-
-    }
-
-    @Override
-    public CustomUIPanelPlugin getCustomPanelPlugin() {
-        return null;
     }
 }
