@@ -5,7 +5,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class TerrestrialEngine extends BaseIndustry {
+public class TerrestrialEngine extends TMEBaseIndustry {
     public TerrestrialEngine() {
         this.modifiableConditions.add(new ModifiableCondition(Conditions.LOW_GRAVITY, 2000000f, 360f, false,
                 // Likes conditions

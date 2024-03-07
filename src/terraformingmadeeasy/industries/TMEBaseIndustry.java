@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class BaseIndustry extends com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry {
+public class TMEBaseIndustry extends com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry {
     public static final float GAMMA_BUILD_TIME_MULT = 0.20f;
     public static final float BETA_BUILD_TIME_MULT = 0.30f;
     public static final float ALPHA_BUILD_TIME_MULT = 0.50f;
@@ -505,15 +505,12 @@ public class BaseIndustry extends com.fs.starfarer.api.impl.campaign.econ.impl.B
     public static class ModifiableCondition {
         public String id;
         public String name;
-        public String description;
         public String icon;
         public float cost;
         public float buildTime;
         public boolean canChangeGasGiants;
         public List<String> likesConditions = new ArrayList<>();
         public List<String> hatesConditions = new ArrayList<>();
-        public List<String> likesIndustries = new ArrayList<>();
-        public List<String> hatesIndustries = new ArrayList<>();
 
         public ModifiableCondition(String conditionSpecId, float cost, float buildTime, boolean canChangeGasGiants, List<String> likesConditions, List<String> hatesConditions) {
             MarketConditionSpecAPI spec = Global.getSettings().getMarketConditionSpec(conditionSpecId);

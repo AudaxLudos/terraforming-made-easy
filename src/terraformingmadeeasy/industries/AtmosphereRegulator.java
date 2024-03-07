@@ -5,7 +5,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class AtmosphereRegulator extends BaseIndustry {
+public class AtmosphereRegulator extends TMEBaseIndustry {
     public AtmosphereRegulator() {
         this.modifiableConditions.add(new ModifiableCondition(Conditions.NO_ATMOSPHERE, 1000000f, 90f, false,
                 // Likes conditions

@@ -5,7 +5,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class ElementSynthesizer extends BaseIndustry {
+public class ElementSynthesizer extends TMEBaseIndustry {
     public ElementSynthesizer() {
         // RARE ORE
         this.modifiableConditions.add(new ModifiableCondition(Conditions.RARE_ORE_SPARSE, 2000000f, 90f, false,

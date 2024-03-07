@@ -1,7 +1,6 @@
 package terraformingmadeeasy.dialogs;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.BaseCustomDialogDelegate;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.impl.campaign.ids.Entities;
 import com.fs.starfarer.api.ui.*;
@@ -13,17 +12,10 @@ import terraformingmadeeasy.ui.DropDownPanelPlugin;
 import terraformingmadeeasy.ui.TextFieldPanelPlugin;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
-public class MegastructureDialogDelegate extends BaseCustomDialogDelegate {
-    public static final float WIDTH = 600f;
-    public static final float HEIGHT = 400f;
-
+public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
     public ConstructionGrid industry;
-    public ConstructionGrid.BuildableMegastructure selected = null;
-    public List<ButtonAPI> buttons = new ArrayList<>();
     public SectorEntityToken orbitFocusField = null;
     public TextFieldAPI startingAngleField = null;
     public TextFieldAPI orbitRadiusField = null;
@@ -32,7 +24,9 @@ public class MegastructureDialogDelegate extends BaseCustomDialogDelegate {
     public CustomPanelAPI mPanel = null;
     public boolean showDropDown = false;
 
-    public MegastructureDialogDelegate(ConstructionGrid industry) {
+    public MegastructureDialogDelegate(float width, float height, ConstructionGrid industry) {
+        WIDTH = width;
+        HEIGHT = height;
         this.industry = industry;
     }
 
@@ -265,18 +259,8 @@ public class MegastructureDialogDelegate extends BaseCustomDialogDelegate {
     }
 
     @Override
-    public boolean hasCancelButton() {
-        return true;
-    }
-
-    @Override
     public String getConfirmText() {
         return "Construct";
-    }
-
-    @Override
-    public String getCancelText() {
-        return "Cancel";
     }
 
     @Override
@@ -284,14 +268,16 @@ public class MegastructureDialogDelegate extends BaseCustomDialogDelegate {
         if (this.selected == null || this.orbitFocusField == null || this.startingAngleField == null
                 || this.orbitRadiusField == null || this.orbitDaysField == null)
             return;
+        ConstructionGrid.BuildableMegastructure megastructure = (ConstructionGrid.BuildableMegastructure) this.selected;
+
         Global.getSoundPlayer().playSound("ui_upgrade_industry", 1f, 1f, Global.getSoundPlayer().getListenerPos(), new Vector2f());
-        Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(this.selected.cost);
+        Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(megastructure.cost);
         ConstructionGrid.OrbitData data = new ConstructionGrid.OrbitData(
                 this.orbitFocusField,
                 Float.parseFloat(this.startingAngleField.getText().trim()),
                 Float.parseFloat(this.orbitRadiusField.getText().trim()),
                 Float.parseFloat(this.orbitDaysField.getText().trim()));
-        this.industry.startUpgrading(this.selected, data);
+        this.industry.startUpgrading(megastructure, data);
     }
 
     public TooltipMakerAPI.TooltipCreator addMegastructureTooltip(final ConstructionGrid.BuildableMegastructure megastructure) {

@@ -1,8 +1,6 @@
 package terraformingmadeeasy.dialogs;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.BaseCustomDialogDelegate;
-import com.fs.starfarer.api.campaign.BaseCustomUIPanelPlugin;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.ButtonAPI;
@@ -10,22 +8,20 @@ import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import org.lwjgl.util.vector.Vector2f;
-import terraformingmadeeasy.industries.BaseIndustry;
+import terraformingmadeeasy.industries.TMEBaseIndustry;
+import terraformingmadeeasy.ui.ButtonPanelPlugin;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TerraformDialogDelegate extends BaseCustomDialogDelegate {
-    public static final float WIDTH = 800f;
-    public static final float HEIGHT = 400f;
+public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
+    public TMEBaseIndustry industry;
 
-    public BaseIndustry industry;
-    public BaseIndustry.ModifiableCondition selected = null;
-    public List<ButtonAPI> buttons = new ArrayList<>();
-
-    public TerraformDialogDelegate(Industry industry) {
-        this.industry = (BaseIndustry) industry;
+    public TerraformDialogDelegate(float width, float height, Industry industry) {
+        WIDTH = width;
+        HEIGHT = height;
+        this.industry = (TMEBaseIndustry) industry;
     }
 
     public static String capitalizeString(String givenString) {
@@ -58,7 +54,7 @@ public class TerraformDialogDelegate extends BaseCustomDialogDelegate {
         // list all modifiable condition of tme industry
         TooltipMakerAPI conditionsElement = panel.createUIElement(WIDTH, HEIGHT - 30f, true);
 
-        for (final BaseIndustry.ModifiableCondition modifiableCondition : this.industry.modifiableConditions) {
+        for (final TMEBaseIndustry.ModifiableCondition modifiableCondition : this.industry.modifiableConditions) {
             float cost = modifiableCondition.cost;
             int buildTime = Math.round(modifiableCondition.buildTime);
             boolean canAfford = Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= cost;
@@ -73,7 +69,7 @@ public class TerraformDialogDelegate extends BaseCustomDialogDelegate {
                 brightColor = Misc.getGrayColor();
             }
 
-            CustomPanelAPI conditionPanel = panel.createCustomPanel(WIDTH, 50f, new ButtonReportingCustomPanel(this));
+            CustomPanelAPI conditionPanel = panel.createCustomPanel(WIDTH, 50f, new ButtonPanelPlugin(this));
             TooltipMakerAPI conditionNameElement = conditionPanel.createUIElement(columnOneWidth, 40f, false);
             TooltipMakerAPI conditionImage = conditionNameElement.beginImageWithText(modifiableCondition.icon, 40f);
             String addOrRemoveText = canBeRemoved ? "Remove " : "Add ";
@@ -113,43 +109,22 @@ public class TerraformDialogDelegate extends BaseCustomDialogDelegate {
     }
 
     @Override
-    public boolean hasCancelButton() {
-        return true;
-    }
-
-    @Override
     public String getConfirmText() {
         return "Terraform";
     }
 
     @Override
-    public String getCancelText() {
-        return "Cancel";
-    }
-
-    @Override
     public void customDialogConfirm() {
         if (this.selected == null) return;
+
+        TMEBaseIndustry.ModifiableCondition selectedCondition = (TMEBaseIndustry.ModifiableCondition) this.selected;
+
         Global.getSoundPlayer().playSound("ui_upgrade_industry", 1f, 1f, Global.getSoundPlayer().getListenerPos(), new Vector2f());
-        Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(this.selected.cost);
-        this.industry.startUpgrading(this.selected);
+        Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(selectedCondition.cost);
+        this.industry.startUpgrading(selectedCondition);
     }
 
-    public void reportButtonPressed(Object id) {
-        if (id instanceof BaseIndustry.ModifiableCondition)
-            this.selected = (BaseIndustry.ModifiableCondition) id;
-        boolean anyChecked = false;
-        for (ButtonAPI button : this.buttons) {
-            if (button.isChecked() && button.getCustomData() != id)
-                button.setChecked(false);
-            if (button.isChecked())
-                anyChecked = true;
-        }
-        if (!anyChecked)
-            this.selected = null;
-    }
-
-    public TooltipMakerAPI.TooltipCreator addConditionTooltip(final BaseIndustry.ModifiableCondition condition) {
+    public TooltipMakerAPI.TooltipCreator addConditionTooltip(final TMEBaseIndustry.ModifiableCondition condition) {
         return new TooltipMakerAPI.TooltipCreator() {
             @Override
             public boolean isTooltipExpandable(Object tooltipParam) {
@@ -202,18 +177,5 @@ public class TerraformDialogDelegate extends BaseCustomDialogDelegate {
                 tooltip.addPara("%s be used on gas giants", 0f, textColor, textFormat);
             }
         };
-    }
-
-    public static class ButtonReportingCustomPanel extends BaseCustomUIPanelPlugin {
-        public TerraformDialogDelegate delegate;
-
-        public ButtonReportingCustomPanel(TerraformDialogDelegate delegate) {
-            this.delegate = delegate;
-        }
-
-        public void buttonPressed(Object buttonId) {
-            super.buttonPressed(buttonId);
-            this.delegate.reportButtonPressed(buttonId);
-        }
     }
 }

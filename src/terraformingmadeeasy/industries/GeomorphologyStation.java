@@ -5,7 +5,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class GeomorphologyStation extends BaseIndustry {
+public class GeomorphologyStation extends TMEBaseIndustry {
     public GeomorphologyStation() {
         this.modifiableConditions.add(new ModifiableCondition(Conditions.INIMICAL_BIOSPHERE, 2000000f, 360f, false,
                 // Likes conditions

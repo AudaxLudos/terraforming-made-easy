@@ -5,7 +5,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class AgriculturalLaboratory extends BaseIndustry {
+public class AgriculturalLaboratory extends TMEBaseIndustry {
     public AgriculturalLaboratory() {
         this.modifiableConditions.add(new ModifiableCondition(Conditions.FARMLAND_POOR, 2000000f, 90f, false,
                 // Likes conditions

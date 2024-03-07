@@ -9,7 +9,7 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.dialogs.ConfirmDialogDelegate;
 import terraformingmadeeasy.dialogs.MegastructureDialogDelegate;
-import terraformingmadeeasy.industries.BaseIndustry;
+import terraformingmadeeasy.industries.TMEBaseIndustry;
 import terraformingmadeeasy.industries.ConstructionGrid;
 
 import java.util.ArrayList;
@@ -62,13 +62,13 @@ public class MegastructureOptionProvider extends BaseIndustryOptionProvider {
             tooltip.addPara("A large structural grid for constructing Megastructures.", 0f);
         } else if (opt.id == CUSTOM_PLUGIN && opt.ind.isUpgrading()) {
             tooltip.addPara("Cancel the Megastructure project for a %s refund.", 0f, Misc.getHighlightColor(),
-                    Misc.getDGSCredits(((BaseIndustry) opt.ind).modifiableCondition.cost));
+                    Misc.getDGSCredits(((TMEBaseIndustry) opt.ind).modifiableCondition.cost));
         }
     }
 
     public void optionSelected(com.fs.starfarer.api.campaign.listeners.IndustryOptionProvider.IndustryOptionData opt, DialogCreatorUI ui) {
         if (opt.id == CUSTOM_PLUGIN && !opt.ind.isUpgrading()) {
-            MegastructureDialogDelegate dialogueDelegate = new MegastructureDialogDelegate((ConstructionGrid) opt.ind);
+            MegastructureDialogDelegate dialogueDelegate = new MegastructureDialogDelegate(600f, 400f, (ConstructionGrid) opt.ind);
             ui.showDialog(800f, 400f, dialogueDelegate);
         } else if (opt.id == CUSTOM_PLUGIN && opt.ind.isUpgrading()) {
             ConfirmDialogDelegate tmeConfirmDialogueDelegate = new ConfirmDialogDelegate(opt.ind);

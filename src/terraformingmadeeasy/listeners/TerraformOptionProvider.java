@@ -9,7 +9,7 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.dialogs.ConfirmDialogDelegate;
 import terraformingmadeeasy.dialogs.TerraformDialogDelegate;
-import terraformingmadeeasy.industries.BaseIndustry;
+import terraformingmadeeasy.industries.TMEBaseIndustry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,13 +67,13 @@ public class TerraformOptionProvider extends BaseIndustryOptionProvider {
             tooltip.addPara("A specialized industry capable of removing and adding hazard conditions of a planet.", 0f);
         } else if (opt.id == CUSTOM_PLUGIN && opt.ind.isUpgrading()) {
             tooltip.addPara("Cancel the terraforming project for a %s refund.", 0f, Misc.getHighlightColor(),
-                    Misc.getDGSCredits(((BaseIndustry) opt.ind).modifiableCondition.cost));
+                    Misc.getDGSCredits(((TMEBaseIndustry) opt.ind).modifiableCondition.cost));
         }
     }
 
     public void optionSelected(com.fs.starfarer.api.campaign.listeners.IndustryOptionProvider.IndustryOptionData opt, DialogCreatorUI ui) {
         if (opt.id == CUSTOM_PLUGIN && !opt.ind.isUpgrading()) {
-            TerraformDialogDelegate dialogueDelegate = new TerraformDialogDelegate(opt.ind);
+            TerraformDialogDelegate dialogueDelegate = new TerraformDialogDelegate(800f, 400f, opt.ind);
             ui.showDialog(TerraformDialogDelegate.WIDTH, TerraformDialogDelegate.HEIGHT, dialogueDelegate);
         } else if (opt.id == CUSTOM_PLUGIN && opt.ind.isUpgrading()) {
             ConfirmDialogDelegate tmeConfirmDialogueDelegate = new ConfirmDialogDelegate(opt.ind);

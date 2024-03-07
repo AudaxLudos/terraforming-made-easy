@@ -7,17 +7,17 @@ import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import org.lwjgl.util.vector.Vector2f;
-import terraformingmadeeasy.industries.BaseIndustry;
+import terraformingmadeeasy.industries.TMEBaseIndustry;
 
 import java.awt.*;
 
 public class ConfirmDialogDelegate extends BaseCustomDialogDelegate {
     public static final float WIDTH = 564f;
     public static final float HEIGHT = 104f;
-    public BaseIndustry industry;
+    public TMEBaseIndustry industry;
 
     public ConfirmDialogDelegate(Industry industry) {
-        this.industry = (BaseIndustry) industry;
+        this.industry = (TMEBaseIndustry) industry;
     }
 
     @Override

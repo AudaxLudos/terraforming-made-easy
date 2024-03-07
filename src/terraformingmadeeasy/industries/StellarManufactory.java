@@ -5,7 +5,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class StellarManufactory extends BaseIndustry {
+public class StellarManufactory extends TMEBaseIndustry {
     public StellarManufactory() {
         this.modifiableConditions.add(new ModifiableCondition(Conditions.SOLAR_ARRAY, 4000000, 360f, false,
                 // Likes conditions

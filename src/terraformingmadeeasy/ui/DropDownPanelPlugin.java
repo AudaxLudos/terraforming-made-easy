@@ -14,8 +14,8 @@ public class DropDownPanelPlugin extends BaseCustomUIPanelPlugin {
     public void buttonPressed(Object buttonId) {
         if (buttonId instanceof SectorEntityToken) {
             this.delegate.orbitFocusField = (SectorEntityToken) buttonId;
-        this.delegate.showDropDown = !this.delegate.showDropDown;
-        this.delegate.refreshPanel();
+            this.delegate.showDropDown = !this.delegate.showDropDown;
+            this.delegate.refreshPanel();
         }
     }
 }
