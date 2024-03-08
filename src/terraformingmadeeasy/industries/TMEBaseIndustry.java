@@ -6,6 +6,7 @@ import com.fs.starfarer.api.campaign.comm.CommMessageAPI;
 import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.characters.MarketConditionSpecAPI;
+import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class TMEBaseIndustry extends com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry {
+public class TMEBaseIndustry extends BaseIndustry {
     public static final float GAMMA_BUILD_TIME_MULT = 0.20f;
     public static final float BETA_BUILD_TIME_MULT = 0.30f;
     public static final float ALPHA_BUILD_TIME_MULT = 0.50f;
@@ -105,7 +106,7 @@ public class TMEBaseIndustry extends com.fs.starfarer.api.impl.campaign.econ.imp
         buildTime = 1f;
         isAICoreBuildTimeMultApplied = false;
         if (modifiableCondition != null) {
-            sendTerraformingMessage();
+            sendCompletedMessage();
             changePlanetConditions();
             changePlanetClass();
             reapplySupplyAndDemand();
@@ -146,7 +147,7 @@ public class TMEBaseIndustry extends com.fs.starfarer.api.impl.campaign.econ.imp
         return "Requires a planet";
     }
 
-    public void sendTerraformingMessage() {
+    public void sendCompletedMessage() {
         if (market.isPlayerOwned()) {
             String addOrRemoveText = !market.hasCondition(modifiableCondition.id) ? "Added " : "Removed ";
             MessageIntel intel = new MessageIntel("Terraforming completed at " + market.getName(), Misc.getBasePlayerColor());

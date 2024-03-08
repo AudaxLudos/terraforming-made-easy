@@ -4,8 +4,8 @@ import com.fs.starfarer.api.campaign.BaseCustomUIPanelPlugin;
 import com.fs.starfarer.api.ui.ButtonAPI;
 import terraformingmadeeasy.dialogs.MegastructureDialogDelegate;
 import terraformingmadeeasy.dialogs.TMEBaseDialogDelegate;
-import terraformingmadeeasy.industries.TMEBaseIndustry;
 import terraformingmadeeasy.industries.ConstructionGrid;
+import terraformingmadeeasy.industries.TMEBaseIndustry;
 
 public class ButtonPanelPlugin extends BaseCustomUIPanelPlugin {
     public TMEBaseDialogDelegate delegate;
@@ -35,8 +35,8 @@ public class ButtonPanelPlugin extends BaseCustomUIPanelPlugin {
         if (this.delegate instanceof MegastructureDialogDelegate) {
             MegastructureDialogDelegate megastructureDelegate = (MegastructureDialogDelegate) this.delegate;
             megastructureDelegate.startingAngleField.setText("0");
-            megastructureDelegate.orbitRadiusField.setText("0");
-            megastructureDelegate.orbitDaysField.setText("0");
+            megastructureDelegate.orbitRadiusField.setText("1000");
+            megastructureDelegate.orbitDaysField.setText("100");
         }
     }
 }

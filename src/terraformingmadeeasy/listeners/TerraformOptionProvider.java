@@ -50,19 +50,17 @@ public class TerraformOptionProvider extends BaseIndustryOptionProvider {
         List<IndustryOptionData> result = new ArrayList<>();
 
         if (!ind.isUpgrading()) {
-            com.fs.starfarer.api.campaign.listeners.IndustryOptionProvider.IndustryOptionData opt = new com.fs.starfarer.api.campaign.listeners.IndustryOptionProvider.IndustryOptionData(
-                    "Terraform planet...", CUSTOM_PLUGIN, ind, this);
+            IndustryOptionData opt = new IndustryOptionData("Terraform planet...", CUSTOM_PLUGIN, ind, this);
             result.add(opt);
         } else {
-            com.fs.starfarer.api.campaign.listeners.IndustryOptionProvider.IndustryOptionData opt = new com.fs.starfarer.api.campaign.listeners.IndustryOptionProvider.IndustryOptionData(
-                    "Cancel project...", CUSTOM_PLUGIN, ind, this);
+            IndustryOptionData opt = new IndustryOptionData("Cancel project...", CUSTOM_PLUGIN, ind, this);
             result.add(opt);
         }
 
         return result;
     }
 
-    public void createTooltip(com.fs.starfarer.api.campaign.listeners.IndustryOptionProvider.IndustryOptionData opt, TooltipMakerAPI tooltip, float width) {
+    public void createTooltip(IndustryOptionData opt, TooltipMakerAPI tooltip, float width) {
         if (opt.id == CUSTOM_PLUGIN && !opt.ind.isUpgrading()) {
             tooltip.addPara("A specialized industry capable of removing and adding hazard conditions of a planet.", 0f);
         } else if (opt.id == CUSTOM_PLUGIN && opt.ind.isUpgrading()) {
@@ -71,12 +69,12 @@ public class TerraformOptionProvider extends BaseIndustryOptionProvider {
         }
     }
 
-    public void optionSelected(com.fs.starfarer.api.campaign.listeners.IndustryOptionProvider.IndustryOptionData opt, DialogCreatorUI ui) {
+    public void optionSelected(IndustryOptionData opt, DialogCreatorUI ui) {
         if (opt.id == CUSTOM_PLUGIN && !opt.ind.isUpgrading()) {
             TerraformDialogDelegate dialogueDelegate = new TerraformDialogDelegate(800f, 400f, opt.ind);
             ui.showDialog(TerraformDialogDelegate.WIDTH, TerraformDialogDelegate.HEIGHT, dialogueDelegate);
         } else if (opt.id == CUSTOM_PLUGIN && opt.ind.isUpgrading()) {
-            ConfirmDialogDelegate tmeConfirmDialogueDelegate = new ConfirmDialogDelegate(opt.ind);
+            ConfirmDialogDelegate tmeConfirmDialogueDelegate = new ConfirmDialogDelegate(opt.ind, ((TMEBaseIndustry) opt.ind).modifiableCondition.cost);
             ui.showDialog(ConfirmDialogDelegate.WIDTH, ConfirmDialogDelegate.HEIGHT, tmeConfirmDialogueDelegate);
         }
     }

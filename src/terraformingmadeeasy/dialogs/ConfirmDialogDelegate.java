@@ -7,17 +7,18 @@ import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import org.lwjgl.util.vector.Vector2f;
-import terraformingmadeeasy.industries.TMEBaseIndustry;
 
 import java.awt.*;
 
 public class ConfirmDialogDelegate extends BaseCustomDialogDelegate {
     public static final float WIDTH = 564f;
     public static final float HEIGHT = 104f;
-    public TMEBaseIndustry industry;
+    public Industry industry;
+    public float cost;
 
-    public ConfirmDialogDelegate(Industry industry) {
-        this.industry = (TMEBaseIndustry) industry;
+    public ConfirmDialogDelegate(Industry industry, float cost) {
+        this.industry = industry;
+        this.cost = cost;
     }
 
     @Override
@@ -28,7 +29,7 @@ public class ConfirmDialogDelegate extends BaseCustomDialogDelegate {
                 "Cancelling the terraforming project for %s will refund you the full upgrade cost of %s and will take effect immediately",
                 0f,
                 new Color[]{Misc.getTextColor(), Misc.getHighlightColor()},
-                industry.getCurrentName(), Misc.getDGSCredits(industry.modifiableCondition.cost));
+                this.industry.getCurrentName(), Misc.getDGSCredits(this.cost));
         panel.addUIElement(panelTooltip);
     }
 
@@ -50,7 +51,7 @@ public class ConfirmDialogDelegate extends BaseCustomDialogDelegate {
     @Override
     public void customDialogConfirm() {
         Global.getSoundPlayer().playSound("ui_cancel_construction_or_upgrade_industry", 1f, 1f, Global.getSoundPlayer().getListenerPos(), new Vector2f());
-        Global.getSector().getPlayerFleet().getCargo().getCredits().add(industry.modifiableCondition.cost);
+        Global.getSector().getPlayerFleet().getCargo().getCredits().add(this.cost);
         this.industry.cancelUpgrade();
     }
 }

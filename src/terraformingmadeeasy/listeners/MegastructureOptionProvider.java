@@ -9,7 +9,6 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.dialogs.ConfirmDialogDelegate;
 import terraformingmadeeasy.dialogs.MegastructureDialogDelegate;
-import terraformingmadeeasy.industries.TMEBaseIndustry;
 import terraformingmadeeasy.industries.ConstructionGrid;
 
 import java.util.ArrayList;
@@ -45,34 +44,32 @@ public class MegastructureOptionProvider extends BaseIndustryOptionProvider {
         List<IndustryOptionData> result = new ArrayList<>();
 
         if (!ind.isUpgrading()) {
-            com.fs.starfarer.api.campaign.listeners.IndustryOptionProvider.IndustryOptionData opt = new com.fs.starfarer.api.campaign.listeners.IndustryOptionProvider.IndustryOptionData(
-                    "Build a Megastructure...", CUSTOM_PLUGIN, ind, this);
+            IndustryOptionData opt = new IndustryOptionData("Build a Megastructure...", CUSTOM_PLUGIN, ind, this);
             result.add(opt);
         } else {
-            com.fs.starfarer.api.campaign.listeners.IndustryOptionProvider.IndustryOptionData opt = new com.fs.starfarer.api.campaign.listeners.IndustryOptionProvider.IndustryOptionData(
-                    "Cancel the Megastructure project...", CUSTOM_PLUGIN, ind, this);
+            IndustryOptionData opt = new IndustryOptionData("Cancel the Megastructure project...", CUSTOM_PLUGIN, ind, this);
             result.add(opt);
         }
 
         return result;
     }
 
-    public void createTooltip(com.fs.starfarer.api.campaign.listeners.IndustryOptionProvider.IndustryOptionData opt, TooltipMakerAPI tooltip, float width) {
+    public void createTooltip(IndustryOptionData opt, TooltipMakerAPI tooltip, float width) {
         if (opt.id == CUSTOM_PLUGIN && !opt.ind.isUpgrading()) {
             tooltip.addPara("A large structural grid for constructing Megastructures.", 0f);
         } else if (opt.id == CUSTOM_PLUGIN && opt.ind.isUpgrading()) {
             tooltip.addPara("Cancel the Megastructure project for a %s refund.", 0f, Misc.getHighlightColor(),
-                    Misc.getDGSCredits(((TMEBaseIndustry) opt.ind).modifiableCondition.cost));
+                    Misc.getDGSCredits(((ConstructionGrid) opt.ind).buildableMegastructure.cost));
         }
     }
 
-    public void optionSelected(com.fs.starfarer.api.campaign.listeners.IndustryOptionProvider.IndustryOptionData opt, DialogCreatorUI ui) {
+    public void optionSelected(IndustryOptionData opt, DialogCreatorUI ui) {
         if (opt.id == CUSTOM_PLUGIN && !opt.ind.isUpgrading()) {
-            MegastructureDialogDelegate dialogueDelegate = new MegastructureDialogDelegate(600f, 400f, (ConstructionGrid) opt.ind);
-            ui.showDialog(800f, 400f, dialogueDelegate);
+            MegastructureDialogDelegate dialogueDelegate = new MegastructureDialogDelegate(800f, 464f, (ConstructionGrid) opt.ind);
+            ui.showDialog(800f, 464f, dialogueDelegate);
         } else if (opt.id == CUSTOM_PLUGIN && opt.ind.isUpgrading()) {
-            ConfirmDialogDelegate tmeConfirmDialogueDelegate = new ConfirmDialogDelegate(opt.ind);
-            ui.showDialog(ConfirmDialogDelegate.WIDTH, ConfirmDialogDelegate.HEIGHT, tmeConfirmDialogueDelegate);
+            ConfirmDialogDelegate dialogueDelegate = new ConfirmDialogDelegate(opt.ind, ((ConstructionGrid) opt.ind).buildableMegastructure.cost);
+            ui.showDialog(ConfirmDialogDelegate.WIDTH, ConfirmDialogDelegate.HEIGHT, dialogueDelegate);
         }
     }
 }

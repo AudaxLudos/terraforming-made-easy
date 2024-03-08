@@ -33,7 +33,7 @@ public class ConstructionGrid extends BaseIndustry {
     public String prevAICoreId = null;
 
     public ConstructionGrid() {
-        this.buildableMegastructures.add(new BuildableMegastructure(Entities.DERELICT_CRYOSLEEPER, 12000000, 1080f));
+        this.buildableMegastructures.add(new BuildableMegastructure(Entities.DERELICT_CRYOSLEEPER, 20000000, 1080f));
         this.buildableMegastructures.add(new BuildableMegastructure(Entities.CORONAL_TAP, 20000000, 1440));
         this.buildableMegastructures.add(new BuildableMegastructure(Entities.INACTIVE_GATE, 12000000, 1080f));
     }
@@ -112,7 +112,7 @@ public class ConstructionGrid extends BaseIndustry {
         isAICoreBuildTimeMultApplied = false;
         if (buildableMegastructure != null) {
             sendCompletedMessage();
-            completeMegastructure(buildableMegastructure, megastructureOrbitData);
+            completeMegastructure();
             buildableMegastructure = null;
             megastructureOrbitData = null;
             market.removeIndustry(getId(), null, false);
@@ -140,13 +140,16 @@ public class ConstructionGrid extends BaseIndustry {
         isAICoreBuildTimeMultApplied = false;
     }
 
-    public void completeMegastructure(BuildableMegastructure megastructure, OrbitData orbitData) {
+    public void completeMegastructure() {
         StarSystemAPI system = getMarket().getStarSystem();
-        String customEntityId = megastructure.id;
+        String customEntityId = buildableMegastructure.id;
+        SectorEntityToken entity = this.megastructureOrbitData.entity;
+        float orbitAngle = this.megastructureOrbitData.orbitAngle;
+        float orbitRadius = this.megastructureOrbitData.orbitRadius;
+        float orbitDays = this.megastructureOrbitData.orbitDays;
         if (Objects.equals(customEntityId, Entities.CORONAL_TAP)) {
             SectorEntityToken coronalTap = system.addCustomEntity(null, null, Entities.CORONAL_TAP, Factions.NEUTRAL);
-            coronalTap.setCircularOrbit(system.getStar(), system.getStar().getCircularOrbitAngle() + 180f,
-                    system.getStar().getRadius() + 250f, system.getStar().getCircularOrbitPeriod());
+            coronalTap.setCircularOrbit(entity, orbitAngle, orbitRadius, orbitDays);
             system.addScript(new MiscellaneousThemeGenerator.MakeCoronalTapFaceNearestStar(coronalTap));
             system.addScript(new CoronalTapParticleScript(coronalTap));
             coronalTap.getMemoryWithoutUpdate().removeAllRequired("$defenderFleet");
@@ -157,7 +160,7 @@ public class ConstructionGrid extends BaseIndustry {
             coronalTap.getMemoryWithoutUpdate().set("$usable", true);
         } else if (Objects.equals(customEntityId, Entities.DERELICT_CRYOSLEEPER)) {
             SectorEntityToken cryoSleeper = system.addCustomEntity(null, null, Entities.DERELICT_CRYOSLEEPER, Factions.NEUTRAL);
-            cryoSleeper.setCircularOrbit(orbitData.entity, orbitData.orbitAngle, orbitData.orbitRadius, orbitData.orbitDays);
+            cryoSleeper.setCircularOrbit(entity, orbitAngle, orbitRadius, orbitDays);
             cryoSleeper.getMemoryWithoutUpdate().removeAllRequired("$defenderFleet");
             cryoSleeper.getMemoryWithoutUpdate().removeAllRequired("$hasDefenders");
             cryoSleeper.getMemoryWithoutUpdate().set("$usable", true);
@@ -165,7 +168,7 @@ public class ConstructionGrid extends BaseIndustry {
             cryoSleeper.getMemoryWithoutUpdate().set("$option", "salBeatDefendersContinue");
         } else if (Objects.equals(customEntityId, Entities.INACTIVE_GATE)) {
             SectorEntityToken inactiveGate = system.addCustomEntity(null, null, Entities.INACTIVE_GATE, Factions.NEUTRAL);
-            inactiveGate.setCircularOrbit(orbitData.entity, orbitData.orbitAngle, orbitData.orbitRadius, orbitData.orbitDays);
+            inactiveGate.setCircularOrbit(entity, orbitAngle, orbitRadius, orbitDays);
             inactiveGate.getMemoryWithoutUpdate().set("$gateScanned", true);
             inactiveGate.getMemoryWithoutUpdate().set("$fullName", "Active Gate");
         }
