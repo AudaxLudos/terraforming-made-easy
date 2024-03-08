@@ -2,21 +2,17 @@ package terraformingmadeeasy.dialogs;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
-import com.fs.starfarer.api.impl.campaign.ids.Entities;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import org.lwjgl.util.vector.Vector2f;
-import terraformingmadeeasy.dialogs.tooltips.MegastructureTooltip;
-import terraformingmadeeasy.dialogs.tooltips.OrbitDaysFieldTooltip;
-import terraformingmadeeasy.dialogs.tooltips.OrbitRadiusFieldTooltip;
-import terraformingmadeeasy.dialogs.tooltips.StartingAngleFieldTooltip;
+import terraformingmadeeasy.Utils;
+import terraformingmadeeasy.dialogs.tooltips.*;
 import terraformingmadeeasy.industries.ConstructionGrid;
 import terraformingmadeeasy.ui.ButtonPanelPlugin;
 import terraformingmadeeasy.ui.DropDownPanelPlugin;
 import terraformingmadeeasy.ui.TextFieldPanelPlugin;
 
 import java.awt.*;
-import java.util.Objects;
 
 public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
     public ConstructionGrid industry;
@@ -76,7 +72,7 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         TooltipMakerAPI megaStructsElement = megaStructsPanel.createUIElement(WIDTH, 360f, true);
         megaStructsPanel.addUIElement(megaStructsElement);
         mElement.addCustom(megaStructsPanel, 0f);
-        for (final ConstructionGrid.BuildableMegastructure buildableMegastructure : this.industry.buildableMegastructures) {
+        for (Utils.BuildableMegastructure buildableMegastructure : this.industry.buildableMegastructures) {
             float cost = buildableMegastructure.cost;
             int buildTime = Math.round(buildableMegastructure.buildTime);
             boolean canAfford = Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= cost;
@@ -142,7 +138,8 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         orbitInputsElement.addCustom(orbitFocusPanel, 0f);
         orbitFocusElement.addPara("Orbit Focus", 0f).setAlignment(Alignment.MID);
         orbitFocusElement.addSpacer(3f);
-        ButtonAPI mainBtn = null;
+        orbitFocusElement.setParaSmallInsignia();
+        ButtonAPI mainBtn;
         if (this.orbitFocusField != null) {
             mainBtn = orbitFocusElement.addButton(this.orbitFocusField.getName(), this.orbitFocusField, Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Alignment.MID, CutStyle.NONE, 190f, 25f, 0f);
         } else {
@@ -159,7 +156,7 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
                 prevBtn = currBtn;
             }
         }
-        orbitFocusElement.addTooltipTo(new OrbitRadiusFieldTooltip(), orbitFocusPanel, TooltipMakerAPI.TooltipLocation.BELOW);
+        orbitFocusElement.addTooltipTo(new OrbitFocusFieldTooltip(), orbitFocusPanel, TooltipMakerAPI.TooltipLocation.BELOW);
 
         TextFieldPanelPlugin startAnglePlugin = new TextFieldPanelPlugin();
         CustomPanelAPI startAnglePanel = this.mPanel.createCustomPanel(WIDTH / 4f, 40f, startAnglePlugin);
@@ -230,11 +227,11 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         if (this.selected == null || this.orbitFocusField == null || this.startingAngleField == null
                 || this.orbitRadiusField == null || this.orbitDaysField == null)
             return;
-        ConstructionGrid.BuildableMegastructure megastructure = (ConstructionGrid.BuildableMegastructure) this.selected;
+        Utils.BuildableMegastructure megastructure = (Utils.BuildableMegastructure) this.selected;
 
         Global.getSoundPlayer().playSound("ui_upgrade_industry", 1f, 1f, Global.getSoundPlayer().getListenerPos(), new Vector2f());
         Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(megastructure.cost);
-        ConstructionGrid.OrbitData data = new ConstructionGrid.OrbitData(
+        Utils.OrbitData data = new Utils.OrbitData(
                 this.orbitFocusField,
                 Float.parseFloat(this.startingAngleField.getText().trim()),
                 Float.parseFloat(this.orbitRadiusField.getText().trim()),

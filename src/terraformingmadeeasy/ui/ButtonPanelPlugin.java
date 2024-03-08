@@ -2,10 +2,9 @@ package terraformingmadeeasy.ui;
 
 import com.fs.starfarer.api.campaign.BaseCustomUIPanelPlugin;
 import com.fs.starfarer.api.ui.ButtonAPI;
+import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.dialogs.MegastructureDialogDelegate;
 import terraformingmadeeasy.dialogs.TMEBaseDialogDelegate;
-import terraformingmadeeasy.industries.ConstructionGrid;
-import terraformingmadeeasy.industries.TMEBaseIndustry;
 
 public class ButtonPanelPlugin extends BaseCustomUIPanelPlugin {
     public TMEBaseDialogDelegate delegate;
@@ -15,9 +14,9 @@ public class ButtonPanelPlugin extends BaseCustomUIPanelPlugin {
     }
 
     public void buttonPressed(Object buttonId) {
-        if (buttonId instanceof ConstructionGrid.BuildableMegastructure) {
+        if (buttonId instanceof Utils.BuildableMegastructure) {
             this.delegate.selected = buttonId;
-        } else if (buttonId instanceof TMEBaseIndustry.ModifiableCondition) {
+        } else if (buttonId instanceof Utils.ModifiableCondition) {
             this.delegate.selected = buttonId;
         }
 

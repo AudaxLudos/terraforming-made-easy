@@ -1,7 +1,6 @@
 package terraformingmadeeasy.industries;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.CustomEntitySpecAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.campaign.comm.CommMessageAPI;
@@ -14,6 +13,7 @@ import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.impl.campaign.procgen.themes.MiscellaneousThemeGenerator;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import terraformingmadeeasy.Utils;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -24,18 +24,18 @@ public class ConstructionGrid extends BaseIndustry {
     public static final float GAMMA_BUILD_TIME_MULT = 0.20f;
     public static final float BETA_BUILD_TIME_MULT = 0.30f;
     public static final float ALPHA_BUILD_TIME_MULT = 0.50f;
-    public List<BuildableMegastructure> buildableMegastructures = new ArrayList<>();
-    public BuildableMegastructure buildableMegastructure = null;
-    public OrbitData megastructureOrbitData = null;
+    public List<Utils.BuildableMegastructure> buildableMegastructures = new ArrayList<>();
+    public Utils.BuildableMegastructure buildableMegastructure = null;
+    public Utils.OrbitData megastructureOrbitData = null;
     public Boolean isAICoreBuildTimeMultApplied = false;
     public float aiCoreCurrentBuildTimeMult = 0f;
     public boolean firstTick = false;
     public String prevAICoreId = null;
 
     public ConstructionGrid() {
-        this.buildableMegastructures.add(new BuildableMegastructure(Entities.DERELICT_CRYOSLEEPER, 20000000, 1080f));
-        this.buildableMegastructures.add(new BuildableMegastructure(Entities.CORONAL_TAP, 20000000, 1440));
-        this.buildableMegastructures.add(new BuildableMegastructure(Entities.INACTIVE_GATE, 12000000, 1080f));
+        this.buildableMegastructures.add(new Utils.BuildableMegastructure(Entities.DERELICT_CRYOSLEEPER, 20000000, 1080f));
+        this.buildableMegastructures.add(new Utils.BuildableMegastructure(Entities.CORONAL_TAP, 20000000, 1440));
+        this.buildableMegastructures.add(new Utils.BuildableMegastructure(Entities.INACTIVE_GATE, 12000000, 1080f));
     }
 
     @Override
@@ -98,11 +98,7 @@ public class ConstructionGrid extends BaseIndustry {
         String days = "days";
         if (left == 1) days = "day";
 
-        if (isUpgrading()) {
-            return "Building: " + left + " " + days + " left";
-        } else {
-            return "Building: " + left + " " + days + " left";
-        }
+        return "Building: " + left + " " + days + " left";
     }
 
     public void finishBuildingOrUpgrading() {
@@ -122,7 +118,7 @@ public class ConstructionGrid extends BaseIndustry {
         }
     }
 
-    public void startUpgrading(BuildableMegastructure megastructure, OrbitData orbitData) {
+    public void startUpgrading(Utils.BuildableMegastructure megastructure, Utils.OrbitData orbitData) {
         // Will be called from MegastructureDialogDelegate to start building megastructure
         building = true;
         buildProgress = 0;
@@ -277,37 +273,5 @@ public class ConstructionGrid extends BaseIndustry {
         }
 
         return true;
-    }
-
-    public static class BuildableMegastructure {
-        public String id;
-        public String name;
-        public String icon;
-        public float cost;
-        public float buildTime;
-
-        public BuildableMegastructure(String customEntityId, float cost, float buildTime) {
-            CustomEntitySpecAPI spec = Global.getSettings().getCustomEntitySpec(customEntityId);
-
-            this.id = spec.getId();
-            this.name = spec.getDefaultName();
-            this.icon = spec.getInteractionImage();
-            this.cost = cost;
-            this.buildTime = buildTime;
-        }
-    }
-
-    public static class OrbitData {
-        public SectorEntityToken entity;
-        public float orbitAngle;
-        public float orbitRadius;
-        public float orbitDays;
-
-        public OrbitData(SectorEntityToken entity, float orbitAngle, float orbitRadius, float orbitDays) {
-            this.entity = entity;
-            this.orbitAngle = orbitAngle;
-            this.orbitRadius = orbitRadius;
-            this.orbitDays = orbitDays;
-        }
     }
 }

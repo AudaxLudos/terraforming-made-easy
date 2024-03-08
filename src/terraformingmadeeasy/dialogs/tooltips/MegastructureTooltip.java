@@ -3,14 +3,14 @@ package terraformingmadeeasy.dialogs.tooltips;
 import com.fs.starfarer.api.impl.campaign.ids.Entities;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import terraformingmadeeasy.industries.ConstructionGrid;
+import terraformingmadeeasy.Utils;
 
 import java.util.Objects;
 
 public class MegastructureTooltip implements TooltipMakerAPI.TooltipCreator {
-    public ConstructionGrid.BuildableMegastructure megastructure;
+    public Utils.BuildableMegastructure megastructure;
 
-    public MegastructureTooltip(ConstructionGrid.BuildableMegastructure megastructure) {
+    public MegastructureTooltip(Utils.BuildableMegastructure megastructure) {
         this.megastructure = megastructure;
     }
 
@@ -21,7 +21,7 @@ public class MegastructureTooltip implements TooltipMakerAPI.TooltipCreator {
 
     @Override
     public float getTooltipWidth(Object tooltipParam) {
-        return 0;
+        return 380f;
     }
 
     @Override

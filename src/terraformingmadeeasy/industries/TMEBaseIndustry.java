@@ -5,7 +5,6 @@ import com.fs.starfarer.api.campaign.PlanetSpecAPI;
 import com.fs.starfarer.api.campaign.comm.CommMessageAPI;
 import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
 import com.fs.starfarer.api.campaign.econ.Industry;
-import com.fs.starfarer.api.characters.MarketConditionSpecAPI;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Conditions;
@@ -16,6 +15,7 @@ import com.fs.starfarer.api.impl.campaign.procgen.StarSystemGenerator;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.loading.specs.PlanetSpec;
+import terraformingmadeeasy.Utils;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -26,8 +26,8 @@ public class TMEBaseIndustry extends BaseIndustry {
     public static final float GAMMA_BUILD_TIME_MULT = 0.20f;
     public static final float BETA_BUILD_TIME_MULT = 0.30f;
     public static final float ALPHA_BUILD_TIME_MULT = 0.50f;
-    public List<ModifiableCondition> modifiableConditions = new ArrayList<>();
-    public ModifiableCondition modifiableCondition = null;
+    public List<Utils.ModifiableCondition> modifiableConditions = new ArrayList<>();
+    public Utils.ModifiableCondition modifiableCondition = null;
     public Boolean isAICoreBuildTimeMultApplied = false;
     public float aiCoreCurrentBuildTimeMult = 0f;
     public boolean firstTick = false;
@@ -118,7 +118,7 @@ public class TMEBaseIndustry extends BaseIndustry {
         }
     }
 
-    public void startUpgrading(ModifiableCondition condition) {
+    public void startUpgrading(Utils.ModifiableCondition condition) {
         // Will be called from TerraformDialogDelegate to start terraforming
         building = true;
         buildProgress = 0;
@@ -492,7 +492,7 @@ public class TMEBaseIndustry extends BaseIndustry {
         }
     }
 
-    public Boolean canTerraformCondition(ModifiableCondition condition) {
+    public Boolean canTerraformCondition(Utils.ModifiableCondition condition) {
         boolean canTerraform = false;
         if (!condition.likesConditions.isEmpty()) {
             for (String cond : condition.likesConditions)
@@ -501,29 +501,5 @@ public class TMEBaseIndustry extends BaseIndustry {
             canTerraform = true;
         }
         return canTerraform;
-    }
-
-    public static class ModifiableCondition {
-        public String id;
-        public String name;
-        public String icon;
-        public float cost;
-        public float buildTime;
-        public boolean canChangeGasGiants;
-        public List<String> likesConditions = new ArrayList<>();
-        public List<String> hatesConditions = new ArrayList<>();
-
-        public ModifiableCondition(String conditionSpecId, float cost, float buildTime, boolean canChangeGasGiants, List<String> likesConditions, List<String> hatesConditions) {
-            MarketConditionSpecAPI spec = Global.getSettings().getMarketConditionSpec(conditionSpecId);
-
-            this.id = spec.getId();
-            this.name = spec.getName();
-            this.icon = spec.getIcon();
-            this.cost = cost;
-            this.buildTime = buildTime;
-            this.canChangeGasGiants = canChangeGasGiants;
-            if (likesConditions != null) this.likesConditions = likesConditions;
-            if (hatesConditions != null) this.hatesConditions = hatesConditions;
-        }
     }
 }

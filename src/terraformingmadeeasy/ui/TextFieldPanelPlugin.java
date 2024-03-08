@@ -6,7 +6,6 @@ import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.Fonts;
 import com.fs.starfarer.api.ui.TextFieldAPI;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class TextFieldPanelPlugin extends BaseCustomUIPanelPlugin {
@@ -47,9 +46,6 @@ public class TextFieldPanelPlugin extends BaseCustomUIPanelPlugin {
             if (event.getEventValue() == 1) {
                 this.shouldRecaptureFocus = false;
                 continue;
-            }
-            if (event.getEventValue() > 0 && !Arrays.asList(2, 3, 4, 5, 6, 7, 8, 9, 10, 11).contains(event.getEventValue())) {
-                Global.getSoundPlayer().playUISound("ui_button_disabled_pressed", 1f, 1f);
             }
         }
     }

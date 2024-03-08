@@ -1,6 +1,7 @@
 package terraformingmadeeasy.industries;
 
 import com.fs.starfarer.api.impl.campaign.ids.Conditions;
+import terraformingmadeeasy.Utils;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -8,28 +9,28 @@ import java.util.Collections;
 public class MineralReplicator extends TMEBaseIndustry {
     public MineralReplicator() {
         // ORGANICS
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.ORGANICS_TRACE, 2000000f, 90f, false,
+        this.modifiableConditions.add(new Utils.ModifiableCondition(Conditions.ORGANICS_TRACE, 2000000f, 90f, false,
                 // Likes conditions
                 Arrays.asList(Conditions.HABITABLE, Conditions.THIN_ATMOSPHERE, Conditions.TOXIC_ATMOSPHERE),
                 // Hates conditions
                 Arrays.asList(Conditions.ORGANICS_COMMON,
                         Conditions.ORGANICS_ABUNDANT,
                         Conditions.ORGANICS_PLENTIFUL)));
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.ORGANICS_COMMON, 4000000f, 180f, false,
+        this.modifiableConditions.add(new Utils.ModifiableCondition(Conditions.ORGANICS_COMMON, 4000000f, 180f, false,
                 // Likes conditions
                 Arrays.asList(Conditions.HABITABLE, Conditions.THIN_ATMOSPHERE, Conditions.TOXIC_ATMOSPHERE),
                 // Hates conditions
                 Arrays.asList(Conditions.ORGANICS_TRACE,
                         Conditions.ORGANICS_ABUNDANT,
                         Conditions.ORGANICS_PLENTIFUL)));
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.ORGANICS_ABUNDANT, 6000000f, 270f, false,
+        this.modifiableConditions.add(new Utils.ModifiableCondition(Conditions.ORGANICS_ABUNDANT, 6000000f, 270f, false,
                 // Likes conditions
                 Collections.singletonList(Conditions.HABITABLE),
                 // Hates conditions
                 Arrays.asList(Conditions.ORGANICS_TRACE,
                         Conditions.ORGANICS_COMMON,
                         Conditions.ORGANICS_PLENTIFUL)));
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.ORGANICS_PLENTIFUL, 12000000f, 540f, false,
+        this.modifiableConditions.add(new Utils.ModifiableCondition(Conditions.ORGANICS_PLENTIFUL, 12000000f, 540f, false,
                 // Likes conditions
                 Collections.singletonList(Conditions.HABITABLE),
                 // Hates conditions
@@ -37,7 +38,7 @@ public class MineralReplicator extends TMEBaseIndustry {
                         Conditions.ORGANICS_COMMON,
                         Conditions.ORGANICS_ABUNDANT)));
         // ORE
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.ORE_SPARSE, 2000000f, 90f, false,
+        this.modifiableConditions.add(new Utils.ModifiableCondition(Conditions.ORE_SPARSE, 2000000f, 90f, false,
                 // Likes conditions
                 Arrays.asList(Conditions.TECTONIC_ACTIVITY,
                         Conditions.HOT),
@@ -46,7 +47,7 @@ public class MineralReplicator extends TMEBaseIndustry {
                         Conditions.ORE_ABUNDANT,
                         Conditions.ORE_RICH,
                         Conditions.ORE_ULTRARICH)));
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.ORE_MODERATE, 4000000f, 180f, false,
+        this.modifiableConditions.add(new Utils.ModifiableCondition(Conditions.ORE_MODERATE, 4000000f, 180f, false,
                 // Likes conditions
                 Arrays.asList(Conditions.TECTONIC_ACTIVITY,
                         Conditions.HOT),
@@ -55,7 +56,7 @@ public class MineralReplicator extends TMEBaseIndustry {
                         Conditions.ORE_ABUNDANT,
                         Conditions.ORE_RICH,
                         Conditions.ORE_ULTRARICH)));
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.ORE_ABUNDANT, 6000000f, 270f, false,
+        this.modifiableConditions.add(new Utils.ModifiableCondition(Conditions.ORE_ABUNDANT, 6000000f, 270f, false,
                 // Likes conditions
                 Arrays.asList(Conditions.EXTREME_TECTONIC_ACTIVITY,
                         Conditions.VERY_HOT),
@@ -64,7 +65,7 @@ public class MineralReplicator extends TMEBaseIndustry {
                         Conditions.ORE_MODERATE,
                         Conditions.ORE_RICH,
                         Conditions.ORE_ULTRARICH)));
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.ORE_RICH, 12000000f, 540f, false,
+        this.modifiableConditions.add(new Utils.ModifiableCondition(Conditions.ORE_RICH, 12000000f, 540f, false,
                 // Likes conditions
                 Arrays.asList(Conditions.EXTREME_TECTONIC_ACTIVITY,
                         Conditions.VERY_HOT),
@@ -73,7 +74,7 @@ public class MineralReplicator extends TMEBaseIndustry {
                         Conditions.ORE_MODERATE,
                         Conditions.ORE_ABUNDANT,
                         Conditions.ORE_ULTRARICH)));
-        this.modifiableConditions.add(new ModifiableCondition(Conditions.ORE_ULTRARICH, 18000000f, 1080f, false,
+        this.modifiableConditions.add(new Utils.ModifiableCondition(Conditions.ORE_ULTRARICH, 18000000f, 1080f, false,
                 // Likes conditions
                 Arrays.asList(Conditions.EXTREME_TECTONIC_ACTIVITY,
                         Conditions.VERY_HOT),

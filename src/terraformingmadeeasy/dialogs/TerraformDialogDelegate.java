@@ -8,12 +8,12 @@ import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import org.lwjgl.util.vector.Vector2f;
+import terraformingmadeeasy.Utils;
+import terraformingmadeeasy.dialogs.tooltips.TerraformTooltip;
 import terraformingmadeeasy.industries.TMEBaseIndustry;
 import terraformingmadeeasy.ui.ButtonPanelPlugin;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
     public TMEBaseIndustry industry;
@@ -22,12 +22,6 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
         WIDTH = width;
         HEIGHT = height;
         this.industry = (TMEBaseIndustry) industry;
-    }
-
-    public static String capitalizeString(String givenString) {
-        String text = givenString.replace("_", " ");
-        text = Character.toUpperCase(text.charAt(0)) + text.substring(1);
-        return text;
     }
 
     @Override
@@ -54,7 +48,7 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
         // list all modifiable condition of tme industry
         TooltipMakerAPI conditionsElement = panel.createUIElement(WIDTH, HEIGHT - 30f, true);
 
-        for (final TMEBaseIndustry.ModifiableCondition modifiableCondition : this.industry.modifiableConditions) {
+        for (Utils.ModifiableCondition modifiableCondition : this.industry.modifiableConditions) {
             float cost = modifiableCondition.cost;
             int buildTime = Math.round(modifiableCondition.buildTime);
             boolean canAfford = Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= cost;
@@ -88,7 +82,7 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
             TooltipMakerAPI conditionButton = conditionPanel.createUIElement(WIDTH, 50f, false);
             ButtonAPI areaCheckbox = conditionButton.addAreaCheckbox("", modifiableCondition, baseColor, bgColour, brightColor, WIDTH, 50f, 0f);
             areaCheckbox.setEnabled(canAffordAndBuild);
-            conditionButton.addTooltipTo(addConditionTooltip(modifiableCondition), conditionPanel, TooltipMakerAPI.TooltipLocation.RIGHT);
+            conditionButton.addTooltipTo(new TerraformTooltip(modifiableCondition), conditionPanel, TooltipMakerAPI.TooltipLocation.RIGHT);
 
             conditionPanel.addUIElement(conditionButton).inTL(-10f, 0f);
             conditionPanel.addUIElement(conditionNameElement);
@@ -117,65 +111,10 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
     public void customDialogConfirm() {
         if (this.selected == null) return;
 
-        TMEBaseIndustry.ModifiableCondition selectedCondition = (TMEBaseIndustry.ModifiableCondition) this.selected;
+        Utils.ModifiableCondition selectedCondition = (Utils.ModifiableCondition) this.selected;
 
         Global.getSoundPlayer().playSound("ui_upgrade_industry", 1f, 1f, Global.getSoundPlayer().getListenerPos(), new Vector2f());
         Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(selectedCondition.cost);
         this.industry.startUpgrading(selectedCondition);
-    }
-
-    public TooltipMakerAPI.TooltipCreator addConditionTooltip(final TMEBaseIndustry.ModifiableCondition condition) {
-        return new TooltipMakerAPI.TooltipCreator() {
-            @Override
-            public boolean isTooltipExpandable(Object tooltipParam) {
-                return false;
-            }
-
-            @Override
-            public float getTooltipWidth(Object tooltipParam) {
-                return 380f;
-            }
-
-            @Override
-            public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-                if (!condition.likesConditions.isEmpty()) {
-                    int i = 0;
-                    String text = "";
-                    List<String> conditions = new ArrayList<>();
-                    for (String cond : condition.likesConditions) {
-                        conditions.add(capitalizeString(cond));
-                        i++;
-                        if (i != condition.likesConditions.size())
-                            text = text + "%s or ";
-                        else
-                            text = text + "%s to add";
-                    }
-                    tooltip.addPara("Requires " + text, 0f, Misc.getHighlightColor(), conditions.toArray(new String[0]));
-                } else {
-                    tooltip.addPara("Requires %s", 0f, Misc.getTextColor(), "no conditions");
-                }
-                tooltip.addSpacer(10f);
-                if (!condition.hatesConditions.isEmpty()) {
-                    int i = 0;
-                    String text = "";
-                    List<String> conditions = new ArrayList<>();
-                    for (String cond : condition.hatesConditions) {
-                        conditions.add(capitalizeString(cond));
-                        i++;
-                        if (i != condition.hatesConditions.size())
-                            text = text + "%s, ";
-                        else
-                            text = text + "and %s";
-                    }
-                    tooltip.addPara("Removes " + text, 0f, Misc.getHighlightColor(), conditions.toArray(new String[0]));
-                } else {
-                    tooltip.addPara("Removes %s", 0f, Misc.getTextColor(), "no conditions");
-                }
-                tooltip.addSpacer(10f);
-                Color textColor = condition.canChangeGasGiants ? Misc.getHighlightColor() : Misc.getNegativeHighlightColor();
-                String textFormat = condition.canChangeGasGiants ? "Can" : "Cannot";
-                tooltip.addPara("%s be used on gas giants", 0f, textColor, textFormat);
-            }
-        };
     }
 }
