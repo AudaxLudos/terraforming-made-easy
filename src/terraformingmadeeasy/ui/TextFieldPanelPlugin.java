@@ -45,7 +45,6 @@ public class TextFieldPanelPlugin extends BaseCustomUIPanelPlugin {
                 continue;
             if (event.getEventValue() == 1) {
                 this.shouldRecaptureFocus = false;
-                continue;
             }
         }
     }

@@ -17,6 +17,7 @@ public class OrbitRadiusFieldTooltip implements TooltipMakerAPI.TooltipCreator {
     @Override
     public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
         tooltip.addPara("Input a number between %s", 0f, Misc.getHighlightColor(), "100 - 10000");
-        tooltip.addPara("Distance from the megastructure to an entity", 0f);
+        tooltip.addSpacer(10f);
+        tooltip.addPara("%s from the megastructure to an entity", 0f, Misc.getHighlightColor(), "Distance");
     }
 }

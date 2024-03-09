@@ -6,9 +6,8 @@ import terraformingmadeeasy.Utils;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-
-import static terraformingmadeeasy.Utils.capitalizeString;
 
 public class TerraformTooltip implements TooltipMakerAPI.TooltipCreator {
     public Utils.ModifiableCondition condition;
@@ -30,16 +29,16 @@ public class TerraformTooltip implements TooltipMakerAPI.TooltipCreator {
     @Override
     public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
         if (!condition.likesConditions.isEmpty()) {
-            int i = 0;
-            String text = "";
+            StringBuilder text = new StringBuilder();
             List<String> conditions = new ArrayList<>();
-            for (String cond : condition.likesConditions) {
-                conditions.add(capitalizeString(cond));
-                i++;
-                if (i != condition.likesConditions.size())
-                    text = text + "%s or ";
+            for (Iterator<String> itr = condition.likesConditions.iterator(); itr.hasNext(); ) {
+                conditions.add(Utils.capitalizeString(itr.next()));
+                if (condition.likesConditions.size() == 1)
+                    text.append("%s");
+                else if (!itr.hasNext())
+                    text.append("and %s");
                 else
-                    text = text + "%s to add";
+                    text.append("%s, ");
             }
             tooltip.addPara("Requires " + text, 0f, Misc.getHighlightColor(), conditions.toArray(new String[0]));
         } else {
@@ -47,16 +46,16 @@ public class TerraformTooltip implements TooltipMakerAPI.TooltipCreator {
         }
         tooltip.addSpacer(10f);
         if (!condition.hatesConditions.isEmpty()) {
-            int i = 0;
-            String text = "";
+            StringBuilder text = new StringBuilder();
             List<String> conditions = new ArrayList<>();
-            for (String cond : condition.hatesConditions) {
-                conditions.add(capitalizeString(cond));
-                i++;
-                if (i != condition.hatesConditions.size())
-                    text = text + "%s, ";
+            for (Iterator<String> itr = condition.hatesConditions.iterator(); itr.hasNext(); ) {
+                conditions.add(Utils.capitalizeString(itr.next()));
+                if (condition.hatesConditions.size() == 1)
+                    text.append("%s");
+                else if (!itr.hasNext())
+                    text.append("and %s");
                 else
-                    text = text + "and %s";
+                    text.append("%s, ");
             }
             tooltip.addPara("Removes " + text, 0f, Misc.getHighlightColor(), conditions.toArray(new String[0]));
         } else {
