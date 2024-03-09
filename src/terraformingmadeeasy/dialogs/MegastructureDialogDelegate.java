@@ -12,8 +12,6 @@ import terraformingmadeeasy.ui.ButtonPanelPlugin;
 import terraformingmadeeasy.ui.DropDownPanelPlugin;
 import terraformingmadeeasy.ui.TextFieldPanelPlugin;
 
-import java.awt.*;
-
 public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
     public ConstructionGrid industry;
     public SectorEntityToken orbitFocusField = null;
@@ -42,9 +40,6 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
 
         this.buttons.clear();
 
-        Color baseColor = Misc.getDarkPlayerColor();
-        Color bgColour = Misc.getDarkPlayerColor();
-        Color brightColor = Misc.getDarkPlayerColor();
         float columnOneWidth = WIDTH / 3f + 100f;
         float columnWidth = (WIDTH - columnOneWidth) / 2f;
 
@@ -79,11 +74,6 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
             boolean canAfford = Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= cost;
             boolean canBuild = this.industry.canBuildMegastructure(buildableMegastructure.id);
             boolean canAffordAndBuild = canBuild && canAfford;
-            if (!canAfford) {
-                baseColor = Misc.getGrayColor();
-                bgColour = Misc.getGrayColor();
-                brightColor = Misc.getGrayColor();
-            }
 
             CustomPanelAPI megaStructPanel = this.mPanel.createCustomPanel(WIDTH, 50f, new ButtonPanelPlugin(this));
 
@@ -102,7 +92,7 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
             megaStructCostElement.getPosition().rightOfMid(megaStructBuildTimeElement, 0f);
 
             TooltipMakerAPI megaStructButtonElement = megaStructPanel.createUIElement(WIDTH, 50f, false);
-            ButtonAPI megaStructButton = megaStructButtonElement.addAreaCheckbox("", buildableMegastructure, baseColor, bgColour, brightColor, WIDTH, 50f, 0f);
+            ButtonAPI megaStructButton = megaStructButtonElement.addAreaCheckbox("", buildableMegastructure, Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(), WIDTH, 50f, 0f);
             megaStructButton.setEnabled(canAffordAndBuild);
             megaStructButton.setChecked(this.selected == buildableMegastructure);
             megaStructButtonElement.addTooltipTo(new MegastructureTooltip(buildableMegastructure), megaStructPanel, TooltipMakerAPI.TooltipLocation.RIGHT);

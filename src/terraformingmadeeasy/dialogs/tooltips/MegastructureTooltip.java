@@ -1,22 +1,18 @@
 package terraformingmadeeasy.dialogs.tooltips;
 
 import com.fs.starfarer.api.impl.campaign.ids.Entities;
+import com.fs.starfarer.api.ui.BaseTooltipCreator;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.Utils;
 
 import java.util.Objects;
 
-public class MegastructureTooltip implements TooltipMakerAPI.TooltipCreator {
+public class MegastructureTooltip extends BaseTooltipCreator {
     public Utils.BuildableMegastructure megastructure;
 
     public MegastructureTooltip(Utils.BuildableMegastructure megastructure) {
         this.megastructure = megastructure;
-    }
-
-    @Override
-    public boolean isTooltipExpandable(Object tooltipParam) {
-        return false;
     }
 
     @Override

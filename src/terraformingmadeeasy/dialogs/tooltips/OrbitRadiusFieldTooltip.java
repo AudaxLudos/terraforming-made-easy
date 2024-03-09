@@ -1,13 +1,10 @@
 package terraformingmadeeasy.dialogs.tooltips;
 
+import com.fs.starfarer.api.ui.BaseTooltipCreator;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 
-public class OrbitRadiusFieldTooltip implements TooltipMakerAPI.TooltipCreator {
-    @Override
-    public boolean isTooltipExpandable(Object tooltipParam) {
-        return false;
-    }
+public class OrbitRadiusFieldTooltip extends BaseTooltipCreator {
 
     @Override
     public float getTooltipWidth(Object tooltipParam) {

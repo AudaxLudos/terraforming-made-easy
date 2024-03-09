@@ -1,9 +1,10 @@
 package terraformingmadeeasy.dialogs.tooltips;
 
+import com.fs.starfarer.api.ui.BaseTooltipCreator;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 
-public class OrbitDaysFieldTooltip implements TooltipMakerAPI.TooltipCreator {
+public class OrbitDaysFieldTooltip extends BaseTooltipCreator {
     @Override
     public boolean isTooltipExpandable(Object tooltipParam) {
         return false;

@@ -1,5 +1,6 @@
 package terraformingmadeeasy.dialogs.tooltips;
 
+import com.fs.starfarer.api.ui.BaseTooltipCreator;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.Utils;
@@ -9,16 +10,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class TerraformTooltip implements TooltipMakerAPI.TooltipCreator {
+public class TerraformTooltip extends BaseTooltipCreator {
     public Utils.ModifiableCondition condition;
 
     public TerraformTooltip(Utils.ModifiableCondition condition) {
         this.condition = condition;
-    }
-
-    @Override
-    public boolean isTooltipExpandable(Object tooltipParam) {
-        return false;
     }
 
     @Override

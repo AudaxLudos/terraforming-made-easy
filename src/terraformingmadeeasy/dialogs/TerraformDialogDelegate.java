@@ -13,8 +13,6 @@ import terraformingmadeeasy.dialogs.tooltips.TerraformTooltip;
 import terraformingmadeeasy.industries.TMEBaseIndustry;
 import terraformingmadeeasy.ui.ButtonPanelPlugin;
 
-import java.awt.*;
-
 public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
     public TMEBaseIndustry industry;
 
@@ -28,9 +26,6 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
     public void createCustomDialog(CustomPanelAPI panel, CustomDialogCallback callback) {
         this.buttons.clear();
 
-        Color baseColor = Misc.getDarkPlayerColor();
-        Color bgColour = Misc.getDarkPlayerColor();
-        Color brightColor = Misc.getDarkPlayerColor();
         float columnOneWidth = WIDTH / 3f + 100f;
         float columnWidth = (WIDTH - columnOneWidth) / 2f;
 
@@ -68,11 +63,6 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
             if (this.industry.getMarket().getPlanetEntity().isGasGiant())
                 canBuild = canBuild && modifiableCondition.canChangeGasGiants;
             boolean canAffordAndBuild = canBuild && canAfford;
-            if (!canAfford) {
-                baseColor = Misc.getGrayColor();
-                bgColour = Misc.getGrayColor();
-                brightColor = Misc.getGrayColor();
-            }
 
             CustomPanelAPI conditionPanel = panel.createCustomPanel(WIDTH, 50f, new ButtonPanelPlugin(this));
             TooltipMakerAPI conditionNameElement = conditionPanel.createUIElement(columnOneWidth, 40f, false);
@@ -91,7 +81,7 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
             conditionCostElement.getPosition().rightOfMid(conditionBuildTimeElement, 0f);
 
             TooltipMakerAPI conditionButton = conditionPanel.createUIElement(WIDTH, 50f, false);
-            ButtonAPI areaCheckbox = conditionButton.addAreaCheckbox("", modifiableCondition, baseColor, bgColour, brightColor, WIDTH, 50f, 0f);
+            ButtonAPI areaCheckbox = conditionButton.addAreaCheckbox("", modifiableCondition, Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(), WIDTH, 50f, 0f);
             areaCheckbox.setEnabled(canAffordAndBuild);
             conditionButton.addTooltipTo(new TerraformTooltip(modifiableCondition), conditionPanel, TooltipMakerAPI.TooltipLocation.RIGHT);
 
