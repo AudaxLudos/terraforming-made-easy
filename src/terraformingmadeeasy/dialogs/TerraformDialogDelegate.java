@@ -34,7 +34,17 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
         float columnOneWidth = WIDTH / 3f + 100f;
         float columnWidth = (WIDTH - columnOneWidth) / 2f;
 
-        TooltipMakerAPI headerElement = panel.createUIElement(WIDTH, 0f, false);
+        CustomPanelAPI mPanel = panel.createCustomPanel(WIDTH, HEIGHT, null);
+        panel.addComponent(mPanel);
+
+        TooltipMakerAPI mElement = mPanel.createUIElement(WIDTH, HEIGHT, false);
+        mPanel.addUIElement(mElement).inTL(0f, 0f).setXAlignOffset(-5f);
+
+        // terraforming options selection area
+        CustomPanelAPI headerPanel = mPanel.createCustomPanel(WIDTH, 25f, null);
+        TooltipMakerAPI headerElement = headerPanel.createUIElement(WIDTH, 25f, false);
+        headerPanel.addUIElement(headerElement);
+        mElement.addCustom(headerPanel, 0f);
         headerElement.beginTable(Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(),
                 0f, false, true,
                 new Object[]{"Name", columnOneWidth, "Build time", columnWidth, "Cost", columnWidth - 6f});
@@ -43,11 +53,12 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
         headerElement.addTableHeaderTooltip(2, "One-time cost to begin terraforming project, in credits");
         headerElement.addTable("", 0, 0f);
         headerElement.getPrev().getPosition().setXAlignOffset(0f);
-        panel.addUIElement(headerElement).inTL(0f, 0f);
 
-        // list all modifiable condition of tme industry
-        TooltipMakerAPI conditionsElement = panel.createUIElement(WIDTH, HEIGHT - 30f, true);
-
+        // selectable terraforming options list
+        CustomPanelAPI conditionsPanel = mPanel.createCustomPanel(WIDTH, 439f, null);
+        TooltipMakerAPI conditionsElement = conditionsPanel.createUIElement(WIDTH, 439f, true);
+        conditionsPanel.addUIElement(conditionsElement);
+        mElement.addCustom(conditionsPanel, 0f);
         for (Utils.ModifiableCondition modifiableCondition : this.industry.modifiableConditions) {
             float cost = modifiableCondition.cost;
             int buildTime = Math.round(modifiableCondition.buildTime);
@@ -86,13 +97,12 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
 
             conditionPanel.addUIElement(conditionButton).inTL(-10f, 0f);
             conditionPanel.addUIElement(conditionNameElement);
-            conditionPanel.addUIElement(conditionCostElement);
             conditionPanel.addUIElement(conditionBuildTimeElement);
+            conditionPanel.addUIElement(conditionCostElement);
 
             conditionsElement.addCustom(conditionPanel, 0f);
             this.buttons.add(areaCheckbox);
         }
-        panel.addUIElement(conditionsElement).belowMid(headerElement, 0f);
 
         // show player credits
         TooltipMakerAPI creditsElement = panel.createUIElement(WIDTH, 0f, false);
