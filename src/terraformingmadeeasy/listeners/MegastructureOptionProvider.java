@@ -9,6 +9,7 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.dialogs.ConfirmDialogDelegate;
 import terraformingmadeeasy.dialogs.MegastructureDialogDelegate;
+import terraformingmadeeasy.ids.TMEIndustries;
 import terraformingmadeeasy.industries.ConstructionGrid;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class MegastructureOptionProvider extends BaseIndustryOptionProvider {
     public static Object CUSTOM_PLUGIN = new Object();
 
     static {
-        tmeIndustries.add("tme_construction_grid");
+        tmeIndustries.add(TMEIndustries.CONSTRUCTION_GRID);
     }
 
     public static void register() {

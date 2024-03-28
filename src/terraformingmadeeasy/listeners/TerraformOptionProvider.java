@@ -9,6 +9,7 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.dialogs.ConfirmDialogDelegate;
 import terraformingmadeeasy.dialogs.TerraformDialogDelegate;
+import terraformingmadeeasy.ids.TMEIndustries;
 import terraformingmadeeasy.industries.TMEBaseIndustry;
 
 import java.util.ArrayList;
@@ -19,13 +20,13 @@ public class TerraformOptionProvider extends BaseIndustryOptionProvider {
     public static Object CUSTOM_PLUGIN = new Object();
 
     static {
-        tmeIndustries.add("tme_agricultural_laboratory");
-        tmeIndustries.add("tme_atmosphere_regulator");
-        tmeIndustries.add("tme_element_synthesizer");
-        tmeIndustries.add("tme_geomorphology_station");
-        tmeIndustries.add("tme_mineral_replicator");
-        tmeIndustries.add("tme_stellar_manufactory");
-        tmeIndustries.add("tme_terrestrial_engine");
+        tmeIndustries.add(TMEIndustries.AGRICULTURAL_LABORATORY);
+        tmeIndustries.add(TMEIndustries.ATMOSPHERE_REGULATOR);
+        tmeIndustries.add(TMEIndustries.ELEMENT_SYNTHESIZER);
+        tmeIndustries.add(TMEIndustries.GEOMORPHOLOGY_STATION);
+        tmeIndustries.add(TMEIndustries.MINERAL_REPLICATOR);
+        tmeIndustries.add(TMEIndustries.STELLAR_MANUFACTORY);
+        tmeIndustries.add(TMEIndustries.TERRESTRIAL_ENGINE);
     }
 
     public static void register() {
