@@ -1,0 +1,11 @@
+id,trigger,conditions,script,text,options,notes
+"#RULESET_NAME Terraforming Made Easy",,,,,,
+,,,,,,
+# tmeIntro,,,,,,
+tmeIntro_BlurbBar,tmeIntro_blurbBar,,,"You see a large Tri-Board at the wall of the bar. Different bounties and missions are being advertized, maybe you could find some easy work to do while you drink.",,
+tmeIntro_OptionBar,tmeIntro_optionBar,,,,"tmeIntro_barText1:Check the Tri-Board for missions",
+tmeIntro_BarText1,DialogOptionSelected,"$option == tmeIntro_barText1","$missionId = tmeIntro","As you sit across the $manOrWoman $heOrShe says, ""I am glad you can take a hint Captain, I am $personName an $personPost of this planet. As for you captain,"" $heOrShe pauses, ""I already know who are, so let us skip the introductions,"" $heOrShe continues, ""But before we begin there are certain risks in what I am about to tell you, risks that will ruin your reputation with others. Are you still willing to listen after knowing?""","tmeIntro_barText2:Of course
+contact_declineBarNoContinue:Check for something more interesting",
+tmeIntro_BarText2,DialogOptionSelected,"$option == tmeIntro_barText2",,"test","contact_acceptBarNoText:Understood",
+"#END tmeIntro",,,,,,
+

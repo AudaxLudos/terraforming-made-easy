@@ -9,7 +9,7 @@ import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.impl.campaign.ids.*;
 
 public class TMEPeople {
-    public static String INA_DIRE = "INA_DIRE";
+    public static String INADIRE = "INADIRE";
 
     public static void register() {
         addTMEPeople();
@@ -17,16 +17,16 @@ public class TMEPeople {
 
     public static void addTMEPeople() {
         ImportantPeopleAPI ip = Global.getSector().getImportantPeople();
-        if (ip.getPerson(INA_DIRE) == null) {
+        if (ip.getPerson(INADIRE) == null) {
             PersonAPI person = Global.getFactory().createPerson();
-            person.setId(INA_DIRE);
+            person.setId(INADIRE);
             person.setFaction(Factions.INDEPENDENT);
             person.setGender(FullName.Gender.FEMALE);
             person.setRankId(Ranks.CITIZEN);
             person.setPostId(Ranks.POST_SCIENTIST);
             person.setImportance(PersonImportance.VERY_HIGH);
-            person.getName().setFirst("Ina");
-            person.getName().setLast("Dire");
+            person.getName().setFirst("Asirav");
+            person.getName().setLast("Inadire");
             person.addTag(Tags.CONTACT_SCIENCE);
             person.setVoice(Voices.SCIENTIST);
             person.setPortraitSprite("graphics/portraits/portrait_corporate04.png");
@@ -34,7 +34,6 @@ public class TMEPeople {
             MarketAPI market = Global.getSector().getImportantPeople().getData(People.BAIRD).getLocation().getMarket();
             if(market != null) {
                 market.getCommDirectory().addPerson(person);
-                market.getCommDirectory().getEntryForPerson(person).setHidden(true);
                 market.addPerson(person);
             }
 
