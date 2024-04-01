@@ -1,111 +1,137 @@
 package terraformingmadeeasy.missions;
 
-import com.fs.starfarer.api.campaign.FactionAPI;
-import com.fs.starfarer.api.campaign.PlanetAPI;
-import com.fs.starfarer.api.campaign.RepLevel;
+import com.fs.starfarer.api.campaign.InteractionDialogAPI;
+import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.characters.PersonAPI;
-import com.fs.starfarer.api.characters.RelationshipAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
-import com.fs.starfarer.api.impl.campaign.ids.Tags;
+import com.fs.starfarer.api.impl.campaign.ids.FleetTypes;
 import com.fs.starfarer.api.impl.campaign.missions.hub.HubMissionWithBarEvent;
-import com.fs.starfarer.api.impl.campaign.missions.hub.ReqMode;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.ids.TMEPeople;
 
 import java.awt.*;
+import java.util.List;
+import java.util.Map;
 
 public class TMEIntro extends HubMissionWithBarEvent {
-    public enum Stage {
-        MEET_PERSON,
-        SURVEY_PLANET,
-        RETURN,
-        COMPLETED,
-    }
-
-    public PlanetAPI planet;
+    public MarketAPI createdAt;
+    public MarketAPI market;
+    public SectorEntityToken planet;
     public StarSystemAPI system;
     public PersonAPI inadire;
+
+    @Override
+    public boolean shouldShowAtMarket(MarketAPI market) {
+        return market.getFaction().getId().equals(Factions.INDEPENDENT);
+    }
 
     @Override
     protected boolean create(MarketAPI createdAt, boolean barEvent) {
         // find or set quest giver
         if (barEvent) {
             setPersonOverride(getImportantPerson(TMEPeople.INADIRE));
-            inadire = getPerson();
+            this.inadire = getPerson();
         }
-        if (inadire == null) return false;
-        if (!setPersonMissionRef(inadire, "$tmeIntro_ref")) return false;
-        if (!setGlobalReference("$tmeIntro_ref")) return false;
+
+        if (this.inadire == null) return false;
+        if (!setPersonMissionRef(this.inadire, "$tmeIntro_ref")) return false;
+        if (!setGlobalReference("$tmeIntro_ref")) return false; // Stops the mission from being repeatable
 
         // Find and pick a planet to use for quest
-        requireSystemTags(ReqMode.ANY, new String[] { Tags.THEME_REMNANT, Tags.THEME_REMNANT_MAIN, Tags.THEME_REMNANT_RESURGENT });
-        requireSystemTags(ReqMode.NOT_ANY, new String[] { Tags.THEME_REMNANT_NO_FLEETS, Tags.THEME_REMNANT_SECONDARY, Tags.THEME_REMNANT_SUPPRESSED });
-        preferSystemUnexplored();
-        requirePlanetNotStar();
-        requirePlanetNotGasGiant();
-        requirePlanetWithRuins();
-        preferPlanetNotFullySurveyed();
+        requireMarketFaction(Factions.INDEPENDENT);
+        requireMarketSizeAtLeast(3);
+        requireMarketHasSpaceport();
+        requireMarketStabilityAtLeast(6);
 
-        planet = pickPlanet();
-        if (planet == null)
+        this.market = pickMarket();
+
+        if (market == null || market == createdAt)
             return false;
-        system = planet.getStarSystem();
+
+        this.planet = this.market.getPrimaryEntity();
+        this.system = this.market.getStarSystem();
 
         // set up starting and end stages
         setStoryMission();
-        setStartingStage(Stage.MEET_PERSON);
+        setStartingStage(Stage.ESCORT_CONTACT);
         addSuccessStages(Stage.COMPLETED);
 
         // Make these locations important
-        makeImportant(inadire, "$tmeIntro_meetPerson", Stage.MEET_PERSON);
-        makeImportant(planet, "$tmeIntro_surveyPlanet", Stage.SURVEY_PLANET);
-        makeImportant(inadire, "$tmeIntro_return", Stage.RETURN);
+        makeImportant(this.market, "$tmeIntro_escortContact", Stage.ESCORT_CONTACT);
 
         // Flags that can be used to enter the next stage
-        connectWithGlobalFlag(Stage.MEET_PERSON, Stage.SURVEY_PLANET, "$tmeIntro_surveyPlanet");
-        connectWithGlobalFlag(Stage.SURVEY_PLANET, Stage.RETURN, "$tmeIntro_return");
         setStageOnGlobalFlag(Stage.COMPLETED, "$tmeIntro_completed");
 
         setCreditReward(CreditReward.AVERAGE);
+
+        // Create a fleet near entity after completing survey planet
+        beginStageTrigger(Stage.ESCORT_CONTACT);
+        triggerCreateFleet(FleetSize.MEDIUM, FleetQuality.DEFAULT, Factions.HEGEMONY, FleetTypes.PATROL_MEDIUM, createdAt.getStarSystem());
+        triggerSetFleetOfficers(OfficerNum.DEFAULT, OfficerQuality.DEFAULT);
+        triggerFleetAllowLongPursuit();
+        triggerSetFleetAlwaysPursue();
+        triggerPickLocationAroundPlayer(1000f);
+        triggerSpawnFleetAtPickedLocation();
+        triggerOrderFleetInterceptPlayer();
+        triggerOrderFleetEBurn(1f);
+        triggerSetFleetFlag("$tmeIntro_hegeFleet", Stage.ESCORT_CONTACT);
+        endTrigger();
+
+        this.createdAt = createdAt;
+
+        setPersonIsPotentialContactOnSuccess(inadire);
 
         return true;
     }
 
     @Override
     protected void updateInteractionDataImpl() {
-        set("$tmeIntro_distance", getDistanceLY(system));
-        set("$tmeIntro_systemName", system.getNameWithLowercaseTypeShort());
-        set("$tmeIntro_planetName", planet.getFullName());
+        set("$tmeIntro_distance", getDistanceLY(this.system));
+        set("$tmeIntro_systemName", this.system.getNameWithLowercaseTypeShort());
+        set("$tmeIntro_planetName", this.planet.getFullName());
         set("$tmeIntro_reward", Misc.getWithDGS(getCreditsReward()));
+    }
+
+    @Override
+    protected boolean callAction(String action, String ruleId, InteractionDialogAPI dialog, List<Misc.Token> params, Map<String, MemoryAPI> memoryMap) {
+        if (action.equals("rejectContact")) {
+            if (this.inadire.getMarket() != null) {
+                this.inadire.getMarket().getCommDirectory().removePerson(this.inadire);
+                this.inadire.getMarket().removePerson(this.inadire);
+            }
+            this.createdAt.getCommDirectory().addPerson(this.inadire);
+            this.market.addPerson(this.inadire);
+            return true;
+        } else if (action.equals("moveContact")) {
+            if (this.inadire.getMarket() != null) {
+                this.inadire.getMarket().getCommDirectory().removePerson(this.inadire);
+                this.inadire.getMarket().removePerson(this.inadire);
+            }
+            this.market.getCommDirectory().addPerson(this.inadire);
+            this.market.addPerson(this.inadire);
+            return true;
+        }
+        return false;
     }
 
     @Override
     public void addDescriptionForNonEndStage(TooltipMakerAPI info, float width, float height) {
         float oPad = 10f;
+        Color h = Misc.getHighlightColor();
 
-        if (currentStage == Stage.MEET_PERSON) {
-            info.addPara("Go to the " + system.getNameWithLowercaseTypeShort() + " and investigate the planet " + planet.getName() + ".", oPad);
-        } else if (currentStage == Stage.SURVEY_PLANET) {
-            info.addPara("Return to " + inadire.getName().getFullName() + " and tell " + inadire.getHimOrHer() + " about what you found", oPad);
-            addStandardMarketDesc(inadire.getNameString() + " is located " + inadire.getMarket().getOnOrAt(), inadire.getMarket(), info, oPad);
-        } else if (currentStage == Stage.RETURN) {
-            info.addPara("Return to " + inadire.getName().getFullName() + " and tell " + inadire.getHimOrHer() + " about what you found", oPad);
+        if (currentStage == Stage.ESCORT_CONTACT) {
+            info.addPara("Escort %s to %s in the %s", oPad, h, inadire.getName().getFullName(), planet.getFullName(), system.getNameWithLowercaseTypeShort());
         }
     }
 
     @Override
     public boolean addNextStepText(TooltipMakerAPI info, Color tc, float pad) {
-        if (currentStage == Stage.MEET_PERSON) {
-            info.addPara("Meet the contractor at " + inadire.getMarket().getStarSystem().getNameWithLowercaseTypeShort(), tc, pad);
-            return true;
-        } else if (currentStage == Stage.SURVEY_PLANET) {
-            info.addPara("Survey the planet marked at " + system.getNameWithLowercaseTypeShort(), tc, pad);
-            return true;
-        } else if (currentStage == Stage.RETURN) {
-            info.addPara("Return back to the contractor at " + inadire.getMarket().getStarSystem().getNameWithLowercaseTypeShort(), tc, pad);
+        if (currentStage == Stage.ESCORT_CONTACT) {
+            info.addPara("Escort %s to a planet within the %s", pad, tc, inadire.getName().getFullName(), system.getNameWithLowercaseTypeShort());
             return true;
         }
 
@@ -115,5 +141,10 @@ public class TMEIntro extends HubMissionWithBarEvent {
     @Override
     public String getBaseName() {
         return "Inadire's Requests";
+    }
+
+    public enum Stage {
+        ESCORT_CONTACT,
+        COMPLETED,
     }
 }

@@ -20,24 +20,18 @@ public class TMEPeople {
         if (ip.getPerson(INADIRE) == null) {
             PersonAPI person = Global.getFactory().createPerson();
             person.setId(INADIRE);
-            person.setFaction(Factions.INDEPENDENT);
+            person.getName().setFirst("Inadire");
+            person.getName().setLast("Asirav");
             person.setGender(FullName.Gender.FEMALE);
+            person.setFaction(Factions.INDEPENDENT);
             person.setRankId(Ranks.CITIZEN);
             person.setPostId(Ranks.POST_SCIENTIST);
+            person.setPortraitSprite("graphics/portraits/portrait_corporate04.png");
+            person.setPersonality(Personalities.STEADY);
             person.setImportance(PersonImportance.VERY_HIGH);
-            person.getName().setFirst("Asirav");
-            person.getName().setLast("Inadire");
             person.addTag(Tags.CONTACT_SCIENCE);
             person.setVoice(Voices.SCIENTIST);
-            person.setPortraitSprite("graphics/portraits/portrait_corporate04.png");
-
-            MarketAPI market = Global.getSector().getImportantPeople().getData(People.BAIRD).getLocation().getMarket();
-            if(market != null) {
-                market.getCommDirectory().addPerson(person);
-                market.addPerson(person);
-            }
-
-            Global.getSector().getImportantPeople().addPerson(person);
+            ip.addPerson(person);
         }
     }
 }

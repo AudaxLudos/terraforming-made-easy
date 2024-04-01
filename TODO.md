@@ -1,0 +1,20 @@
+### TODO:
+- Add terraforming structure
+  - [ ] add unification center
+- Add mission for unlocking terraforming structures
+  - [ ] Create intro mission as bar event
+    - [x] Escort contact to target market
+    - [x] Spawn fleet to intercept player during escort
+    - [x] Set dialogs when player interacts with spawned fleet
+    - [ ] Set ending dialogs based on spawned fleet interaction
+      - [ ] Positive interaction
+      - [ ] Negative interaction
+  - [ ] Create mission for 1st terraforming structure
+  - [ ] Create mission for 2nt terraforming structure
+  - [ ] Create mission for 3rd terraforming structure
+  - [ ] Create mission for 4th terraforming structure
+  - [ ] Create mission for 5th terraforming structure
+  - [ ] Create mission for 6th terraforming structure
+  - [ ] Create mission for 7th terraforming structure
+  - [ ] Create mission for 8th terraforming structure
+  - [ ] Create final mission
