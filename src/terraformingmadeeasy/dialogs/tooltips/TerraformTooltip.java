@@ -44,7 +44,7 @@ public class TerraformTooltip extends BaseTooltipCreator {
         if (!preferences.isEmpty()) {
             StringBuilder text = new StringBuilder();
             List<String> names = new ArrayList<>();
-            for (Iterator<String> itr = preferences.iterator(); itr.hasNext();) {
+            for (Iterator<String> itr = preferences.iterator(); itr.hasNext(); ) {
                 if (isIndustry)
                     names.add(Global.getSettings().getIndustrySpec(itr.next()).getName());
                 else

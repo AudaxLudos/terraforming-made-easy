@@ -19,8 +19,10 @@ import com.fs.starfarer.loading.specs.PlanetSpec;
 import terraformingmadeeasy.Utils;
 
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 public class TMEBaseIndustry extends BaseIndustry {
     public static final float GAMMA_BUILD_TIME_MULT = 0.20f;
@@ -463,7 +465,7 @@ public class TMEBaseIndustry extends BaseIndustry {
         boolean hasLikedConditions = true;
         if (!condition.likedConditions.isEmpty()) {
             List<String> conditionIds = new ArrayList<>();
-            for (MarketConditionAPI mc: market.getConditions())
+            for (MarketConditionAPI mc : market.getConditions())
                 conditionIds.add(mc.getId());
             hasLikedConditions = new HashSet<>(conditionIds).containsAll(condition.likedConditions);
         }
@@ -478,7 +480,7 @@ public class TMEBaseIndustry extends BaseIndustry {
         boolean hasLikedIndustries = true;
         if (!condition.likedIndustries.isEmpty()) {
             List<String> industryIds = new ArrayList<>();
-            for (Industry mc: market.getIndustries())
+            for (Industry mc : market.getIndustries())
                 industryIds.add(mc.getId());
             hasLikedIndustries = new HashSet<>(industryIds).containsAll(condition.likedIndustries);
         }

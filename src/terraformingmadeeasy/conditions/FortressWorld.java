@@ -15,7 +15,7 @@ public class FortressWorld extends BaseMarketConditionPlugin {
     public static int HEAVY_PATROL_BONUS = 1;
     public static int SUPPLY_BONUS = 3;
     public String[] industryIds = {
-            Industries.ORBITALWORKS, Industries.HIGHCOMMAND, Industries.REFINING, Industries.FUELPROD
+            Industries.POPULATION, Industries.ORBITALWORKS, Industries.HIGHCOMMAND, Industries.FUELPROD
     };
 
     @Override
@@ -58,6 +58,6 @@ public class FortressWorld extends BaseMarketConditionPlugin {
         tooltip.addSpacer(10f);
         tooltip.addPara("%s number of heavy patrols", 0f, Misc.getHighlightColor(), "+" + HEAVY_PATROL_BONUS);
         tooltip.addSpacer(10f);
-        tooltip.addPara("%s production to orbital works, high command, refining and fuel production", 0f, Misc.getHighlightColor(), "+" + SUPPLY_BONUS);
+        tooltip.addPara("%s production to population & infrastructure, orbital works, high command, and fuel production", 0f, Misc.getHighlightColor(), "+" + SUPPLY_BONUS);
     }
 }

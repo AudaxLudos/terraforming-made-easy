@@ -12,7 +12,7 @@ public class ParadiseWorld extends BaseMarketConditionPlugin {
     public static int STABILITY_BONUS = 4;
     public static int SUPPLY_BONUS = 3;
     public String[] industryIds = {
-            Industries.POPULATION, Industries.FARMING, Industries.LIGHTINDUSTRY, Industries.HIGHCOMMAND
+            Industries.POPULATION, Industries.FARMING, Industries.LIGHTINDUSTRY
     };
 
     @Override
@@ -50,6 +50,6 @@ public class ParadiseWorld extends BaseMarketConditionPlugin {
         tooltip.addSpacer(10f);
         tooltip.addPara("%s stability", 0f, Misc.getHighlightColor(), "+" + STABILITY_BONUS);
         tooltip.addSpacer(10f);
-        tooltip.addPara("%s production to population & infrastructure, farming, light industry and high command", 0f, Misc.getHighlightColor(), "+" + SUPPLY_BONUS);
+        tooltip.addPara("%s production to population & infrastructure, farming, and light industry", 0f, Misc.getHighlightColor(), "+" + SUPPLY_BONUS);
     }
 }
