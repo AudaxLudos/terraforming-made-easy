@@ -16,9 +16,7 @@ public class Utils {
         public float cost;
         public float buildTime;
 
-        public BuildableMegastructure(String customEntityId, float cost, float buildTime) {
-            CustomEntitySpecAPI spec = Global.getSettings().getCustomEntitySpec(customEntityId);
-
+        public BuildableMegastructure(CustomEntitySpecAPI spec, float cost, float buildTime) {
             this.id = spec.getId();
             this.name = spec.getDefaultName();
             this.icon = spec.getInteractionImage();

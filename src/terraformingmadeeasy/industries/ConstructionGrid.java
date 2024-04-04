@@ -33,9 +33,9 @@ public class ConstructionGrid extends BaseIndustry {
     public String prevAICoreId = null;
 
     public ConstructionGrid() {
-        this.buildableMegastructures.add(new Utils.BuildableMegastructure(Entities.DERELICT_CRYOSLEEPER, 20000000, 1080f));
-        this.buildableMegastructures.add(new Utils.BuildableMegastructure(Entities.CORONAL_TAP, 20000000, 1440));
-        this.buildableMegastructures.add(new Utils.BuildableMegastructure(Entities.INACTIVE_GATE, 12000000, 1080f));
+        this.buildableMegastructures.add(new Utils.BuildableMegastructure(Global.getSettings().getCustomEntitySpec(Entities.DERELICT_CRYOSLEEPER), 20000000, 1080f));
+        this.buildableMegastructures.add(new Utils.BuildableMegastructure(Global.getSettings().getCustomEntitySpec(Entities.CORONAL_TAP), 20000000, 1440));
+        this.buildableMegastructures.add(new Utils.BuildableMegastructure(Global.getSettings().getCustomEntitySpec(Entities.INACTIVE_GATE), 12000000, 1080f));
     }
 
     @Override
@@ -47,15 +47,11 @@ public class ConstructionGrid extends BaseIndustry {
     public void advance(float amount) {
         super.advance(amount);
         if (firstTick) {
-            boolean alpha = Objects.equals(aiCoreId, Commodities.ALPHA_CORE);
-            boolean beta = Objects.equals(aiCoreId, Commodities.BETA_CORE);
-            boolean gamma = Objects.equals(aiCoreId, Commodities.GAMMA_CORE);
-
-            if (alpha) {
+            if (Objects.equals(aiCoreId, Commodities.ALPHA_CORE)) {
                 aiCoreCurrentBuildTimeMult = ALPHA_BUILD_TIME_MULT;
-            } else if (beta) {
+            } else if (Objects.equals(aiCoreId, Commodities.BETA_CORE)) {
                 aiCoreCurrentBuildTimeMult = BETA_BUILD_TIME_MULT;
-            } else if (gamma) {
+            } else if (Objects.equals(aiCoreId, Commodities.GAMMA_CORE)) {
                 aiCoreCurrentBuildTimeMult = GAMMA_BUILD_TIME_MULT;
             }
 
