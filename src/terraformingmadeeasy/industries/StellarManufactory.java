@@ -1,5 +1,6 @@
 package terraformingmadeeasy.industries;
 
+import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import terraformingmadeeasy.Utils;
 
@@ -8,19 +9,19 @@ import java.util.Collections;
 
 public class StellarManufactory extends TMEBaseIndustry {
     public StellarManufactory() {
-        this.modifiableConditions.add(new Utils.ModifiableCondition(Conditions.SOLAR_ARRAY, 4000000, 360f, false,
+        this.modifiableConditions.add(new Utils.ModifiableCondition(Global.getSettings().getMarketConditionSpec(Conditions.SOLAR_ARRAY), 4000000, 360f, false,
                 // Likes conditions
                 Collections.singletonList(Conditions.HABITABLE),
                 // Hates conditions
                 null));
-        this.modifiableConditions.add(new Utils.ModifiableCondition(Conditions.HOT, 1000000f, 180f, true,
+        this.modifiableConditions.add(new Utils.ModifiableCondition(Global.getSettings().getMarketConditionSpec(Conditions.HOT), 1000000f, 180f, true,
                 // Likes conditions
                 null,
                 // Hates conditions
                 Arrays.asList(Conditions.VERY_HOT,
                         Conditions.COLD,
                         Conditions.VERY_COLD)));
-        this.modifiableConditions.add(new Utils.ModifiableCondition(Conditions.VERY_HOT, 2000000f, 360f, true,
+        this.modifiableConditions.add(new Utils.ModifiableCondition(Global.getSettings().getMarketConditionSpec(Conditions.VERY_HOT), 2000000f, 360f, true,
                 // Likes conditions
                 null,
                 // Hates conditions
@@ -29,14 +30,14 @@ public class StellarManufactory extends TMEBaseIndustry {
                         Conditions.VERY_COLD,
                         Conditions.HABITABLE,
                         Conditions.MILD_CLIMATE)));
-        this.modifiableConditions.add(new Utils.ModifiableCondition(Conditions.COLD, 1000000f, 180f, true,
+        this.modifiableConditions.add(new Utils.ModifiableCondition(Global.getSettings().getMarketConditionSpec(Conditions.COLD), 1000000f, 180f, true,
                 // Likes conditions
                 null,
                 // Hates conditions
                 Arrays.asList(Conditions.VERY_COLD,
                         Conditions.HOT,
                         Conditions.VERY_HOT)));
-        this.modifiableConditions.add(new Utils.ModifiableCondition(Conditions.VERY_COLD, 2000000f, 360f, true,
+        this.modifiableConditions.add(new Utils.ModifiableCondition(Global.getSettings().getMarketConditionSpec(Conditions.VERY_COLD), 2000000f, 360f, true,
                 // Likes conditions
                 null,
                 // Hates conditions
@@ -45,12 +46,12 @@ public class StellarManufactory extends TMEBaseIndustry {
                         Conditions.VERY_HOT,
                         Conditions.HABITABLE,
                         Conditions.MILD_CLIMATE)));
-        this.modifiableConditions.add(new Utils.ModifiableCondition(Conditions.POOR_LIGHT, 1000000f, 180f, true,
+        this.modifiableConditions.add(new Utils.ModifiableCondition(Global.getSettings().getMarketConditionSpec(Conditions.POOR_LIGHT), 1000000f, 180f, true,
                 // Likes conditions
                 null,
                 // Hates conditions
                 Collections.singletonList(Conditions.DARK)));
-        this.modifiableConditions.add(new Utils.ModifiableCondition(Conditions.DARK, 2000000f, 360f, true,
+        this.modifiableConditions.add(new Utils.ModifiableCondition(Global.getSettings().getMarketConditionSpec(Conditions.DARK), 2000000f, 360f, true,
                 // Likes conditions
                 null,
                 // Hates conditions

@@ -9,4 +9,5 @@ public class TMEIndustries {
     public static final String MINERAL_REPLICATOR = "tme_mineral_replicator";
     public static final String STELLAR_MANUFACTORY = "tme_stellar_manufactory";
     public static final String TERRESTRIAL_ENGINE = "tme_terrestrial_engine";
+    public static final String UNIFICATION_CENTER = "tme_unification_center";
 }

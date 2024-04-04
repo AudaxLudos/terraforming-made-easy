@@ -27,6 +27,7 @@ public class TerraformOptionProvider extends BaseIndustryOptionProvider {
         tmeIndustries.add(TMEIndustries.MINERAL_REPLICATOR);
         tmeIndustries.add(TMEIndustries.STELLAR_MANUFACTORY);
         tmeIndustries.add(TMEIndustries.TERRESTRIAL_ENGINE);
+        tmeIndustries.add(TMEIndustries.UNIFICATION_CENTER);
     }
 
     public static void register() {

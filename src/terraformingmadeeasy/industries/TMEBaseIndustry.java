@@ -5,6 +5,7 @@ import com.fs.starfarer.api.campaign.PlanetSpecAPI;
 import com.fs.starfarer.api.campaign.comm.CommMessageAPI;
 import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
 import com.fs.starfarer.api.campaign.econ.Industry;
+import com.fs.starfarer.api.campaign.econ.MarketConditionAPI;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Conditions;
@@ -18,9 +19,8 @@ import com.fs.starfarer.loading.specs.PlanetSpec;
 import terraformingmadeeasy.Utils;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
 
 public class TMEBaseIndustry extends BaseIndustry {
     public static final float GAMMA_BUILD_TIME_MULT = 0.20f;
@@ -235,7 +235,7 @@ public class TMEBaseIndustry extends BaseIndustry {
         } else {
             market.addCondition(modifiableCondition.id);
             market.getFirstCondition(modifiableCondition.id).setSurveyed(true);
-            for (String restriction : modifiableCondition.hatesConditions) {
+            for (String restriction : modifiableCondition.hatedConditions) {
                 if (market.hasCondition(restriction))
                     market.removeCondition(restriction);
             }
@@ -331,24 +331,6 @@ public class TMEBaseIndustry extends BaseIndustry {
                 reduceOrganics = false;
             }
         }
-        if (market.hasCondition(Conditions.TOXIC_ATMOSPHERE) && market.hasCondition(Conditions.VERY_HOT) && market.hasCondition(Conditions.EXTREME_WEATHER) && market.hasCondition(Conditions.AI_CORE_ADMIN) &&
-                market.hasIndustry(Industries.ORBITALWORKS) && market.hasIndustry(Industries.MINING) && market.hasIndustry(Industries.REFINING) && market.hasIndustry(Industries.FUELPROD)) {
-            planetTypeId = "tme_forge";
-            removeFarming = true;
-            reduceOrganics = true;
-        }
-        if (market.hasCondition(Conditions.HABITABLE) && market.hasCondition(Conditions.EXTREME_WEATHER) && market.hasCondition(Conditions.HIGH_GRAVITY) && market.hasCondition(Conditions.AI_CORE_ADMIN) &&
-                market.hasIndustry(Industries.ORBITALWORKS) && market.hasIndustry(Industries.HIGHCOMMAND) && market.hasIndustry(Industries.REFINING) && market.hasIndustry(Industries.FUELPROD)) {
-            planetTypeId = "tme_fortress";
-            removeFarming = false;
-            removeOrganics = false;
-        }
-        if (market.hasCondition(Conditions.HABITABLE) && market.hasCondition(Conditions.MILD_CLIMATE) && market.hasCondition(Conditions.LOW_GRAVITY) && market.hasCondition(Conditions.AI_CORE_ADMIN) &&
-                market.hasIndustry(Industries.FARMING) && market.hasIndustry(Industries.COMMERCE) && market.hasIndustry(Industries.LIGHTINDUSTRY) && market.hasIndustry(Industries.HIGHCOMMAND)) {
-            planetTypeId = "tme_paradise";
-            removeFarming = false;
-            removeOrganics = false;
-        }
         if (market.getPlanetEntity().isGasGiant()) {
             removeFarming = true;
             removeOrganics = true;
@@ -365,7 +347,6 @@ public class TMEBaseIndustry extends BaseIndustry {
         else if (removeOrganics) removeOrganics();
 
         updateFarmingOrAquaculture();
-        addOrRemoveTMEConditions(planetTypeId);
         changePlanetVisuals(planetTypeId);
     }
 
@@ -376,20 +357,6 @@ public class TMEBaseIndustry extends BaseIndustry {
         } else if (market.hasCondition(Conditions.WATER_SURFACE) && market.hasIndustry(Industries.FARMING)) {
             market.removeIndustry(Industries.FARMING, null, false);
             market.addIndustry(Industries.AQUACULTURE);
-        }
-    }
-
-    public void addOrRemoveTMEConditions(String planetTypeId) {
-        if (Objects.equals(planetTypeId, "tme_forge")) {
-            market.addCondition("tme_forge_world");
-        } else if (Objects.equals(planetTypeId, "tme_fortress")) {
-            market.addCondition("tme_fortress_world");
-        } else if (Objects.equals(planetTypeId, "tme_paradise")) {
-            market.addCondition("tme_paradise_world");
-        } else {
-            market.removeCondition("tme_forge_world");
-            market.removeCondition("tme_fortress_world");
-            market.removeCondition("tme_paradise_world");
         }
     }
 
@@ -493,13 +460,36 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     public Boolean canTerraformCondition(Utils.ModifiableCondition condition) {
-        boolean canTerraform = false;
-        if (!condition.likesConditions.isEmpty()) {
-            for (String cond : condition.likesConditions)
-                canTerraform = canTerraform || market.hasCondition(cond);
-        } else {
-            canTerraform = true;
+        boolean hasLikedConditions = true;
+        if (!condition.likedConditions.isEmpty()) {
+            List<String> conditionIds = new ArrayList<>();
+            for (MarketConditionAPI mc: market.getConditions())
+                conditionIds.add(mc.getId());
+            hasLikedConditions = new HashSet<>(conditionIds).containsAll(condition.likedConditions);
         }
-        return canTerraform;
+
+        boolean hasHatedConditions = false;
+        if (!condition.hatedConditions.isEmpty()) {
+            for (String id : condition.hatedConditions)
+                if (market.hasCondition(id))
+                    hasHatedConditions = true;
+        }
+
+        boolean hasLikedIndustries = true;
+        if (!condition.likedIndustries.isEmpty()) {
+            List<String> industryIds = new ArrayList<>();
+            for (Industry mc: market.getIndustries())
+                industryIds.add(mc.getId());
+            hasLikedIndustries = new HashSet<>(industryIds).containsAll(condition.likedIndustries);
+        }
+
+        boolean hasHatedIndustries = false;
+        if (!condition.hatedIndustries.isEmpty()) {
+            for (String id : condition.hatedIndustries)
+                if (market.hasIndustry(id))
+                    hasHatedIndustries = true;
+        }
+
+        return hasLikedConditions && hasLikedIndustries;
     }
 }

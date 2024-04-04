@@ -9,12 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Utils {
-    public static String capitalizeString(String givenString) {
-        String text = givenString.replace("_", " ");
-        text = Character.toUpperCase(text.charAt(0)) + text.substring(1);
-        return text;
-    }
-
     public static class BuildableMegastructure {
         public String id;
         public String name;
@@ -54,20 +48,33 @@ public class Utils {
         public float cost;
         public float buildTime;
         public boolean canChangeGasGiants;
-        public List<String> likesConditions = new ArrayList<>();
-        public List<String> hatesConditions = new ArrayList<>();
+        public List<String> likedConditions = new ArrayList<>();
+        public List<String> hatedConditions = new ArrayList<>();
+        public List<String> likedIndustries = new ArrayList<>();
+        public List<String> hatedIndustries = new ArrayList<>();
 
-        public ModifiableCondition(String conditionSpecId, float cost, float buildTime, boolean canChangeGasGiants, List<String> likesConditions, List<String> hatesConditions) {
-            MarketConditionSpecAPI spec = Global.getSettings().getMarketConditionSpec(conditionSpecId);
-
+        public ModifiableCondition(MarketConditionSpecAPI spec, float cost, float buildTime, boolean canChangeGasGiants, List<String> likedConditions, List<String> hatedConditions) {
             this.id = spec.getId();
             this.name = spec.getName();
             this.icon = spec.getIcon();
             this.cost = cost;
             this.buildTime = buildTime;
             this.canChangeGasGiants = canChangeGasGiants;
-            if (likesConditions != null) this.likesConditions = likesConditions;
-            if (hatesConditions != null) this.hatesConditions = hatesConditions;
+            if (likedConditions != null) this.likedConditions = likedConditions;
+            if (hatedConditions != null) this.hatedConditions = hatedConditions;
+        }
+
+        public ModifiableCondition(MarketConditionSpecAPI spec, float cost, float buildTime, boolean canChangeGasGiants, List<String> likedConditions, List<String> hatedConditions, List<String> likedIndustries, List<String> hatedIndustries) {
+            this.id = spec.getId();
+            this.name = spec.getName();
+            this.icon = spec.getIcon();
+            this.cost = cost;
+            this.buildTime = buildTime;
+            this.canChangeGasGiants = canChangeGasGiants;
+            if (likedConditions != null) this.likedConditions = likedConditions;
+            if (hatedConditions != null) this.hatedConditions = hatedConditions;
+            if (likedIndustries != null) this.likedIndustries = likedIndustries;
+            if (hatedIndustries != null) this.hatedIndustries = hatedIndustries;
         }
     }
 }
