@@ -5,7 +5,6 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 
 public class OrbitFocusFieldTooltip extends BaseTooltipCreator {
-
     @Override
     public float getTooltipWidth(Object tooltipParam) {
         return 380f;

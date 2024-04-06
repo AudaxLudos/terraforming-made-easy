@@ -1,6 +1,5 @@
 package terraformingmadeeasy;
 
-import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomEntitySpecAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.characters.MarketConditionSpecAPI;
@@ -19,6 +18,14 @@ public class Utils {
         public BuildableMegastructure(CustomEntitySpecAPI spec, float cost, float buildTime) {
             this.id = spec.getId();
             this.name = spec.getDefaultName();
+            this.icon = spec.getInteractionImage();
+            this.cost = cost;
+            this.buildTime = buildTime;
+        }
+
+        public BuildableMegastructure(CustomEntitySpecAPI spec, String name, float cost, float buildTime) {
+            this.id = spec.getId();
+            this.name = name;
             this.icon = spec.getInteractionImage();
             this.cost = cost;
             this.buildTime = buildTime;

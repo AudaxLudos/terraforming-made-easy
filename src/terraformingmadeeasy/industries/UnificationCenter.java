@@ -1,14 +1,12 @@
 package terraformingmadeeasy.industries;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.impl.campaign.econ.ConditionData;
 import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.ids.TMEConditions;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 public class UnificationCenter extends TMEBaseIndustry {
     public UnificationCenter() {

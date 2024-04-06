@@ -6,11 +6,6 @@ import com.fs.starfarer.api.util.Misc;
 
 public class OrbitDaysFieldTooltip extends BaseTooltipCreator {
     @Override
-    public boolean isTooltipExpandable(Object tooltipParam) {
-        return false;
-    }
-
-    @Override
     public float getTooltipWidth(Object tooltipParam) {
         return 380f;
     }

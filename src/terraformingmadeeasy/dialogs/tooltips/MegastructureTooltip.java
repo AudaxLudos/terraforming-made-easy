@@ -30,6 +30,8 @@ public class MegastructureTooltip extends BaseTooltipCreator {
             tooltip.addPara("Only %s can exist in a system", 0f, Misc.getHighlightColor(), "1 " + megastructure.name);
         } else if (Objects.equals(megastructure.id, Entities.INACTIVE_GATE)) {
             tooltip.addPara("Only %s can exist in a system", 0f, Misc.getHighlightColor(), "1 " + megastructure.name);
+        } else if (Objects.equals(megastructure.id, "station_side00")) {
+            tooltip.addPara("Only %s can exist in a system", 0f, Misc.getHighlightColor(), "3 " + megastructure.name);
         }
     }
 }
