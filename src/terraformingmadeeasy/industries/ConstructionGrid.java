@@ -41,9 +41,9 @@ public class ConstructionGrid extends BaseIndustry {
 
     public ConstructionGrid() {
         this.buildableMegastructures.add(new Utils.BuildableMegastructure(Global.getSettings().getCustomEntitySpec(Entities.DERELICT_CRYOSLEEPER), 20000000, 1080f));
-        this.buildableMegastructures.add(new Utils.BuildableMegastructure(Global.getSettings().getCustomEntitySpec(Entities.CORONAL_TAP), 20000000, 1440));
+        this.buildableMegastructures.add(new Utils.BuildableMegastructure(Global.getSettings().getCustomEntitySpec(Entities.CORONAL_TAP), 20000000, 1440f));
         this.buildableMegastructures.add(new Utils.BuildableMegastructure(Global.getSettings().getCustomEntitySpec(Entities.INACTIVE_GATE), 12000000, 1080f));
-        this.buildableMegastructures.add(new Utils.BuildableMegastructure(Global.getSettings().getCustomEntitySpec("station_side00"), "Orbital Station", 12000000, 5f));
+        this.buildableMegastructures.add(new Utils.BuildableMegastructure(Global.getSettings().getCustomEntitySpec("station_side00"), "Orbital Station", 12000000, 720f));
     }
 
     @Override
