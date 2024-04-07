@@ -75,10 +75,6 @@ public class TMEBaseIndustry extends BaseIndustry {
         }
     }
 
-    public boolean isUpgrading() {
-        return building && modifiableCondition != null;
-    }
-
     @Override
     public String getBuildOrUpgradeProgressText() {
         if (isDisrupted()) {
@@ -102,39 +98,13 @@ public class TMEBaseIndustry extends BaseIndustry {
         }
     }
 
-    public void finishBuildingOrUpgrading() {
-        building = false;
-        buildProgress = 0;
-        buildTime = 1f;
-        isAICoreBuildTimeMultApplied = false;
-        if (modifiableCondition != null) {
-            sendCompletedMessage();
-            changePlanetConditions();
-            changePlanetClass();
-            reapplySupplyAndDemand();
-            reapply();
-            modifiableCondition = null;
-        } else {
-            buildingFinished();
-            reapply();
+    @Override
+    public void reapply() {
+        super.reapply();
+        for (Industry ind : market.getIndustries()) {
+            ind.doPreSaveCleanup();
+            ind.doPostSaveRestore();
         }
-    }
-
-    public void startUpgrading(Utils.ModifiableCondition condition) {
-        // Will be called from TerraformDialogDelegate to start terraforming
-        building = true;
-        buildProgress = 0;
-        modifiableCondition = condition;
-        buildTime = condition.buildTime;
-        firstTick = true;
-    }
-
-    public void cancelUpgrade() {
-        // Will be called from ConfirmDialogDelegate to cancel terraforming
-        building = false;
-        buildProgress = 0;
-        modifiableCondition = null;
-        isAICoreBuildTimeMultApplied = false;
     }
 
     @Override
@@ -147,17 +117,6 @@ public class TMEBaseIndustry extends BaseIndustry {
     public String getUnavailableReason() {
         if (!super.isAvailableToBuild()) return super.getUnavailableReason();
         return "Requires a planet";
-    }
-
-    public void sendCompletedMessage() {
-        if (market.isPlayerOwned()) {
-            String addOrRemoveText = !market.hasCondition(modifiableCondition.id) ? "Added " : "Removed ";
-            MessageIntel intel = new MessageIntel("Terraforming completed at " + market.getName(), Misc.getBasePlayerColor());
-            intel.addLine(BaseIntelPlugin.BULLET + addOrRemoveText + modifiableCondition.name.toLowerCase() + " planet condition");
-            intel.setIcon(Global.getSector().getPlayerFaction().getCrest());
-            intel.setSound(BaseIntelPlugin.getSoundStandardUpdate());
-            Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.COLONY_INFO, market);
-        }
     }
 
     @Override
@@ -229,6 +188,55 @@ public class TMEBaseIndustry extends BaseIndustry {
     @Override
     protected void updateAICoreToSupplyAndDemandModifiers() {
         // TME industries don't supply or demand commodities for now
+    }
+
+    public boolean isUpgrading() {
+        return building && modifiableCondition != null;
+    }
+
+    public void finishBuildingOrUpgrading() {
+        building = false;
+        buildProgress = 0;
+        buildTime = 1f;
+        isAICoreBuildTimeMultApplied = false;
+        if (modifiableCondition != null) {
+            changePlanetConditions();
+            changePlanetClass();
+            reapply();
+            sendCompletedMessage();
+            modifiableCondition = null;
+        } else {
+            buildingFinished();
+            reapply();
+        }
+    }
+
+    public void startUpgrading(Utils.ModifiableCondition condition) {
+        // Will be called from TerraformDialogDelegate to start terraforming
+        building = true;
+        buildProgress = 0;
+        modifiableCondition = condition;
+        buildTime = condition.buildTime;
+        firstTick = true;
+    }
+
+    public void cancelUpgrade() {
+        // Will be called from ConfirmDialogDelegate to cancel terraforming
+        building = false;
+        buildProgress = 0;
+        modifiableCondition = null;
+        isAICoreBuildTimeMultApplied = false;
+    }
+
+    public void sendCompletedMessage() {
+        if (market.isPlayerOwned()) {
+            String addOrRemoveText = !market.hasCondition(modifiableCondition.id) ? "Added " : "Removed ";
+            MessageIntel intel = new MessageIntel("Terraforming completed at " + market.getName(), Misc.getBasePlayerColor());
+            intel.addLine(BaseIntelPlugin.BULLET + addOrRemoveText + modifiableCondition.name.toLowerCase() + " planet condition");
+            intel.setIcon(Global.getSector().getPlayerFaction().getCrest());
+            intel.setSound(BaseIntelPlugin.getSoundStandardUpdate());
+            Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.COLONY_INFO, market);
+        }
     }
 
     public void changePlanetConditions() {
@@ -454,13 +462,6 @@ public class TMEBaseIndustry extends BaseIndustry {
         }
     }
 
-    public void reapplySupplyAndDemand() {
-        for (Industry ind : market.getIndustries()) {
-            ind.doPreSaveCleanup();
-            ind.doPostSaveRestore();
-        }
-    }
-
     public Boolean canTerraformCondition(Utils.ModifiableCondition condition) {
         boolean hasLikedConditions = true;
         if (!condition.likedConditions.isEmpty()) {
@@ -470,26 +471,12 @@ public class TMEBaseIndustry extends BaseIndustry {
             hasLikedConditions = new HashSet<>(conditionIds).containsAll(condition.likedConditions);
         }
 
-        boolean hasHatedConditions = false;
-        if (!condition.hatedConditions.isEmpty()) {
-            for (String id : condition.hatedConditions)
-                if (market.hasCondition(id))
-                    hasHatedConditions = true;
-        }
-
         boolean hasLikedIndustries = true;
         if (!condition.likedIndustries.isEmpty()) {
             List<String> industryIds = new ArrayList<>();
             for (Industry mc : market.getIndustries())
                 industryIds.add(mc.getId());
             hasLikedIndustries = new HashSet<>(industryIds).containsAll(condition.likedIndustries);
-        }
-
-        boolean hasHatedIndustries = false;
-        if (!condition.hatedIndustries.isEmpty()) {
-            for (String id : condition.hatedIndustries)
-                if (market.hasIndustry(id))
-                    hasHatedIndustries = true;
         }
 
         return hasLikedConditions && hasLikedIndustries;
