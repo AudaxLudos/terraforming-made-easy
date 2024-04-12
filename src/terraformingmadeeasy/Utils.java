@@ -1,13 +1,35 @@
 package terraformingmadeeasy;
 
+import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomEntitySpecAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.characters.MarketConditionSpecAPI;
+import org.json.JSONArray;
+import org.json.JSONException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Utils {
+    public static JSONArray TERRAFORMING_OPTIONS_DATA = null;
+    public static JSONArray MEGASTRUCTURE_OPTIONS_DATA = null;
+
+
+    static {
+        try {
+            TERRAFORMING_OPTIONS_DATA = Global.getSettings().loadCSV("data/config/terraforming_options.csv");
+        } catch (IOException | JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            MEGASTRUCTURE_OPTIONS_DATA = Global.getSettings().loadCSV("data/config/megastructure_options.csv");
+        } catch (IOException | JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static class BuildableMegastructure {
         public String id;
         public String name;
