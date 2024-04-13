@@ -5,7 +5,6 @@ import com.fs.starfarer.api.campaign.PlanetSpecAPI;
 import com.fs.starfarer.api.campaign.comm.CommMessageAPI;
 import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
 import com.fs.starfarer.api.campaign.econ.Industry;
-import com.fs.starfarer.api.campaign.econ.MarketConditionAPI;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Conditions;
@@ -34,6 +33,7 @@ public class TMEBaseIndustry extends BaseIndustry {
     public float aiCoreCurrentBuildTimeMult = 0f;
     public boolean firstTick = false;
     public String prevAICoreId = null;
+    public boolean hasAtLeastOneLikedCondition = false;
 
     @Override
     public void apply() {
@@ -463,22 +463,33 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     public Boolean canTerraformCondition(Utils.ModifiableCondition condition) {
-        boolean hasLikedConditions = true;
+        System.out.println(hasLikedConditions(condition) && hasLikedIndustries(condition));
+        return hasLikedConditions(condition) && hasLikedIndustries(condition);
+    }
+
+    public boolean hasLikedConditions(Utils.ModifiableCondition condition) {
+        // Checks if market has at least one of these condition
+        hasAtLeastOneLikedCondition = true;
         if (!condition.likedConditions.isEmpty()) {
-            List<String> conditionIds = new ArrayList<>();
-            for (MarketConditionAPI mc : market.getConditions())
-                conditionIds.add(mc.getId());
-            hasLikedConditions = new HashSet<>(conditionIds).containsAll(condition.likedConditions);
+            boolean hasOneLikedCondition = false;
+            for (String conditionId : condition.likedConditions) {
+                hasOneLikedCondition = hasOneLikedCondition || market.hasCondition(conditionId);
+            }
+            return hasOneLikedCondition;
         }
+        return true;
+    }
 
-        boolean hasLikedIndustries = true;
+    public boolean hasLikedIndustries(Utils.ModifiableCondition condition) {
+        // Checks if market has all industries
         if (!condition.likedIndustries.isEmpty()) {
-            List<String> industryIds = new ArrayList<>();
-            for (Industry mc : market.getIndustries())
-                industryIds.add(mc.getId());
-            hasLikedIndustries = new HashSet<>(industryIds).containsAll(condition.likedIndustries);
+            for (String industryId : condition.likedIndustries) {
+                if (!market.hasIndustry(industryId)) {
+                    return false;
+                }
+            }
         }
 
-        return hasLikedConditions && hasLikedIndustries;
+        return true;
     }
 }

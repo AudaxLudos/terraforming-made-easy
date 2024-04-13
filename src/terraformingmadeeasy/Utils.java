@@ -1,20 +1,11 @@
 package terraformingmadeeasy;
 
-import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomEntitySpecAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.characters.MarketConditionSpecAPI;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import terraformingmadeeasy.ids.TMEIndustries;
-import terraformingmadeeasy.industries.AgriculturalLaboratory;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class Utils {
     public static class BuildableMegastructure {

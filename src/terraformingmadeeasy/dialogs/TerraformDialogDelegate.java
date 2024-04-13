@@ -82,7 +82,7 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
             TooltipMakerAPI conditionButton = conditionPanel.createUIElement(WIDTH, 50f, false);
             ButtonAPI areaCheckbox = conditionButton.addAreaCheckbox("", modifiableCondition, Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(), WIDTH, 50f, 0f);
             areaCheckbox.setEnabled(canAffordAndBuild);
-            conditionButton.addTooltipTo(new TerraformTooltip(modifiableCondition), conditionPanel, TooltipMakerAPI.TooltipLocation.RIGHT);
+            conditionButton.addTooltipTo(new TerraformTooltip(modifiableCondition, industry), conditionPanel, TooltipMakerAPI.TooltipLocation.RIGHT);
 
             conditionPanel.addUIElement(conditionButton).inTL(-10f, 0f);
             conditionPanel.addUIElement(conditionNameElement);

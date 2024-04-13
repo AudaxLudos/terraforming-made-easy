@@ -1,6 +1,7 @@
 package terraformingmadeeasy.industries;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.econ.Industry;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,10 +9,7 @@ import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.ids.TMEIndustries;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class UnificationCenter extends TMEBaseIndustry {
     public UnificationCenter() {
@@ -52,5 +50,20 @@ public class UnificationCenter extends TMEBaseIndustry {
         } catch (IOException | JSONException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public boolean hasLikedConditions(Utils.ModifiableCondition condition) {
+        // Checks if market has all conditions
+        hasAtLeastOneLikedCondition = false;
+        if (!condition.likedConditions.isEmpty()) {
+            for (String conditionId : condition.likedConditions) {
+                if (!market.hasCondition(conditionId)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }

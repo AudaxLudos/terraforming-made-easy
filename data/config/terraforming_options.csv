@@ -25,7 +25,7 @@ tme_element_synthesizer,volatiles_plentiful,12000000,1080,true,very_cold,"volati
 tme_geomorphology_station,inimical_biosphere,2000000,360,false,"habitable, thin_atmosphere",,,,
 tme_geomorphology_station,decivilized,4000000,180,true,,,,,
 tme_geomorphology_station,decivilized_subpop,2000000,90,true,,,,,
-tme_geomorphology_station,irradiated,1000000,360,true,"habitable, water_surface",,,,
+tme_geomorphology_station,irradiated,1000000,360,true,,"habitable, water_surface",,,
 tme_geomorphology_station,water_surface,1000000,360,false,habitable,,,,
 tme_geomorphology_station,volturnian_lobster_pens,1000000,360,false,water_surface,,,,
 ,,,,,,,,,
