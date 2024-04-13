@@ -67,8 +67,6 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         // selectable megastructures list
         CustomPanelAPI megaStructsPanel = this.mPanel.createCustomPanel(WIDTH, 360f, null);
         TooltipMakerAPI megaStructsElement = megaStructsPanel.createUIElement(WIDTH, 360f, true);
-        megaStructsPanel.addUIElement(megaStructsElement);
-        mElement.addCustom(megaStructsPanel, 0f);
         for (Utils.BuildableMegastructure buildableMegastructure : this.industry.buildableMegastructures) {
             float cost = buildableMegastructure.cost;
             int buildTime = Math.round(buildableMegastructure.buildTime);
@@ -106,6 +104,8 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
 
             this.buttons.add(megaStructButton);
         }
+        megaStructsPanel.addUIElement(megaStructsElement);
+        mElement.addCustom(megaStructsPanel, 0f);
 
         // Inputs for megastructure orbit area
         CustomPanelAPI orbitInputsHeaderPanel = this.mPanel.createCustomPanel(WIDTH, 25f, null);
@@ -115,7 +115,7 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         orbitInputsHeaderElement.beginTable(Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(),
                 0f, false, true,
                 new Object[]{"Orbit Data", WIDTH});
-        orbitInputsHeaderElement.addTableHeaderTooltip(0, "Determines the location where the megastructure will be completed");
+        orbitInputsHeaderElement.addTableHeaderTooltip(0, "Determines the location where the megastructure will be constructed");
         orbitInputsHeaderElement.addTable("", 0, 0f);
         orbitInputsHeaderElement.getPrev().getPosition().setXAlignOffset(0f);
 

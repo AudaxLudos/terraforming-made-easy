@@ -39,8 +39,6 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
         // terraforming options selection area
         CustomPanelAPI headerPanel = mPanel.createCustomPanel(WIDTH, 25f, null);
         TooltipMakerAPI headerElement = headerPanel.createUIElement(WIDTH, 25f, false);
-        headerPanel.addUIElement(headerElement);
-        mElement.addCustom(headerPanel, 0f);
         headerElement.beginTable(Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(),
                 0f, false, true,
                 new Object[]{"Name", columnOneWidth, "Build time", columnWidth, "Cost", columnWidth - 6f});
@@ -49,12 +47,12 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
         headerElement.addTableHeaderTooltip(2, "One-time cost to begin terraforming project, in credits");
         headerElement.addTable("", 0, 0f);
         headerElement.getPrev().getPosition().setXAlignOffset(0f);
+        headerPanel.addUIElement(headerElement);
+        mElement.addCustom(headerPanel, 0f);
 
         // selectable terraforming options list
         CustomPanelAPI conditionsPanel = mPanel.createCustomPanel(WIDTH, 439f, null);
         TooltipMakerAPI conditionsElement = conditionsPanel.createUIElement(WIDTH, 439f, true);
-        conditionsPanel.addUIElement(conditionsElement);
-        mElement.addCustom(conditionsPanel, 0f);
         for (Utils.ModifiableCondition modifiableCondition : this.industry.modifiableConditions) {
             float cost = modifiableCondition.cost;
             int buildTime = Math.round(modifiableCondition.buildTime);
@@ -94,6 +92,8 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
             conditionsElement.addCustom(conditionPanel, 0f);
             this.buttons.add(areaCheckbox);
         }
+        conditionsPanel.addUIElement(conditionsElement);
+        mElement.addCustom(conditionsPanel, 0f);
 
         // show player credits
         TooltipMakerAPI creditsElement = panel.createUIElement(WIDTH, 0f, false);
