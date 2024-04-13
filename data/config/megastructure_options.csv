@@ -1,6 +1,6 @@
-structureID,buildTime,cost
+structureId,buildTime,cost
 derelict_cryosleeper,90,2000000
 coronal_tap,180,4000000
 inactive_gate,270,6000000
-station_side00,540,12000000
+tme_station,540,12000000
 ,,

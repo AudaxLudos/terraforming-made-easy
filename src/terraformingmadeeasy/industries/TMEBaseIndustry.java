@@ -15,14 +15,20 @@ import com.fs.starfarer.api.impl.campaign.procgen.StarSystemGenerator;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.loading.specs.PlanetSpec;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import terraformingmadeeasy.Utils;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class TMEBaseIndustry extends BaseIndustry {
+    public static final String TERRAFORMING_OPTIONS_FILE = "data/config/terraforming_options.csv";
     public static final float GAMMA_BUILD_TIME_MULT = 0.20f;
     public static final float BETA_BUILD_TIME_MULT = 0.30f;
     public static final float ALPHA_BUILD_TIME_MULT = 0.50f;
@@ -189,6 +195,49 @@ public class TMEBaseIndustry extends BaseIndustry {
         // TME industries don't supply or demand commodities for now
     }
 
+    public void getTerraformingOptions(String industryId) {
+        try {
+            JSONArray data = Global.getSettings().loadCSV(TERRAFORMING_OPTIONS_FILE);
+            for (int i = 0; i < data.length(); i++) {
+                JSONObject row = data.getJSONObject(i);
+                if (!Objects.equals(row.getString("structureId"), industryId)) continue;
+                if (row.getString("structureId").isEmpty()) continue;
+                if (row.getString("structureId").contains("#")) continue;
+                if (Global.getSettings().getMarketConditionSpec(row.getString("conditionId")) == null) continue;
+
+                String conditionId = row.getString("conditionId");
+                float buildTime = row.getInt("buildTime");
+                float cost = row.getInt("cost");
+                boolean canChangeGasGiants = row.getBoolean("canChangeGasGiants");
+                List<String> likedConditions = new ArrayList<>();
+                List<String> hatedConditions = new ArrayList<>();
+                List<String> likedIndustries = new ArrayList<>();
+                List<String> hatedIndustries = new ArrayList<>();
+                if (!row.getString("likedConditions").isEmpty())
+                    likedConditions.addAll(Arrays.asList(row.getString("likedConditions").replace(" ", "").split(",")));
+                if (!row.getString("hatedConditions").isEmpty())
+                    hatedConditions.addAll(Arrays.asList(row.getString("hatedConditions").replace(" ", "").split(",")));
+                if (!row.getString("likedIndustries").isEmpty())
+                    likedIndustries.addAll(Arrays.asList(row.getString("likedIndustries").replace(" ", "").split(",")));
+                if (!row.getString("hatedIndustries").isEmpty())
+                    hatedIndustries.addAll(Arrays.asList(row.getString("hatedIndustries").replace(" ", "").split(",")));
+
+                this.modifiableConditions.add(new Utils.ModifiableCondition(
+                        Global.getSettings().getMarketConditionSpec(conditionId),
+                        cost,
+                        buildTime,
+                        canChangeGasGiants,
+                        likedConditions,
+                        hatedConditions,
+                        likedIndustries,
+                        hatedIndustries
+                ));
+            }
+        } catch (IOException | JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public boolean isUpgrading() {
         return building && modifiableCondition != null;
     }
@@ -199,10 +248,10 @@ public class TMEBaseIndustry extends BaseIndustry {
         buildTime = 1f;
         isAICoreBuildTimeMultApplied = false;
         if (modifiableCondition != null) {
+            sendCompletedMessage();
             changePlanetConditions();
             changePlanetClass();
             reapply();
-            sendCompletedMessage();
             modifiableCondition = null;
         } else {
             buildingFinished();
@@ -470,7 +519,6 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     public Boolean canTerraformCondition(Utils.ModifiableCondition condition) {
-        System.out.println(hasLikedConditions(condition) && hasLikedIndustries(condition));
         return hasLikedConditions(condition) && hasLikedIndustries(condition);
     }
 

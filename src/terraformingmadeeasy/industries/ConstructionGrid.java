@@ -32,6 +32,7 @@ import java.util.Objects;
 import java.util.Random;
 
 public class ConstructionGrid extends BaseIndustry {
+    public static final String MEGASTRUCTURE_OPTIONS_FILE = "data/config/megastructure_options.csv";
     public static final float GAMMA_BUILD_TIME_MULT = 0.20f;
     public static final float BETA_BUILD_TIME_MULT = 0.30f;
     public static final float ALPHA_BUILD_TIME_MULT = 0.50f;
@@ -45,12 +46,13 @@ public class ConstructionGrid extends BaseIndustry {
 
     public ConstructionGrid() {
         try {
-            JSONArray data = Global.getSettings().loadCSV("data/config/megastructure_options.csv");
+            JSONArray data = Global.getSettings().loadCSV(MEGASTRUCTURE_OPTIONS_FILE);
             for (int i = 0; i < data.length(); i++) {
                 JSONObject row = data.getJSONObject(i);
-                if (row.getString("structureID").isEmpty()) return;
+                if (row.getString("structureId").isEmpty()) continue;
+                if (row.getString("structureId").contains("#")) continue;
 
-                String structureId = row.getString("structureID");
+                String structureId = row.getString("structureId");
                 float cost = row.getInt("cost");
                 float buildTime = row.getInt("buildTime");
 
@@ -272,7 +274,7 @@ public class ConstructionGrid extends BaseIndustry {
             inactiveGate.setCircularOrbit(orbitEntity, orbitAngle, orbitRadius, orbitDays);
             inactiveGate.getMemoryWithoutUpdate().set("$gateScanned", true);
             inactiveGate.getMemoryWithoutUpdate().set("$fullName", "Active Gate");
-        } else if (Objects.equals(customEntityId, "station_side00")) {
+        } else if (Objects.equals(customEntityId, "tme_station")) {
             // Pick a random station spec
             WeightedRandomPicker<String> stations = new WeightedRandomPicker<>(StarSystemGenerator.random);
             stations.add("station_side00");
@@ -329,7 +331,7 @@ public class ConstructionGrid extends BaseIndustry {
             return system.getEntitiesWithTag(Tags.CRYOSLEEPER).isEmpty();
         } else if (Objects.equals(customEntityId, Entities.INACTIVE_GATE)) {
             return system.getEntitiesWithTag(Tags.GATE).isEmpty();
-        } else if (Objects.equals(customEntityId, "station_side00")) {
+        } else if (Objects.equals(customEntityId, "tme_station")) {
             return system.getEntitiesWithTag("tme_station").size() < 3;
         }
 

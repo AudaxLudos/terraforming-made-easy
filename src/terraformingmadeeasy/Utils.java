@@ -22,14 +22,6 @@ public class Utils {
             this.cost = cost;
             this.buildTime = buildTime;
         }
-
-        public BuildableMegastructure(CustomEntitySpecAPI spec, String name, float cost, float buildTime) {
-            this.id = spec.getId();
-            this.name = name;
-            this.icon = spec.getInteractionImage();
-            this.cost = cost;
-            this.buildTime = buildTime;
-        }
     }
 
     public static class OrbitData {

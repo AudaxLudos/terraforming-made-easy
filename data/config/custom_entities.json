@@ -1,0 +1,25 @@
+{
+	"tme_station":{
+		"defaultName":"Orbital Station",
+		"defaultRadius":50,
+		"customDescriptionId":"orbital_station_default",
+		"interactionImage":"graphics/illustrations/orbital.jpg",
+		"icon":"graphics/icons/station0.png",
+		"iconWidth":20,
+		"iconHeight":20,
+		"sprite":"graphics/stations/station_side00.png",
+		"spriteWidth":80,
+		"spriteHeight":80,
+		"renderShadow":true,
+		"useLightColor":true,
+		"showInCampaign":true,
+		"showIconOnMap":true,
+		"showNameOnMap":false,
+		"scaleNameWithZoom":false,
+		"scaleIconWithZoom":true,
+		"tags":["station"],
+		"layers":[STATIONS]
+	}
+}
+
+
