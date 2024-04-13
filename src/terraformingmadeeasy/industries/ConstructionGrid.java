@@ -19,9 +19,13 @@ import com.fs.starfarer.api.impl.campaign.submarkets.StoragePlugin;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import terraformingmadeeasy.Utils;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -40,10 +44,24 @@ public class ConstructionGrid extends BaseIndustry {
     public String prevAICoreId = null;
 
     public ConstructionGrid() {
-        this.buildableMegastructures.add(new Utils.BuildableMegastructure(Global.getSettings().getCustomEntitySpec(Entities.DERELICT_CRYOSLEEPER), 20000000, 1080f));
-        this.buildableMegastructures.add(new Utils.BuildableMegastructure(Global.getSettings().getCustomEntitySpec(Entities.CORONAL_TAP), 20000000, 1440f));
-        this.buildableMegastructures.add(new Utils.BuildableMegastructure(Global.getSettings().getCustomEntitySpec(Entities.INACTIVE_GATE), 12000000, 1080f));
-        this.buildableMegastructures.add(new Utils.BuildableMegastructure(Global.getSettings().getCustomEntitySpec("station_side00"), "Orbital Station", 12000000, 720f));
+        try {
+            JSONArray data = Global.getSettings().loadCSV("data/config/megastructure_options.csv");
+            for (int i = 0; i < data.length(); i++) {
+                JSONObject row = data.getJSONObject(i);
+                if (row.getString("structureID").isEmpty()) return;
+
+                String structureId = row.getString("structureID");
+                float cost = row.getInt("cost");
+                float buildTime = row.getInt("buildTime");
+
+                this.buildableMegastructures.add(new Utils.BuildableMegastructure(
+                        Global.getSettings().getCustomEntitySpec(structureId),
+                        cost,
+                        buildTime));
+            }
+        } catch (IOException | JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

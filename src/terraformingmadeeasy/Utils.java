@@ -6,30 +6,17 @@ import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.characters.MarketConditionSpecAPI;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
+import terraformingmadeeasy.ids.TMEIndustries;
+import terraformingmadeeasy.industries.AgriculturalLaboratory;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class Utils {
-    public static JSONArray TERRAFORMING_OPTIONS_DATA = null;
-    public static JSONArray MEGASTRUCTURE_OPTIONS_DATA = null;
-
-
-    static {
-        try {
-            TERRAFORMING_OPTIONS_DATA = Global.getSettings().loadCSV("data/config/terraforming_options.csv");
-        } catch (IOException | JSONException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            MEGASTRUCTURE_OPTIONS_DATA = Global.getSettings().loadCSV("data/config/megastructure_options.csv");
-        } catch (IOException | JSONException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public static class BuildableMegastructure {
         public String id;
         public String name;
@@ -79,17 +66,6 @@ public class Utils {
         public List<String> hatedConditions = new ArrayList<>();
         public List<String> likedIndustries = new ArrayList<>();
         public List<String> hatedIndustries = new ArrayList<>();
-
-        public ModifiableCondition(MarketConditionSpecAPI spec, float cost, float buildTime, boolean canChangeGasGiants, List<String> likedConditions, List<String> hatedConditions) {
-            this.id = spec.getId();
-            this.name = spec.getName();
-            this.icon = spec.getIcon();
-            this.cost = cost;
-            this.buildTime = buildTime;
-            this.canChangeGasGiants = canChangeGasGiants;
-            if (likedConditions != null) this.likedConditions = likedConditions;
-            if (hatedConditions != null) this.hatedConditions = hatedConditions;
-        }
 
         public ModifiableCondition(MarketConditionSpecAPI spec, float cost, float buildTime, boolean canChangeGasGiants, List<String> likedConditions, List<String> hatedConditions, List<String> likedIndustries, List<String> hatedIndustries) {
             this.id = spec.getId();

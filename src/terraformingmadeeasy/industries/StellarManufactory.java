@@ -1,60 +1,56 @@
 package terraformingmadeeasy.industries;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.impl.campaign.ids.Conditions;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import terraformingmadeeasy.Utils;
+import terraformingmadeeasy.ids.TMEIndustries;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 public class StellarManufactory extends TMEBaseIndustry {
     public StellarManufactory() {
-        this.modifiableConditions.add(new Utils.ModifiableCondition(Global.getSettings().getMarketConditionSpec(Conditions.SOLAR_ARRAY), 4000000, 360f, false,
-                // Likes conditions
-                Collections.singletonList(Conditions.HABITABLE),
-                // Hates conditions
-                null));
-        this.modifiableConditions.add(new Utils.ModifiableCondition(Global.getSettings().getMarketConditionSpec(Conditions.HOT), 1000000f, 180f, true,
-                // Likes conditions
-                null,
-                // Hates conditions
-                Arrays.asList(Conditions.VERY_HOT,
-                        Conditions.COLD,
-                        Conditions.VERY_COLD)));
-        this.modifiableConditions.add(new Utils.ModifiableCondition(Global.getSettings().getMarketConditionSpec(Conditions.VERY_HOT), 2000000f, 360f, true,
-                // Likes conditions
-                null,
-                // Hates conditions
-                Arrays.asList(Conditions.HOT,
-                        Conditions.COLD,
-                        Conditions.VERY_COLD,
-                        Conditions.HABITABLE,
-                        Conditions.MILD_CLIMATE)));
-        this.modifiableConditions.add(new Utils.ModifiableCondition(Global.getSettings().getMarketConditionSpec(Conditions.COLD), 1000000f, 180f, true,
-                // Likes conditions
-                null,
-                // Hates conditions
-                Arrays.asList(Conditions.VERY_COLD,
-                        Conditions.HOT,
-                        Conditions.VERY_HOT)));
-        this.modifiableConditions.add(new Utils.ModifiableCondition(Global.getSettings().getMarketConditionSpec(Conditions.VERY_COLD), 2000000f, 360f, true,
-                // Likes conditions
-                null,
-                // Hates conditions
-                Arrays.asList(Conditions.COLD,
-                        Conditions.HOT,
-                        Conditions.VERY_HOT,
-                        Conditions.HABITABLE,
-                        Conditions.MILD_CLIMATE)));
-        this.modifiableConditions.add(new Utils.ModifiableCondition(Global.getSettings().getMarketConditionSpec(Conditions.POOR_LIGHT), 1000000f, 180f, true,
-                // Likes conditions
-                null,
-                // Hates conditions
-                Collections.singletonList(Conditions.DARK)));
-        this.modifiableConditions.add(new Utils.ModifiableCondition(Global.getSettings().getMarketConditionSpec(Conditions.DARK), 2000000f, 360f, true,
-                // Likes conditions
-                null,
-                // Hates conditions
-                Arrays.asList(Conditions.POOR_LIGHT, Conditions.HABITABLE)));
+        try {
+            JSONArray data = Global.getSettings().loadCSV("data/config/terraforming_options.csv");
+            for (int i = 0; i < data.length(); i++) {
+                JSONObject row = data.getJSONObject(i);
+                if (!Objects.equals(row.getString("structureId"), TMEIndustries.STELLAR_MANUFACTORY)) continue;
+
+                String conditionId = row.getString("conditionId");
+                float buildTime = row.getInt("buildTime");
+                float cost = row.getInt("cost");
+                boolean canChangeGasGiants = row.getBoolean("canChangeGasGiants");
+                List<String> likedConditions = new ArrayList<>();
+                List<String> hatedConditions = new ArrayList<>();
+                List<String> likedIndustries = new ArrayList<>();
+                List<String> hatedIndustries = new ArrayList<>();
+                if (!row.getString("likedConditions").isEmpty())
+                    likedConditions.addAll(Arrays.asList(row.getString("likedConditions").replace(" ", "").split(",")));
+                if (!row.getString("hatedConditions").isEmpty())
+                    hatedConditions.addAll(Arrays.asList(row.getString("hatedConditions").replace(" ", "").split(",")));
+                if (!row.getString("likedIndustries").isEmpty())
+                    likedIndustries.addAll(Arrays.asList(row.getString("likedIndustries").replace(" ", "").split(",")));
+                if (!row.getString("hatedIndustries").isEmpty())
+                    hatedIndustries.addAll(Arrays.asList(row.getString("hatedIndustries").replace(" ", "").split(",")));
+
+                this.modifiableConditions.add(new Utils.ModifiableCondition(
+                        Global.getSettings().getMarketConditionSpec(conditionId),
+                        cost,
+                        buildTime,
+                        canChangeGasGiants,
+                        likedConditions,
+                        hatedConditions,
+                        likedIndustries,
+                        hatedIndustries
+                ));
+            }
+        } catch (IOException | JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
