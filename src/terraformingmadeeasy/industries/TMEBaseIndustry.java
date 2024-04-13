@@ -19,7 +19,6 @@ import terraformingmadeeasy.Utils;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -258,6 +257,7 @@ public class TMEBaseIndustry extends BaseIndustry {
         boolean removeOrganics = false;
         boolean reduceOrganics = false;
         boolean removeLobsters = true;
+        boolean removeWaterSurface = true;
         if (!market.getPlanetEntity().isStar() && !market.getPlanetEntity().isGasGiant()
                 && !market.hasCondition(Conditions.HABITABLE) && !market.hasCondition(Conditions.VERY_COLD)
                 && !market.hasCondition(Conditions.VERY_HOT) && !market.hasCondition(Conditions.NO_ATMOSPHERE)
@@ -279,20 +279,29 @@ public class TMEBaseIndustry extends BaseIndustry {
                 planetTypeId = "tundra";
             }
         }
+        if (market.hasCondition(Conditions.NO_ATMOSPHERE) || market.hasCondition(Conditions.VERY_HOT) || market.hasCondition(Conditions.VERY_COLD)) {
+            String[] poorBarrenTypes = {"barren", "barren2", "barren3", "barren_castiron", "barren_venuslike", "rocky_metallic", "barren-bombarded"};
+            planetTypeId = poorBarrenTypes[Misc.random.nextInt(poorBarrenTypes.length)];
+            removeFarming = true;
+            removeOrganics = true;
+            if (market.hasCondition(Conditions.TECTONIC_ACTIVITY) || market.hasCondition(Conditions.EXTREME_TECTONIC_ACTIVITY))
+                planetTypeId = "rocky_unstable";
+        }
         if (market.hasCondition(Conditions.WATER_SURFACE)) {
             planetTypeId = "water";
             removeFarming = true;
             removeLobsters = false;
+            removeWaterSurface = false;
             if (market.hasCondition(Conditions.VERY_COLD)) {
-                market.removeCondition(Conditions.WATER_SURFACE);
                 String[] frozenTypes = {"frozen", "frozen1", "frozen2", "frozen3"};
                 planetTypeId = frozenTypes[Misc.random.nextInt(frozenTypes.length)];
+                removeWaterSurface = true;
                 removeOrganics = true;
                 removeLobsters = true;
             }
             if ((market.hasCondition(Conditions.COLD) || market.hasCondition(Conditions.VERY_COLD)) && market.hasCondition(Conditions.NO_ATMOSPHERE)) {
-                market.removeCondition(Conditions.WATER_SURFACE);
                 planetTypeId = "rocky_ice";
+                removeWaterSurface = true;
                 removeOrganics = true;
                 removeLobsters = true;
             }
@@ -301,20 +310,13 @@ public class TMEBaseIndustry extends BaseIndustry {
             planetTypeId = "barren-desert";
             removeFarming = true;
             reduceOrganics = true;
-        }
-        if (market.hasCondition(Conditions.NO_ATMOSPHERE) || market.hasCondition(Conditions.VERY_HOT) || market.hasCondition(Conditions.VERY_COLD)) {
-            String[] poorBarrenTypes = {"barren", "barren2", "barren3", "barren_castiron", "barren_venuslike", "rocky_metallic", "barren-bombarded"};
-            planetTypeId = poorBarrenTypes[Misc.random.nextInt(poorBarrenTypes.length)];
-            removeFarming = true;
-            removeOrganics = true;
-            reduceOrganics = false;
-            if (market.hasCondition(Conditions.TECTONIC_ACTIVITY) || market.hasCondition(Conditions.EXTREME_TECTONIC_ACTIVITY))
-                planetTypeId = "rocky_unstable";
+            removeWaterSurface = true;
         }
         if (market.hasCondition(Conditions.TOXIC_ATMOSPHERE)) {
             planetTypeId = "toxic";
             removeFarming = true;
             reduceOrganics = true;
+            removeWaterSurface = true;
         }
         if (market.hasCondition(Conditions.IRRADIATED)) {
             planetTypeId = "irradiated";
@@ -353,11 +355,16 @@ public class TMEBaseIndustry extends BaseIndustry {
 
         if (removeFarming) removeFarming();
         if (removeLobsters) removeLobsters();
+        if (removeWaterSurface) removeWaterSurface();
         if (reduceOrganics) reduceOrganicsToCommon();
         else if (removeOrganics) removeOrganics();
 
         updateFarmingOrAquaculture();
         changePlanetVisuals(planetTypeId);
+    }
+
+    public void removeWaterSurface() {
+        market.removeCondition(Conditions.WATER_SURFACE);
     }
 
     public void updateFarmingOrAquaculture() {
