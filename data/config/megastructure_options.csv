@@ -1,11 +1,7 @@
 structureId,cost,buildTime,buildLimit
 #required,#required,#required,#not used
-#not all megastructures from other mods,,,
-#can work due to mod specific settings,,,
-#needed to be set manually,,,
-#there is no need to restart the game,,,
-#when changing or adding new settings;,,,
-#just rebuild the structure,,,
+#megastructures from other mods may not work due to specific settings needed to be set manually,,,
+#no need to restart the game when changing settings; just rebuild the structure,,,
 "#sample if you have RAT, remove hashtag",,,
 #rat_abyss_fabrication,1,1,1
 #rat_abyss_research,1,1,1
