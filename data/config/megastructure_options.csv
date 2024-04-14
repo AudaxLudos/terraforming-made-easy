@@ -1,6 +1,7 @@
-structureId,buildTime,cost
-derelict_cryosleeper,90,2000000
-coronal_tap,180,4000000
-inactive_gate,270,6000000
-tme_station,540,12000000
-,,
+structureId,cost,buildTime,buildLimit
+#required,#required,#required,#not used
+coronal_tap,18000000,1440,1
+derelict_cryosleeper,12000000,1080,1
+inactive_gate,12000000,1080,1
+tme_station,10000000,720,3
+,,,

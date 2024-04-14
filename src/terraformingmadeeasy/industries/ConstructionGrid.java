@@ -23,6 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import terraformingmadeeasy.Utils;
+import terraformingmadeeasy.ids.TMEIds;
 
 import java.awt.*;
 import java.io.IOException;
@@ -214,8 +215,8 @@ public class ConstructionGrid extends BaseIndustry {
         buildTime = 1f;
         isAICoreBuildTimeMultApplied = false;
         if (buildableMegastructure != null) {
-            completeMegastructure();
             sendCompletedMessage();
+            completeMegastructure();
             buildableMegastructure = null;
             megastructureOrbitData = null;
             market.removeIndustry(getId(), null, false);
@@ -241,6 +242,15 @@ public class ConstructionGrid extends BaseIndustry {
         buildProgress = 0;
         buildableMegastructure = null;
         isAICoreBuildTimeMultApplied = false;
+    }
+
+    public void sendCompletedMessage() {
+        if (market.isPlayerOwned()) {
+            MessageIntel intel = new MessageIntel(buildableMegastructure.name + " megastructure completed", Misc.getBasePlayerColor());
+            intel.setIcon(Global.getSector().getPlayerFaction().getCrest());
+            intel.setSound(BaseIntelPlugin.getSoundStandardUpdate());
+            Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.COLONY_INFO, market);
+        }
     }
 
     public void completeMegastructure() {
@@ -286,8 +296,8 @@ public class ConstructionGrid extends BaseIndustry {
             stations.add("station_side06");
             SectorEntityToken station = system.addCustomEntity(null, generateProceduralName(orbitEntity.getStarSystem().getConstellation().getName()), stations.pick(), Factions.PLAYER);
             station.setCircularOrbit(orbitEntity, orbitAngle, orbitRadius, orbitDays);
-            station.addTag("tme_station");
             station.setId("system_" + station.getId() + ":tme_station_" + station.getStarSystem().getEntitiesWithTag("tme_station").size());
+            station.addTag(TMEIds.TME_STATION);
             MarketAPI market = Global.getFactory().createMarket("market_" + station.getId(), station.getName(), 3);
             market.setPrimaryEntity(station);
             market.setFactionId(Global.getSector().getPlayerFleet().getFaction().getId());
@@ -308,18 +318,13 @@ public class ConstructionGrid extends BaseIndustry {
             market.getConnectedEntities().add(station);
             station.getMemoryWithoutUpdate().set("$hasStation", true);
             Global.getSector().getEconomy().addMarket(market, true);
+            // Needed to fix bug where market size instantly raises to max
             Global.getSector().getCampaignUI().showInteractionDialog(station);
             Global.getSector().getCampaignUI().getCurrentInteractionDialog().getTextPanel().clear();
             Global.getSector().getCampaignUI().getCurrentInteractionDialog().getTextPanel().addPara("Sorry, I have to force open a dialog to fix a bug that instantly increases the population size of a recently finished Orbital Station Megastructure to 6 (haven't found any other solutions)", Misc.getHighlightColor());
-        }
-    }
-
-    public void sendCompletedMessage() {
-        if (market.isPlayerOwned()) {
-            MessageIntel intel = new MessageIntel(buildableMegastructure.name + " megastructure completed", Misc.getBasePlayerColor());
-            intel.setIcon(Global.getSector().getPlayerFaction().getCrest());
-            intel.setSound(BaseIntelPlugin.getSoundStandardUpdate());
-            Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.COLONY_INFO, market);
+        } else {
+            SectorEntityToken entity = system.addCustomEntity(null, null, customEntityId, Factions.NEUTRAL);
+            entity.setCircularOrbit(orbitEntity, orbitAngle, orbitRadius, orbitDays);
         }
     }
 
@@ -331,11 +336,11 @@ public class ConstructionGrid extends BaseIndustry {
             return system.getEntitiesWithTag(Tags.CRYOSLEEPER).isEmpty();
         } else if (Objects.equals(customEntityId, Entities.INACTIVE_GATE)) {
             return system.getEntitiesWithTag(Tags.GATE).isEmpty();
-        } else if (Objects.equals(customEntityId, "tme_station")) {
-            return system.getEntitiesWithTag("tme_station").size() < 3;
+        } else if (Objects.equals(customEntityId, TMEIds.TME_STATION)) {
+            return system.getEntitiesWithTag(TMEIds.TME_STATION).size() < 3;
         }
 
-        return true;
+        return system.getEntitiesWithTag(customEntityId).isEmpty();
     }
 
     public String generateProceduralName(String parent) {

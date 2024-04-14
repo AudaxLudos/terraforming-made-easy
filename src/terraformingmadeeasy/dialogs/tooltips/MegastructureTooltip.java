@@ -5,6 +5,7 @@ import com.fs.starfarer.api.ui.BaseTooltipCreator;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.Utils;
+import terraformingmadeeasy.ids.TMEIds;
 
 import java.util.Objects;
 
@@ -30,8 +31,10 @@ public class MegastructureTooltip extends BaseTooltipCreator {
             tooltip.addPara("Only %s can exist in a system", 0f, Misc.getHighlightColor(), "1 " + megastructure.name);
         } else if (Objects.equals(megastructure.id, Entities.INACTIVE_GATE)) {
             tooltip.addPara("Only %s can exist in a system", 0f, Misc.getHighlightColor(), "1 " + megastructure.name);
-        } else if (Objects.equals(megastructure.id, "station_side00")) {
+        } else if (Objects.equals(megastructure.id, TMEIds.TME_STATION)) {
             tooltip.addPara("Only %s can exist in a system", 0f, Misc.getHighlightColor(), "3 " + megastructure.name);
+        } else {
+            tooltip.addPara("Only %s can exist in a system", 0f, Misc.getHighlightColor(), "1 " + megastructure.name);
         }
     }
 }

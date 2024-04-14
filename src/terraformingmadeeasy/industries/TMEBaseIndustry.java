@@ -22,10 +22,8 @@ import terraformingmadeeasy.Utils;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class TMEBaseIndustry extends BaseIndustry {
     public static final String TERRAFORMING_OPTIONS_FILE = "data/config/terraforming_options.csv";
@@ -209,18 +207,27 @@ public class TMEBaseIndustry extends BaseIndustry {
                 float buildTime = row.getInt("buildTime");
                 float cost = row.getInt("cost");
                 boolean canChangeGasGiants = row.getBoolean("canChangeGasGiants");
+
                 List<String> likedConditions = new ArrayList<>();
                 List<String> hatedConditions = new ArrayList<>();
                 List<String> likedIndustries = new ArrayList<>();
                 List<String> hatedIndustries = new ArrayList<>();
-                if (!row.getString("likedConditions").isEmpty())
+                if (!row.getString("likedConditions").isEmpty()) {
                     likedConditions.addAll(Arrays.asList(row.getString("likedConditions").replace(" ", "").split(",")));
-                if (!row.getString("hatedConditions").isEmpty())
+                    likedConditions = filterUnknownConditionSpecs(likedConditions);
+                }
+                if (!row.getString("hatedConditions").isEmpty()) {
                     hatedConditions.addAll(Arrays.asList(row.getString("hatedConditions").replace(" ", "").split(",")));
-                if (!row.getString("likedIndustries").isEmpty())
+                    hatedConditions = filterUnknownConditionSpecs(hatedConditions);
+                }
+                if (!row.getString("likedIndustries").isEmpty()) {
                     likedIndustries.addAll(Arrays.asList(row.getString("likedIndustries").replace(" ", "").split(",")));
-                if (!row.getString("hatedIndustries").isEmpty())
+                    likedIndustries = filterUnknownIndustrySpecs(likedIndustries);
+                }
+                if (!row.getString("hatedIndustries").isEmpty()) {
                     hatedIndustries.addAll(Arrays.asList(row.getString("hatedIndustries").replace(" ", "").split(",")));
+                    hatedIndustries = filterUnknownIndustrySpecs(hatedIndustries);
+                }
 
                 this.modifiableConditions.add(new Utils.ModifiableCondition(
                         Global.getSettings().getMarketConditionSpec(conditionId),
@@ -236,6 +243,28 @@ public class TMEBaseIndustry extends BaseIndustry {
         } catch (IOException | JSONException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public List<String> filterUnknownConditionSpecs(List<String> conditionIds) {
+        for (Iterator<String> itr = conditionIds.iterator(); itr.hasNext(); ) {
+            String id = itr.next();
+            if (id.isEmpty() || Global.getSettings().getMarketConditionSpec(id) == null) {
+                itr.remove();
+            }
+        }
+
+        return conditionIds;
+    }
+
+    public List<String> filterUnknownIndustrySpecs(List<String> industriesIds) {
+        for (Iterator<String> itr = industriesIds.iterator(); itr.hasNext(); ) {
+            String id = itr.next();
+            if (id.isEmpty() || Global.getSettings().getMarketConditionSpec(id) == null) {
+                itr.remove();
+            }
+        }
+
+        return industriesIds;
     }
 
     public boolean isUpgrading() {
