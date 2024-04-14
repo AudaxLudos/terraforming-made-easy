@@ -1,5 +1,15 @@
 structureId,cost,buildTime,buildLimit
 #required,#required,#required,#not used
+#not all megastructures from other mods,,,
+#can work due to mod specific settings,,,
+#needed to be set manually,,,
+#there is no need to restart the game,,,
+#when changing or adding new settings;,,,
+#just rebuild the structure,,,
+"#sample if you have RAT, remove hashtag",,,
+#rat_abyss_fabrication,1,1,1
+#rat_abyss_research,1,1,1
+,,,
 coronal_tap,18000000,1440,1
 derelict_cryosleeper,12000000,1080,1
 inactive_gate,12000000,1080,1

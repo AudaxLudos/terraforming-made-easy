@@ -18,7 +18,10 @@ public class Utils {
         public BuildableMegastructure(CustomEntitySpecAPI spec, float cost, float buildTime) {
             this.id = spec.getId();
             this.name = spec.getDefaultName();
-            this.icon = spec.getInteractionImage();
+            this.icon = "graphics/illustrations/bombardment_saturation.jpg";
+            if (spec.getInteractionImage() != null) {
+                this.icon = spec.getInteractionImage();
+            }
             this.cost = cost;
             this.buildTime = buildTime;
         }

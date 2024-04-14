@@ -1,6 +1,13 @@
 structureId,conditionId,cost,buildTime,canChangeGasGiants,likedConditions,hatedConditions,likedIndustries,hatedIndustries,planetSpecOverride
 #required,#required,#required,#required,#required,#optional,#optional,#optional,#optional,#not used
+#there is no need to restart the game,,,,,,,,,
+#when changing or adding new settings;,,,,,,,,,
+#just rebuild the structure,,,,,,,,,
+"#sample if you have IndEvo, remove hashtag",,,,,,,,,
+#tme_stellar_manufactory,IndEvo_mineFieldCondition,1,1,true,,,,,
+#tme_stellar_manufactory,IndEvo_ArtilleryStationCondition,1,1,true,,,,,
 ,,,,,,,,,
+#default mod settings,,,,,,,,,
 tme_agricultural_laboratory,farmland_poor,2000000,90,false,habitable,"farmland_adequate, farmland_rich, farmland_bountiful",,,
 tme_agricultural_laboratory,farmland_adequate,4000000,180,false,habitable,"farmland_poor, farmland_rich, farmland_bountiful",,,
 tme_agricultural_laboratory,farmland_rich,6000000,270,false,habitable,"farmland_adequate, farmland_adequate, farmland_bountiful",,,
