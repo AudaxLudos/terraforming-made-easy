@@ -6,7 +6,8 @@
 - Fix issue where water-surface can't turn into frozen worlds
 - Fix bug where terraforming options that require one liked condition is not working and not displayed properly
 - Fix bug where scrolling is not working when selecting terraforming or megastructure options
-- Update fetching of terraforming options tme structures
+- Update fetching of megastructure options for construction grid
+- Update fetching of terraforming options for tme structures
 - Add csv file for megastructure options
 - Add csv file for terraforming options
 
