@@ -1,3 +1,15 @@
+### 2.3.0
+- Release 2.3.0
+- Update construction grid can now construct entities from other mods
+- Update terraforming structures can now add conditions from other mods
+- Fix issue where habitable is not removed when terraforming negative atmospheric conditions
+- Fix issue where water-surface can't turn into frozen worlds
+- Fix bug where terraforming options that require one liked condition is not working and not displayed properly
+- Fix bug where scrolling is not working when selecting terraforming or megastructure options
+- Update fetching of terraforming options tme structures
+- Add csv file for megastructure options
+- Add csv file for terraforming options
+
 ### 2.1.1
 - Release 2.1.1
 - Update orbital station build time to 720 from 5
