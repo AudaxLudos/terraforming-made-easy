@@ -52,8 +52,9 @@ public class Utils {
         public List<String> hatedConditions = new ArrayList<>();
         public List<String> likedIndustries = new ArrayList<>();
         public List<String> hatedIndustries = new ArrayList<>();
+        public String planetSpecOverride = null;
 
-        public ModifiableCondition(MarketConditionSpecAPI spec, float cost, float buildTime, boolean canChangeGasGiants, List<String> likedConditions, List<String> hatedConditions, List<String> likedIndustries, List<String> hatedIndustries) {
+        public ModifiableCondition(MarketConditionSpecAPI spec, float cost, float buildTime, boolean canChangeGasGiants, List<String> likedConditions, List<String> hatedConditions, List<String> likedIndustries, List<String> hatedIndustries, String planetSpecOverride) {
             this.id = spec.getId();
             this.name = spec.getName();
             this.icon = spec.getIcon();
@@ -64,6 +65,7 @@ public class Utils {
             if (hatedConditions != null) this.hatedConditions = hatedConditions;
             if (likedIndustries != null) this.likedIndustries = likedIndustries;
             if (hatedIndustries != null) this.hatedIndustries = hatedIndustries;
+            this.planetSpecOverride = planetSpecOverride;
         }
     }
 }

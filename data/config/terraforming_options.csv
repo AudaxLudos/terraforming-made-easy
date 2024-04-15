@@ -1,9 +1,11 @@
 structureId,conditionId,cost,buildTime,canChangeGasGiants,likedConditions,hatedConditions,likedIndustries,hatedIndustries,planetSpecOverride
-#required,#required,#required,#required,#required,#optional,#optional,#optional,#optional,#not used
+#required,#required,#required,#required,#required,#optional,#optional,#optional,#optional,#optional
 #no need to restart the game when changing settings; just rebuild the structure,,,,,#default function: atleast one condition is on the planet; exception for unification center,#default function: requires all conditions to be on the planet,#default function: requires all industries to be on the planet,#default function: requires all industries to not be on the planet,
 "#sample if you have IndEvo, remove hashtag",,,,,,,,,
-#tme_stellar_manufactory,IndEvo_mineFieldCondition,1,1,true,,,,,
-#tme_stellar_manufactory,IndEvo_ArtilleryStationCondition,1,1,true,,,,,
+tme_stellar_manufactory,IndEvo_mineFieldCondition,1,1,true,,,,,
+tme_stellar_manufactory,IndEvo_ArtilleryStationCondition,1,1,true,,,,,
+"#sample if you have UAF, remove hashtag",,,,,,,,,
+tme_geomorphology_station,habitable,1,1,true,,"no_atmosphere, thin_atmosphere, toxic_atmosphere, dense_atmosphere, irradiated, very_hot, very_cold, dark, extreme_tectonic_activity",,,resort_world
 ,,,,,,,,,
 #default mod settings,,,,,,,,,
 tme_agricultural_laboratory,farmland_poor,2000000,90,false,habitable,"farmland_adequate, farmland_rich, farmland_bountiful",,,

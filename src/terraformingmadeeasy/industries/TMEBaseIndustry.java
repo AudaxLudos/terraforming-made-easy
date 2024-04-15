@@ -228,6 +228,7 @@ public class TMEBaseIndustry extends BaseIndustry {
                     hatedIndustries.addAll(Arrays.asList(row.getString("hatedIndustries").replace(" ", "").split(",")));
                     hatedIndustries = filterUnknownIndustrySpecs(hatedIndustries);
                 }
+                String planetSpecOverride = row.getString("planetSpecOverride");
 
                 this.modifiableConditions.add(new Utils.ModifiableCondition(
                         Global.getSettings().getMarketConditionSpec(conditionId),
@@ -237,7 +238,8 @@ public class TMEBaseIndustry extends BaseIndustry {
                         likedConditions,
                         hatedConditions,
                         likedIndustries,
-                        hatedIndustries
+                        hatedIndustries,
+                        planetSpecOverride
                 ));
             }
         } catch (IOException | JSONException e) {
@@ -431,11 +433,20 @@ public class TMEBaseIndustry extends BaseIndustry {
                 planetTypeId = "gas_giant";
         }
 
-        if (removeFarming) removeFarming();
-        if (removeLobsters) removeLobsters();
-        if (removeWaterSurface) removeWaterSurface();
-        if (reduceOrganics) reduceOrganicsToCommon();
-        else if (removeOrganics) removeOrganics();
+        if (removeFarming) {
+            removeFarming();
+        }
+        if (removeLobsters) {
+            removeLobsters();
+        }
+        if (removeWaterSurface) {
+            removeWaterSurface();
+        }
+        if (reduceOrganics) {
+            reduceOrganicsToCommon();
+        } else if (removeOrganics) {
+            removeOrganics();
+        }
 
         updateFarmingOrAquaculture();
         changePlanetVisuals(planetTypeId);
@@ -456,9 +467,20 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     public void changePlanetVisuals(String planetTypeId) {
+        String planetType = planetTypeId;
         PlanetSpecAPI marketSpec = market.getPlanetEntity().getSpec();
+        if (modifiableCondition.planetSpecOverride != null) {
+            for (PlanetSpecAPI spec : Global.getSettings().getAllPlanetSpecs()) {
+                if (spec.isStar()) continue;
+                if (Objects.equals(spec.getPlanetType(), modifiableCondition.planetSpecOverride)) {
+                    marketSpec = spec;
+                    planetType = spec.getPlanetType();
+                    break;
+                }
+            }
+        }
         for (PlanetSpecAPI spec : Global.getSettings().getAllPlanetSpecs()) {
-            if (spec.getPlanetType().equals(planetTypeId)) {
+            if (spec.getPlanetType().equals(planetType)) {
                 marketSpec.setAtmosphereColor(spec.getAtmosphereColor());
                 marketSpec.setAtmosphereThickness(spec.getAtmosphereThickness());
                 marketSpec.setAtmosphereThicknessMin(spec.getAtmosphereThicknessMin());
@@ -472,13 +494,13 @@ public class TMEBaseIndustry extends BaseIndustry {
                 marketSpec.setStarscapeIcon(spec.getStarscapeIcon());
                 marketSpec.setTexture(spec.getTexture());
                 marketSpec.setUseReverseLightForGlow(spec.isUseReverseLightForGlow());
-                ((PlanetSpec) marketSpec).planetType = planetTypeId;
+                ((PlanetSpec) marketSpec).planetType = planetType;
                 ((PlanetSpec) marketSpec).name = spec.getName();
                 ((PlanetSpec) marketSpec).descriptionId = ((PlanetSpec) spec).descriptionId;
                 break;
             }
         }
-        market.getPlanetEntity().changeType(planetTypeId, StarSystemGenerator.random);
+        market.getPlanetEntity().changeType(planetType, StarSystemGenerator.random);
         market.getPlanetEntity().applySpecChanges();
     }
 

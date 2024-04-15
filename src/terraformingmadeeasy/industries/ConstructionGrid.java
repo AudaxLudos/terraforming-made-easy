@@ -298,7 +298,7 @@ public class ConstructionGrid extends BaseIndustry {
             if (orbitEntity.getStarSystem().getConstellation() != null) {
                 parentName = orbitEntity.getStarSystem().getConstellation().getName();
             }
-            SectorEntityToken station = system.addCustomEntity(null, generateProceduralName(parentName), stations.pick(), Factions.PLAYER);
+            SectorEntityToken station = system.addCustomEntity(null, generateProceduralName(Tags.STATION, parentName), stations.pick(), Factions.PLAYER);
             station.setCircularOrbit(orbitEntity, orbitAngle, orbitRadius, orbitDays);
             station.setId("system_" + station.getId() + ":tme_station_" + station.getStarSystem().getEntitiesWithTag("tme_station").size());
             station.addTag(TMEIds.TME_STATION);
@@ -347,11 +347,11 @@ public class ConstructionGrid extends BaseIndustry {
         return system.getEntitiesWithTag(customEntityId).isEmpty();
     }
 
-    public String generateProceduralName(String parent) {
+    public String generateProceduralName(String tag, String parent) {
         Random random = StarSystemGenerator.random;
         int randomLagRangePointType = random.nextInt(StarSystemGenerator.LagrangePointType.values().length);
         StarSystemGenerator.LagrangePointType lagrangePointType = StarSystemGenerator.LagrangePointType.values()[randomLagRangePointType];
-        ProcgenUsedNames.NamePick namePick = ProcgenUsedNames.pickName(null, parent, lagrangePointType);
+        ProcgenUsedNames.NamePick namePick = ProcgenUsedNames.pickName(tag, parent, lagrangePointType);
         return namePick.spec.getName();
     }
 }

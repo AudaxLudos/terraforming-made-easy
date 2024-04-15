@@ -1,6 +1,7 @@
 package terraformingmadeeasy.dialogs.tooltips;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.PlanetSpecAPI;
 import com.fs.starfarer.api.ui.BaseTooltipCreator;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
@@ -11,6 +12,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 public class TerraformTooltip extends BaseTooltipCreator {
     public Utils.ModifiableCondition condition;
@@ -39,6 +41,16 @@ public class TerraformTooltip extends BaseTooltipCreator {
         Color textColor = condition.canChangeGasGiants ? Misc.getHighlightColor() : Misc.getNegativeHighlightColor();
         String textFormat = condition.canChangeGasGiants ? "Can" : "Cannot";
         tooltip.addPara("%s be used on gas giants", 0f, textColor, textFormat);
+        if (condition.planetSpecOverride != null) {
+            for (PlanetSpecAPI spec : Global.getSettings().getAllPlanetSpecs()) {
+                if (spec.isStar()) continue;
+                if (Objects.equals(spec.getPlanetType(), condition.planetSpecOverride)) {
+                    tooltip.addSpacer(10f);
+                    tooltip.addPara("The planet will be terraformed into a %s world", 0f, Misc.getHighlightColor(), spec.getName());
+                    break;
+                }
+            }
+        }
     }
 
     public void displayPreferences(TooltipMakerAPI tooltip, List<String> preferences, boolean likes, boolean isIndustry, boolean hasAtLeastOneLikedCondition) {
