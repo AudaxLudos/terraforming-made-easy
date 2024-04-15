@@ -294,7 +294,11 @@ public class ConstructionGrid extends BaseIndustry {
             stations.add("station_side05");
             stations.add("station_side07");
             stations.add("station_side06");
-            SectorEntityToken station = system.addCustomEntity(null, generateProceduralName(orbitEntity.getStarSystem().getConstellation().getName()), stations.pick(), Factions.PLAYER);
+            String parentName = orbitEntity.getName();
+            if (orbitEntity.getStarSystem().getConstellation() != null) {
+                parentName = orbitEntity.getStarSystem().getConstellation().getName();
+            }
+            SectorEntityToken station = system.addCustomEntity(null, generateProceduralName(parentName), stations.pick(), Factions.PLAYER);
             station.setCircularOrbit(orbitEntity, orbitAngle, orbitRadius, orbitDays);
             station.setId("system_" + station.getId() + ":tme_station_" + station.getStarSystem().getEntitiesWithTag("tme_station").size());
             station.addTag(TMEIds.TME_STATION);
