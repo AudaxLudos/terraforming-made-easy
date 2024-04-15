@@ -1,3 +1,8 @@
+### 2.3.2
+- Release 2.3.2
+- Update jar file
+- Fix crash when building stations in a system without a constellation
+
 ### 2.3.1
 - Release 2.3.1
 - Update jar file
