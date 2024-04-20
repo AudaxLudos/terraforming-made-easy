@@ -1,3 +1,13 @@
+### 2.3.5
+- Release 2.3.5
+- Fix issue filtering of unknown industries specs not working
+- Fix bug terraforming options list not getting sorted
+- Update terraforming options ui
+- Update megastructure options ui
+- Update LICENSE to CC-BY-NC-SA
+- Update disabled samples in terraforming options csv
+- Add planet type override option after a terraforming project
+
 ### 2.3.2
 - Release 2.3.2
 - Update jar file
@@ -47,7 +57,7 @@
 - Update farming industry when terraforming to a water or non water world
 - Add dicivilized subpop to geomorphology station terraform options
 - Add volturnian lobster pens to geomorphology station terraform options
-- Update geomorpholgy station terraform options requirements and restrictions
+- Update geomorphology station terraform options requirements and restrictions
 - Update modifiable conditions data
 
 ### 1.0.2
