@@ -155,7 +155,7 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
             boolean canBuild = this.industry.canTerraformCondition(condition) || canBeRemoved;
             if (this.industry.getMarket().getPlanetEntity().isGasGiant())
                 canBuild = canBuild && condition.canChangeGasGiants;
-            return !canBuild && !canAfford;
+            return !(canBuild && canAfford);
         }
     }
 }

@@ -55,7 +55,7 @@ public class TerraformTooltip extends BaseTooltipCreator {
 
     public void displayPreferences(TooltipMakerAPI tooltip, List<String> preferences, boolean likes, boolean isIndustry, boolean hasAtLeastOneLikedCondition) {
         String preferenceText = likes ? "Requires " : "Removes ";
-        preferenceText = likes && hasAtLeastOneLikedCondition && !isIndustry && !preferences.isEmpty() ? preferenceText + "at least one of these " : preferenceText;
+        preferenceText = likes && hasAtLeastOneLikedCondition && !isIndustry && preferences.size() > 1 ? preferenceText + "at least one of these " : preferenceText;
         preferenceText = !isIndustry ? preferenceText + "conditions: " : preferenceText + "industries: ";
         String industryText = "none";
         if (!preferences.isEmpty()) {
