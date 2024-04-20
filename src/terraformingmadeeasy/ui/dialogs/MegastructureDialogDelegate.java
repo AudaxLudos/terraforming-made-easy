@@ -54,13 +54,11 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         this.bgPanel.addComponent(this.mPanel);
 
         TooltipMakerAPI mElement = this.mPanel.createUIElement(WIDTH, HEIGHT, false);
-        this.mPanel.addUIElement(mElement).inTL(0f, 0f).setXAlignOffset(-5f);
+        this.mPanel.addUIElement(mElement).setXAlignOffset(-5f);
 
         // megastructures selection area
         CustomPanelAPI headerPanel = this.mPanel.createCustomPanel(WIDTH, 25f, null);
         TooltipMakerAPI headerElement = headerPanel.createUIElement(WIDTH, 25f, false);
-        headerPanel.addUIElement(headerElement);
-        mElement.addCustom(headerPanel, 0f);
         headerElement.beginTable(Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(),
                 0f, false, true,
                 new Object[]{"Name", columnOneWidth, "Build time", columnWidth, "Cost", columnWidth - 6f});
@@ -69,6 +67,8 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         headerElement.addTableHeaderTooltip(2, "One-time cost to begin megastructure project, in credits");
         headerElement.addTable("", 0, 0f);
         headerElement.getPrev().getPosition().setXAlignOffset(0f);
+        headerPanel.addUIElement(headerElement);
+        mElement.addCustom(headerPanel, 0f);
 
         // selectable megastructures list
         CustomPanelAPI megaStructsPanel = this.mPanel.createCustomPanel(WIDTH, 360f, null);
@@ -84,12 +84,12 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
             boolean canBuild = this.industry.canBuildMegastructure(megastructure.id);
             boolean canAffordAndBuild = canBuild && canAfford;
 
-            CustomPanelAPI megaStructPanel = this.mPanel.createCustomPanel(WIDTH, 50f, new SelectButtonPlugin(this));
+            CustomPanelAPI megaStructPanel = this.mPanel.createCustomPanel(WIDTH, 44f, new SelectButtonPlugin(this));
             TooltipMakerAPI megaStructNameElement = megaStructPanel.createUIElement(columnOneWidth, 40f, false);
             TooltipMakerAPI megastructureImage = megaStructNameElement.beginImageWithText(megastructure.icon, 40f);
             megastructureImage.addPara(megastructure.name, canAffordAndBuild ? Misc.getTextColor() : Misc.getNegativeHighlightColor(), 0f);
             megaStructNameElement.addImageWithText(0f);
-            megaStructNameElement.getPosition().inTL(-5f, 5f);
+            megaStructNameElement.getPosition().setXAlignOffset(-8f).setYAlignOffset(2f);
 
             TooltipMakerAPI megaStructBuildTimeElement = megaStructPanel.createUIElement(columnWidth, 40f, false);
             megaStructBuildTimeElement.addPara(buildTime + "", Misc.getHighlightColor(), 12f).setAlignment(Alignment.MID);
@@ -99,29 +99,29 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
             megaStructCostElement.addPara(Misc.getDGSCredits(cost), canAfford ? Misc.getHighlightColor() : Misc.getNegativeHighlightColor(), 12f).setAlignment(Alignment.MID);
             megaStructCostElement.getPosition().rightOfMid(megaStructBuildTimeElement, 0f);
 
-            TooltipMakerAPI megaStructButtonElement = megaStructPanel.createUIElement(WIDTH, 50f, false);
-            ButtonAPI megaStructButton = null;
+            TooltipMakerAPI megaStructButtonElement = megaStructPanel.createUIElement(WIDTH, 44f, false);
+            ButtonAPI megaStructButton = megaStructButtonElement.addButton("", megastructure, new Color(0, 195, 255, 190), new Color(0, 0, 0, 255), Alignment.MID, CutStyle.NONE, WIDTH, 44f, 0f);;
             if (canAffordAndBuild) {
-                megaStructButton = megaStructButtonElement.addButton("", megastructure, new Color(0, 195, 255, 190), new Color(0, 0, 0, 255), Alignment.MID, CutStyle.NONE, WIDTH, 50f, 0f);
                 megaStructButton.setHighlightBrightness(0.6f);
                 megaStructButton.setGlowBrightness(0.56f);
                 megaStructButton.setQuickMode(true);
             } else {
-                ButtonAPI disabledMegaStructButton = megaStructButtonElement.addButton("", null, new Color(0, 195, 255, 190), new Color(0, 0, 0, 255), Alignment.MID, CutStyle.NONE, WIDTH, 50f, 0f);
-                disabledMegaStructButton.setButtonPressedSound("ui_button_disabled_pressed");
-                disabledMegaStructButton.setGlowBrightness(1.2f);
-                disabledMegaStructButton.setHighlightBrightness(0.6f);
-                disabledMegaStructButton.highlight();
+                megaStructButton.setCustomData(null);
+                megaStructButton.setButtonPressedSound("ui_button_disabled_pressed");
+                megaStructButton.setGlowBrightness(1.2f);
+                megaStructButton.setHighlightBrightness(0.6f);
+                megaStructButton.highlight();
             }
             megaStructButtonElement.addTooltipTo(new MegastructureTooltip(megastructure), megaStructPanel, TooltipMakerAPI.TooltipLocation.RIGHT);
+            megaStructButtonElement.getPosition().setXAlignOffset(-10f);
 
-            megaStructPanel.addUIElement(megaStructButtonElement).inTL(-10f, 0f);
+            megaStructPanel.addUIElement(megaStructButtonElement);
             megaStructPanel.addUIElement(megaStructNameElement);
             megaStructPanel.addUIElement(megaStructBuildTimeElement);
             megaStructPanel.addUIElement(megaStructCostElement);
             megaStructsElement.addCustom(megaStructPanel, 0f);
 
-            if (megaStructButton != null)
+            if (megaStructButton.getCustomData() != null)
                 this.buttons.add(megaStructButton);
         }
         megaStructsPanel.addUIElement(megaStructsElement);
@@ -264,9 +264,11 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
 
         @Override
         public int compare(Utils.BuildableMegastructure o1, Utils.BuildableMegastructure o2) {
-            boolean canAffordAndBuildFirst = Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= o1.cost && this.industry.canBuildMegastructure(o1.id);
-            boolean canAffordAndBuildSecond = Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= o2.cost && this.industry.canBuildMegastructure(o2.id);
-            return Boolean.compare(!canAffordAndBuildFirst, !canAffordAndBuildSecond);
+            return Boolean.compare(canAffordAndBuild(o1), canAffordAndBuild(o2));
+        }
+
+        public boolean canAffordAndBuild(Utils.BuildableMegastructure structure) {
+            return !(Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= structure.cost) || !this.industry.canBuildMegastructure(structure.id);
         }
     }
 }

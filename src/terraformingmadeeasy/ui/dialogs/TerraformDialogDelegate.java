@@ -11,6 +11,9 @@ import terraformingmadeeasy.industries.TMEBaseIndustry;
 import terraformingmadeeasy.ui.plugins.SelectButtonPlugin;
 
 import java.awt.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
     public TMEBaseIndustry industry;
@@ -33,7 +36,7 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
         panel.addComponent(mPanel);
 
         TooltipMakerAPI mElement = mPanel.createUIElement(WIDTH, HEIGHT, false);
-        mPanel.addUIElement(mElement).inTL(0f, 0f).setXAlignOffset(-5f);
+        mPanel.addUIElement(mElement).setXAlignOffset(-5f);
 
         // terraforming options selection area
         CustomPanelAPI headerPanel = mPanel.createCustomPanel(WIDTH, 25f, null);
@@ -52,23 +55,27 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
         // selectable terraforming options list
         CustomPanelAPI conditionsPanel = mPanel.createCustomPanel(WIDTH, 439f, null);
         TooltipMakerAPI conditionsElement = conditionsPanel.createUIElement(WIDTH, 439f, true);
-        for (Utils.ModifiableCondition modifiableCondition : this.industry.modifiableConditions) {
-            float cost = modifiableCondition.cost;
-            int buildTime = Math.round(modifiableCondition.buildTime);
+
+        List<Utils.ModifiableCondition> conditions = this.industry.modifiableConditions;
+        Collections.sort(conditions, new SortCanAffordAndBuild(this.industry));
+
+        for (Utils.ModifiableCondition condition : conditions) {
+            float cost = condition.cost;
+            int buildTime = Math.round(condition.buildTime);
             boolean canAfford = Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= cost;
-            boolean canBeRemoved = this.industry.getMarket().hasCondition(modifiableCondition.id);
-            boolean canBuild = this.industry.canTerraformCondition(modifiableCondition) || canBeRemoved;
+            boolean canBeRemoved = this.industry.getMarket().hasCondition(condition.id);
+            boolean canBuild = this.industry.canTerraformCondition(condition) || canBeRemoved;
             if (this.industry.getMarket().getPlanetEntity().isGasGiant())
-                canBuild = canBuild && modifiableCondition.canChangeGasGiants;
+                canBuild = canBuild && condition.canChangeGasGiants;
             boolean canAffordAndBuild = canBuild && canAfford;
 
-            CustomPanelAPI conditionPanel = panel.createCustomPanel(WIDTH, 50f, new SelectButtonPlugin(this));
+            CustomPanelAPI conditionPanel = panel.createCustomPanel(WIDTH, 44f, new SelectButtonPlugin(this));
             TooltipMakerAPI conditionNameElement = conditionPanel.createUIElement(columnOneWidth, 40f, false);
-            TooltipMakerAPI conditionImage = conditionNameElement.beginImageWithText(modifiableCondition.icon, 40f);
+            TooltipMakerAPI conditionImage = conditionNameElement.beginImageWithText(condition.icon, 40f);
             String addOrRemoveText = canBeRemoved ? "Remove " : "Add ";
-            conditionImage.addPara(addOrRemoveText + modifiableCondition.name, canAffordAndBuild ? Misc.getBasePlayerColor() : Misc.getNegativeHighlightColor(), 0f);
+            conditionImage.addPara(addOrRemoveText + condition.name, canAffordAndBuild ? Misc.getBasePlayerColor() : Misc.getNegativeHighlightColor(), 0f);
             conditionNameElement.addImageWithText(0f);
-            conditionNameElement.getPosition().inTL(-5f, 5f);
+            conditionNameElement.getPosition().setXAlignOffset(-8f).setYAlignOffset(2f);
 
             TooltipMakerAPI conditionBuildTimeElement = conditionPanel.createUIElement(columnWidth, 40f, false);
             conditionBuildTimeElement.addPara(buildTime + "", Misc.getHighlightColor(), 12f).setAlignment(Alignment.MID);
@@ -78,30 +85,29 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
             conditionCostElement.addPara(Misc.getDGSCredits(cost), canAfford ? Misc.getHighlightColor() : Misc.getNegativeHighlightColor(), 12f).setAlignment(Alignment.MID);
             conditionCostElement.getPosition().rightOfMid(conditionBuildTimeElement, 0f);
 
-            TooltipMakerAPI conditionButtonElement = conditionPanel.createUIElement(WIDTH, 50f, false);
-            ButtonAPI conditionButton = null;
+            TooltipMakerAPI conditionButtonElement = conditionPanel.createUIElement(WIDTH, 44f, false);
+            ButtonAPI conditionButton = conditionButtonElement.addButton("", condition, new Color(0, 195, 255, 190), new Color(0, 0, 0, 255), Alignment.MID, CutStyle.NONE, WIDTH, 44f, 0f);
             if (canAffordAndBuild) {
-                conditionButton = conditionButtonElement.addButton("", modifiableCondition, new Color(0, 195, 255, 190), new Color(0, 0, 0, 255), Alignment.MID, CutStyle.NONE, WIDTH, 50f, 0f);
                 conditionButton.setHighlightBrightness(0.6f);
                 conditionButton.setGlowBrightness(0.56f);
                 conditionButton.setQuickMode(true);
             } else {
-                ButtonAPI disabledMegaStructButton = conditionButtonElement.addButton("", null, new Color(0, 195, 255, 190), new Color(0, 0, 0, 255), Alignment.MID, CutStyle.NONE, WIDTH, 50f, 0f);
-                disabledMegaStructButton.setButtonPressedSound("ui_button_disabled_pressed");
-                disabledMegaStructButton.setGlowBrightness(1.2f);
-                disabledMegaStructButton.setHighlightBrightness(0.6f);
-                disabledMegaStructButton.highlight();
+                conditionButton.setCustomData(null);
+                conditionButton.setButtonPressedSound("ui_button_disabled_pressed");
+                conditionButton.setGlowBrightness(1.2f);
+                conditionButton.setHighlightBrightness(0.6f);
+                conditionButton.highlight();
             }
-            conditionButtonElement.addTooltipTo(new TerraformTooltip(modifiableCondition, industry), conditionPanel, TooltipMakerAPI.TooltipLocation.RIGHT);
+            conditionButtonElement.addTooltipTo(new TerraformTooltip(condition, industry), conditionPanel, TooltipMakerAPI.TooltipLocation.RIGHT);
+            conditionButtonElement.getPosition().setXAlignOffset(-10f);
 
-            conditionPanel.addUIElement(conditionButtonElement).inTL(-10f, 0f);
+            conditionPanel.addUIElement(conditionButtonElement);
             conditionPanel.addUIElement(conditionNameElement);
             conditionPanel.addUIElement(conditionBuildTimeElement);
             conditionPanel.addUIElement(conditionCostElement);
-
             conditionsElement.addCustom(conditionPanel, 0f);
 
-            if (conditionButton != null)
+            if (conditionButton.getCustomData() != null)
                 this.buttons.add(conditionButton);
         }
         conditionsPanel.addUIElement(conditionsElement);
@@ -129,5 +135,27 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
         Global.getSoundPlayer().playSound("ui_upgrade_industry", 1f, 1f, Global.getSoundPlayer().getListenerPos(), new Vector2f());
         Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(selectedCondition.cost);
         this.industry.startUpgrading(selectedCondition);
+    }
+
+    public static class SortCanAffordAndBuild implements Comparator<Utils.ModifiableCondition> {
+        TMEBaseIndustry industry;
+
+        public SortCanAffordAndBuild(TMEBaseIndustry industry) {
+            this.industry = industry;
+        }
+
+        @Override
+        public int compare(Utils.ModifiableCondition o1, Utils.ModifiableCondition o2) {
+            return Boolean.compare(canAffordAndBuild(o1), canAffordAndBuild(o2));
+        }
+
+        public boolean canAffordAndBuild(Utils.ModifiableCondition condition) {
+            boolean canAfford = Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= condition.cost;
+            boolean canBeRemoved = this.industry.getMarket().hasCondition(condition.id);
+            boolean canBuild = this.industry.canTerraformCondition(condition) || canBeRemoved;
+            if (this.industry.getMarket().getPlanetEntity().isGasGiant())
+                canBuild = canBuild && condition.canChangeGasGiants;
+            return !canBuild && !canAfford;
+        }
     }
 }
