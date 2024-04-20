@@ -6,11 +6,11 @@ import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import org.lwjgl.util.vector.Vector2f;
 import terraformingmadeeasy.Utils;
-import terraformingmadeeasy.ui.tooltips.*;
 import terraformingmadeeasy.industries.ConstructionGrid;
-import terraformingmadeeasy.ui.plugins.SelectButtonPlugin;
 import terraformingmadeeasy.ui.plugins.DropDownPlugin;
+import terraformingmadeeasy.ui.plugins.SelectButtonPlugin;
 import terraformingmadeeasy.ui.plugins.TextFieldPlugin;
+import terraformingmadeeasy.ui.tooltips.*;
 
 import java.awt.*;
 import java.util.Collections;
@@ -100,7 +100,7 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
             megaStructCostElement.getPosition().rightOfMid(megaStructBuildTimeElement, 0f);
 
             TooltipMakerAPI megaStructButtonElement = megaStructPanel.createUIElement(WIDTH, 44f, false);
-            ButtonAPI megaStructButton = megaStructButtonElement.addButton("", megastructure, new Color(0, 195, 255, 190), new Color(0, 0, 0, 255), Alignment.MID, CutStyle.NONE, WIDTH, 44f, 0f);;
+            ButtonAPI megaStructButton = megaStructButtonElement.addButton("", megastructure, new Color(0, 195, 255, 190), new Color(0, 0, 0, 255), Alignment.MID, CutStyle.NONE, WIDTH, 44f, 0f);
             if (canAffordAndBuild) {
                 megaStructButton.setHighlightBrightness(0.6f);
                 megaStructButton.setGlowBrightness(0.56f);

@@ -7,10 +7,10 @@ import com.fs.starfarer.api.campaign.listeners.DialogCreatorUI;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import terraformingmadeeasy.ui.dialogs.ConfirmDialogDelegate;
-import terraformingmadeeasy.ui.dialogs.TerraformDialogDelegate;
 import terraformingmadeeasy.ids.TMEIndustries;
 import terraformingmadeeasy.industries.TMEBaseIndustry;
+import terraformingmadeeasy.ui.dialogs.ConfirmDialogDelegate;
+import terraformingmadeeasy.ui.dialogs.TerraformDialogDelegate;
 
 import java.util.ArrayList;
 import java.util.List;

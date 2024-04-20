@@ -6,9 +6,9 @@ import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import org.lwjgl.util.vector.Vector2f;
 import terraformingmadeeasy.Utils;
-import terraformingmadeeasy.ui.tooltips.TerraformTooltip;
 import terraformingmadeeasy.industries.TMEBaseIndustry;
 import terraformingmadeeasy.ui.plugins.SelectButtonPlugin;
+import terraformingmadeeasy.ui.tooltips.TerraformTooltip;
 
 import java.awt.*;
 import java.util.Collections;
