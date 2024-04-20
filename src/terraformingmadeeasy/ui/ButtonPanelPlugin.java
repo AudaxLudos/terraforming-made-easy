@@ -20,16 +20,21 @@ public class ButtonPanelPlugin extends BaseCustomUIPanelPlugin {
             this.delegate.selected = buttonId;
         }
 
-        boolean anyChecked = false;
+        boolean isHighlighted = false;
         for (ButtonAPI button : this.delegate.buttons) {
-            if (button.isChecked() && button.getCustomData() != buttonId)
-                button.setChecked(false);
-            if (button.isChecked())
-                anyChecked = true;
+            if (button.getCustomData() == buttonId && !button.isHighlighted()) {
+                button.highlight();
+                isHighlighted = true;
+                continue;
+            }
+            if (button.isHighlighted()) {
+                button.unhighlight();
+            }
         }
 
-        if (!anyChecked)
+        if (!isHighlighted) {
             this.delegate.selected = null;
+        }
 
         if (this.delegate instanceof MegastructureDialogDelegate) {
             MegastructureDialogDelegate megastructureDelegate = (MegastructureDialogDelegate) this.delegate;

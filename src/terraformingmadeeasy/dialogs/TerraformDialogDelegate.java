@@ -2,16 +2,15 @@ package terraformingmadeeasy.dialogs;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.Industry;
-import com.fs.starfarer.api.ui.Alignment;
-import com.fs.starfarer.api.ui.ButtonAPI;
-import com.fs.starfarer.api.ui.CustomPanelAPI;
-import com.fs.starfarer.api.ui.TooltipMakerAPI;
+import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import org.lwjgl.util.vector.Vector2f;
 import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.dialogs.tooltips.TerraformTooltip;
 import terraformingmadeeasy.industries.TMEBaseIndustry;
 import terraformingmadeeasy.ui.ButtonPanelPlugin;
+
+import java.awt.*;
 
 public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
     public TMEBaseIndustry industry;
@@ -67,7 +66,7 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
             TooltipMakerAPI conditionNameElement = conditionPanel.createUIElement(columnOneWidth, 40f, false);
             TooltipMakerAPI conditionImage = conditionNameElement.beginImageWithText(modifiableCondition.icon, 40f);
             String addOrRemoveText = canBeRemoved ? "Remove " : "Add ";
-            conditionImage.addPara(addOrRemoveText + modifiableCondition.name, canAffordAndBuild ? Misc.getTextColor() : Misc.getNegativeHighlightColor(), 0f);
+            conditionImage.addPara(addOrRemoveText + modifiableCondition.name, canAffordAndBuild ? Misc.getBasePlayerColor() : Misc.getNegativeHighlightColor(), 0f);
             conditionNameElement.addImageWithText(0f);
             conditionNameElement.getPosition().inTL(-5f, 5f);
 
@@ -79,18 +78,19 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
             conditionCostElement.addPara(Misc.getDGSCredits(cost), canAfford ? Misc.getHighlightColor() : Misc.getNegativeHighlightColor(), 12f).setAlignment(Alignment.MID);
             conditionCostElement.getPosition().rightOfMid(conditionBuildTimeElement, 0f);
 
-            TooltipMakerAPI conditionButton = conditionPanel.createUIElement(WIDTH, 50f, false);
-            ButtonAPI areaCheckbox = conditionButton.addAreaCheckbox("", modifiableCondition, Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(), WIDTH, 50f, 0f);
-            areaCheckbox.setEnabled(canAffordAndBuild);
-            conditionButton.addTooltipTo(new TerraformTooltip(modifiableCondition, industry), conditionPanel, TooltipMakerAPI.TooltipLocation.RIGHT);
+            TooltipMakerAPI conditionButtonElement = conditionPanel.createUIElement(WIDTH, 50f, false);
+            ButtonAPI conditionButton = conditionButtonElement.addButton("", modifiableCondition, new Color(0, 195, 255, 190), new Color(0, 0, 0, 255), Alignment.MID, CutStyle.NONE, WIDTH, 50f, 0f);
+            conditionButton.setHighlightBounceDown(false);
+            conditionButton.setGlowBrightness(0.4f);
+            conditionButtonElement.addTooltipTo(new TerraformTooltip(modifiableCondition, industry), conditionPanel, TooltipMakerAPI.TooltipLocation.RIGHT);
 
-            conditionPanel.addUIElement(conditionButton).inTL(-10f, 0f);
+            conditionPanel.addUIElement(conditionButtonElement).inTL(-10f, 0f);
             conditionPanel.addUIElement(conditionNameElement);
             conditionPanel.addUIElement(conditionBuildTimeElement);
             conditionPanel.addUIElement(conditionCostElement);
 
             conditionsElement.addCustom(conditionPanel, 0f);
-            this.buttons.add(areaCheckbox);
+            this.buttons.add(conditionButton);
         }
         conditionsPanel.addUIElement(conditionsElement);
         mElement.addCustom(conditionsPanel, 0f);
