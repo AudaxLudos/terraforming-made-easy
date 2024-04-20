@@ -1,15 +1,15 @@
-package terraformingmadeeasy.ui;
+package terraformingmadeeasy.ui.plugins;
 
 import com.fs.starfarer.api.campaign.BaseCustomUIPanelPlugin;
 import com.fs.starfarer.api.ui.ButtonAPI;
 import terraformingmadeeasy.Utils;
-import terraformingmadeeasy.dialogs.MegastructureDialogDelegate;
-import terraformingmadeeasy.dialogs.TMEBaseDialogDelegate;
+import terraformingmadeeasy.ui.dialogs.MegastructureDialogDelegate;
+import terraformingmadeeasy.ui.dialogs.TMEBaseDialogDelegate;
 
-public class ButtonPanelPlugin extends BaseCustomUIPanelPlugin {
+public class SelectButtonPlugin extends BaseCustomUIPanelPlugin {
     public TMEBaseDialogDelegate delegate;
 
-    public ButtonPanelPlugin(TMEBaseDialogDelegate delegate) {
+    public SelectButtonPlugin(TMEBaseDialogDelegate delegate) {
         this.delegate = delegate;
     }
 

@@ -1,13 +1,13 @@
-package terraformingmadeeasy.ui;
+package terraformingmadeeasy.ui.plugins;
 
 import com.fs.starfarer.api.campaign.BaseCustomUIPanelPlugin;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
-import terraformingmadeeasy.dialogs.MegastructureDialogDelegate;
+import terraformingmadeeasy.ui.dialogs.MegastructureDialogDelegate;
 
-public class DropDownPanelPlugin extends BaseCustomUIPanelPlugin {
+public class DropDownPlugin extends BaseCustomUIPanelPlugin {
     public MegastructureDialogDelegate delegate;
 
-    public DropDownPanelPlugin(MegastructureDialogDelegate delegate) {
+    public DropDownPlugin(MegastructureDialogDelegate delegate) {
         this.delegate = delegate;
     }
 

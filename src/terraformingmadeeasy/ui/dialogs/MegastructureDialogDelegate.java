@@ -1,4 +1,4 @@
-package terraformingmadeeasy.dialogs;
+package terraformingmadeeasy.ui.dialogs;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
@@ -6,11 +6,11 @@ import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import org.lwjgl.util.vector.Vector2f;
 import terraformingmadeeasy.Utils;
-import terraformingmadeeasy.dialogs.tooltips.*;
+import terraformingmadeeasy.ui.tooltips.*;
 import terraformingmadeeasy.industries.ConstructionGrid;
-import terraformingmadeeasy.ui.ButtonPanelPlugin;
-import terraformingmadeeasy.ui.DropDownPanelPlugin;
-import terraformingmadeeasy.ui.TextFieldPanelPlugin;
+import terraformingmadeeasy.ui.plugins.SelectButtonPlugin;
+import terraformingmadeeasy.ui.plugins.DropDownPlugin;
+import terraformingmadeeasy.ui.plugins.TextFieldPlugin;
 
 import java.awt.*;
 import java.util.Collections;
@@ -84,8 +84,7 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
             boolean canBuild = this.industry.canBuildMegastructure(megastructure.id);
             boolean canAffordAndBuild = canBuild && canAfford;
 
-            CustomPanelAPI megaStructPanel = this.mPanel.createCustomPanel(WIDTH, 50f, new ButtonPanelPlugin(this));
-
+            CustomPanelAPI megaStructPanel = this.mPanel.createCustomPanel(WIDTH, 50f, new SelectButtonPlugin(this));
             TooltipMakerAPI megaStructNameElement = megaStructPanel.createUIElement(columnOneWidth, 40f, false);
             TooltipMakerAPI megastructureImage = megaStructNameElement.beginImageWithText(megastructure.icon, 40f);
             megastructureImage.addPara(megastructure.name, canAffordAndBuild ? Misc.getTextColor() : Misc.getNegativeHighlightColor(), 0f);
@@ -146,7 +145,7 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         mElement.addCustom(orbitInputsPanel, 0f).getPosition().setXAlignOffset(-5f);
 
         // orbit focus field
-        CustomPanelAPI orbitFocusPanel = this.mPanel.createCustomPanel(WIDTH / 4f, 40f, new DropDownPanelPlugin(this));
+        CustomPanelAPI orbitFocusPanel = this.mPanel.createCustomPanel(WIDTH / 4f, 40f, new DropDownPlugin(this));
         TooltipMakerAPI orbitFocusElement = orbitFocusPanel.createUIElement(WIDTH / 4f, 40f, false);
         orbitFocusPanel.addUIElement(orbitFocusElement);
         orbitInputsElement.addCustom(orbitFocusPanel, 0f);
@@ -173,7 +172,7 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         orbitFocusElement.addTooltipTo(new OrbitFocusFieldTooltip(), orbitFocusPanel, TooltipMakerAPI.TooltipLocation.BELOW);
 
         // start angle field
-        TextFieldPanelPlugin startAnglePlugin = new TextFieldPanelPlugin();
+        TextFieldPlugin startAnglePlugin = new TextFieldPlugin();
         CustomPanelAPI startAnglePanel = this.mPanel.createCustomPanel(WIDTH / 4f, 40f, startAnglePlugin);
         TooltipMakerAPI startAngleElement = startAnglePanel.createUIElement(WIDTH / 4f, 40f, false);
         startAnglePanel.addUIElement(startAngleElement);
@@ -191,7 +190,7 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         startAngleElement.addTooltipTo(new StartingAngleFieldTooltip(), startAnglePanel, TooltipMakerAPI.TooltipLocation.BELOW);
 
         // orbit radius field
-        TextFieldPanelPlugin orbitRadiusPlugin = new TextFieldPanelPlugin();
+        TextFieldPlugin orbitRadiusPlugin = new TextFieldPlugin();
         CustomPanelAPI orbitRadiusPanel = this.mPanel.createCustomPanel(WIDTH / 4f, 40f, orbitRadiusPlugin);
         TooltipMakerAPI orbitRadiusElement = orbitRadiusPanel.createUIElement(WIDTH / 4f, 40f, false);
         orbitRadiusPanel.addUIElement(orbitRadiusElement);
@@ -209,7 +208,7 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         orbitRadiusElement.addTooltipTo(new OrbitRadiusFieldTooltip(), orbitRadiusPanel, TooltipMakerAPI.TooltipLocation.BELOW);
 
         // orbit days field
-        TextFieldPanelPlugin orbitDaysPlugin = new TextFieldPanelPlugin();
+        TextFieldPlugin orbitDaysPlugin = new TextFieldPlugin();
         CustomPanelAPI orbitDaysPanel = this.mPanel.createCustomPanel(WIDTH / 4f, 40f, orbitDaysPlugin);
         TooltipMakerAPI orbitDaysElement = orbitDaysPanel.createUIElement(WIDTH / 4f, 40f, false);
         orbitDaysPanel.addUIElement(orbitDaysElement);

@@ -1,4 +1,4 @@
-package terraformingmadeeasy.dialogs;
+package terraformingmadeeasy.ui.dialogs;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.Industry;
@@ -6,9 +6,9 @@ import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import org.lwjgl.util.vector.Vector2f;
 import terraformingmadeeasy.Utils;
-import terraformingmadeeasy.dialogs.tooltips.TerraformTooltip;
+import terraformingmadeeasy.ui.tooltips.TerraformTooltip;
 import terraformingmadeeasy.industries.TMEBaseIndustry;
-import terraformingmadeeasy.ui.ButtonPanelPlugin;
+import terraformingmadeeasy.ui.plugins.SelectButtonPlugin;
 
 import java.awt.*;
 
@@ -62,7 +62,7 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
                 canBuild = canBuild && modifiableCondition.canChangeGasGiants;
             boolean canAffordAndBuild = canBuild && canAfford;
 
-            CustomPanelAPI conditionPanel = panel.createCustomPanel(WIDTH, 50f, new ButtonPanelPlugin(this));
+            CustomPanelAPI conditionPanel = panel.createCustomPanel(WIDTH, 50f, new SelectButtonPlugin(this));
             TooltipMakerAPI conditionNameElement = conditionPanel.createUIElement(columnOneWidth, 40f, false);
             TooltipMakerAPI conditionImage = conditionNameElement.beginImageWithText(modifiableCondition.icon, 40f);
             String addOrRemoveText = canBeRemoved ? "Remove " : "Add ";
@@ -79,12 +79,18 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
             conditionCostElement.getPosition().rightOfMid(conditionBuildTimeElement, 0f);
 
             TooltipMakerAPI conditionButtonElement = conditionPanel.createUIElement(WIDTH, 50f, false);
-            ButtonAPI conditionButton = conditionButtonElement.addButton("", modifiableCondition, new Color(0, 195, 255, 190), new Color(0, 0, 0, 255), Alignment.MID, CutStyle.NONE, WIDTH, 50f, 0f);
-            conditionButton.setHighlightBounceDown(false);
-            conditionButton.setGlowBrightness(0.4f);
-            if (!canAffordAndBuild) {
-                conditionButton.setEnabled(false);
-                conditionButton.setGlowBrightness(0f);
+            ButtonAPI conditionButton = null;
+            if (canAffordAndBuild) {
+                conditionButton = conditionButtonElement.addButton("", modifiableCondition, new Color(0, 195, 255, 190), new Color(0, 0, 0, 255), Alignment.MID, CutStyle.NONE, WIDTH, 50f, 0f);
+                conditionButton.setHighlightBrightness(0.6f);
+                conditionButton.setGlowBrightness(0.56f);
+                conditionButton.setQuickMode(true);
+            } else {
+                ButtonAPI disabledMegaStructButton = conditionButtonElement.addButton("", null, new Color(0, 195, 255, 190), new Color(0, 0, 0, 255), Alignment.MID, CutStyle.NONE, WIDTH, 50f, 0f);
+                disabledMegaStructButton.setButtonPressedSound("ui_button_disabled_pressed");
+                disabledMegaStructButton.setGlowBrightness(1.2f);
+                disabledMegaStructButton.setHighlightBrightness(0.6f);
+                disabledMegaStructButton.highlight();
             }
             conditionButtonElement.addTooltipTo(new TerraformTooltip(modifiableCondition, industry), conditionPanel, TooltipMakerAPI.TooltipLocation.RIGHT);
 
@@ -94,7 +100,9 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
             conditionPanel.addUIElement(conditionCostElement);
 
             conditionsElement.addCustom(conditionPanel, 0f);
-            this.buttons.add(conditionButton);
+
+            if (conditionButton != null)
+                this.buttons.add(conditionButton);
         }
         conditionsPanel.addUIElement(conditionsElement);
         mElement.addCustom(conditionsPanel, 0f);

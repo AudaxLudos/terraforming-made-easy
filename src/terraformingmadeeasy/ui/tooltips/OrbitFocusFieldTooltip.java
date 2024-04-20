@@ -1,10 +1,10 @@
-package terraformingmadeeasy.dialogs.tooltips;
+package terraformingmadeeasy.ui.tooltips;
 
 import com.fs.starfarer.api.ui.BaseTooltipCreator;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 
-public class StartingAngleFieldTooltip extends BaseTooltipCreator {
+public class OrbitFocusFieldTooltip extends BaseTooltipCreator {
     @Override
     public float getTooltipWidth(Object tooltipParam) {
         return 380f;
@@ -12,8 +12,8 @@ public class StartingAngleFieldTooltip extends BaseTooltipCreator {
 
     @Override
     public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-        tooltip.addPara("Input a number between %s", 0f, Misc.getHighlightColor(), "0 - 360");
+        tooltip.addPara("The %s where the megastructure orbits", 0f, Misc.getHighlightColor(), "main entity");
         tooltip.addSpacer(10f);
-        tooltip.addPara("Starting angle may be %s due to orbit radius and orbit days", 0f, Misc.getHighlightColor(), "different");
+        tooltip.addPara("Only %s are eligible", 0f, Misc.getHighlightColor(), "planets and stars");
     }
 }

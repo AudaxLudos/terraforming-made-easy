@@ -1,4 +1,4 @@
-package terraformingmadeeasy.dialogs.tooltips;
+package terraformingmadeeasy.ui.tooltips;
 
 import com.fs.starfarer.api.ui.BaseTooltipCreator;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;

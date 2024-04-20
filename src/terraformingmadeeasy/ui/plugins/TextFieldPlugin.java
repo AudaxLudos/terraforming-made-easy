@@ -1,4 +1,4 @@
-package terraformingmadeeasy.ui;
+package terraformingmadeeasy.ui.plugins;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.BaseCustomUIPanelPlugin;
@@ -8,7 +8,7 @@ import com.fs.starfarer.api.ui.TextFieldAPI;
 
 import java.util.List;
 
-public class TextFieldPanelPlugin extends BaseCustomUIPanelPlugin {
+public class TextFieldPlugin extends BaseCustomUIPanelPlugin {
     public TextFieldAPI field = Global.getSettings().createTextField("", Fonts.DEFAULT_SMALL);
     public float width = 0f;
     public float height = 0f;

@@ -1,4 +1,4 @@
-package terraformingmadeeasy.dialogs;
+package terraformingmadeeasy.ui.dialogs;
 
 import com.fs.starfarer.api.campaign.BaseCustomDialogDelegate;
 import com.fs.starfarer.api.ui.ButtonAPI;
