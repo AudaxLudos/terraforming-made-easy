@@ -214,19 +214,19 @@ public class TMEBaseIndustry extends BaseIndustry {
                 List<String> hatedIndustries = new ArrayList<>();
                 if (!row.getString("likedConditions").isEmpty()) {
                     likedConditions.addAll(Arrays.asList(row.getString("likedConditions").replace(" ", "").split(",")));
-                    likedConditions = filterUnknownConditionSpecs(likedConditions);
+                    likedConditions = filterUnknownSpecs(likedConditions, false);
                 }
                 if (!row.getString("hatedConditions").isEmpty()) {
                     hatedConditions.addAll(Arrays.asList(row.getString("hatedConditions").replace(" ", "").split(",")));
-                    hatedConditions = filterUnknownConditionSpecs(hatedConditions);
+                    hatedConditions = filterUnknownSpecs(hatedConditions, false);
                 }
                 if (!row.getString("likedIndustries").isEmpty()) {
                     likedIndustries.addAll(Arrays.asList(row.getString("likedIndustries").replace(" ", "").split(",")));
-                    likedIndustries = filterUnknownIndustrySpecs(likedIndustries);
+                    likedIndustries = filterUnknownSpecs(likedIndustries, true);
                 }
                 if (!row.getString("hatedIndustries").isEmpty()) {
                     hatedIndustries.addAll(Arrays.asList(row.getString("hatedIndustries").replace(" ", "").split(",")));
-                    hatedIndustries = filterUnknownIndustrySpecs(hatedIndustries);
+                    hatedIndustries = filterUnknownSpecs(hatedIndustries, true);
                 }
                 String planetSpecOverride = row.getString("planetSpecOverride");
 
@@ -247,26 +247,20 @@ public class TMEBaseIndustry extends BaseIndustry {
         }
     }
 
-    public List<String> filterUnknownConditionSpecs(List<String> conditionIds) {
-        for (Iterator<String> itr = conditionIds.iterator(); itr.hasNext(); ) {
+    public List<String> filterUnknownSpecs(List<String> ids, boolean isIndustry) {
+        for (Iterator<String> itr = ids.iterator(); itr.hasNext(); ) {
             String id = itr.next();
-            if (id.isEmpty() || Global.getSettings().getMarketConditionSpec(id) == null) {
-                itr.remove();
+
+            if (isIndustry) {
+                if (id.isEmpty() || Global.getSettings().getIndustrySpec(id) == null)
+                    itr.remove();
+            } else {
+                if (id.isEmpty() || Global.getSettings().getMarketConditionSpec(id) == null)
+                    itr.remove();
             }
         }
 
-        return conditionIds;
-    }
-
-    public List<String> filterUnknownIndustrySpecs(List<String> industriesIds) {
-        for (Iterator<String> itr = industriesIds.iterator(); itr.hasNext(); ) {
-            String id = itr.next();
-            if (id.isEmpty() || Global.getSettings().getMarketConditionSpec(id) == null) {
-                itr.remove();
-            }
-        }
-
-        return industriesIds;
+        return ids;
     }
 
     public boolean isUpgrading() {
