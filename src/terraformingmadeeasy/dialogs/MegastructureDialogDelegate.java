@@ -12,6 +12,12 @@ import terraformingmadeeasy.ui.ButtonPanelPlugin;
 import terraformingmadeeasy.ui.DropDownPanelPlugin;
 import terraformingmadeeasy.ui.TextFieldPanelPlugin;
 
+import java.awt.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+
 public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
     public ConstructionGrid industry;
     public SectorEntityToken orbitFocusField = null;
@@ -67,18 +73,22 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         // selectable megastructures list
         CustomPanelAPI megaStructsPanel = this.mPanel.createCustomPanel(WIDTH, 360f, null);
         TooltipMakerAPI megaStructsElement = megaStructsPanel.createUIElement(WIDTH, 360f, true);
-        for (Utils.BuildableMegastructure buildableMegastructure : this.industry.buildableMegastructures) {
-            float cost = buildableMegastructure.cost;
-            int buildTime = Math.round(buildableMegastructure.buildTime);
+
+        List<Utils.BuildableMegastructure> megastructures = this.industry.buildableMegastructures;
+        Collections.sort(megastructures, new SortCanAffordAndBuild(this.industry));
+
+        for (Utils.BuildableMegastructure megastructure : megastructures) {
+            float cost = megastructure.cost;
+            int buildTime = Math.round(megastructure.buildTime);
             boolean canAfford = Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= cost;
-            boolean canBuild = this.industry.canBuildMegastructure(buildableMegastructure.id);
+            boolean canBuild = this.industry.canBuildMegastructure(megastructure.id);
             boolean canAffordAndBuild = canBuild && canAfford;
 
             CustomPanelAPI megaStructPanel = this.mPanel.createCustomPanel(WIDTH, 50f, new ButtonPanelPlugin(this));
 
             TooltipMakerAPI megaStructNameElement = megaStructPanel.createUIElement(columnOneWidth, 40f, false);
-            TooltipMakerAPI megastructureImage = megaStructNameElement.beginImageWithText(buildableMegastructure.icon, 40f);
-            megastructureImage.addPara(buildableMegastructure.name, canAffordAndBuild ? Misc.getTextColor() : Misc.getNegativeHighlightColor(), 0f);
+            TooltipMakerAPI megastructureImage = megaStructNameElement.beginImageWithText(megastructure.icon, 40f);
+            megastructureImage.addPara(megastructure.name, canAffordAndBuild ? Misc.getTextColor() : Misc.getNegativeHighlightColor(), 0f);
             megaStructNameElement.addImageWithText(0f);
             megaStructNameElement.getPosition().inTL(-5f, 5f);
 
@@ -91,10 +101,20 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
             megaStructCostElement.getPosition().rightOfMid(megaStructBuildTimeElement, 0f);
 
             TooltipMakerAPI megaStructButtonElement = megaStructPanel.createUIElement(WIDTH, 50f, false);
-            ButtonAPI megaStructButton = megaStructButtonElement.addAreaCheckbox("", buildableMegastructure, Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(), WIDTH, 50f, 0f);
-            megaStructButton.setEnabled(canAffordAndBuild);
-            megaStructButton.setChecked(this.selected == buildableMegastructure);
-            megaStructButtonElement.addTooltipTo(new MegastructureTooltip(buildableMegastructure), megaStructPanel, TooltipMakerAPI.TooltipLocation.RIGHT);
+            ButtonAPI megaStructButton = null;
+            if (canAffordAndBuild) {
+                megaStructButton = megaStructButtonElement.addButton("", megastructure, new Color(0, 195, 255, 190), new Color(0, 0, 0, 255), Alignment.MID, CutStyle.NONE, WIDTH, 50f, 0f);
+                megaStructButton.setHighlightBrightness(0.6f);
+                megaStructButton.setGlowBrightness(0.56f);
+                megaStructButton.setQuickMode(true);
+            } else {
+                ButtonAPI disabledMegaStructButton = megaStructButtonElement.addButton("", null, new Color(0, 195, 255, 190), new Color(0, 0, 0, 255), Alignment.MID, CutStyle.NONE, WIDTH, 50f, 0f);
+                disabledMegaStructButton.setButtonPressedSound("ui_button_disabled_pressed");
+                disabledMegaStructButton.setGlowBrightness(1.2f);
+                disabledMegaStructButton.setHighlightBrightness(0.6f);
+                disabledMegaStructButton.highlight();
+            }
+            megaStructButtonElement.addTooltipTo(new MegastructureTooltip(megastructure), megaStructPanel, TooltipMakerAPI.TooltipLocation.RIGHT);
 
             megaStructPanel.addUIElement(megaStructButtonElement).inTL(-10f, 0f);
             megaStructPanel.addUIElement(megaStructNameElement);
@@ -102,7 +122,8 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
             megaStructPanel.addUIElement(megaStructCostElement);
             megaStructsElement.addCustom(megaStructPanel, 0f);
 
-            this.buttons.add(megaStructButton);
+            if (megaStructButton != null)
+                this.buttons.add(megaStructButton);
         }
         megaStructsPanel.addUIElement(megaStructsElement);
         mElement.addCustom(megaStructsPanel, 0f);
@@ -233,5 +254,20 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
                 Float.parseFloat(this.orbitRadiusField.getText().trim()),
                 Float.parseFloat(this.orbitDaysField.getText().trim()));
         this.industry.startUpgrading(megastructure, data);
+    }
+
+    public static class SortCanAffordAndBuild implements Comparator<Utils.BuildableMegastructure> {
+        ConstructionGrid industry;
+
+        public SortCanAffordAndBuild(ConstructionGrid industry) {
+            this.industry = industry;
+        }
+
+        @Override
+        public int compare(Utils.BuildableMegastructure o1, Utils.BuildableMegastructure o2) {
+            boolean canAffordAndBuildFirst = Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= o1.cost && this.industry.canBuildMegastructure(o1.id);
+            boolean canAffordAndBuildSecond = Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= o2.cost && this.industry.canBuildMegastructure(o2.id);
+            return Boolean.compare(!canAffordAndBuildFirst, !canAffordAndBuildSecond);
+        }
     }
 }

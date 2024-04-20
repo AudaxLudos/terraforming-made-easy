@@ -82,6 +82,10 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
             ButtonAPI conditionButton = conditionButtonElement.addButton("", modifiableCondition, new Color(0, 195, 255, 190), new Color(0, 0, 0, 255), Alignment.MID, CutStyle.NONE, WIDTH, 50f, 0f);
             conditionButton.setHighlightBounceDown(false);
             conditionButton.setGlowBrightness(0.4f);
+            if (!canAffordAndBuild) {
+                conditionButton.setEnabled(false);
+                conditionButton.setGlowBrightness(0f);
+            }
             conditionButtonElement.addTooltipTo(new TerraformTooltip(modifiableCondition, industry), conditionPanel, TooltipMakerAPI.TooltipLocation.RIGHT);
 
             conditionPanel.addUIElement(conditionButtonElement).inTL(-10f, 0f);
