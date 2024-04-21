@@ -1,3 +1,7 @@
+### 2.3.6
+- Release 2.3.6
+- Update directDownloadURL link in version file
+
 ### 2.3.5
 - Release 2.3.5
 - Fix issue filtering of unknown industries specs not working
