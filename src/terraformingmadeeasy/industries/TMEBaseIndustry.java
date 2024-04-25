@@ -12,6 +12,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.impl.campaign.procgen.StarSystemGenerator;
+import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.loading.specs.PlanetSpec;
@@ -191,6 +192,31 @@ public class TMEBaseIndustry extends BaseIndustry {
     @Override
     protected void updateAICoreToSupplyAndDemandModifiers() {
         // TME industries don't supply or demand commodities for now
+    }
+
+    @Override
+    protected void addPostDescriptionSection(TooltipMakerAPI tooltip, IndustryTooltipMode mode) {
+        float oPad = 10f;
+        float pad = 3f;
+
+        tooltip.addSpacer(10f);
+        tooltip.addSectionHeading("Terraforming Project", Alignment.MID, 0f);
+        if (isUpgrading()) {
+            System.out.println(modifiableCondition.icon);
+            TooltipMakerAPI imageWithText = tooltip.beginImageWithText(modifiableCondition.icon, 40f);
+            imageWithText.addPara("Status: %s", oPad, Misc.getHighlightColor(), "Ongoing");
+            imageWithText.addPara("Action: %s", pad, Misc.getHighlightColor(), !market.hasCondition(modifiableCondition.id) ? "Add" : "Remove");
+            imageWithText.addPara("Condition: %s", pad, Misc.getHighlightColor(), modifiableCondition.name);
+            imageWithText.addPara("Days Left: %s", pad, Misc.getHighlightColor(), Math.round(buildTime) + "");
+            tooltip.addImageWithText(0f);
+        } else {
+            TooltipMakerAPI imageWithText = tooltip.beginImageWithText("graphics/icons/stable_location.png", 40f);
+            imageWithText.addPara("Status: %s", oPad, Misc.getHighlightColor(), "Idle");
+            imageWithText.addPara("Action: %s", pad, Misc.getHighlightColor(), "None");
+            imageWithText.addPara("Condition: %s", pad, Misc.getHighlightColor(), "None");
+            imageWithText.addPara("Days Left: %s", pad, Misc.getHighlightColor(), "-");
+            tooltip.addImageWithText(0f);
+        }
     }
 
     public void getTerraformingOptions(String industryId) {
