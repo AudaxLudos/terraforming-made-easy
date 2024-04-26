@@ -2,7 +2,7 @@
 - Add terraforming structure
   - [x] add unification center
 - Add mission for unlocking terraforming structures
-  - [ ] Create intro mission as bar event
+  - [x] Create intro mission as bar event
     - [x] Escort contact to target market
     - [x] Spawn fleet to intercept player during escort
     - [x] Set dialogs when player interacts with spawned fleet

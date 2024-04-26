@@ -1,3 +1,7 @@
+### 2.3.9
+- Release 2.3.9
+- Fix bug where days left in terraforming project section tooltip is not reflected properly
+
 ### 2.3.8
 - Release 2.3.8
 - Add terraforming project section for tooltip when hovering industry

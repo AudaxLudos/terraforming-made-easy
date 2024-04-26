@@ -2,8 +2,8 @@
     "id": "terraformingmadeeasy",
     "name": "Terraforming Made Easy",
     "author": "Audax",
-    "version": "2.3.8",
-    "description": "Allows to player to build industries that can remove or add planet conditions to a colony",
+    "version": "2.3.9",
+    "description": "A mod for starsector that allows to player to build structures that can remove or add planet conditions to a colony or build megastructures like stations and gates.",
     "gameVersion": "0.97a",
     "jars": [
         "TerraformingMadeEasy.jar"

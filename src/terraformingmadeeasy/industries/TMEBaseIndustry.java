@@ -206,7 +206,7 @@ public class TMEBaseIndustry extends BaseIndustry {
             imageWithText.addPara("Status: %s", oPad, Misc.getHighlightColor(), "Ongoing");
             imageWithText.addPara("Action: %s", pad, Misc.getHighlightColor(), !market.hasCondition(modifiableCondition.id) ? "Add" : "Remove");
             imageWithText.addPara("Condition: %s", pad, Misc.getHighlightColor(), modifiableCondition.name);
-            imageWithText.addPara("Days Left: %s", pad, Misc.getHighlightColor(), Math.round(buildTime) + "");
+            imageWithText.addPara("Days Left: %s", pad, Misc.getHighlightColor(), Math.round(buildTime - buildProgress) + "");
             tooltip.addImageWithText(0f);
         } else {
             TooltipMakerAPI imageWithText = tooltip.beginImageWithText("graphics/icons/stable_location.png", 40f);
