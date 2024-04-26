@@ -31,7 +31,7 @@ public class TMEIntro extends HubMissionWithBarEvent {
 
     @Override
     protected boolean create(MarketAPI createdAt, boolean barEvent) {
-        // find or set quest giver
+        /* find or set quest giver */
         if (barEvent) {
             setPersonOverride(getImportantPerson(TMEPeople.INADIRE));
             this.inadire = getPerson();
@@ -41,7 +41,7 @@ public class TMEIntro extends HubMissionWithBarEvent {
         if (!setPersonMissionRef(this.inadire, "$tmeIntro_ref")) return false;
         if (!setGlobalReference("$tmeIntro_ref")) return false; // Stops the mission from being repeatable
 
-        // Find and pick a planet to use for quest
+        /* Find and pick a planet to use for quest */
         requireMarketFaction(Factions.INDEPENDENT);
         requireMarketSizeAtLeast(3);
         requireMarketHasSpaceport();
@@ -55,20 +55,20 @@ public class TMEIntro extends HubMissionWithBarEvent {
         this.planet = this.market.getPrimaryEntity();
         this.system = this.market.getStarSystem();
 
-        // set up starting and end stages
+        /* set up starting and end stages */
         setStoryMission();
         setStartingStage(Stage.ESCORT_CONTACT);
         addSuccessStages(Stage.COMPLETED);
 
-        // Make these locations important
+        /* Make these locations important */
         makeImportant(this.market, "$tmeIntro_escortContact", Stage.ESCORT_CONTACT);
 
-        // Flags that can be used to enter the next stage
+        /* Flags that can be used to enter the next stage */
         setStageOnGlobalFlag(Stage.COMPLETED, "$tmeIntro_completed");
 
         setCreditReward(CreditReward.AVERAGE);
 
-        // Create a fleet near entity after completing survey planet
+        /* Create a fleet near entity after completing survey planet */
         beginStageTrigger(Stage.ESCORT_CONTACT);
         triggerCreateFleet(FleetSize.MEDIUM, FleetQuality.DEFAULT, Factions.HEGEMONY, FleetTypes.PATROL_MEDIUM, createdAt.getStarSystem());
         triggerSetFleetOfficers(OfficerNum.DEFAULT, OfficerQuality.DEFAULT);

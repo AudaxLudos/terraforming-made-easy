@@ -56,7 +56,7 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         TooltipMakerAPI mElement = this.mPanel.createUIElement(WIDTH, HEIGHT, false);
         this.mPanel.addUIElement(mElement).setXAlignOffset(-5f);
 
-        // megastructures selection area
+        /*megastructures selection area*/
         CustomPanelAPI headerPanel = this.mPanel.createCustomPanel(WIDTH, 25f, null);
         TooltipMakerAPI headerElement = headerPanel.createUIElement(WIDTH, 25f, false);
         headerElement.beginTable(Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(),
@@ -70,7 +70,7 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         headerPanel.addUIElement(headerElement);
         mElement.addCustom(headerPanel, 0f);
 
-        // selectable megastructures list
+        /*selectable megastructures list*/
         CustomPanelAPI megaStructsPanel = this.mPanel.createCustomPanel(WIDTH, 360f, null);
         TooltipMakerAPI megaStructsElement = megaStructsPanel.createUIElement(WIDTH, 360f, true);
 
@@ -127,7 +127,7 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         megaStructsPanel.addUIElement(megaStructsElement);
         mElement.addCustom(megaStructsPanel, 0f);
 
-        // Inputs for megastructure orbit area
+        /* Inputs for megastructure orbit area */
         CustomPanelAPI orbitInputsHeaderPanel = this.mPanel.createCustomPanel(WIDTH, 25f, null);
         TooltipMakerAPI orbitInputsHeaderElement = orbitInputsHeaderPanel.createUIElement(WIDTH, 25f, false);
         orbitInputsHeaderPanel.addUIElement(orbitInputsHeaderElement);
@@ -144,7 +144,7 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         orbitInputsPanel.addUIElement(orbitInputsElement);
         mElement.addCustom(orbitInputsPanel, 0f).getPosition().setXAlignOffset(-5f);
 
-        // orbit focus field
+        /* orbit focus field */
         CustomPanelAPI orbitFocusPanel = this.mPanel.createCustomPanel(WIDTH / 4f, 40f, new DropDownPlugin(this));
         TooltipMakerAPI orbitFocusElement = orbitFocusPanel.createUIElement(WIDTH / 4f, 40f, false);
         orbitFocusPanel.addUIElement(orbitFocusElement);
@@ -171,7 +171,7 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         }
         orbitFocusElement.addTooltipTo(new OrbitFocusFieldTooltip(), orbitFocusPanel, TooltipMakerAPI.TooltipLocation.BELOW);
 
-        // start angle field
+        /* start angle field */
         TextFieldPlugin startAnglePlugin = new TextFieldPlugin();
         CustomPanelAPI startAnglePanel = this.mPanel.createCustomPanel(WIDTH / 4f, 40f, startAnglePlugin);
         TooltipMakerAPI startAngleElement = startAnglePanel.createUIElement(WIDTH / 4f, 40f, false);
@@ -189,7 +189,7 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         startAnglePlugin.setTextField(this.startingAngleField, 0, 0);
         startAngleElement.addTooltipTo(new StartingAngleFieldTooltip(), startAnglePanel, TooltipMakerAPI.TooltipLocation.BELOW);
 
-        // orbit radius field
+        /* orbit radius field */
         TextFieldPlugin orbitRadiusPlugin = new TextFieldPlugin();
         CustomPanelAPI orbitRadiusPanel = this.mPanel.createCustomPanel(WIDTH / 4f, 40f, orbitRadiusPlugin);
         TooltipMakerAPI orbitRadiusElement = orbitRadiusPanel.createUIElement(WIDTH / 4f, 40f, false);
@@ -207,7 +207,7 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         orbitRadiusPlugin.setTextField(this.orbitRadiusField, 0, 0);
         orbitRadiusElement.addTooltipTo(new OrbitRadiusFieldTooltip(), orbitRadiusPanel, TooltipMakerAPI.TooltipLocation.BELOW);
 
-        // orbit days field
+        /* orbit days field */
         TextFieldPlugin orbitDaysPlugin = new TextFieldPlugin();
         CustomPanelAPI orbitDaysPanel = this.mPanel.createCustomPanel(WIDTH / 4f, 40f, orbitDaysPlugin);
         TooltipMakerAPI orbitDaysElement = orbitDaysPanel.createUIElement(WIDTH / 4f, 40f, false);
@@ -225,7 +225,7 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         orbitDaysPlugin.setTextField(this.orbitDaysField, 0, 0);
         orbitDaysElement.addTooltipTo(new OrbitDaysFieldTooltip(), orbitDaysElement, TooltipMakerAPI.TooltipLocation.BELOW);
 
-        // display player credits
+        /* display player credits */
         TooltipMakerAPI creditsElement = this.mPanel.createUIElement(WIDTH, 0f, false);
         creditsElement.setParaSmallInsignia();
         creditsElement.addPara("Credits: %s", 0f, Misc.getGrayColor(), Misc.getHighlightColor(),

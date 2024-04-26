@@ -38,7 +38,7 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
         TooltipMakerAPI mElement = mPanel.createUIElement(WIDTH, HEIGHT, false);
         mPanel.addUIElement(mElement).setXAlignOffset(-5f);
 
-        // terraforming options selection area
+        /*terraforming options selection area*/
         CustomPanelAPI headerPanel = mPanel.createCustomPanel(WIDTH, 25f, null);
         TooltipMakerAPI headerElement = headerPanel.createUIElement(WIDTH, 25f, false);
         headerElement.beginTable(Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(),
@@ -52,7 +52,7 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
         headerPanel.addUIElement(headerElement);
         mElement.addCustom(headerPanel, 0f);
 
-        // selectable terraforming options list
+        /*selectable terraforming options list*/
         CustomPanelAPI conditionsPanel = mPanel.createCustomPanel(WIDTH, 439f, null);
         TooltipMakerAPI conditionsElement = conditionsPanel.createUIElement(WIDTH, 439f, true);
 
@@ -113,7 +113,7 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
         conditionsPanel.addUIElement(conditionsElement);
         mElement.addCustom(conditionsPanel, 0f);
 
-        // show player credits
+        /*show player credits*/
         TooltipMakerAPI creditsElement = panel.createUIElement(WIDTH, 0f, false);
         creditsElement.setParaSmallInsignia();
         creditsElement.addPara("Credits: %s", 0f, Misc.getGrayColor(), Misc.getHighlightColor(),
@@ -129,9 +129,7 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
     @Override
     public void customDialogConfirm() {
         if (this.selected == null) return;
-
         Utils.ModifiableCondition selectedCondition = (Utils.ModifiableCondition) this.selected;
-
         Global.getSoundPlayer().playSound("ui_upgrade_industry", 1f, 1f, Global.getSoundPlayer().getListenerPos(), new Vector2f());
         Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(selectedCondition.cost);
         this.industry.startUpgrading(selectedCondition);

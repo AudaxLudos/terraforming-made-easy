@@ -202,7 +202,6 @@ public class TMEBaseIndustry extends BaseIndustry {
         tooltip.addSpacer(10f);
         tooltip.addSectionHeading("Terraforming Project", Alignment.MID, 0f);
         if (isUpgrading()) {
-            System.out.println(modifiableCondition.icon);
             TooltipMakerAPI imageWithText = tooltip.beginImageWithText(modifiableCondition.icon, 40f);
             imageWithText.addPara("Status: %s", oPad, Misc.getHighlightColor(), "Ongoing");
             imageWithText.addPara("Action: %s", pad, Misc.getHighlightColor(), !market.hasCondition(modifiableCondition.id) ? "Add" : "Remove");
@@ -212,8 +211,8 @@ public class TMEBaseIndustry extends BaseIndustry {
         } else {
             TooltipMakerAPI imageWithText = tooltip.beginImageWithText("graphics/icons/stable_location.png", 40f);
             imageWithText.addPara("Status: %s", oPad, Misc.getHighlightColor(), "Idle");
-            imageWithText.addPara("Action: %s", pad, Misc.getHighlightColor(), "None");
-            imageWithText.addPara("Condition: %s", pad, Misc.getHighlightColor(), "None");
+            imageWithText.addPara("Action: %s", pad, Misc.getHighlightColor(), "-");
+            imageWithText.addPara("Condition: %s", pad, Misc.getHighlightColor(), "-");
             imageWithText.addPara("Days Left: %s", pad, Misc.getHighlightColor(), "-");
             tooltip.addImageWithText(0f);
         }
@@ -311,7 +310,7 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     public void startUpgrading(Utils.ModifiableCondition condition) {
-        // Will be called from TerraformDialogDelegate to start terraforming
+        /* Will be called from TerraformDialogDelegate to start terraforming */
         building = true;
         buildProgress = 0;
         modifiableCondition = condition;
@@ -320,7 +319,7 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     public void cancelUpgrade() {
-        // Will be called from ConfirmDialogDelegate to cancel terraforming
+        /* Will be called from ConfirmDialogDelegate to cancel terraforming */
         building = false;
         buildProgress = 0;
         modifiableCondition = null;
@@ -594,7 +593,7 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     public boolean hasLikedConditions(Utils.ModifiableCondition condition) {
-        // Checks if market has at least one of these condition
+        /* Checks if market has at least one of these condition */
         hasAtLeastOneLikedCondition = true;
         if (!condition.likedConditions.isEmpty()) {
             boolean hasOneLikedCondition = false;
@@ -607,7 +606,7 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     public boolean hasLikedIndustries(Utils.ModifiableCondition condition) {
-        // Checks if market has all industries
+        /* Checks if market has all industries */
         if (!condition.likedIndustries.isEmpty()) {
             for (String industryId : condition.likedIndustries) {
                 if (!market.hasIndustry(industryId)) {
