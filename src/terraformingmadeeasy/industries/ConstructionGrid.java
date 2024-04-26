@@ -16,6 +16,7 @@ import com.fs.starfarer.api.impl.campaign.procgen.ProcgenUsedNames;
 import com.fs.starfarer.api.impl.campaign.procgen.StarSystemGenerator;
 import com.fs.starfarer.api.impl.campaign.procgen.themes.MiscellaneousThemeGenerator;
 import com.fs.starfarer.api.impl.campaign.submarkets.StoragePlugin;
+import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
@@ -104,6 +105,11 @@ public class ConstructionGrid extends BaseIndustry {
     }
 
     @Override
+    public boolean isUpgrading() {
+        return building && buildableMegastructure != null;
+    }
+
+    @Override
     public String getBuildOrUpgradeProgressText() {
         if (isDisrupted()) {
             int left = (int) getDisruptedDays();
@@ -120,6 +126,43 @@ public class ConstructionGrid extends BaseIndustry {
         if (left == 1) days = "day";
 
         return "Building: " + left + " " + days + " left";
+    }
+
+    @Override
+    public void finishBuildingOrUpgrading() {
+        building = false;
+        buildProgress = 0;
+        buildTime = 1f;
+        isAICoreBuildTimeMultApplied = false;
+        if (buildableMegastructure != null) {
+            sendCompletedMessage();
+            completeMegastructure();
+            buildableMegastructure = null;
+            megastructureOrbitData = null;
+            market.removeIndustry(getId(), null, false);
+        } else {
+            buildingFinished();
+            reapply();
+        }
+    }
+
+    public void startUpgrading(Utils.BuildableMegastructure megastructure, Utils.OrbitData orbitData) {
+        /* Will be called from MegastructureDialogDelegate to start building megastructure */
+        building = true;
+        buildProgress = 0;
+        buildableMegastructure = megastructure;
+        megastructureOrbitData = orbitData;
+        buildTime = megastructure.buildTime;
+        firstTick = true;
+    }
+
+    @Override
+    public void cancelUpgrade() {
+        /* Will be called from ConfirmDialogDelegate to cancel megastructure project */
+        building = false;
+        buildProgress = 0;
+        buildableMegastructure = null;
+        isAICoreBuildTimeMultApplied = false;
     }
 
     @Override
@@ -200,43 +243,30 @@ public class ConstructionGrid extends BaseIndustry {
                 (int) ((1f - UPKEEP_MULT) * 100f) + "%", (int) (GAMMA_BUILD_TIME_MULT * 100f) + "%");
     }
 
-    public boolean isUpgrading() {
-        return building && buildableMegastructure != null;
-    }
+    @Override
+    protected void addPostUpkeepSection(TooltipMakerAPI tooltip, IndustryTooltipMode mode) {
+        float oPad = 10f;
+        float pad = 3f;
 
-    public void finishBuildingOrUpgrading() {
-        building = false;
-        buildProgress = 0;
-        buildTime = 1f;
-        isAICoreBuildTimeMultApplied = false;
-        if (buildableMegastructure != null) {
-            sendCompletedMessage();
-            completeMegastructure();
-            buildableMegastructure = null;
-            megastructureOrbitData = null;
-            market.removeIndustry(getId(), null, false);
-        } else {
-            buildingFinished();
-            reapply();
+        if (mode == IndustryTooltipMode.NORMAL || isUpgrading()) {
+            tooltip.addSpacer(10f);
+            tooltip.addSectionHeading("Megastructure Project", Alignment.MID, 0f);
+            if (isUpgrading()) {
+                TooltipMakerAPI imageWithText = tooltip.beginImageWithText(buildableMegastructure.icon, 40f);
+                imageWithText.addPara("Status: %s", oPad, Misc.getHighlightColor(), "Ongoing");
+                imageWithText.addPara("Action: %s", pad, Misc.getHighlightColor(), "Add");
+                imageWithText.addPara("Megastructure: %s", pad, Misc.getHighlightColor(), buildableMegastructure.name);
+                imageWithText.addPara("Days Left: %s", pad, Misc.getHighlightColor(), Math.round(buildTime - buildProgress) + "");
+                tooltip.addImageWithText(0f);
+            } else {
+                TooltipMakerAPI imageWithText = tooltip.beginImageWithText("graphics/icons/stable_location.png", 40f);
+                imageWithText.addPara("Status: %s", oPad, Misc.getHighlightColor(), "Idle");
+                imageWithText.addPara("Action: %s", pad, Misc.getHighlightColor(), "-");
+                imageWithText.addPara("Megastructure: %s", pad, Misc.getHighlightColor(), "-");
+                imageWithText.addPara("Days Left: %s", pad, Misc.getHighlightColor(), "-");
+                tooltip.addImageWithText(0f);
+            }
         }
-    }
-
-    public void startUpgrading(Utils.BuildableMegastructure megastructure, Utils.OrbitData orbitData) {
-        // Will be called from MegastructureDialogDelegate to start building megastructure
-        building = true;
-        buildProgress = 0;
-        buildableMegastructure = megastructure;
-        megastructureOrbitData = orbitData;
-        buildTime = megastructure.buildTime;
-        firstTick = true;
-    }
-
-    public void cancelUpgrade() {
-        // Will be called from ConfirmDialogDelegate to cancel megastructure project
-        building = false;
-        buildProgress = 0;
-        buildableMegastructure = null;
-        isAICoreBuildTimeMultApplied = false;
     }
 
     public void sendCompletedMessage() {
@@ -280,7 +310,7 @@ public class ConstructionGrid extends BaseIndustry {
             inactiveGate.getMemoryWithoutUpdate().set("$gateScanned", true);
             inactiveGate.getMemoryWithoutUpdate().set("$fullName", "Active Gate");
         } else if (Objects.equals(customEntityId, "tme_station")) {
-            // Pick a random station spec
+            /* Pick a random station spec */
             WeightedRandomPicker<String> stations = new WeightedRandomPicker<>(StarSystemGenerator.random);
             stations.add("station_side00");
             stations.add("station_side02");
@@ -317,7 +347,7 @@ public class ConstructionGrid extends BaseIndustry {
             market.getConnectedEntities().add(station);
             station.getMemoryWithoutUpdate().set("$hasStation", true);
             Global.getSector().getEconomy().addMarket(market, true);
-            // Needed to fix bug where market size instantly raises to max
+            /* Needed to fix bug where market size instantly raises to max */
             Global.getSector().getCampaignUI().showInteractionDialog(station);
             Global.getSector().getCampaignUI().getCurrentInteractionDialog().getTextPanel().clear();
             Global.getSector().getCampaignUI().getCurrentInteractionDialog().getTextPanel().addPara("Sorry, I have to force open a dialog to fix a bug that instantly increases the population size of a recently finished Orbital Station Megastructure to 6 (haven't found any other solutions)", Misc.getHighlightColor());
