@@ -200,11 +200,6 @@ public class ConstructionGrid extends BaseIndustry {
                 (int) ((1f - UPKEEP_MULT) * 100f) + "%", (int) (GAMMA_BUILD_TIME_MULT * 100f) + "%");
     }
 
-    @Override
-    protected void updateAICoreToSupplyAndDemandModifiers() {
-        // TME industries don't supply or demand commodities
-    }
-
     public boolean isUpgrading() {
         return building && buildableMegastructure != null;
     }

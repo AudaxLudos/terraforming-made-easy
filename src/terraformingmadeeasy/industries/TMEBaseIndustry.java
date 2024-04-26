@@ -80,6 +80,11 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     @Override
+    public boolean isUpgrading() {
+        return building && modifiableCondition != null;
+    }
+
+    @Override
     public String getBuildOrUpgradeProgressText() {
         if (isDisrupted()) {
             int left = (int) getDisruptedDays();
@@ -103,12 +108,44 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     @Override
-    public void reapply() {
-        super.reapply();
-        for (Industry ind : market.getIndustries()) {
-            ind.doPreSaveCleanup();
-            ind.doPostSaveRestore();
+    public void finishBuildingOrUpgrading() {
+        building = false;
+        buildProgress = 0;
+        buildTime = 1f;
+        isAICoreBuildTimeMultApplied = false;
+        if (modifiableCondition != null) {
+            sendCompletedMessage();
+            changePlanetConditions();
+            changePlanetClass();
+            reapply();
+            /* Force reapply demands and supply */
+            for (Industry ind : market.getIndustries()) {
+                ind.doPreSaveCleanup();
+                ind.doPostSaveRestore();
+            }
+            modifiableCondition = null;
+        } else {
+            buildingFinished();
+            reapply();
         }
+    }
+
+    public void startUpgrading(Utils.ModifiableCondition condition) {
+        /* Will be called from TerraformDialogDelegate to start terraforming */
+        building = true;
+        buildProgress = 0;
+        modifiableCondition = condition;
+        buildTime = condition.buildTime;
+        firstTick = true;
+    }
+
+    @Override
+    public void cancelUpgrade() {
+        /* Will be called from ConfirmDialogDelegate to cancel terraforming */
+        building = false;
+        buildProgress = 0;
+        modifiableCondition = null;
+        isAICoreBuildTimeMultApplied = false;
     }
 
     @Override
@@ -190,31 +227,28 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     @Override
-    protected void updateAICoreToSupplyAndDemandModifiers() {
-        // TME industries don't supply or demand commodities for now
-    }
-
-    @Override
-    protected void addPostDescriptionSection(TooltipMakerAPI tooltip, IndustryTooltipMode mode) {
+    protected void addPostUpkeepSection(TooltipMakerAPI tooltip, IndustryTooltipMode mode) {
         float oPad = 10f;
         float pad = 3f;
 
-        tooltip.addSpacer(10f);
-        tooltip.addSectionHeading("Terraforming Project", Alignment.MID, 0f);
-        if (isUpgrading()) {
-            TooltipMakerAPI imageWithText = tooltip.beginImageWithText(modifiableCondition.icon, 40f);
-            imageWithText.addPara("Status: %s", oPad, Misc.getHighlightColor(), "Ongoing");
-            imageWithText.addPara("Action: %s", pad, Misc.getHighlightColor(), !market.hasCondition(modifiableCondition.id) ? "Add" : "Remove");
-            imageWithText.addPara("Condition: %s", pad, Misc.getHighlightColor(), modifiableCondition.name);
-            imageWithText.addPara("Days Left: %s", pad, Misc.getHighlightColor(), Math.round(buildTime - buildProgress) + "");
-            tooltip.addImageWithText(0f);
-        } else {
-            TooltipMakerAPI imageWithText = tooltip.beginImageWithText("graphics/icons/stable_location.png", 40f);
-            imageWithText.addPara("Status: %s", oPad, Misc.getHighlightColor(), "Idle");
-            imageWithText.addPara("Action: %s", pad, Misc.getHighlightColor(), "-");
-            imageWithText.addPara("Condition: %s", pad, Misc.getHighlightColor(), "-");
-            imageWithText.addPara("Days Left: %s", pad, Misc.getHighlightColor(), "-");
-            tooltip.addImageWithText(0f);
+        if (mode == IndustryTooltipMode.NORMAL || isUpgrading()) {
+            tooltip.addSpacer(10f);
+            tooltip.addSectionHeading("Terraforming Project", Alignment.MID, 0f);
+            if (isUpgrading()) {
+                TooltipMakerAPI imageWithText = tooltip.beginImageWithText(modifiableCondition.icon, 40f);
+                imageWithText.addPara("Status: %s", oPad, Misc.getHighlightColor(), "Ongoing");
+                imageWithText.addPara("Action: %s", pad, Misc.getHighlightColor(), !market.hasCondition(modifiableCondition.id) ? "Add" : "Remove");
+                imageWithText.addPara("Condition: %s", pad, Misc.getHighlightColor(), modifiableCondition.name);
+                imageWithText.addPara("Days Left: %s", pad, Misc.getHighlightColor(), Math.round(buildTime - buildProgress) + "");
+                tooltip.addImageWithText(0f);
+            } else {
+                TooltipMakerAPI imageWithText = tooltip.beginImageWithText("graphics/icons/stable_location.png", 40f);
+                imageWithText.addPara("Status: %s", oPad, Misc.getHighlightColor(), "Idle");
+                imageWithText.addPara("Action: %s", pad, Misc.getHighlightColor(), "-");
+                imageWithText.addPara("Condition: %s", pad, Misc.getHighlightColor(), "-");
+                imageWithText.addPara("Days Left: %s", pad, Misc.getHighlightColor(), "-");
+                tooltip.addImageWithText(0f);
+            }
         }
     }
 
@@ -286,44 +320,6 @@ public class TMEBaseIndustry extends BaseIndustry {
         }
 
         return ids;
-    }
-
-    public boolean isUpgrading() {
-        return building && modifiableCondition != null;
-    }
-
-    public void finishBuildingOrUpgrading() {
-        building = false;
-        buildProgress = 0;
-        buildTime = 1f;
-        isAICoreBuildTimeMultApplied = false;
-        if (modifiableCondition != null) {
-            sendCompletedMessage();
-            changePlanetConditions();
-            changePlanetClass();
-            reapply();
-            modifiableCondition = null;
-        } else {
-            buildingFinished();
-            reapply();
-        }
-    }
-
-    public void startUpgrading(Utils.ModifiableCondition condition) {
-        /* Will be called from TerraformDialogDelegate to start terraforming */
-        building = true;
-        buildProgress = 0;
-        modifiableCondition = condition;
-        buildTime = condition.buildTime;
-        firstTick = true;
-    }
-
-    public void cancelUpgrade() {
-        /* Will be called from ConfirmDialogDelegate to cancel terraforming */
-        building = false;
-        buildProgress = 0;
-        modifiableCondition = null;
-        isAICoreBuildTimeMultApplied = false;
     }
 
     public void sendCompletedMessage() {
