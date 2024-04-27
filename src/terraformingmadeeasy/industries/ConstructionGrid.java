@@ -146,14 +146,15 @@ public class ConstructionGrid extends BaseIndustry {
         }
     }
 
-    public void startUpgrading(Utils.BuildableMegastructure megastructure, Utils.OrbitData orbitData) {
+    @Override
+    public void startUpgrading() {
         /* Will be called from MegastructureDialogDelegate to start building megastructure */
-        building = true;
-        buildProgress = 0;
-        buildableMegastructure = megastructure;
-        megastructureOrbitData = orbitData;
-        buildTime = megastructure.buildTime;
-        firstTick = true;
+        if (buildableMegastructure != null && megastructureOrbitData != null) {
+            building = true;
+            buildProgress = 0;
+            buildTime = buildableMegastructure.buildTime;
+            firstTick = true;
+        }
     }
 
     @Override

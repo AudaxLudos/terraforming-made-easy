@@ -130,9 +130,10 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
     public void customDialogConfirm() {
         if (this.selected == null) return;
         Utils.ModifiableCondition selectedCondition = (Utils.ModifiableCondition) this.selected;
-        Global.getSoundPlayer().playSound("ui_upgrade_industry", 1f, 1f, Global.getSoundPlayer().getListenerPos(), new Vector2f());
+        this.industry.modifiableCondition = selectedCondition;
+        this.industry.startUpgrading();
         Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(selectedCondition.cost);
-        this.industry.startUpgrading(selectedCondition);
+        Global.getSoundPlayer().playSound("ui_upgrade_industry", 1f, 1f, Global.getSoundPlayer().getListenerPos(), new Vector2f());
     }
 
     public static class SortCanAffordAndBuild implements Comparator<Utils.ModifiableCondition> {

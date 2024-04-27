@@ -244,14 +244,16 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
             return;
 
         Utils.BuildableMegastructure megastructure = (Utils.BuildableMegastructure) this.selected;
-        Global.getSoundPlayer().playSound("ui_upgrade_industry", 1f, 1f, Global.getSoundPlayer().getListenerPos(), new Vector2f());
-        Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(megastructure.cost);
-        Utils.OrbitData data = new Utils.OrbitData(
+        Utils.OrbitData orbitData = new Utils.OrbitData(
                 this.orbitFocusField,
                 Float.parseFloat(this.startingAngleField.getText().trim()),
                 Float.parseFloat(this.orbitRadiusField.getText().trim()),
                 Float.parseFloat(this.orbitDaysField.getText().trim()));
-        this.industry.startUpgrading(megastructure, data);
+        this.industry.buildableMegastructure = megastructure;
+        this.industry.megastructureOrbitData = orbitData;
+        this.industry.startUpgrading();
+        Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(megastructure.cost);
+        Global.getSoundPlayer().playSound("ui_upgrade_industry", 1f, 1f, Global.getSoundPlayer().getListenerPos(), new Vector2f());
     }
 
     public static class SortCanAffordAndBuild implements Comparator<Utils.BuildableMegastructure> {

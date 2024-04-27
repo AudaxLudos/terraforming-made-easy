@@ -15,7 +15,6 @@ import com.fs.starfarer.api.impl.campaign.procgen.StarSystemGenerator;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import com.fs.starfarer.loading.specs.PlanetSpec;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -130,13 +129,15 @@ public class TMEBaseIndustry extends BaseIndustry {
         }
     }
 
-    public void startUpgrading(Utils.ModifiableCondition condition) {
+    @Override
+    public void startUpgrading() {
         /* Will be called from TerraformDialogDelegate to start terraforming */
-        building = true;
-        buildProgress = 0;
-        modifiableCondition = condition;
-        buildTime = condition.buildTime;
-        firstTick = true;
+        if (modifiableCondition != null) {
+            building = true;
+            buildProgress = 0;
+            buildTime = modifiableCondition.buildTime;
+            firstTick = true;
+        }
     }
 
     @Override
@@ -483,36 +484,13 @@ public class TMEBaseIndustry extends BaseIndustry {
 
     public void changePlanetVisuals(String planetTypeId) {
         String planetType = planetTypeId;
-        PlanetSpecAPI marketSpec = market.getPlanetEntity().getSpec();
         if (modifiableCondition.planetSpecOverride != null) {
             for (PlanetSpecAPI spec : Global.getSettings().getAllPlanetSpecs()) {
                 if (spec.isStar()) continue;
                 if (Objects.equals(spec.getPlanetType(), modifiableCondition.planetSpecOverride)) {
-                    marketSpec = spec;
                     planetType = spec.getPlanetType();
                     break;
                 }
-            }
-        }
-        for (PlanetSpecAPI spec : Global.getSettings().getAllPlanetSpecs()) {
-            if (spec.getPlanetType().equals(planetType)) {
-                marketSpec.setAtmosphereColor(spec.getAtmosphereColor());
-                marketSpec.setAtmosphereThickness(spec.getAtmosphereThickness());
-                marketSpec.setAtmosphereThicknessMin(spec.getAtmosphereThicknessMin());
-                marketSpec.setCloudColor(spec.getCloudColor());
-                marketSpec.setCloudRotation(spec.getCloudRotation());
-                marketSpec.setCloudTexture(spec.getCloudTexture());
-                marketSpec.setGlowColor(spec.getGlowColor());
-                marketSpec.setGlowTexture(spec.getGlowTexture());
-                marketSpec.setIconColor(spec.getIconColor());
-                marketSpec.setPlanetColor(spec.getPlanetColor());
-                marketSpec.setStarscapeIcon(spec.getStarscapeIcon());
-                marketSpec.setTexture(spec.getTexture());
-                marketSpec.setUseReverseLightForGlow(spec.isUseReverseLightForGlow());
-                ((PlanetSpec) marketSpec).planetType = planetType;
-                ((PlanetSpec) marketSpec).name = spec.getName();
-                ((PlanetSpec) marketSpec).descriptionId = ((PlanetSpec) spec).descriptionId;
-                break;
             }
         }
         market.getPlanetEntity().changeType(planetType, StarSystemGenerator.random);
