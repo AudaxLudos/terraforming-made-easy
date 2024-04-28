@@ -67,5 +67,19 @@ public class Utils {
             if (hatedIndustries != null) this.hatedIndustries = hatedIndustries;
             this.planetSpecOverride = planetSpecOverride;
         }
+
+        public ModifiableCondition(String id, String name, String icon, float cost, float buildTime, boolean canChangeGasGiants, List<String> likedConditions, List<String> hatedConditions, List<String> likedIndustries, List<String> hatedIndustries, String planetSpecOverride) {
+            this.id = id;
+            this.name = name;
+            this.icon = icon;
+            this.cost = cost;
+            this.buildTime = buildTime;
+            this.canChangeGasGiants = canChangeGasGiants;
+            if (likedConditions != null) this.likedConditions = likedConditions;
+            if (hatedConditions != null) this.hatedConditions = hatedConditions;
+            if (likedIndustries != null) this.likedIndustries = likedIndustries;
+            if (hatedIndustries != null) this.hatedIndustries = hatedIndustries;
+            this.planetSpecOverride = planetSpecOverride;
+        }
     }
 }

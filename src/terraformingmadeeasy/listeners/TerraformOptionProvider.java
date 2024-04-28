@@ -25,6 +25,7 @@ public class TerraformOptionProvider extends BaseIndustryOptionProvider {
         tmeIndustries.add(TMEIndustries.ELEMENT_SYNTHESIZER);
         tmeIndustries.add(TMEIndustries.GEOMORPHOLOGY_STATION);
         tmeIndustries.add(TMEIndustries.MINERAL_REPLICATOR);
+        tmeIndustries.add(TMEIndustries.PLANETARY_HOLOGRAM);
         tmeIndustries.add(TMEIndustries.STELLAR_MANUFACTORY);
         tmeIndustries.add(TMEIndustries.TERRESTRIAL_ENGINE);
         tmeIndustries.add(TMEIndustries.UNIFICATION_CENTER);

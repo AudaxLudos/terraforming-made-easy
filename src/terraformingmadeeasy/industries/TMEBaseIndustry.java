@@ -335,6 +335,8 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     public void changePlanetConditions() {
+        if (Global.getSettings().getMarketConditionSpec(modifiableCondition.id) == null) return;
+
         if (market.hasCondition(modifiableCondition.id)) {
             market.removeCondition(modifiableCondition.id);
         } else {
