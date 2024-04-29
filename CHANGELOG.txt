@@ -1,3 +1,10 @@
+### 2.4.1
+- Release 2.4.1
+- Update reduce cost and build time for all terraforming & megatsructure options by 30%-50%
+- Fix bug where AI core effects would instantly finish the structure/project
+- Add unification center sprite
+- Add planetary hologram industry (disabled)
+
 ### 2.4.0
 - Release 2.4.0
 - Add megastructure project section for tooltip when hovering industry
