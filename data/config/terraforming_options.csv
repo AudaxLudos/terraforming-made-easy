@@ -1,6 +1,6 @@
 structureId,conditionId,cost,buildTime,canChangeGasGiants,likedConditions,hatedConditions,likedIndustries,hatedIndustries,planetSpecOverride
 #required,#required,#required,#required,#required,#optional,#optional,#optional,#optional,#optional
-#no need to restart the game when changing settings; just rebuild the structure,,,,,#default function: atleast one condition is on the planet; exception for unification center,#default function: requires all conditions to be on the planet,#default function: requires all industries to be on the planet,#default function: requires all industries to not be on the planet,
+#no need to restart the game when changing settings; just rebuild the structure,,,,,#default function: atleast one condition is on the planet; exception for unification center,#default function: removes all listed conditions on the planet,#default function: requires all industries to be on the planet,#default function: requires all industries to not be on the planet,
 "#sample if you have IndEvo, remove hashtag",,,,,,,,,
 #tme_stellar_manufactory,IndEvo_mineFieldCondition,1,1,true,,,,,
 #tme_stellar_manufactory,IndEvo_ArtilleryStationCondition,1,1,true,,,,,

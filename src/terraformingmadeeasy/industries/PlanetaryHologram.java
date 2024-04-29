@@ -9,7 +9,7 @@ import terraformingmadeeasy.Utils;
 
 import java.util.Objects;
 
-public class PlanetaryHologram extends TMEBaseIndustry{
+public class PlanetaryHologram extends TMEBaseIndustry {
     public PlanetaryHologram() {
         for (PlanetGenDataSpec pDataSpec : Global.getSettings().getAllSpecs(PlanetGenDataSpec.class)) {
             for (PlanetSpecAPI pSpec : Global.getSettings().getAllPlanetSpecs()) {

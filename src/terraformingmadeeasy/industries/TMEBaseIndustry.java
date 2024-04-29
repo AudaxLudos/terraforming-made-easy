@@ -34,7 +34,7 @@ public class TMEBaseIndustry extends BaseIndustry {
     public Utils.ModifiableCondition modifiableCondition = null;
     public Boolean isAICoreBuildTimeMultApplied = false;
     public float aiCoreCurrentBuildTimeMult = 0f;
-    public boolean firstTick = false;
+    public float aiCoreBuildProgressRemoved = 0f;
     public String prevAICoreId = null;
     public boolean hasAtLeastOneLikedCondition = false;
 
@@ -46,35 +46,28 @@ public class TMEBaseIndustry extends BaseIndustry {
     @Override
     public void advance(float amount) {
         super.advance(amount);
-        if (firstTick) {
-            boolean alpha = Objects.equals(aiCoreId, Commodities.ALPHA_CORE);
-            boolean beta = Objects.equals(aiCoreId, Commodities.BETA_CORE);
-            boolean gamma = Objects.equals(aiCoreId, Commodities.GAMMA_CORE);
-
-            if (alpha) {
+        if (!isAICoreBuildTimeMultApplied) {
+            if (Objects.equals(aiCoreId, Commodities.ALPHA_CORE)) {
                 aiCoreCurrentBuildTimeMult = ALPHA_BUILD_TIME_MULT;
-            } else if (beta) {
+            } else if (Objects.equals(aiCoreId, Commodities.BETA_CORE)) {
                 aiCoreCurrentBuildTimeMult = BETA_BUILD_TIME_MULT;
-            } else if (gamma) {
+            } else if (Objects.equals(aiCoreId, Commodities.GAMMA_CORE)) {
                 aiCoreCurrentBuildTimeMult = GAMMA_BUILD_TIME_MULT;
-            }
-
-            if (aiCoreId != null && !isAICoreBuildTimeMultApplied) {
-                buildTime = buildTime * (1f - aiCoreCurrentBuildTimeMult);
-                isAICoreBuildTimeMultApplied = true;
             } else {
                 aiCoreCurrentBuildTimeMult = 0f;
-                isAICoreBuildTimeMultApplied = false;
             }
 
+            float daysLeft = buildTime - buildProgress;
+            aiCoreBuildProgressRemoved = daysLeft * aiCoreCurrentBuildTimeMult;
+            buildProgress = buildTime - (daysLeft - aiCoreBuildProgressRemoved);
+            isAICoreBuildTimeMultApplied = true;
             prevAICoreId = getAICoreId();
-            firstTick = false;
         }
 
-        if (!Objects.equals(getAICoreId(), prevAICoreId)) {
-            buildTime = buildTime / (1f - aiCoreCurrentBuildTimeMult);
+        if (isAICoreBuildTimeMultApplied && !Objects.equals(getAICoreId(), prevAICoreId)) {
+            buildProgress = buildProgress - aiCoreBuildProgressRemoved;
+            aiCoreBuildProgressRemoved = 0f;
             isAICoreBuildTimeMultApplied = false;
-            firstTick = true;
         }
     }
 
@@ -111,6 +104,7 @@ public class TMEBaseIndustry extends BaseIndustry {
         building = false;
         buildProgress = 0;
         buildTime = 1f;
+        aiCoreBuildProgressRemoved = 0f;
         isAICoreBuildTimeMultApplied = false;
         if (modifiableCondition != null) {
             sendCompletedMessage();
@@ -135,8 +129,9 @@ public class TMEBaseIndustry extends BaseIndustry {
         if (modifiableCondition != null) {
             building = true;
             buildProgress = 0;
+            aiCoreBuildProgressRemoved = 0f;
+            isAICoreBuildTimeMultApplied = false;
             buildTime = modifiableCondition.buildTime;
-            firstTick = true;
         }
     }
 
@@ -145,8 +140,9 @@ public class TMEBaseIndustry extends BaseIndustry {
         /* Will be called from ConfirmDialogDelegate to cancel terraforming */
         building = false;
         buildProgress = 0;
-        modifiableCondition = null;
+        aiCoreBuildProgressRemoved = 0f;
         isAICoreBuildTimeMultApplied = false;
+        modifiableCondition = null;
     }
 
     @Override
