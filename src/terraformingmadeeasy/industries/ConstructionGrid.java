@@ -43,7 +43,7 @@ public class ConstructionGrid extends BaseIndustry {
     public Utils.OrbitData megastructureOrbitData = null;
     public Boolean isAICoreBuildTimeMultApplied = false;
     public float aiCoreCurrentBuildTimeMult = 0f;
-    public boolean firstTick = false;
+    public float aiCoreBuildProgressRemoved = 0f;
     public String prevAICoreId = null;
 
     public ConstructionGrid() {
@@ -76,31 +76,28 @@ public class ConstructionGrid extends BaseIndustry {
     @Override
     public void advance(float amount) {
         super.advance(amount);
-        if (firstTick) {
+        if (!isAICoreBuildTimeMultApplied) {
             if (Objects.equals(aiCoreId, Commodities.ALPHA_CORE)) {
                 aiCoreCurrentBuildTimeMult = ALPHA_BUILD_TIME_MULT;
             } else if (Objects.equals(aiCoreId, Commodities.BETA_CORE)) {
                 aiCoreCurrentBuildTimeMult = BETA_BUILD_TIME_MULT;
             } else if (Objects.equals(aiCoreId, Commodities.GAMMA_CORE)) {
                 aiCoreCurrentBuildTimeMult = GAMMA_BUILD_TIME_MULT;
-            }
-
-            if (aiCoreId != null && !isAICoreBuildTimeMultApplied) {
-                buildTime = buildTime * (1f - aiCoreCurrentBuildTimeMult);
-                isAICoreBuildTimeMultApplied = true;
             } else {
                 aiCoreCurrentBuildTimeMult = 0f;
-                isAICoreBuildTimeMultApplied = false;
             }
 
+            float daysLeft = buildTime - buildProgress;
+            aiCoreBuildProgressRemoved = daysLeft * aiCoreCurrentBuildTimeMult;
+            buildProgress = buildTime - (daysLeft - aiCoreBuildProgressRemoved);
+            isAICoreBuildTimeMultApplied = true;
             prevAICoreId = getAICoreId();
-            firstTick = false;
         }
 
-        if (!Objects.equals(getAICoreId(), prevAICoreId)) {
-            buildTime = buildTime / (1f - aiCoreCurrentBuildTimeMult);
+        if (isAICoreBuildTimeMultApplied && !Objects.equals(getAICoreId(), prevAICoreId)) {
+            buildProgress = buildProgress - aiCoreBuildProgressRemoved;
+            aiCoreBuildProgressRemoved = 0f;
             isAICoreBuildTimeMultApplied = false;
-            firstTick = true;
         }
     }
 
@@ -152,8 +149,9 @@ public class ConstructionGrid extends BaseIndustry {
         if (buildableMegastructure != null && megastructureOrbitData != null) {
             building = true;
             buildProgress = 0;
+            aiCoreBuildProgressRemoved = 0f;
+            isAICoreBuildTimeMultApplied = false;
             buildTime = buildableMegastructure.buildTime;
-            firstTick = true;
         }
     }
 
@@ -162,8 +160,9 @@ public class ConstructionGrid extends BaseIndustry {
         /* Will be called from ConfirmDialogDelegate to cancel megastructure project */
         building = false;
         buildProgress = 0;
-        buildableMegastructure = null;
+        aiCoreBuildProgressRemoved = 0f;
         isAICoreBuildTimeMultApplied = false;
+        buildableMegastructure = null;
     }
 
     @Override
