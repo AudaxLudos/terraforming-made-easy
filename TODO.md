@@ -1,6 +1,6 @@
 ### TODO:
 - [ ] Lower cost and build time for all terraforming and megastructure options
-- [ ] Fix bug where AI core effects would instantly finish the structure/project
+- [x] Fix bug where AI core effects would instantly finish the structure/project
 - Add terraforming structure
   - [x] add unification center
 - Add mission for unlocking terraforming structures
