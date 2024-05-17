@@ -46,51 +46,59 @@ public class TMEBaseIndustry extends BaseIndustry {
     @Override
     public void advance(float amount) {
         super.advance(amount);
-        if (!isAICoreBuildTimeMultApplied) {
-            if (Objects.equals(aiCoreId, Commodities.ALPHA_CORE)) {
-                aiCoreCurrentBuildTimeMult = ALPHA_BUILD_TIME_MULT;
-            } else if (Objects.equals(aiCoreId, Commodities.BETA_CORE)) {
-                aiCoreCurrentBuildTimeMult = BETA_BUILD_TIME_MULT;
-            } else if (Objects.equals(aiCoreId, Commodities.GAMMA_CORE)) {
-                aiCoreCurrentBuildTimeMult = GAMMA_BUILD_TIME_MULT;
+        if (!this.isAICoreBuildTimeMultApplied) {
+            if (Objects.equals(this.aiCoreId, Commodities.ALPHA_CORE)) {
+                this.aiCoreCurrentBuildTimeMult = ALPHA_BUILD_TIME_MULT;
+            } else if (Objects.equals(this.aiCoreId, Commodities.BETA_CORE)) {
+                this.aiCoreCurrentBuildTimeMult = BETA_BUILD_TIME_MULT;
+            } else if (Objects.equals(this.aiCoreId, Commodities.GAMMA_CORE)) {
+                this.aiCoreCurrentBuildTimeMult = GAMMA_BUILD_TIME_MULT;
             } else {
-                aiCoreCurrentBuildTimeMult = 0f;
+                this.aiCoreCurrentBuildTimeMult = 0f;
             }
 
-            float daysLeft = buildTime - buildProgress;
-            aiCoreBuildProgressRemoved = daysLeft * aiCoreCurrentBuildTimeMult;
-            buildProgress = buildTime - (daysLeft - aiCoreBuildProgressRemoved);
-            isAICoreBuildTimeMultApplied = true;
-            prevAICoreId = getAICoreId();
+            float daysLeft = this.buildTime - this.buildProgress;
+            this.aiCoreBuildProgressRemoved = daysLeft * this.aiCoreCurrentBuildTimeMult;
+            this.buildProgress = this.buildTime - (daysLeft - this.aiCoreBuildProgressRemoved);
+            this.isAICoreBuildTimeMultApplied = true;
+            this.prevAICoreId = getAICoreId();
         }
 
-        if (isAICoreBuildTimeMultApplied && !Objects.equals(getAICoreId(), prevAICoreId)) {
-            buildProgress = buildProgress - aiCoreBuildProgressRemoved;
-            aiCoreBuildProgressRemoved = 0f;
-            isAICoreBuildTimeMultApplied = false;
+        if (this.isAICoreBuildTimeMultApplied && !Objects.equals(getAICoreId(), this.prevAICoreId)) {
+            this.buildProgress = this.buildProgress - this.aiCoreBuildProgressRemoved;
+            this.aiCoreBuildProgressRemoved = 0f;
+            this.isAICoreBuildTimeMultApplied = false;
         }
     }
 
     @Override
     public boolean isUpgrading() {
-        return building && modifiableCondition != null;
+        return this.building && this.modifiableCondition != null;
     }
 
     @Override
     public String getBuildOrUpgradeProgressText() {
         if (isDisrupted()) {
             int left = (int) getDisruptedDays();
-            if (left < 1) left = 1;
+            if (left < 1) {
+                left = 1;
+            }
             String days = "days";
-            if (left == 1) days = "day";
+            if (left == 1) {
+                days = "day";
+            }
 
             return "Disrupted: " + left + " " + days + " left";
         }
 
-        int left = (int) (buildTime - buildProgress);
-        if (left < 1) left = 1;
+        int left = (int) (this.buildTime - this.buildProgress);
+        if (left < 1) {
+            left = 1;
+        }
         String days = "days";
-        if (left == 1) days = "day";
+        if (left == 1) {
+            days = "day";
+        }
 
         if (isUpgrading()) {
             return "Terraforming: " + left + " " + days + " left";
@@ -101,22 +109,22 @@ public class TMEBaseIndustry extends BaseIndustry {
 
     @Override
     public void finishBuildingOrUpgrading() {
-        building = false;
-        buildProgress = 0;
-        buildTime = 1f;
-        aiCoreBuildProgressRemoved = 0f;
-        isAICoreBuildTimeMultApplied = false;
-        if (modifiableCondition != null) {
+        this.building = false;
+        this.buildProgress = 0;
+        this.buildTime = 1f;
+        this.aiCoreBuildProgressRemoved = 0f;
+        this.isAICoreBuildTimeMultApplied = false;
+        if (this.modifiableCondition != null) {
             sendCompletedMessage();
             changePlanetConditions();
             changePlanetClass();
             reapply();
-            /* Force reapply demands and supply */
-            for (Industry ind : market.getIndustries()) {
+            // Force reapply demands and supply
+            for (Industry ind : this.market.getIndustries()) {
                 ind.doPreSaveCleanup();
                 ind.doPostSaveRestore();
             }
-            modifiableCondition = null;
+            this.modifiableCondition = null;
         } else {
             buildingFinished();
             reapply();
@@ -125,35 +133,39 @@ public class TMEBaseIndustry extends BaseIndustry {
 
     @Override
     public void startUpgrading() {
-        /* Will be called from TerraformDialogDelegate to start terraforming */
-        if (modifiableCondition != null) {
-            building = true;
-            buildProgress = 0;
-            aiCoreBuildProgressRemoved = 0f;
-            isAICoreBuildTimeMultApplied = false;
-            buildTime = modifiableCondition.buildTime;
+        // Will be called from TerraformDialogDelegate to start terraforming
+        if (this.modifiableCondition != null) {
+            this.building = true;
+            this.buildProgress = 0;
+            this.aiCoreBuildProgressRemoved = 0f;
+            this.isAICoreBuildTimeMultApplied = false;
+            this.buildTime = this.modifiableCondition.buildTime;
         }
     }
 
     @Override
     public void cancelUpgrade() {
-        /* Will be called from ConfirmDialogDelegate to cancel terraforming */
-        building = false;
-        buildProgress = 0;
-        aiCoreBuildProgressRemoved = 0f;
-        isAICoreBuildTimeMultApplied = false;
-        modifiableCondition = null;
+        // Will be called from ConfirmDialogDelegate to cancel terraforming
+        this.building = false;
+        this.buildProgress = 0;
+        this.aiCoreBuildProgressRemoved = 0f;
+        this.isAICoreBuildTimeMultApplied = false;
+        this.modifiableCondition = null;
     }
 
     @Override
     public boolean isAvailableToBuild() {
-        if (!super.isAvailableToBuild()) return false;
-        return market.getPlanetEntity() != null;
+        if (!super.isAvailableToBuild()) {
+            return false;
+        }
+        return this.market.getPlanetEntity() != null;
     }
 
     @Override
     public String getUnavailableReason() {
-        if (!super.isAvailableToBuild()) return super.getUnavailableReason();
+        if (!super.isAvailableToBuild()) {
+            return super.getUnavailableReason();
+        }
         return "Requires a planet";
     }
 
@@ -167,7 +179,7 @@ public class TMEBaseIndustry extends BaseIndustry {
             pre = "Alpha-level AI core. ";
         }
         if (mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP || mode == AICoreDescriptionMode.MANAGE_CORE_TOOLTIP) {
-            CommoditySpecAPI coreSpec = Global.getSettings().getCommoditySpec(aiCoreId);
+            CommoditySpecAPI coreSpec = Global.getSettings().getCommoditySpec(this.aiCoreId);
             TooltipMakerAPI text = tooltip.beginImageWithText(coreSpec.getIconName(), 48);
             text.addPara(pre + "Reduces upkeep cost by %s. Reduces terraforming time by %s.", oPad, highlight,
                     (int) ((1f - UPKEEP_MULT) * 100f) + "%", (int) (ALPHA_BUILD_TIME_MULT * 100f) + "%");
@@ -189,7 +201,7 @@ public class TMEBaseIndustry extends BaseIndustry {
             pre = "Beta-level AI core. ";
         }
         if (mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP || mode == AICoreDescriptionMode.MANAGE_CORE_TOOLTIP) {
-            CommoditySpecAPI coreSpec = Global.getSettings().getCommoditySpec(aiCoreId);
+            CommoditySpecAPI coreSpec = Global.getSettings().getCommoditySpec(this.aiCoreId);
             TooltipMakerAPI text = tooltip.beginImageWithText(coreSpec.getIconName(), 48);
             text.addPara(pre + "Reduces upkeep cost by %s. Reduces terraforming time by %s.", oPad, highlight,
                     (int) ((1f - UPKEEP_MULT) * 100f) + "%", (int) (BETA_BUILD_TIME_MULT * 100f) + "%");
@@ -211,7 +223,7 @@ public class TMEBaseIndustry extends BaseIndustry {
             pre = "Gamma-level AI core. ";
         }
         if (mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP || mode == AICoreDescriptionMode.MANAGE_CORE_TOOLTIP) {
-            CommoditySpecAPI coreSpec = Global.getSettings().getCommoditySpec(aiCoreId);
+            CommoditySpecAPI coreSpec = Global.getSettings().getCommoditySpec(this.aiCoreId);
             TooltipMakerAPI text = tooltip.beginImageWithText(coreSpec.getIconName(), 48);
             text.addPara(pre + "Reduces upkeep cost by %s. Reduces terraforming time by %s.", oPad, highlight,
                     (int) ((1f - UPKEEP_MULT) * 100f) + "%", (int) (GAMMA_BUILD_TIME_MULT * 100f) + "%");
@@ -232,11 +244,11 @@ public class TMEBaseIndustry extends BaseIndustry {
             tooltip.addSpacer(10f);
             tooltip.addSectionHeading("Terraforming Project", Alignment.MID, 0f);
             if (isUpgrading()) {
-                TooltipMakerAPI imageWithText = tooltip.beginImageWithText(modifiableCondition.icon, 40f);
+                TooltipMakerAPI imageWithText = tooltip.beginImageWithText(this.modifiableCondition.icon, 40f);
                 imageWithText.addPara("Status: %s", oPad, Misc.getHighlightColor(), "Ongoing");
-                imageWithText.addPara("Action: %s", pad, Misc.getHighlightColor(), !market.hasCondition(modifiableCondition.id) ? "Add" : "Remove");
-                imageWithText.addPara("Condition: %s", pad, Misc.getHighlightColor(), modifiableCondition.name);
-                imageWithText.addPara("Days Left: %s", pad, Misc.getHighlightColor(), Math.round(buildTime - buildProgress) + "");
+                imageWithText.addPara("Action: %s", pad, Misc.getHighlightColor(), !this.market.hasCondition(this.modifiableCondition.id) ? "Add" : "Remove");
+                imageWithText.addPara("Condition: %s", pad, Misc.getHighlightColor(), this.modifiableCondition.name);
+                imageWithText.addPara("Days Left: %s", pad, Misc.getHighlightColor(), Math.round(this.buildTime - this.buildProgress) + "");
                 tooltip.addImageWithText(0f);
             } else {
                 TooltipMakerAPI imageWithText = tooltip.beginImageWithText("graphics/icons/stable_location.png", 40f);
@@ -254,10 +266,18 @@ public class TMEBaseIndustry extends BaseIndustry {
             JSONArray data = Global.getSettings().loadCSV(TERRAFORMING_OPTIONS_FILE);
             for (int i = 0; i < data.length(); i++) {
                 JSONObject row = data.getJSONObject(i);
-                if (!Objects.equals(row.getString("structureId"), industryId)) continue;
-                if (row.getString("structureId").isEmpty()) continue;
-                if (row.getString("structureId").contains("#")) continue;
-                if (Global.getSettings().getMarketConditionSpec(row.getString("conditionId")) == null) continue;
+                if (!Objects.equals(row.getString("structureId"), industryId)) {
+                    continue;
+                }
+                if (row.getString("structureId").isEmpty()) {
+                    continue;
+                }
+                if (row.getString("structureId").contains("#")) {
+                    continue;
+                }
+                if (Global.getSettings().getMarketConditionSpec(row.getString("conditionId")) == null) {
+                    continue;
+                }
 
                 String conditionId = row.getString("conditionId");
                 float buildTime = row.getInt("buildTime");
@@ -308,11 +328,13 @@ public class TMEBaseIndustry extends BaseIndustry {
             String id = itr.next();
 
             if (isIndustry) {
-                if (id.isEmpty() || Global.getSettings().getIndustrySpec(id) == null)
+                if (id.isEmpty() || Global.getSettings().getIndustrySpec(id) == null) {
                     itr.remove();
+                }
             } else {
-                if (id.isEmpty() || Global.getSettings().getMarketConditionSpec(id) == null)
+                if (id.isEmpty() || Global.getSettings().getMarketConditionSpec(id) == null) {
                     itr.remove();
+                }
             }
         }
 
@@ -320,27 +342,30 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     public void sendCompletedMessage() {
-        if (market.isPlayerOwned()) {
-            String addOrRemoveText = !market.hasCondition(modifiableCondition.id) ? "Added " : "Removed ";
-            MessageIntel intel = new MessageIntel("Terraforming completed at " + market.getName(), Misc.getBasePlayerColor());
-            intel.addLine(BaseIntelPlugin.BULLET + addOrRemoveText + modifiableCondition.name.toLowerCase() + " planet condition");
+        if (this.market.isPlayerOwned()) {
+            String addOrRemoveText = !this.market.hasCondition(this.modifiableCondition.id) ? "Added " : "Removed ";
+            MessageIntel intel = new MessageIntel("Terraforming completed at " + this.market.getName(), Misc.getBasePlayerColor());
+            intel.addLine(BaseIntelPlugin.BULLET + addOrRemoveText + this.modifiableCondition.name.toLowerCase() + " planet condition");
             intel.setIcon(Global.getSector().getPlayerFaction().getCrest());
             intel.setSound(BaseIntelPlugin.getSoundStandardUpdate());
-            Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.COLONY_INFO, market);
+            Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.COLONY_INFO, this.market);
         }
     }
 
     public void changePlanetConditions() {
-        if (Global.getSettings().getMarketConditionSpec(modifiableCondition.id) == null) return;
+        if (Global.getSettings().getMarketConditionSpec(this.modifiableCondition.id) == null) {
+            return;
+        }
 
-        if (market.hasCondition(modifiableCondition.id)) {
-            market.removeCondition(modifiableCondition.id);
+        if (this.market.hasCondition(this.modifiableCondition.id)) {
+            this.market.removeCondition(this.modifiableCondition.id);
         } else {
-            market.addCondition(modifiableCondition.id);
-            market.getFirstCondition(modifiableCondition.id).setSurveyed(true);
-            for (String restriction : modifiableCondition.hatedConditions) {
-                if (market.hasCondition(restriction))
-                    market.removeCondition(restriction);
+            this.market.addCondition(this.modifiableCondition.id);
+            this.market.getFirstCondition(this.modifiableCondition.id).setSurveyed(true);
+            for (String restriction : this.modifiableCondition.hatedConditions) {
+                if (this.market.hasCondition(restriction)) {
+                    this.market.removeCondition(restriction);
+                }
             }
         }
     }
@@ -352,99 +377,102 @@ public class TMEBaseIndustry extends BaseIndustry {
         boolean reduceOrganics = false;
         boolean removeLobsters = true;
         boolean removeWaterSurface = true;
-        if (!market.getPlanetEntity().isStar() && !market.getPlanetEntity().isGasGiant()
-                && !market.hasCondition(Conditions.HABITABLE) && !market.hasCondition(Conditions.VERY_COLD)
-                && !market.hasCondition(Conditions.VERY_HOT) && !market.hasCondition(Conditions.NO_ATMOSPHERE)
-                && !market.hasCondition(Conditions.THIN_ATMOSPHERE) && !market.hasCondition(Conditions.DENSE_ATMOSPHERE)
-                && !market.hasCondition(Conditions.TOXIC_ATMOSPHERE) && !market.hasCondition(Conditions.IRRADIATED)
-                && !market.hasCondition(Conditions.DARK)) {
+        if (!this.market.getPlanetEntity().isStar() && !this.market.getPlanetEntity().isGasGiant()
+                && !this.market.hasCondition(Conditions.HABITABLE) && !this.market.hasCondition(Conditions.VERY_COLD)
+                && !this.market.hasCondition(Conditions.VERY_HOT) && !this.market.hasCondition(Conditions.NO_ATMOSPHERE)
+                && !this.market.hasCondition(Conditions.THIN_ATMOSPHERE) && !this.market.hasCondition(Conditions.DENSE_ATMOSPHERE)
+                && !this.market.hasCondition(Conditions.TOXIC_ATMOSPHERE) && !this.market.hasCondition(Conditions.IRRADIATED)
+                && !this.market.hasCondition(Conditions.DARK)) {
             addOrImproveFarming();
             addOrImproveOrganics();
-            market.addCondition(Conditions.HABITABLE);
+            this.market.addCondition(Conditions.HABITABLE);
         }
-        if (market.hasCondition(Conditions.HABITABLE)) {
+        if (this.market.hasCondition(Conditions.HABITABLE)) {
             String[] richHabitableTypes = {"terran", "terran-eccentric"};
             planetTypeId = richHabitableTypes[Misc.random.nextInt(richHabitableTypes.length)];
-            if (market.hasCondition(Conditions.HOT)) {
+            if (this.market.hasCondition(Conditions.HOT)) {
                 String[] poorHabitableTypes = {"jungle", "arid", "desert", "desert1"};
                 planetTypeId = poorHabitableTypes[Misc.random.nextInt(poorHabitableTypes.length)];
             }
-            if (market.hasCondition(Conditions.COLD)) {
+            if (this.market.hasCondition(Conditions.COLD)) {
                 planetTypeId = "tundra";
             }
         }
-        if (market.hasCondition(Conditions.NO_ATMOSPHERE) || market.hasCondition(Conditions.VERY_HOT) || market.hasCondition(Conditions.VERY_COLD)) {
+        if (this.market.hasCondition(Conditions.NO_ATMOSPHERE) || this.market.hasCondition(Conditions.VERY_HOT) || this.market.hasCondition(Conditions.VERY_COLD)) {
             String[] poorBarrenTypes = {"barren", "barren2", "barren3", "barren_castiron", "barren_venuslike", "rocky_metallic", "barren-bombarded"};
             planetTypeId = poorBarrenTypes[Misc.random.nextInt(poorBarrenTypes.length)];
             removeFarming = true;
             removeOrganics = true;
-            if (market.hasCondition(Conditions.TECTONIC_ACTIVITY) || market.hasCondition(Conditions.EXTREME_TECTONIC_ACTIVITY))
+            if (this.market.hasCondition(Conditions.TECTONIC_ACTIVITY) || this.market.hasCondition(Conditions.EXTREME_TECTONIC_ACTIVITY)) {
                 planetTypeId = "rocky_unstable";
+            }
         }
-        if (market.hasCondition(Conditions.WATER_SURFACE)) {
+        if (this.market.hasCondition(Conditions.WATER_SURFACE)) {
             planetTypeId = "water";
             removeFarming = true;
             removeLobsters = false;
             removeWaterSurface = false;
-            if (market.hasCondition(Conditions.VERY_COLD)) {
+            if (this.market.hasCondition(Conditions.VERY_COLD)) {
                 String[] frozenTypes = {"frozen", "frozen1", "frozen2", "frozen3"};
                 planetTypeId = frozenTypes[Misc.random.nextInt(frozenTypes.length)];
                 removeWaterSurface = true;
                 removeOrganics = true;
                 removeLobsters = true;
             }
-            if ((market.hasCondition(Conditions.COLD) || market.hasCondition(Conditions.VERY_COLD)) && market.hasCondition(Conditions.NO_ATMOSPHERE)) {
+            if ((this.market.hasCondition(Conditions.COLD) || this.market.hasCondition(Conditions.VERY_COLD)) && this.market.hasCondition(Conditions.NO_ATMOSPHERE)) {
                 planetTypeId = "rocky_ice";
                 removeWaterSurface = true;
                 removeOrganics = true;
                 removeLobsters = true;
             }
         }
-        if (market.hasCondition(Conditions.THIN_ATMOSPHERE)) {
+        if (this.market.hasCondition(Conditions.THIN_ATMOSPHERE)) {
             planetTypeId = "barren-desert";
             removeFarming = true;
             reduceOrganics = true;
             removeWaterSurface = true;
         }
-        if (market.hasCondition(Conditions.TOXIC_ATMOSPHERE)) {
+        if (this.market.hasCondition(Conditions.TOXIC_ATMOSPHERE)) {
             planetTypeId = "toxic";
             removeFarming = true;
             reduceOrganics = true;
             removeWaterSurface = true;
         }
-        if (market.hasCondition(Conditions.IRRADIATED)) {
+        if (this.market.hasCondition(Conditions.IRRADIATED)) {
             planetTypeId = "irradiated";
             removeFarming = true;
             removeOrganics = true;
             reduceOrganics = false;
         }
-        if (market.hasCondition(Conditions.TECTONIC_ACTIVITY) || market.hasCondition(Conditions.EXTREME_TECTONIC_ACTIVITY)) {
-            if ((market.hasCondition(Conditions.VERY_HOT) || market.hasCondition(Conditions.HOT))
-                    && (market.hasCondition(Conditions.TOXIC_ATMOSPHERE) || market.hasCondition(Conditions.THIN_ATMOSPHERE) || market.hasCondition(Conditions.DENSE_ATMOSPHERE))
-                    && (market.hasCondition(Conditions.ORE_ABUNDANT) || market.hasCondition(Conditions.ORE_RICH) || market.hasCondition(Conditions.ORE_ULTRARICH))
-                    && (market.hasCondition(Conditions.RARE_ORE_ABUNDANT) || market.hasCondition(Conditions.RARE_ORE_RICH) || market.hasCondition(Conditions.RARE_ORE_ULTRARICH))) {
+        if (this.market.hasCondition(Conditions.TECTONIC_ACTIVITY) || this.market.hasCondition(Conditions.EXTREME_TECTONIC_ACTIVITY)) {
+            if ((this.market.hasCondition(Conditions.VERY_HOT) || this.market.hasCondition(Conditions.HOT))
+                    && (this.market.hasCondition(Conditions.TOXIC_ATMOSPHERE) || this.market.hasCondition(Conditions.THIN_ATMOSPHERE) || this.market.hasCondition(Conditions.DENSE_ATMOSPHERE))
+                    && (this.market.hasCondition(Conditions.ORE_ABUNDANT) || this.market.hasCondition(Conditions.ORE_RICH) || this.market.hasCondition(Conditions.ORE_ULTRARICH))
+                    && (this.market.hasCondition(Conditions.RARE_ORE_ABUNDANT) || this.market.hasCondition(Conditions.RARE_ORE_RICH) || this.market.hasCondition(Conditions.RARE_ORE_ULTRARICH))) {
                 planetTypeId = "lava";
                 removeFarming = true;
                 removeOrganics = true;
                 reduceOrganics = false;
             }
-            if (market.hasCondition(Conditions.VERY_COLD)
-                    && (market.hasCondition(Conditions.VOLATILES_TRACE) || market.hasCondition(Conditions.VOLATILES_DIFFUSE) ||
-                    market.hasCondition(Conditions.VOLATILES_ABUNDANT) || market.hasCondition(Conditions.VOLATILES_PLENTIFUL))) {
+            if (this.market.hasCondition(Conditions.VERY_COLD)
+                    && (this.market.hasCondition(Conditions.VOLATILES_TRACE) || this.market.hasCondition(Conditions.VOLATILES_DIFFUSE) ||
+                    this.market.hasCondition(Conditions.VOLATILES_ABUNDANT) || this.market.hasCondition(Conditions.VOLATILES_PLENTIFUL))) {
                 planetTypeId = "cryovolcanic";
                 removeFarming = true;
                 removeOrganics = true;
                 reduceOrganics = false;
             }
         }
-        if (market.getPlanetEntity().isGasGiant()) {
+        if (this.market.getPlanetEntity().isGasGiant()) {
             removeFarming = true;
             removeOrganics = true;
             reduceOrganics = false;
-            if (market.hasCondition(Conditions.VERY_COLD))
+            if (this.market.hasCondition(Conditions.VERY_COLD)) {
                 planetTypeId = "ice_giant";
-            if (market.hasCondition(Conditions.VERY_HOT))
+            }
+            if (this.market.hasCondition(Conditions.VERY_HOT)) {
                 planetTypeId = "gas_giant";
+            }
         }
 
         if (removeFarming) {
@@ -467,96 +495,98 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     public void removeWaterSurface() {
-        market.removeCondition(Conditions.WATER_SURFACE);
+        this.market.removeCondition(Conditions.WATER_SURFACE);
     }
 
     public void updateFarmingOrAquaculture() {
-        if (!market.hasCondition(Conditions.WATER_SURFACE) && market.hasIndustry(Industries.AQUACULTURE)) {
-            market.removeIndustry(Industries.AQUACULTURE, null, false);
-            market.addIndustry(Industries.FARMING);
-        } else if (market.hasCondition(Conditions.WATER_SURFACE) && market.hasIndustry(Industries.FARMING)) {
-            market.removeIndustry(Industries.FARMING, null, false);
-            market.addIndustry(Industries.AQUACULTURE);
+        if (!this.market.hasCondition(Conditions.WATER_SURFACE) && this.market.hasIndustry(Industries.AQUACULTURE)) {
+            this.market.removeIndustry(Industries.AQUACULTURE, null, false);
+            this.market.addIndustry(Industries.FARMING);
+        } else if (this.market.hasCondition(Conditions.WATER_SURFACE) && this.market.hasIndustry(Industries.FARMING)) {
+            this.market.removeIndustry(Industries.FARMING, null, false);
+            this.market.addIndustry(Industries.AQUACULTURE);
         }
     }
 
     public void changePlanetVisuals(String planetTypeId) {
         String planetType = planetTypeId;
-        if (modifiableCondition.planetSpecOverride != null) {
+        if (this.modifiableCondition.planetSpecOverride != null) {
             for (PlanetSpecAPI spec : Global.getSettings().getAllPlanetSpecs()) {
-                if (spec.isStar()) continue;
-                if (Objects.equals(spec.getPlanetType(), modifiableCondition.planetSpecOverride)) {
+                if (spec.isStar()) {
+                    continue;
+                }
+                if (Objects.equals(spec.getPlanetType(), this.modifiableCondition.planetSpecOverride)) {
                     planetType = spec.getPlanetType();
                     break;
                 }
             }
         }
-        market.getPlanetEntity().changeType(planetType, StarSystemGenerator.random);
-        market.getPlanetEntity().applySpecChanges();
+        this.market.getPlanetEntity().changeType(planetType, StarSystemGenerator.random);
+        this.market.getPlanetEntity().applySpecChanges();
     }
 
     public void removeFarming() {
-        market.removeCondition(Conditions.FARMLAND_POOR);
-        market.removeCondition(Conditions.FARMLAND_ADEQUATE);
-        market.removeCondition(Conditions.FARMLAND_RICH);
-        market.removeCondition(Conditions.FARMLAND_BOUNTIFUL);
+        this.market.removeCondition(Conditions.FARMLAND_POOR);
+        this.market.removeCondition(Conditions.FARMLAND_ADEQUATE);
+        this.market.removeCondition(Conditions.FARMLAND_RICH);
+        this.market.removeCondition(Conditions.FARMLAND_BOUNTIFUL);
     }
 
     public void removeOrganics() {
-        market.removeCondition(Conditions.ORGANICS_TRACE);
-        market.removeCondition(Conditions.ORGANICS_COMMON);
-        market.removeCondition(Conditions.ORGANICS_ABUNDANT);
-        market.removeCondition(Conditions.ORGANICS_PLENTIFUL);
+        this.market.removeCondition(Conditions.ORGANICS_TRACE);
+        this.market.removeCondition(Conditions.ORGANICS_COMMON);
+        this.market.removeCondition(Conditions.ORGANICS_ABUNDANT);
+        this.market.removeCondition(Conditions.ORGANICS_PLENTIFUL);
     }
 
     public void removeLobsters() {
-        market.removeCondition(Conditions.VOLTURNIAN_LOBSTER_PENS);
+        this.market.removeCondition(Conditions.VOLTURNIAN_LOBSTER_PENS);
     }
 
     public void addOrImproveFarming() {
-        if (market.hasCondition(Conditions.FARMLAND_POOR)) {
-            market.removeCondition(Conditions.FARMLAND_POOR);
-            market.addCondition(Conditions.FARMLAND_ADEQUATE);
-            market.getFirstCondition(Conditions.FARMLAND_ADEQUATE).setSurveyed(true);
-        } else if (market.hasCondition(Conditions.FARMLAND_ADEQUATE)) {
-            market.removeCondition(Conditions.FARMLAND_ADEQUATE);
-            market.addCondition(Conditions.FARMLAND_RICH);
-            market.getFirstCondition(Conditions.FARMLAND_RICH).setSurveyed(true);
-        } else if (market.hasCondition(Conditions.FARMLAND_RICH)) {
-            market.removeCondition(Conditions.FARMLAND_RICH);
-            market.addCondition(Conditions.FARMLAND_BOUNTIFUL);
-            market.getFirstCondition(Conditions.FARMLAND_BOUNTIFUL).setSurveyed(true);
-        } else if (!market.hasCondition(Conditions.FARMLAND_BOUNTIFUL)) {
-            market.addCondition(Conditions.FARMLAND_POOR);
-            market.getFirstCondition(Conditions.FARMLAND_POOR).setSurveyed(true);
+        if (this.market.hasCondition(Conditions.FARMLAND_POOR)) {
+            this.market.removeCondition(Conditions.FARMLAND_POOR);
+            this.market.addCondition(Conditions.FARMLAND_ADEQUATE);
+            this.market.getFirstCondition(Conditions.FARMLAND_ADEQUATE).setSurveyed(true);
+        } else if (this.market.hasCondition(Conditions.FARMLAND_ADEQUATE)) {
+            this.market.removeCondition(Conditions.FARMLAND_ADEQUATE);
+            this.market.addCondition(Conditions.FARMLAND_RICH);
+            this.market.getFirstCondition(Conditions.FARMLAND_RICH).setSurveyed(true);
+        } else if (this.market.hasCondition(Conditions.FARMLAND_RICH)) {
+            this.market.removeCondition(Conditions.FARMLAND_RICH);
+            this.market.addCondition(Conditions.FARMLAND_BOUNTIFUL);
+            this.market.getFirstCondition(Conditions.FARMLAND_BOUNTIFUL).setSurveyed(true);
+        } else if (!this.market.hasCondition(Conditions.FARMLAND_BOUNTIFUL)) {
+            this.market.addCondition(Conditions.FARMLAND_POOR);
+            this.market.getFirstCondition(Conditions.FARMLAND_POOR).setSurveyed(true);
         }
     }
 
     public void addOrImproveOrganics() {
-        if (market.hasCondition(Conditions.ORGANICS_TRACE)) {
-            market.removeCondition(Conditions.ORGANICS_TRACE);
-            market.addCondition(Conditions.ORGANICS_COMMON);
-            market.getFirstCondition(Conditions.ORGANICS_COMMON).setSurveyed(true);
-        } else if (market.hasCondition(Conditions.ORGANICS_COMMON)) {
-            market.removeCondition(Conditions.ORGANICS_COMMON);
-            market.addCondition(Conditions.ORGANICS_ABUNDANT);
-            market.getFirstCondition(Conditions.ORGANICS_ABUNDANT).setSurveyed(true);
-        } else if (market.hasCondition(Conditions.ORGANICS_ABUNDANT)) {
-            market.removeCondition(Conditions.ORGANICS_ABUNDANT);
-            market.addCondition(Conditions.ORGANICS_PLENTIFUL);
-            market.getFirstCondition(Conditions.ORGANICS_PLENTIFUL).setSurveyed(true);
-        } else if (!market.hasCondition(Conditions.ORGANICS_PLENTIFUL)) {
-            market.addCondition(Conditions.ORGANICS_TRACE);
-            market.getFirstCondition(Conditions.ORGANICS_TRACE).setSurveyed(true);
+        if (this.market.hasCondition(Conditions.ORGANICS_TRACE)) {
+            this.market.removeCondition(Conditions.ORGANICS_TRACE);
+            this.market.addCondition(Conditions.ORGANICS_COMMON);
+            this.market.getFirstCondition(Conditions.ORGANICS_COMMON).setSurveyed(true);
+        } else if (this.market.hasCondition(Conditions.ORGANICS_COMMON)) {
+            this.market.removeCondition(Conditions.ORGANICS_COMMON);
+            this.market.addCondition(Conditions.ORGANICS_ABUNDANT);
+            this.market.getFirstCondition(Conditions.ORGANICS_ABUNDANT).setSurveyed(true);
+        } else if (this.market.hasCondition(Conditions.ORGANICS_ABUNDANT)) {
+            this.market.removeCondition(Conditions.ORGANICS_ABUNDANT);
+            this.market.addCondition(Conditions.ORGANICS_PLENTIFUL);
+            this.market.getFirstCondition(Conditions.ORGANICS_PLENTIFUL).setSurveyed(true);
+        } else if (!this.market.hasCondition(Conditions.ORGANICS_PLENTIFUL)) {
+            this.market.addCondition(Conditions.ORGANICS_TRACE);
+            this.market.getFirstCondition(Conditions.ORGANICS_TRACE).setSurveyed(true);
         }
     }
 
     public void reduceOrganicsToCommon() {
-        if (market.hasCondition(Conditions.ORGANICS_ABUNDANT) || market.hasCondition(Conditions.ORGANICS_PLENTIFUL)) {
-            market.removeCondition(Conditions.ORGANICS_ABUNDANT);
-            market.removeCondition(Conditions.ORGANICS_PLENTIFUL);
-            market.addCondition(Conditions.ORGANICS_COMMON);
-            market.getFirstCondition(Conditions.ORGANICS_COMMON).setSurveyed(true);
+        if (this.market.hasCondition(Conditions.ORGANICS_ABUNDANT) || this.market.hasCondition(Conditions.ORGANICS_PLENTIFUL)) {
+            this.market.removeCondition(Conditions.ORGANICS_ABUNDANT);
+            this.market.removeCondition(Conditions.ORGANICS_PLENTIFUL);
+            this.market.addCondition(Conditions.ORGANICS_COMMON);
+            this.market.getFirstCondition(Conditions.ORGANICS_COMMON).setSurveyed(true);
         }
     }
 
@@ -565,12 +595,12 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     public boolean hasLikedConditions(Utils.ModifiableCondition condition) {
-        /* Checks if market has at least one of these condition */
-        hasAtLeastOneLikedCondition = true;
+        // Checks if market has at least one of these condition
+        this.hasAtLeastOneLikedCondition = true;
         if (!condition.likedConditions.isEmpty()) {
             boolean hasOneLikedCondition = false;
             for (String conditionId : condition.likedConditions) {
-                hasOneLikedCondition = hasOneLikedCondition || market.hasCondition(conditionId);
+                hasOneLikedCondition = hasOneLikedCondition || this.market.hasCondition(conditionId);
             }
             return hasOneLikedCondition;
         }
@@ -578,10 +608,10 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     public boolean hasLikedIndustries(Utils.ModifiableCondition condition) {
-        /* Checks if market has all industries */
+        // Checks if market has all industries
         if (!condition.likedIndustries.isEmpty()) {
             for (String industryId : condition.likedIndustries) {
-                if (!market.hasIndustry(industryId)) {
+                if (!this.market.hasIndustry(industryId)) {
                     return false;
                 }
             }

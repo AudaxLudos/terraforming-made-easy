@@ -15,8 +15,9 @@ public class TextFieldPlugin extends BaseCustomUIPanelPlugin {
     public boolean shouldRecaptureFocus = false;
 
     public void setTextField(TextFieldAPI field, float width, float height) {
-        if (field == null)
+        if (field == null) {
             return;
+        }
         this.field = field;
         this.width = width;
         this.height = height;
@@ -34,15 +35,17 @@ public class TextFieldPlugin extends BaseCustomUIPanelPlugin {
     @Override
     public void processInput(List<InputEventAPI> events) {
         this.field.getTextLabelAPI().getPosition().setSize(this.width, this.height);
-        if (this.field.hasFocus() && !this.shouldRecaptureFocus)
+        if (this.field.hasFocus() && !this.shouldRecaptureFocus) {
             this.shouldRecaptureFocus = true;
+        }
         for (InputEventAPI event : events) {
             if (event.isMouseDownEvent() && clickedOutsideTextArea(event)) {
                 this.shouldRecaptureFocus = false;
                 continue;
             }
-            if (!this.shouldRecaptureFocus && !event.isKeyboardEvent())
+            if (!this.shouldRecaptureFocus && !event.isKeyboardEvent()) {
                 continue;
+            }
             if (event.getEventValue() == 1) {
                 this.shouldRecaptureFocus = false;
             }

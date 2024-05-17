@@ -20,31 +20,38 @@ public class FortressWorld extends BaseMarketConditionPlugin {
 
     @Override
     public void apply(String id) {
-        market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).modifyMult(id, 1f + FLEET_SIZE_MULT, "Fortress World");
-        market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).modifyMult(id, 1f + GROUND_DEFENSE_MULT, "Fortress World");
-        for (String industryId : industryIds) {
-            if (!market.hasIndustry(industryId)) continue;
-            Industry ind = market.getIndustry(industryId);
+        this.market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).modifyMult(id, 1f + FLEET_SIZE_MULT, "Fortress World");
+        this.market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).modifyMult(id, 1f + GROUND_DEFENSE_MULT, "Fortress World");
+        for (String industryId : this.industryIds) {
+            if (!this.market.hasIndustry(industryId)) {
+                continue;
+            }
+            Industry ind = this.market.getIndustry(industryId);
             ind.getSupplyBonusFromOther().modifyFlat(id, SUPPLY_BONUS, "Fortress World");
 
-            if (!Objects.equals(industryId, Industries.HIGHCOMMAND)) continue;
-            if (ind.getSpec().hasTag(Industries.TAG_PATROL))
-                market.getStats().getDynamic().getMod(Stats.PATROL_NUM_MEDIUM_MOD).modifyFlat(id, HEAVY_PATROL_BONUS);
-            else
-                market.getStats().getDynamic().getMod(Stats.PATROL_NUM_HEAVY_MOD).modifyFlat(id, HEAVY_PATROL_BONUS);
+            if (!Objects.equals(industryId, Industries.HIGHCOMMAND)) {
+                continue;
+            }
+            if (ind.getSpec().hasTag(Industries.TAG_PATROL)) {
+                this.market.getStats().getDynamic().getMod(Stats.PATROL_NUM_MEDIUM_MOD).modifyFlat(id, HEAVY_PATROL_BONUS);
+            } else {
+                this.market.getStats().getDynamic().getMod(Stats.PATROL_NUM_HEAVY_MOD).modifyFlat(id, HEAVY_PATROL_BONUS);
+            }
         }
     }
 
     @Override
     public void unapply(String id) {
-        market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).unmodify(id);
-        market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).unmodify(id);
-        market.getStats().getDynamic().getMod(Stats.PATROL_NUM_MEDIUM_MOD).unmodify(id);
-        market.getStats().getDynamic().getMod(Stats.PATROL_NUM_HEAVY_MOD).unmodify(id);
-        for (String industryId : industryIds) {
-            if (!market.hasIndustry(industryId)) continue;
+        this.market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).unmodify(id);
+        this.market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).unmodify(id);
+        this.market.getStats().getDynamic().getMod(Stats.PATROL_NUM_MEDIUM_MOD).unmodify(id);
+        this.market.getStats().getDynamic().getMod(Stats.PATROL_NUM_HEAVY_MOD).unmodify(id);
+        for (String industryId : this.industryIds) {
+            if (!this.market.hasIndustry(industryId)) {
+                continue;
+            }
 
-            Industry ind = market.getIndustry(industryId);
+            Industry ind = this.market.getIndustry(industryId);
             ind.getSupplyBonusFromOther().unmodify(id);
         }
     }

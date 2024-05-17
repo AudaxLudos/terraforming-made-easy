@@ -23,18 +23,18 @@ public class MegastructureTooltip extends BaseTooltipCreator {
 
     @Override
     public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-        if (Objects.equals(megastructure.id, Entities.CORONAL_TAP)) {
-            tooltip.addPara("Only %s can exist in a system", 0f, Misc.getHighlightColor(), "1 " + megastructure.name);
+        if (Objects.equals(this.megastructure.id, Entities.CORONAL_TAP)) {
+            tooltip.addPara("Only %s can exist in a system", 0f, Misc.getHighlightColor(), "1 " + this.megastructure.name);
             tooltip.addSpacer(10f);
             tooltip.addPara("Needs a %s in the system", 0f, Misc.getHighlightColor(), "Blue Supergiant Star");
-        } else if (Objects.equals(megastructure.id, Entities.DERELICT_CRYOSLEEPER)) {
-            tooltip.addPara("Only %s can exist in a system", 0f, Misc.getHighlightColor(), "1 " + megastructure.name);
-        } else if (Objects.equals(megastructure.id, Entities.INACTIVE_GATE)) {
-            tooltip.addPara("Only %s can exist in a system", 0f, Misc.getHighlightColor(), "1 " + megastructure.name);
-        } else if (Objects.equals(megastructure.id, TMEIds.TME_STATION)) {
-            tooltip.addPara("Only %s can exist in a system", 0f, Misc.getHighlightColor(), "3 " + megastructure.name);
+        } else if (Objects.equals(this.megastructure.id, Entities.DERELICT_CRYOSLEEPER)) {
+            tooltip.addPara("Only %s can exist in a system", 0f, Misc.getHighlightColor(), "1 " + this.megastructure.name);
+        } else if (Objects.equals(this.megastructure.id, Entities.INACTIVE_GATE)) {
+            tooltip.addPara("Only %s can exist in a system", 0f, Misc.getHighlightColor(), "1 " + this.megastructure.name);
+        } else if (Objects.equals(this.megastructure.id, TMEIds.TME_STATION)) {
+            tooltip.addPara("Only %s can exist in a system", 0f, Misc.getHighlightColor(), "3 " + this.megastructure.name);
         } else {
-            tooltip.addPara("Only %s can exist in a system", 0f, Misc.getHighlightColor(), "1 " + megastructure.name);
+            tooltip.addPara("Only %s can exist in a system", 0f, Misc.getHighlightColor(), "1 " + this.megastructure.name);
         }
     }
 }

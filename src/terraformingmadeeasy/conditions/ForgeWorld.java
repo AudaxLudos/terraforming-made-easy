@@ -19,26 +19,30 @@ public class ForgeWorld extends BaseMarketConditionPlugin {
 
     @Override
     public void apply(String id) {
-        market.getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).modifyFlat(id, FLEET_QUALITY_MOD, "Forge World");
-        Global.getSector().getPlayerStats().getDynamic().getMod(Stats.CUSTOM_PRODUCTION_MOD).modifyMult(id, 1f + CUSTOM_PRODUCTION_MULT, "Forge World (" + market.getName() + ")");
-        market.getStats().getDynamic().getMod(Stats.MAX_INDUSTRIES).modifyFlat(id, MAX_INDUSTRIES_BONUS, "Forge World");
-        for (String industryId : industryIds) {
-            if (!market.hasIndustry(industryId)) continue;
+        this.market.getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).modifyFlat(id, FLEET_QUALITY_MOD, "Forge World");
+        Global.getSector().getPlayerStats().getDynamic().getMod(Stats.CUSTOM_PRODUCTION_MOD).modifyMult(id, 1f + CUSTOM_PRODUCTION_MULT, "Forge World (" + this.market.getName() + ")");
+        this.market.getStats().getDynamic().getMod(Stats.MAX_INDUSTRIES).modifyFlat(id, MAX_INDUSTRIES_BONUS, "Forge World");
+        for (String industryId : this.industryIds) {
+            if (!this.market.hasIndustry(industryId)) {
+                continue;
+            }
 
-            Industry ind = market.getIndustry(industryId);
+            Industry ind = this.market.getIndustry(industryId);
             ind.getSupplyBonusFromOther().modifyFlat(id, SUPPLY_BONUS, "Forge World");
         }
     }
 
     @Override
     public void unapply(String id) {
-        market.getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).unmodify(id);
+        this.market.getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).unmodify(id);
         Global.getSector().getPlayerStats().getDynamic().getMod(Stats.CUSTOM_PRODUCTION_MOD).unmodify(id);
-        market.getStats().getDynamic().getMod(Stats.MAX_INDUSTRIES).unmodify(id);
-        for (String industryId : industryIds) {
-            if (!market.hasIndustry(industryId)) continue;
+        this.market.getStats().getDynamic().getMod(Stats.MAX_INDUSTRIES).unmodify(id);
+        for (String industryId : this.industryIds) {
+            if (!this.market.hasIndustry(industryId)) {
+                continue;
+            }
 
-            Industry ind = market.getIndustry(industryId);
+            Industry ind = this.market.getIndustry(industryId);
             ind.getSupplyBonusFromOther().unmodify(id);
         }
     }

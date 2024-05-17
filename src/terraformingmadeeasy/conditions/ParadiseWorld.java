@@ -17,26 +17,30 @@ public class ParadiseWorld extends BaseMarketConditionPlugin {
 
     @Override
     public void apply(String id) {
-        market.getIncomeMult().modifyMult(id, 1f + INCOME_MULT, "Paradise World");
-        market.getAccessibilityMod().modifyFlat(id, ACCESSIBILITY_MOD, "Paradise World");
-        market.getStability().modifyFlat(id, STABILITY_BONUS, "Paradise World");
-        for (String industryId : industryIds) {
-            if (!market.hasIndustry(industryId)) continue;
+        this.market.getIncomeMult().modifyMult(id, 1f + INCOME_MULT, "Paradise World");
+        this.market.getAccessibilityMod().modifyFlat(id, ACCESSIBILITY_MOD, "Paradise World");
+        this.market.getStability().modifyFlat(id, STABILITY_BONUS, "Paradise World");
+        for (String industryId : this.industryIds) {
+            if (!this.market.hasIndustry(industryId)) {
+                continue;
+            }
 
-            Industry ind = market.getIndustry(industryId);
+            Industry ind = this.market.getIndustry(industryId);
             ind.getSupplyBonusFromOther().modifyFlat(id, SUPPLY_BONUS, "Paradise World");
         }
     }
 
     @Override
     public void unapply(String id) {
-        market.getStability().unmodify(id);
-        market.getIncomeMult().unmodify(id);
-        market.getAccessibilityMod().unmodify(id);
-        for (String industryId : industryIds) {
-            if (!market.hasIndustry(industryId)) continue;
+        this.market.getStability().unmodify(id);
+        this.market.getIncomeMult().unmodify(id);
+        this.market.getAccessibilityMod().unmodify(id);
+        for (String industryId : this.industryIds) {
+            if (!this.market.hasIndustry(industryId)) {
+                continue;
+            }
 
-            Industry ind = market.getIndustry(industryId);
+            Industry ind = this.market.getIndustry(industryId);
             ind.getSupplyBonusFromOther().unmodify(id);
         }
     }

@@ -8,11 +8,12 @@ import org.lwjgl.util.vector.Vector2f;
 import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.industries.ConstructionGrid;
 import terraformingmadeeasy.ui.plugins.DropDownPlugin;
-import terraformingmadeeasy.ui.plugins.SelectButtonPlugin;
 import terraformingmadeeasy.ui.plugins.TextFieldPlugin;
-import terraformingmadeeasy.ui.tooltips.*;
+import terraformingmadeeasy.ui.tooltips.OrbitDaysFieldTooltip;
+import terraformingmadeeasy.ui.tooltips.OrbitFocusFieldTooltip;
+import terraformingmadeeasy.ui.tooltips.OrbitRadiusFieldTooltip;
+import terraformingmadeeasy.ui.tooltips.StartingAngleFieldTooltip;
 
-import java.awt.*;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -42,13 +43,18 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
 
     @SuppressWarnings("RedundantArrayCreation")
     public void refreshPanel() {
-        if (this.bgPanel == null) return;
-        if (mPanel != null) this.bgPanel.removeComponent(mPanel);
+        if (this.bgPanel == null) {
+            return;
+        }
+        if (this.mPanel != null) {
+            this.bgPanel.removeComponent(this.mPanel);
+        }
 
         this.buttons.clear();
 
         float columnOneWidth = WIDTH / 3f + 100f;
         float columnWidth = (WIDTH - columnOneWidth) / 2f;
+        float rowHeight = 360f;
 
         this.mPanel = this.bgPanel.createCustomPanel(WIDTH, HEIGHT, null);
         this.bgPanel.addComponent(this.mPanel);
@@ -56,78 +62,30 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         TooltipMakerAPI mElement = this.mPanel.createUIElement(WIDTH, HEIGHT, false);
         this.mPanel.addUIElement(mElement).setXAlignOffset(-5f);
 
-        /*megastructures selection area*/
-        CustomPanelAPI headerPanel = this.mPanel.createCustomPanel(WIDTH, 25f, null);
-        TooltipMakerAPI headerElement = headerPanel.createUIElement(WIDTH, 25f, false);
-        headerElement.beginTable(Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(),
+        // Megastructures selection area
+        CustomPanelAPI megaStructsPanel = this.mPanel.createCustomPanel(WIDTH, rowHeight, null);
+        TooltipMakerAPI megaStructHeader = megaStructsPanel.createUIElement(WIDTH, rowHeight, false);
+        megaStructHeader.beginTable(Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(),
                 0f, false, true,
                 new Object[]{"Name", columnOneWidth, "Build time", columnWidth, "Cost", columnWidth - 6f});
-        headerElement.addTableHeaderTooltip(0, "Name of the megastructure to build");
-        headerElement.addTableHeaderTooltip(1, "Build time, in days. Until the megastructure project finishes.");
-        headerElement.addTableHeaderTooltip(2, "One-time cost to begin megastructure project, in credits");
-        headerElement.addTable("", 0, 0f);
-        headerElement.getPrev().getPosition().setXAlignOffset(0f);
-        headerPanel.addUIElement(headerElement);
-        mElement.addCustom(headerPanel, 0f);
+        megaStructHeader.addTableHeaderTooltip(0, "Name of the megastructure to build");
+        megaStructHeader.addTableHeaderTooltip(1, "Build time, in days. Until the megastructure project finishes.");
+        megaStructHeader.addTableHeaderTooltip(2, "One-time cost to begin megastructure project, in credits");
+        megaStructHeader.addTable("", 0, 0f);
+        megaStructHeader.getPrev().getPosition().setXAlignOffset(0f);
+        megaStructsPanel.addUIElement(megaStructHeader);
 
-        /*selectable megastructures list*/
-        CustomPanelAPI megaStructsPanel = this.mPanel.createCustomPanel(WIDTH, 360f, null);
-        TooltipMakerAPI megaStructsElement = megaStructsPanel.createUIElement(WIDTH, 360f, true);
-
+        TooltipMakerAPI megaStructsElement = megaStructsPanel.createUIElement(WIDTH, rowHeight - 22f, true);
         List<Utils.BuildableMegastructure> megastructures = this.industry.buildableMegastructures;
         Collections.sort(megastructures, new SortCanAffordAndBuild(this.industry));
-
         for (Utils.BuildableMegastructure megastructure : megastructures) {
-            float cost = megastructure.cost;
-            int buildTime = Math.round(megastructure.buildTime);
-            boolean canAfford = Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= cost;
-            boolean canBuild = this.industry.canBuildMegastructure(megastructure.id);
-            boolean canAffordAndBuild = canBuild && canAfford;
-
-            CustomPanelAPI megaStructPanel = this.mPanel.createCustomPanel(WIDTH, 44f, new SelectButtonPlugin(this));
-            TooltipMakerAPI megaStructNameElement = megaStructPanel.createUIElement(columnOneWidth, 40f, false);
-            TooltipMakerAPI megastructureImage = megaStructNameElement.beginImageWithText(megastructure.icon, 40f);
-            megastructureImage.addPara(megastructure.name, canAffordAndBuild ? Misc.getTextColor() : Misc.getNegativeHighlightColor(), 0f);
-            megaStructNameElement.addImageWithText(0f);
-            megaStructNameElement.getPosition().setXAlignOffset(-8f).setYAlignOffset(2f);
-
-            TooltipMakerAPI megaStructBuildTimeElement = megaStructPanel.createUIElement(columnWidth, 40f, false);
-            megaStructBuildTimeElement.addPara(buildTime + "", Misc.getHighlightColor(), 12f).setAlignment(Alignment.MID);
-            megaStructBuildTimeElement.getPosition().rightOfMid(megaStructNameElement, 0f);
-
-            TooltipMakerAPI megaStructCostElement = megaStructPanel.createUIElement(columnWidth, 40f, false);
-            megaStructCostElement.addPara(Misc.getDGSCredits(cost), canAfford ? Misc.getHighlightColor() : Misc.getNegativeHighlightColor(), 12f).setAlignment(Alignment.MID);
-            megaStructCostElement.getPosition().rightOfMid(megaStructBuildTimeElement, 0f);
-
-            TooltipMakerAPI megaStructButtonElement = megaStructPanel.createUIElement(WIDTH, 44f, false);
-            ButtonAPI megaStructButton = megaStructButtonElement.addButton("", megastructure, new Color(0, 195, 255, 190), new Color(0, 0, 0, 255), Alignment.MID, CutStyle.NONE, WIDTH, 44f, 0f);
-            if (canAffordAndBuild) {
-                megaStructButton.setHighlightBrightness(0.6f);
-                megaStructButton.setGlowBrightness(0.56f);
-                megaStructButton.setQuickMode(true);
-            } else {
-                megaStructButton.setCustomData(null);
-                megaStructButton.setButtonPressedSound("ui_button_disabled_pressed");
-                megaStructButton.setGlowBrightness(1.2f);
-                megaStructButton.setHighlightBrightness(0.6f);
-                megaStructButton.highlight();
-            }
-            megaStructButtonElement.addTooltipTo(new MegastructureTooltip(megastructure), megaStructPanel, TooltipMakerAPI.TooltipLocation.RIGHT);
-            megaStructButtonElement.getPosition().setXAlignOffset(-10f);
-
-            megaStructPanel.addUIElement(megaStructButtonElement);
-            megaStructPanel.addUIElement(megaStructNameElement);
-            megaStructPanel.addUIElement(megaStructBuildTimeElement);
-            megaStructPanel.addUIElement(megaStructCostElement);
+            CustomPanelAPI megaStructPanel = Utils.addCustomButton(this.mPanel, megastructure, this.industry, this.buttons, WIDTH, this);
             megaStructsElement.addCustom(megaStructPanel, 0f);
-
-            if (megaStructButton.getCustomData() != null)
-                this.buttons.add(megaStructButton);
         }
         megaStructsPanel.addUIElement(megaStructsElement);
         mElement.addCustom(megaStructsPanel, 0f);
 
-        /* Inputs for megastructure orbit area */
+        // Inputs for megastructure orbit area
         CustomPanelAPI orbitInputsHeaderPanel = this.mPanel.createCustomPanel(WIDTH, 25f, null);
         TooltipMakerAPI orbitInputsHeaderElement = orbitInputsHeaderPanel.createUIElement(WIDTH, 25f, false);
         orbitInputsHeaderPanel.addUIElement(orbitInputsHeaderElement);
@@ -144,7 +102,7 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         orbitInputsPanel.addUIElement(orbitInputsElement);
         mElement.addCustom(orbitInputsPanel, 0f).getPosition().setXAlignOffset(-5f);
 
-        /* orbit focus field */
+        // Orbit focus field
         CustomPanelAPI orbitFocusPanel = this.mPanel.createCustomPanel(WIDTH / 4f, 40f, new DropDownPlugin(this));
         TooltipMakerAPI orbitFocusElement = orbitFocusPanel.createUIElement(WIDTH / 4f, 40f, false);
         orbitFocusPanel.addUIElement(orbitFocusElement);
@@ -161,71 +119,45 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
             mainBtn = orbitFocusElement.addButton(primaryEntity.getName(), primaryEntity, Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Alignment.MID, CutStyle.NONE, 190f, 25f, 0f);
         }
         ButtonAPI prevBtn = mainBtn;
-        if (showDropDown) {
+        if (this.showDropDown) {
             for (SectorEntityToken planet : this.industry.getMarket().getStarSystem().getPlanets()) {
                 ButtonAPI currBtn = orbitFocusElement.addButton(planet.getName(), planet, Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Alignment.MID, CutStyle.NONE, 190f, 25f, 0f);
-                if (prevBtn != null)
+                if (prevBtn != null) {
                     currBtn.getPosition().aboveMid(prevBtn, 0f);
+                }
                 prevBtn = currBtn;
             }
         }
         orbitFocusElement.addTooltipTo(new OrbitFocusFieldTooltip(), orbitFocusPanel, TooltipMakerAPI.TooltipLocation.BELOW);
 
-        /* start angle field */
+        // Start angle field
         TextFieldPlugin startAnglePlugin = new TextFieldPlugin();
         CustomPanelAPI startAnglePanel = this.mPanel.createCustomPanel(WIDTH / 4f, 40f, startAnglePlugin);
         TooltipMakerAPI startAngleElement = startAnglePanel.createUIElement(WIDTH / 4f, 40f, false);
         startAnglePanel.addUIElement(startAngleElement);
         orbitInputsElement.addCustom(startAnglePanel, 0f).getPosition().rightOfMid(orbitFocusPanel, 0f);
-        startAngleElement.addPara("Starting Angle", 0f).setAlignment(Alignment.MID);
-        startAngleElement.addSpacer(3f);
-        TextFieldAPI tempStartingAngle = startAngleElement.addTextField(190f, 25f, Fonts.DEFAULT_SMALL, 0f);
-        tempStartingAngle.setMaxChars(3);
-        if (this.startingAngleField == null)
-            tempStartingAngle.setText("0");
-        else
-            tempStartingAngle.setText(this.startingAngleField.getText().trim());
-        this.startingAngleField = tempStartingAngle;
+        this.startingAngleField = addCustomTextField(startAnglePanel, startAngleElement, this.startingAngleField, "360", 3, startAnglePlugin, new StartingAngleFieldTooltip());
         startAnglePlugin.setTextField(this.startingAngleField, 0, 0);
-        startAngleElement.addTooltipTo(new StartingAngleFieldTooltip(), startAnglePanel, TooltipMakerAPI.TooltipLocation.BELOW);
 
-        /* orbit radius field */
+        // Orbit radius field
         TextFieldPlugin orbitRadiusPlugin = new TextFieldPlugin();
         CustomPanelAPI orbitRadiusPanel = this.mPanel.createCustomPanel(WIDTH / 4f, 40f, orbitRadiusPlugin);
         TooltipMakerAPI orbitRadiusElement = orbitRadiusPanel.createUIElement(WIDTH / 4f, 40f, false);
         orbitRadiusPanel.addUIElement(orbitRadiusElement);
         orbitInputsElement.addCustom(orbitRadiusPanel, 0f).getPosition().rightOfMid(startAnglePanel, 0f);
-        orbitRadiusElement.addPara("Orbit Radius", 0f).setAlignment(Alignment.MID);
-        orbitRadiusElement.addSpacer(3f);
-        TextFieldAPI tempOrbitRadiusField = orbitRadiusElement.addTextField(190f, 25f, Fonts.DEFAULT_SMALL, 0f);
-        tempOrbitRadiusField.setMaxChars(5);
-        if (this.orbitRadiusField == null)
-            tempOrbitRadiusField.setText("1000");
-        else
-            tempOrbitRadiusField.setText(this.orbitRadiusField.getText().trim());
-        this.orbitRadiusField = tempOrbitRadiusField;
+        this.orbitRadiusField = addCustomTextField(orbitRadiusPanel, orbitRadiusElement, this.orbitRadiusField, "1000", 3, orbitRadiusPlugin, new OrbitRadiusFieldTooltip());
         orbitRadiusPlugin.setTextField(this.orbitRadiusField, 0, 0);
-        orbitRadiusElement.addTooltipTo(new OrbitRadiusFieldTooltip(), orbitRadiusPanel, TooltipMakerAPI.TooltipLocation.BELOW);
 
-        /* orbit days field */
+        // Orbit days field
         TextFieldPlugin orbitDaysPlugin = new TextFieldPlugin();
         CustomPanelAPI orbitDaysPanel = this.mPanel.createCustomPanel(WIDTH / 4f, 40f, orbitDaysPlugin);
         TooltipMakerAPI orbitDaysElement = orbitDaysPanel.createUIElement(WIDTH / 4f, 40f, false);
         orbitDaysPanel.addUIElement(orbitDaysElement);
         orbitInputsElement.addCustom(orbitDaysPanel, 0f).getPosition().rightOfMid(orbitRadiusPanel, 0f);
-        orbitDaysElement.addPara("Orbit Days", 0f).setAlignment(Alignment.MID);
-        orbitDaysElement.addSpacer(3f);
-        TextFieldAPI tempOrbitDaysField = orbitDaysElement.addTextField(190f, 25f, Fonts.DEFAULT_SMALL, 0f);
-        tempOrbitDaysField.setMaxChars(5);
-        if (this.orbitDaysField == null)
-            tempOrbitDaysField.setText("100");
-        else
-            tempOrbitDaysField.setText(this.orbitDaysField.getText().trim());
-        this.orbitDaysField = tempOrbitDaysField;
+        this.orbitDaysField = addCustomTextField(orbitDaysPanel, orbitDaysElement, this.orbitDaysField, "100", 5, orbitDaysPlugin, new OrbitDaysFieldTooltip());
         orbitDaysPlugin.setTextField(this.orbitDaysField, 0, 0);
-        orbitDaysElement.addTooltipTo(new OrbitDaysFieldTooltip(), orbitDaysElement, TooltipMakerAPI.TooltipLocation.BELOW);
 
-        /* display player credits */
+        // Display player credits
         TooltipMakerAPI creditsElement = this.mPanel.createUIElement(WIDTH, 0f, false);
         creditsElement.setParaSmallInsignia();
         creditsElement.addPara("Credits: %s", 0f, Misc.getGrayColor(), Misc.getHighlightColor(),
@@ -240,8 +172,9 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
 
     @Override
     public void customDialogConfirm() {
-        if (this.selected == null || this.orbitFocusField == null || this.startingAngleField == null || this.orbitRadiusField == null || this.orbitDaysField == null)
+        if (this.selected == null || this.orbitFocusField == null || this.startingAngleField == null || this.orbitRadiusField == null || this.orbitDaysField == null) {
             return;
+        }
 
         Utils.BuildableMegastructure megastructure = (Utils.BuildableMegastructure) this.selected;
         Utils.OrbitData orbitData = new Utils.OrbitData(
@@ -254,6 +187,21 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         this.industry.startUpgrading();
         Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(megastructure.cost);
         Global.getSoundPlayer().playSound("ui_upgrade_industry", 1f, 1f, Global.getSoundPlayer().getListenerPos(), new Vector2f());
+    }
+
+    public TextFieldAPI addCustomTextField(CustomPanelAPI panel, TooltipMakerAPI tooltip, TextFieldAPI textField, String tempNum, int maxChar, TextFieldPlugin plugin, TooltipMakerAPI.TooltipCreator tip) {
+        tooltip.addPara("Orbit Radius", 0f).setAlignment(Alignment.MID);
+        tooltip.addSpacer(3f);
+        TextFieldAPI tempField = tooltip.addTextField(190f, 25f, Fonts.DEFAULT_SMALL, 0f);
+        tempField.setMaxChars(maxChar);
+        if (textField == null) {
+            tempField.setText(tempNum);
+        } else {
+            tempField.setText(textField.getText().trim());
+        }
+        plugin.setTextField(textField, 0, 0);
+        tooltip.addTooltipTo(tip, panel, TooltipMakerAPI.TooltipLocation.BELOW);
+        return tempField;
     }
 
     public static class SortCanAffordAndBuild implements Comparator<Utils.BuildableMegastructure> {

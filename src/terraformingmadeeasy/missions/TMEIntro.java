@@ -31,17 +31,23 @@ public class TMEIntro extends HubMissionWithBarEvent {
 
     @Override
     protected boolean create(MarketAPI createdAt, boolean barEvent) {
-        /* find or set quest giver */
+        // Find or set quest giver
         if (barEvent) {
             setPersonOverride(getImportantPerson(TMEPeople.INADIRE));
             this.inadire = getPerson();
         }
 
-        if (this.inadire == null) return false;
-        if (!setPersonMissionRef(this.inadire, "$tmeIntro_ref")) return false;
-        if (!setGlobalReference("$tmeIntro_ref")) return false; // Stops the mission from being repeatable
+        if (this.inadire == null) {
+            return false;
+        }
+        if (!setPersonMissionRef(this.inadire, "$tmeIntro_ref")) {
+            return false;
+        }
+        if (!setGlobalReference("$tmeIntro_ref")) {
+            return false; // Stops the mission from being repeatable
+        }
 
-        /* Find and pick a planet to use for quest */
+        // Find and pick a planet to use for quest
         requireMarketFaction(Factions.INDEPENDENT);
         requireMarketSizeAtLeast(3);
         requireMarketHasSpaceport();
@@ -49,26 +55,27 @@ public class TMEIntro extends HubMissionWithBarEvent {
 
         this.market = pickMarket();
 
-        if (market == null || market == createdAt)
+        if (this.market == null || this.market == createdAt) {
             return false;
+        }
 
         this.planet = this.market.getPrimaryEntity();
         this.system = this.market.getStarSystem();
 
-        /* set up starting and end stages */
+        // Set up starting and end stages
         setStoryMission();
         setStartingStage(Stage.ESCORT_CONTACT);
         addSuccessStages(Stage.COMPLETED);
 
-        /* Make these locations important */
+        // Make these locations important
         makeImportant(this.market, "$tmeIntro_escortContact", Stage.ESCORT_CONTACT);
 
-        /* Flags that can be used to enter the next stage */
+        // Flags that can be used to enter the next stage
         setStageOnGlobalFlag(Stage.COMPLETED, "$tmeIntro_completed");
 
         setCreditReward(CreditReward.AVERAGE);
 
-        /* Create a fleet near entity after completing survey planet */
+        // Create a fleet near entity after completing survey planet
         beginStageTrigger(Stage.ESCORT_CONTACT);
         triggerCreateFleet(FleetSize.MEDIUM, FleetQuality.DEFAULT, Factions.HEGEMONY, FleetTypes.PATROL_MEDIUM, createdAt.getStarSystem());
         triggerSetFleetOfficers(OfficerNum.DEFAULT, OfficerQuality.DEFAULT);
@@ -83,7 +90,7 @@ public class TMEIntro extends HubMissionWithBarEvent {
 
         this.createdAt = createdAt;
 
-        setPersonIsPotentialContactOnSuccess(inadire);
+        setPersonIsPotentialContactOnSuccess(this.inadire);
 
         return true;
     }
@@ -123,15 +130,15 @@ public class TMEIntro extends HubMissionWithBarEvent {
         float oPad = 10f;
         Color h = Misc.getHighlightColor();
 
-        if (currentStage == Stage.ESCORT_CONTACT) {
-            info.addPara("Escort %s to %s in the %s", oPad, h, inadire.getName().getFullName(), planet.getFullName(), system.getNameWithLowercaseTypeShort());
+        if (this.currentStage == Stage.ESCORT_CONTACT) {
+            info.addPara("Escort %s to %s in the %s", oPad, h, this.inadire.getName().getFullName(), this.planet.getFullName(), this.system.getNameWithLowercaseTypeShort());
         }
     }
 
     @Override
     public boolean addNextStepText(TooltipMakerAPI info, Color tc, float pad) {
-        if (currentStage == Stage.ESCORT_CONTACT) {
-            info.addPara("Escort %s to a planet within the %s", pad, tc, inadire.getName().getFullName(), system.getNameWithLowercaseTypeShort());
+        if (this.currentStage == Stage.ESCORT_CONTACT) {
+            info.addPara("Escort %s to a planet within the %s", pad, tc, this.inadire.getName().getFullName(), this.system.getNameWithLowercaseTypeShort());
             return true;
         }
 

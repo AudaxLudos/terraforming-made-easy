@@ -35,24 +35,26 @@ public class PlanetaryHologram extends TMEBaseIndustry {
 
     @Override
     public void changePlanetVisuals(String planetTypeId) {
-        String prevPlanetType = market.getPlanetEntity().getSpec().getPlanetType();
-        String prevPlanetName = market.getPlanetEntity().getSpec().getName();
-        boolean prevIsGasGiant = market.getPlanetEntity().getSpec().isGasGiant();
+        String prevPlanetType = this.market.getPlanetEntity().getSpec().getPlanetType();
+        String prevPlanetName = this.market.getPlanetEntity().getSpec().getName();
+        boolean prevIsGasGiant = this.market.getPlanetEntity().getSpec().isGasGiant();
         String newPlanetType = planetTypeId;
-        if (modifiableCondition.planetSpecOverride != null) {
+        if (this.modifiableCondition.planetSpecOverride != null) {
             for (PlanetSpecAPI spec : Global.getSettings().getAllPlanetSpecs()) {
-                if (spec.isStar()) continue;
-                if (Objects.equals(spec.getPlanetType(), modifiableCondition.planetSpecOverride)) {
+                if (spec.isStar()) {
+                    continue;
+                }
+                if (Objects.equals(spec.getPlanetType(), this.modifiableCondition.planetSpecOverride)) {
                     newPlanetType = spec.getPlanetType();
                     break;
                 }
             }
         }
-        /* Change the planet type but make sure certain info are still its based info */
-        market.getPlanetEntity().changeType(newPlanetType, StarSystemGenerator.random);
-        ((PlanetSpec) market.getPlanetEntity().getSpec()).planetType = prevPlanetType;
-        ((PlanetSpec) market.getPlanetEntity().getSpec()).name = prevPlanetName;
-        ((PlanetSpec) market.getPlanetEntity().getSpec()).setGasGiant(prevIsGasGiant);
-        market.getPlanetEntity().applySpecChanges();
+        // Change the planet type but make sure certain info are still its based info
+        this.market.getPlanetEntity().changeType(newPlanetType, StarSystemGenerator.random);
+        ((PlanetSpec) this.market.getPlanetEntity().getSpec()).planetType = prevPlanetType;
+        ((PlanetSpec) this.market.getPlanetEntity().getSpec()).name = prevPlanetName;
+        ((PlanetSpec) this.market.getPlanetEntity().getSpec()).setGasGiant(prevIsGasGiant);
+        this.market.getPlanetEntity().applySpecChanges();
     }
 }

@@ -33,8 +33,9 @@ public class TerraformOptionProvider extends BaseIndustryOptionProvider {
 
     public static void register() {
         ListenerManagerAPI listeners = Global.getSector().getListenerManager();
-        if (!listeners.hasListenerOfClass(TerraformOptionProvider.class))
+        if (!listeners.hasListenerOfClass(TerraformOptionProvider.class)) {
             listeners.addListener(new TerraformOptionProvider(), true);
+        }
     }
 
     public boolean isUnsuitable(Industry ind, boolean allowUnderConstruction) {
@@ -48,8 +49,9 @@ public class TerraformOptionProvider extends BaseIndustryOptionProvider {
     }
 
     public List<IndustryOptionData> getIndustryOptions(Industry ind) {
-        if (isUnsuitable(ind, false))
+        if (isUnsuitable(ind, false)) {
             return null;
+        }
         List<IndustryOptionData> result = new ArrayList<>();
 
         if (!ind.isUpgrading()) {

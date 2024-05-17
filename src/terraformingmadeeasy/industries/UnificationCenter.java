@@ -10,11 +10,11 @@ public class UnificationCenter extends TMEBaseIndustry {
 
     @Override
     public boolean hasLikedConditions(Utils.ModifiableCondition condition) {
-        /* Checks if market has all conditions */
-        hasAtLeastOneLikedCondition = false;
+        // Checks if market has all conditions
+        this.hasAtLeastOneLikedCondition = false;
         if (!condition.likedConditions.isEmpty()) {
             for (String conditionId : condition.likedConditions) {
-                if (!market.hasCondition(conditionId)) {
+                if (!this.market.hasCondition(conditionId)) {
                     return false;
                 }
             }

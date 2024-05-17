@@ -25,8 +25,9 @@ public class MegastructureOptionProvider extends BaseIndustryOptionProvider {
 
     public static void register() {
         ListenerManagerAPI listeners = Global.getSector().getListenerManager();
-        if (!listeners.hasListenerOfClass(MegastructureOptionProvider.class))
+        if (!listeners.hasListenerOfClass(MegastructureOptionProvider.class)) {
             listeners.addListener(new MegastructureOptionProvider(), true);
+        }
     }
 
     public boolean isUnsuitable(Industry ind, boolean allowUnderConstruction) {
@@ -40,8 +41,9 @@ public class MegastructureOptionProvider extends BaseIndustryOptionProvider {
     }
 
     public List<IndustryOptionData> getIndustryOptions(Industry ind) {
-        if (isUnsuitable(ind, false))
+        if (isUnsuitable(ind, false)) {
             return null;
+        }
         List<IndustryOptionData> result = new ArrayList<>();
 
         if (!ind.isUpgrading()) {
