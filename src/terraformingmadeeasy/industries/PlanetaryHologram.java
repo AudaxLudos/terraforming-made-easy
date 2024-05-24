@@ -67,7 +67,7 @@ public class PlanetaryHologram extends TMEBaseIndustry {
         if (mode == IndustryTooltipMode.NORMAL) {
             tooltip.addSpacer(10f);
             tooltip.addSectionHeading("Projected Hologram", Alignment.MID, 0f);
-            tooltip.addPara("Original Planet Type: %s", oPad, Misc.getHighlightColor(), this.market.getPlanetEntity().getTypeId());
+            tooltip.addPara("Original Planet Type: %s", oPad, Misc.getHighlightColor(), this.market.getPlanetEntity().getSpec().getPlanetType());
             tooltip.addPara("Fake Planet Type: %s", pad, Misc.getHighlightColor(), this.fakePlanetType != null ? this.fakePlanetType : "-");
         }
     }

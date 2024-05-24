@@ -2,14 +2,12 @@ package terraformingmadeeasy;
 
 import com.fs.starfarer.api.BaseModPlugin;
 import terraformingmadeeasy.ids.TMEPeople;
-import terraformingmadeeasy.listeners.MegastructureOptionProvider;
-import terraformingmadeeasy.listeners.TerraformOptionProvider;
+import terraformingmadeeasy.listeners.TMEOptionProvider;
 
 public class ModPlugin extends BaseModPlugin {
     @Override
     public void onGameLoad(boolean newGame) {
-        TerraformOptionProvider.register();
-        MegastructureOptionProvider.register();
+        TMEOptionProvider.register();
         TMEPeople.register();
     }
 }
