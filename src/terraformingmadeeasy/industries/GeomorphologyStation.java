@@ -1,9 +1,9 @@
 package terraformingmadeeasy.industries;
 
-import terraformingmadeeasy.ids.TMEIndustries;
+import terraformingmadeeasy.ids.TMEIds;
 
 public class GeomorphologyStation extends TMEBaseIndustry {
     public GeomorphologyStation() {
-        getTerraformingOptions(TMEIndustries.GEOMORPHOLOGY_STATION);
+        getTerraformingOptions(TMEIds.GEOMORPHOLOGY_STATION);
     }
 }

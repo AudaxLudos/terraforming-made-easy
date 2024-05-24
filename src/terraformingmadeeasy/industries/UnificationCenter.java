@@ -1,11 +1,11 @@
 package terraformingmadeeasy.industries;
 
 import terraformingmadeeasy.Utils;
-import terraformingmadeeasy.ids.TMEIndustries;
+import terraformingmadeeasy.ids.TMEIds;
 
 public class UnificationCenter extends TMEBaseIndustry {
     public UnificationCenter() {
-        getTerraformingOptions(TMEIndustries.UNIFICATION_CENTER);
+        getTerraformingOptions(TMEIds.UNIFICATION_CENTER);
     }
 
     @Override

@@ -1,9 +1,9 @@
 package terraformingmadeeasy.industries;
 
-import terraformingmadeeasy.ids.TMEIndustries;
+import terraformingmadeeasy.ids.TMEIds;
 
 public class StellarManufactory extends TMEBaseIndustry {
     public StellarManufactory() {
-        getTerraformingOptions(TMEIndustries.STELLAR_MANUFACTORY);
+        getTerraformingOptions(TMEIds.STELLAR_MANUFACTORY);
     }
 }

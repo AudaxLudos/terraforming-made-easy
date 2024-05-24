@@ -1,9 +1,9 @@
 package terraformingmadeeasy.industries;
 
-import terraformingmadeeasy.ids.TMEIndustries;
+import terraformingmadeeasy.ids.TMEIds;
 
 public class MineralReplicator extends TMEBaseIndustry {
     public MineralReplicator() {
-        getTerraformingOptions(TMEIndustries.MINERAL_REPLICATOR);
+        getTerraformingOptions(TMEIds.MINERAL_REPLICATOR);
     }
 }

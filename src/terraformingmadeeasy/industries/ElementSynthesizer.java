@@ -1,9 +1,9 @@
 package terraformingmadeeasy.industries;
 
-import terraformingmadeeasy.ids.TMEIndustries;
+import terraformingmadeeasy.ids.TMEIds;
 
 public class ElementSynthesizer extends TMEBaseIndustry {
     public ElementSynthesizer() {
-        getTerraformingOptions(TMEIndustries.ELEMENT_SYNTHESIZER);
+        getTerraformingOptions(TMEIds.ELEMENT_SYNTHESIZER);
     }
 }

@@ -7,7 +7,7 @@ import com.fs.starfarer.api.campaign.listeners.DialogCreatorUI;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import terraformingmadeeasy.ids.TMEIndustries;
+import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.industries.ConstructionGrid;
 import terraformingmadeeasy.industries.TMEBaseIndustry;
 import terraformingmadeeasy.ui.dialogs.ConfirmDialogDelegate;
@@ -18,27 +18,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class TMEOptionProvider extends BaseIndustryOptionProvider {
+public class TMEIndustryOptionProvider extends BaseIndustryOptionProvider {
     public static List<String> tmeIndustries = new ArrayList<>();
     public static Object CUSTOM_PLUGIN = new Object();
 
     static {
-        tmeIndustries.add(TMEIndustries.AGRICULTURAL_LABORATORY);
-        tmeIndustries.add(TMEIndustries.ATMOSPHERE_REGULATOR);
-        tmeIndustries.add(TMEIndustries.CONSTRUCTION_GRID);
-        tmeIndustries.add(TMEIndustries.ELEMENT_SYNTHESIZER);
-        tmeIndustries.add(TMEIndustries.GEOMORPHOLOGY_STATION);
-        tmeIndustries.add(TMEIndustries.MINERAL_REPLICATOR);
-        tmeIndustries.add(TMEIndustries.PLANETARY_HOLOGRAM);
-        tmeIndustries.add(TMEIndustries.STELLAR_MANUFACTORY);
-        tmeIndustries.add(TMEIndustries.TERRESTRIAL_ENGINE);
-        tmeIndustries.add(TMEIndustries.UNIFICATION_CENTER);
+        tmeIndustries.add(TMEIds.AGRICULTURAL_LABORATORY);
+        tmeIndustries.add(TMEIds.ATMOSPHERE_REGULATOR);
+        tmeIndustries.add(TMEIds.CONSTRUCTION_GRID);
+        tmeIndustries.add(TMEIds.ELEMENT_SYNTHESIZER);
+        tmeIndustries.add(TMEIds.GEOMORPHOLOGY_STATION);
+        tmeIndustries.add(TMEIds.MINERAL_REPLICATOR);
+        tmeIndustries.add(TMEIds.PLANETARY_HOLOGRAM);
+        tmeIndustries.add(TMEIds.STELLAR_MANUFACTORY);
+        tmeIndustries.add(TMEIds.TERRESTRIAL_ENGINE);
+        tmeIndustries.add(TMEIds.UNIFICATION_CENTER);
     }
 
     public static void register() {
         ListenerManagerAPI listeners = Global.getSector().getListenerManager();
-        if (!listeners.hasListenerOfClass(TMEOptionProvider.class)) {
-            listeners.addListener(new TMEOptionProvider(), true);
+        if (!listeners.hasListenerOfClass(TMEIndustryOptionProvider.class)) {
+            listeners.addListener(new TMEIndustryOptionProvider(), true);
         }
     }
 
@@ -60,10 +60,10 @@ public class TMEOptionProvider extends BaseIndustryOptionProvider {
 
         String isNotUpgradingText = "Terraform planet...";
         String isUpgradingText = "Cancel project...";
-        if (Objects.equals(ind.getId(), TMEIndustries.CONSTRUCTION_GRID)) {
+        if (Objects.equals(ind.getId(), TMEIds.CONSTRUCTION_GRID)) {
             isNotUpgradingText = "Build a megastructure...";
             isUpgradingText = "Cancel the megastructure project...";
-        } else if (Objects.equals(ind.getId(), TMEIndustries.PLANETARY_HOLOGRAM)) {
+        } else if (Objects.equals(ind.getId(), TMEIds.PLANETARY_HOLOGRAM)) {
             isNotUpgradingText = "Change planet visual...";
             isUpgradingText = "Cancel the planet visual change...";
         }
@@ -82,13 +82,13 @@ public class TMEOptionProvider extends BaseIndustryOptionProvider {
         if (opt.ind.isUpgrading()) {
             refundCost = ((TMEBaseIndustry) opt.ind).modifiableCondition.cost;
         }
-        if (Objects.equals(opt.ind.getId(), TMEIndustries.CONSTRUCTION_GRID)) {
+        if (Objects.equals(opt.ind.getId(), TMEIds.CONSTRUCTION_GRID)) {
             description = "A large structural grid for constructing Megastructures.";
             refundText = "Cancel the Megastructure project for a %s refund.";
             if (opt.ind.isUpgrading()) {
                 refundCost = ((ConstructionGrid) opt.ind).buildableMegastructure.cost;
             }
-        } else if (Objects.equals(opt.ind.getId(), TMEIndustries.PLANETARY_HOLOGRAM)) {
+        } else if (Objects.equals(opt.ind.getId(), TMEIds.PLANETARY_HOLOGRAM)) {
             description = "A specialized structure that can change a planet's visual to a different planet type.";
             refundText = "Cancel the planet visual change for a %s refund.";
             if (opt.ind.isUpgrading()) {
@@ -103,7 +103,7 @@ public class TMEOptionProvider extends BaseIndustryOptionProvider {
     }
 
     public void optionSelected(IndustryOptionData opt, DialogCreatorUI ui) {
-        if (opt.id == CUSTOM_PLUGIN && Objects.equals(opt.ind.getId(), TMEIndustries.CONSTRUCTION_GRID)) {
+        if (opt.id == CUSTOM_PLUGIN && Objects.equals(opt.ind.getId(), TMEIds.CONSTRUCTION_GRID)) {
             if (!opt.ind.isUpgrading()) {
                 MegastructureDialogDelegate dialogueDelegate = new MegastructureDialogDelegate(800f, 464f, (ConstructionGrid) opt.ind);
                 ui.showDialog(800f, 464f, dialogueDelegate);

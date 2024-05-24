@@ -1,9 +1,9 @@
 package terraformingmadeeasy.industries;
 
-import terraformingmadeeasy.ids.TMEIndustries;
+import terraformingmadeeasy.ids.TMEIds;
 
 public class TerrestrialEngine extends TMEBaseIndustry {
     public TerrestrialEngine() {
-        getTerraformingOptions(TMEIndustries.TERRESTRIAL_ENGINE);
+        getTerraformingOptions(TMEIds.TERRESTRIAL_ENGINE);
     }
 }

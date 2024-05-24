@@ -69,7 +69,7 @@ public class PlanetaryHologram extends TMEBaseIndustry {
         if (mode == IndustryTooltipMode.NORMAL) {
             tooltip.addSpacer(10f);
             tooltip.addSectionHeading("Projected Hologram", Alignment.MID, 0f);
-            String[] text =  this.market.getPlanetEntity().getSpec().getName().split("[()]");
+            String[] text = this.market.getPlanetEntity().getSpec().getName().split("[()]");
             tooltip.addPara("Original Planet Type: %s World", oPad, Misc.getHighlightColor(), text.length >= 2 ? text[1] : text[0]);
             tooltip.addPara("Fake Planet Type: %s World", pad, Misc.getHighlightColor(), this.fakePlanetSpec != null ? this.fakePlanetSpec.getName() : "-");
         }
