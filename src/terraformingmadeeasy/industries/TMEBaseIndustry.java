@@ -244,14 +244,14 @@ public class TMEBaseIndustry extends BaseIndustry {
             tooltip.addSpacer(10f);
             tooltip.addSectionHeading("Terraforming Project", Alignment.MID, 0f);
             if (isUpgrading()) {
-                TooltipMakerAPI imageWithText = tooltip.beginImageWithText(this.modifiableCondition.icon, 40f);
+                TooltipMakerAPI imageWithText = tooltip.beginImageWithText(this.modifiableCondition.icon, 40f, getTooltipWidth(), false);
                 imageWithText.addPara("Status: %s", oPad, Misc.getHighlightColor(), "Ongoing");
                 imageWithText.addPara("Action: %s", pad, Misc.getHighlightColor(), !this.market.hasCondition(this.modifiableCondition.id) ? "Add" : "Remove");
                 imageWithText.addPara("Condition: %s", pad, Misc.getHighlightColor(), this.modifiableCondition.name);
                 imageWithText.addPara("Days Left: %s", pad, Misc.getHighlightColor(), Math.round(this.buildTime - this.buildProgress) + "");
                 tooltip.addImageWithText(0f);
             } else {
-                TooltipMakerAPI imageWithText = tooltip.beginImageWithText("graphics/icons/stable_location.png", 40f);
+                TooltipMakerAPI imageWithText = tooltip.beginImageWithText("graphics/icons/stable_location.png", 40f, getTooltipWidth(), false);
                 imageWithText.addPara("Status: %s", oPad, Misc.getHighlightColor(), "Idle");
                 imageWithText.addPara("Action: %s", pad, Misc.getHighlightColor(), "-");
                 imageWithText.addPara("Condition: %s", pad, Misc.getHighlightColor(), "-");
