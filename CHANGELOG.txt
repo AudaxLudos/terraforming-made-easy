@@ -1,3 +1,13 @@
+### 2.4.5
+- Release 2.4.5
+- Add planetary hologram sprite
+- Update planetary hologram tooltip ui
+- Update planetary hologram cost multiplier to 20 from 100
+- Update planetary hologram build time to 60 from 360
+- Update planetary hologram upkeep to 2 from 15
+- Update planetary hologram to be enabled
+- Update grammar of industry descriptions
+
 ### 2.4.1
 - Release 2.4.1
 - Update reduce cost and build time for all terraforming & megatsructure options by 30%-50%

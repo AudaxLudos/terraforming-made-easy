@@ -4,9 +4,9 @@
     "modVersion": {
         "major": 2,
         "minor": 4,
-        "patch": 1
+        "patch": 5
     },
     "modThreadId": 29441,
-    "directDownloadURL": "https://github.com/AudaxLudos/terraforming-made-easy/releases/latest/download/TerraformingMadeEasy-2.4.1.zip",
+    "directDownloadURL": "https://github.com/AudaxLudos/terraforming-made-easy/releases/latest/download/TerraformingMadeEasy-2.4.5.zip",
     "changelogURL": "https://raw.githubusercontent.com/AudaxLudos/terraforming-made-easy/main/CHANGELOG.txt"
 }
