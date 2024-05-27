@@ -390,13 +390,13 @@ public class TMEBaseIndustry extends BaseIndustry {
         if (this.market.hasCondition(Conditions.HABITABLE)) {
             String[] richHabitableTypes = {"terran", "terran-eccentric"};
             planetTypeId = richHabitableTypes[Misc.random.nextInt(richHabitableTypes.length)];
-            if (this.market.hasCondition(Conditions.HOT)) {
-                String[] poorHabitableTypes = {"jungle", "arid", "desert", "desert1"};
-                planetTypeId = poorHabitableTypes[Misc.random.nextInt(poorHabitableTypes.length)];
-            }
-            if (this.market.hasCondition(Conditions.COLD)) {
-                planetTypeId = "tundra";
-            }
+        }
+        if (this.market.hasCondition(Conditions.HOT)) {
+            String[] poorHabitableTypes = {"jungle", "arid", "desert", "desert1"};
+            planetTypeId = poorHabitableTypes[Misc.random.nextInt(poorHabitableTypes.length)];
+        }
+        if (this.market.hasCondition(Conditions.COLD)) {
+            planetTypeId = "tundra";
         }
         if (this.market.hasCondition(Conditions.NO_ATMOSPHERE) || this.market.hasCondition(Conditions.VERY_HOT) || this.market.hasCondition(Conditions.VERY_COLD)) {
             String[] poorBarrenTypes = {"barren", "barren2", "barren3", "barren_castiron", "barren_venuslike", "rocky_metallic", "barren-bombarded"};
