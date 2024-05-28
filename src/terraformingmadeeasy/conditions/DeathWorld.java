@@ -7,7 +7,7 @@ import com.fs.starfarer.api.campaign.econ.MarketConditionAPI;
 import com.fs.starfarer.api.impl.campaign.econ.BaseMarketConditionPlugin;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
-import com.fs.starfarer.api.impl.campaign.procgen.ConditionGenDataSpec;
+import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.listeners.TMEDeathWorldScript;
@@ -20,9 +20,10 @@ public class DeathWorld extends BaseMarketConditionPlugin {
     public static float MARINES_TO_TRAIN_MULT = 0.05f;
     public static float GROUND_DEFENSE_MULT = 1.00f;
     public static int SUPPLY_BONUS = 3;
-    public List<String> conditionIds = new ArrayList<>();
+    public List<MarketConditionAPI> suppressedConditions = new ArrayList<>();
+    public int monthsActive = 0;
     public String[] industryIds = {
-            Industries.POPULATION, Industries.ORBITALWORKS, Industries.HIGHCOMMAND, Industries.FUELPROD
+            Industries.POPULATION, Industries.ORBITALWORKS, Industries.HIGHCOMMAND, Industries.MINING
     };
 
     @Override
@@ -31,19 +32,13 @@ public class DeathWorld extends BaseMarketConditionPlugin {
         if (!Global.getSector().getListenerManager().hasListenerOfClass(TMEDeathWorldScript.class)) {
             Global.getSector().getListenerManager().addListener(new TMEDeathWorldScript(), true);
         }
-
-        for (ConditionGenDataSpec c : Global.getSettings().getAllSpecs(ConditionGenDataSpec.class)) {
-            if (c.getHazard() > 0f) {
-                this.conditionIds.add(c.getId());
-            }
-        }
     }
 
     @Override
     public void apply(String id) {
         this.market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).modifyMult(id, 1f + GROUND_DEFENSE_MULT, "Death World");
-        for (String cId : this.conditionIds) {
-            this.market.suppressCondition(cId);
+        for (MarketConditionAPI c : this.suppressedConditions) {
+            this.market.suppressCondition(c.getId());
         }
         for (String industryId : this.industryIds) {
             if (!this.market.hasIndustry(industryId)) {
@@ -57,8 +52,8 @@ public class DeathWorld extends BaseMarketConditionPlugin {
     @Override
     public void unapply(String id) {
         this.market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).unmodify(id);
-        for (String cId : this.conditionIds) {
-            this.market.unsuppressCondition(cId);
+        for (MarketConditionAPI c : this.suppressedConditions) {
+            this.market.unsuppressCondition(c.getId());
         }
         for (String industryId : this.industryIds) {
             if (!this.market.hasIndustry(industryId)) {
@@ -70,16 +65,25 @@ public class DeathWorld extends BaseMarketConditionPlugin {
         }
     }
 
+    @SuppressWarnings("RedundantArrayCreation")
     @Override
     protected void createTooltipAfterDescription(TooltipMakerAPI tooltip, boolean expanded) {
-        tooltip.addSpacer(10f);
-        tooltip.addPara("%s negative conditions every %s months", 0f, Misc.getHighlightColor(), "Suppresses", SUPPRESS_CONDITION_PER_MONTH_MOD + "");
-        tooltip.addSpacer(10f);
-        tooltip.addPara("Trains %s of marines in stockpile for all markets in the system every %s", 0f, Misc.getHighlightColor(), Math.round(MARINES_TO_TRAIN_MULT * 100f) + "%", "month");
-        tooltip.addSpacer(10f);
-        tooltip.addPara("%s ground defense", 0f, Misc.getHighlightColor(), "+" + Math.round(GROUND_DEFENSE_MULT * 100f) + "%");
-        tooltip.addSpacer(10f);
-        tooltip.addPara("%s production to population & infrastructure, orbital works, high command, and fuel production", 0f, Misc.getHighlightColor(), "+" + SUPPLY_BONUS);
-        tooltip.addSpacer(10f);
+        float oPad = 10f;
+
+        tooltip.addPara("%s a random negative condition once every %s months", oPad, Misc.getHighlightColor(), "Suppresses", SUPPRESS_CONDITION_PER_MONTH_MOD + "");
+        tooltip.addPara("Trains %s of marines in the market's stockpile every %s", oPad, Misc.getHighlightColor(), Math.round(MARINES_TO_TRAIN_MULT * 100f) + "%", "month");
+        tooltip.addPara("%s ground defense", oPad, Misc.getHighlightColor(), "+" + Math.round(GROUND_DEFENSE_MULT * 100f) + "%");
+        tooltip.addPara("%s production to population & infrastructure, orbital works, high command, and mining", oPad, Misc.getHighlightColor(), "+" + SUPPLY_BONUS);
+        tooltip.beginTable2(this.market.getFaction(), 20f, true, true,
+                new Object[]{"Suppressed Conditions", tooltip.getWidthSoFar() / 2f});
+        tooltip.addTableHeaderTooltip(0, "Name of the suppressed conditions");
+        if (this.suppressedConditions.isEmpty()) {
+            tooltip.addRow(Alignment.MID, Misc.getGrayColor(), "No conditions suppressed");
+        }
+        for (MarketConditionAPI c : this.suppressedConditions) {
+            tooltip.addRow(Alignment.MID, Misc.getTextColor(), c.getName());
+        }
+        tooltip.addTable("", 0, 10f);
+        tooltip.addSpacer(3f);
     }
 }

@@ -1,10 +1,13 @@
 package terraformingmadeeasy.listeners;
 
+import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CargoStackAPI;
 import com.fs.starfarer.api.campaign.PlayerMarketTransaction;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
+import com.fs.starfarer.api.campaign.comm.CommMessageAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import com.fs.starfarer.api.campaign.econ.MarketConditionAPI;
 import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
 import com.fs.starfarer.api.campaign.listeners.ColonyInteractionListener;
 import com.fs.starfarer.api.campaign.listeners.EconomyTickListener;
@@ -12,11 +15,16 @@ import com.fs.starfarer.api.impl.PlayerFleetPersonnelTracker;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
+import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
+import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.conditions.DeathWorld;
 import terraformingmadeeasy.ids.TMEIds;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 
 public class TMEDeathWorldScript implements EconomyTickListener, ColonyInteractionListener {
     @Override
@@ -99,26 +107,50 @@ public class TMEDeathWorldScript implements EconomyTickListener, ColonyInteracti
 
     @Override
     public void reportEconomyMonthEnd() {
-        for (StarSystemAPI system : Misc.getPlayerSystems(true)) {
-            for (MarketAPI market : Misc.getMarketsInLocation(system, Factions.PLAYER)) {
-                if (!market.hasCondition(TMEIds.DEATH_WORLD)) {
-                    continue;
-                }
+        for (MarketAPI m : Misc.getPlayerMarkets(true)) {
+            if (!m.hasCondition(TMEIds.DEATH_WORLD)) {
+                continue;
+            }
 
-                for (MarketAPI dMarket : Misc.getMarketsInLocation(market.getContainingLocation(), Factions.PLAYER)) {
-                    SubmarketAPI subMarket = Misc.getLocalResources(dMarket).getSubmarket();
-                    int marineCount = subMarket.getCargo().getMarines();
-                    PlayerFleetPersonnelTracker.PersonnelAtEntity tracker =
-                            PlayerFleetPersonnelTracker.getInstance().getDroppedOffAt(
-                                    Commodities.MARINES,
-                                    dMarket.getPrimaryEntity(),
-                                    subMarket,
-                                    true);
-                    tracker.data.num = marineCount;
-                    tracker.data.addXP(marineCount * DeathWorld.MARINES_TO_TRAIN_MULT);
+            SubmarketAPI subMarket = Misc.getLocalResources(m).getSubmarket();
+            int marineCount = subMarket.getCargo().getMarines();
+            PlayerFleetPersonnelTracker.PersonnelAtEntity tracker =
+                    PlayerFleetPersonnelTracker.getInstance().getDroppedOffAt(
+                            Commodities.MARINES,
+                            m.getPrimaryEntity(),
+                            subMarket,
+                            true);
+            tracker.data.num = marineCount;
+            tracker.data.addXP(marineCount * DeathWorld.MARINES_TO_TRAIN_MULT);
+
+            if (m.getCondition(TMEIds.DEATH_WORLD).getPlugin() instanceof DeathWorld) {
+                DeathWorld conditionPlugin = (DeathWorld) m.getCondition(TMEIds.DEATH_WORLD).getPlugin();
+
+                ++conditionPlugin.monthsActive;
+                if (conditionPlugin.monthsActive >= DeathWorld.SUPPRESS_CONDITION_PER_MONTH_MOD) {
+                    List<MarketConditionAPI> conditions = new ArrayList<>();
+                    for (MarketConditionAPI c : m.getConditions()) {
+                        if (c.getGenSpec() != null && c.getGenSpec().getHazard() > 0) {
+                            conditions.add(c);
+                        }
+                    }
+                    conditions.removeAll(conditionPlugin.suppressedConditions);
+                    if (!conditions.isEmpty()) {
+                        MarketConditionAPI condition = conditions.get(new Random().nextInt(conditions.size()));
+                        conditionPlugin.suppressedConditions.add(condition);
+                        sendConditionSuppressedMessage(m, condition);
+                    }
+                    conditionPlugin.monthsActive = 0;
                 }
-                break;
             }
         }
+    }
+
+    public void sendConditionSuppressedMessage(MarketAPI market, MarketConditionAPI condition) {
+        MessageIntel intel = new MessageIntel("Citizens of " + market.getName() + " has adapted to a condition", Misc.getBasePlayerColor());
+        intel.addLine(BaseIntelPlugin.BULLET + "The " + condition.getName() + " planetary condition has been suppressed");
+        intel.setIcon(Global.getSector().getPlayerFaction().getCrest());
+        intel.setSound(BaseIntelPlugin.getSoundStandardUpdate());
+        Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.COLONY_INFO, market);
     }
 }
