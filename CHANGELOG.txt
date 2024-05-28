@@ -1,3 +1,9 @@
+### 2.4.7
+- Release 2.4.7
+- Update GitHub action script
+- Add death world condition to unification center
+- Add death world condition
+
 ### 2.4.5
 - Release 2.4.5
 - Add planetary hologram sprite
