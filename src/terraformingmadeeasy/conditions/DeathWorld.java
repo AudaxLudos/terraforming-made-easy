@@ -70,7 +70,7 @@ public class DeathWorld extends BaseMarketConditionPlugin {
     protected void createTooltipAfterDescription(TooltipMakerAPI tooltip, boolean expanded) {
         float oPad = 10f;
 
-        tooltip.addPara("%s a random negative condition once every %s months", oPad, Misc.getHighlightColor(), "Suppresses", SUPPRESS_CONDITION_PER_MONTH_MOD + "");
+        tooltip.addPara("%s a random hazardous condition once every %s months", oPad, Misc.getHighlightColor(), "Suppresses", SUPPRESS_CONDITION_PER_MONTH_MOD + "");
         tooltip.addPara("Trains %s of marines in the market's stockpile every %s", oPad, Misc.getHighlightColor(), Math.round(MARINES_TO_TRAIN_MULT * 100f) + "%", "month");
         tooltip.addPara("%s ground defense", oPad, Misc.getHighlightColor(), "+" + Math.round(GROUND_DEFENSE_MULT * 100f) + "%");
         tooltip.addPara("%s production to population & infrastructure, orbital works, high command, and mining", oPad, Misc.getHighlightColor(), "+" + SUPPLY_BONUS);
