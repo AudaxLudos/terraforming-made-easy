@@ -30,32 +30,28 @@ public class TerraformTooltip extends BaseTooltipCreator {
 
     @Override
     public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-        displayPreferences(tooltip, this.condition.likedConditions, true, false, this.industry.hasAtLeastOneLikedCondition);
-        tooltip.addSpacer(10f);
-        displayPreferences(tooltip, this.condition.hatedConditions, false, false, this.industry.hasAtLeastOneLikedCondition);
-        tooltip.addSpacer(10f);
-        displayPreferences(tooltip, this.condition.likedIndustries, true, true, this.industry.hasAtLeastOneLikedCondition);
-        tooltip.addSpacer(10f);
-        displayPreferences(tooltip, this.condition.hatedIndustries, false, true, this.industry.hasAtLeastOneLikedCondition);
-        tooltip.addSpacer(10f);
+        float oPad = 10f;
+        displayPreferences(tooltip, this.condition.likedConditions, true, false, this.industry.hasAtLeastOneLikedCondition, 0f);
+        displayPreferences(tooltip, this.condition.hatedConditions, false, false, this.industry.hasAtLeastOneLikedCondition, oPad);
+        displayPreferences(tooltip, this.condition.likedIndustries, true, true, this.industry.hasAtLeastOneLikedCondition, oPad);
+        displayPreferences(tooltip, this.condition.hatedIndustries, false, true, this.industry.hasAtLeastOneLikedCondition, oPad);
         Color textColor = this.condition.canChangeGasGiants ? Misc.getHighlightColor() : Misc.getNegativeHighlightColor();
         String textFormat = this.condition.canChangeGasGiants ? "Can" : "Cannot";
-        tooltip.addPara("%s be used on gas giants", 0f, textColor, textFormat);
+        tooltip.addPara("%s be used on gas giants", oPad, textColor, textFormat);
         if (this.condition.planetSpecOverride != null) {
             for (PlanetSpecAPI spec : Global.getSettings().getAllPlanetSpecs()) {
                 if (spec.isStar()) {
                     continue;
                 }
                 if (Objects.equals(spec.getPlanetType(), this.condition.planetSpecOverride)) {
-                    tooltip.addSpacer(10f);
-                    tooltip.addPara("The planet will be terraformed into a %s world", 0f, Misc.getHighlightColor(), spec.getName());
+                    tooltip.addPara("The planet will be terraformed into a %s world", oPad, Misc.getHighlightColor(), spec.getName());
                     break;
                 }
             }
         }
     }
 
-    public void displayPreferences(TooltipMakerAPI tooltip, List<String> preferences, boolean likes, boolean isIndustry, boolean hasAtLeastOneLikedCondition) {
+    public void displayPreferences(TooltipMakerAPI tooltip, List<String> preferences, boolean likes, boolean isIndustry, boolean hasAtLeastOneLikedCondition, float pad) {
         String preferenceText = likes ? "Requires " : "Removes ";
         preferenceText = likes && hasAtLeastOneLikedCondition && !isIndustry && preferences.size() > 1 ? preferenceText + "at least one of these " : preferenceText;
         preferenceText = !isIndustry ? preferenceText + "conditions: " : preferenceText + "industries: ";
@@ -82,9 +78,9 @@ public class TerraformTooltip extends BaseTooltipCreator {
                     text.append("%s, ");
                 }
             }
-            tooltip.addPara(preferenceText + text, 0f, Misc.getHighlightColor(), names.toArray(new String[0]));
+            tooltip.addPara(preferenceText + text, pad, Misc.getHighlightColor(), names.toArray(new String[0]));
         } else {
-            tooltip.addPara(preferenceText + " %s", 0f, Misc.getTextColor(), industryText);
+            tooltip.addPara(preferenceText + " %s", pad, Misc.getTextColor(), industryText);
         }
     }
 }

@@ -13,7 +13,6 @@ public class StartingAngleFieldTooltip extends BaseTooltipCreator {
     @Override
     public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
         tooltip.addPara("Input a number between %s", 0f, Misc.getHighlightColor(), "0 - 360");
-        tooltip.addSpacer(10f);
-        tooltip.addPara("Starting angle may be %s due to orbit radius and orbit days", 0f, Misc.getHighlightColor(), "different");
+        tooltip.addPara("Starting angle may be %s due to orbit radius and orbit days", 10f, Misc.getHighlightColor(), "different");
     }
 }

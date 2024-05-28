@@ -25,8 +25,7 @@ public class MegastructureTooltip extends BaseTooltipCreator {
     public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
         if (Objects.equals(this.megastructure.id, Entities.CORONAL_TAP)) {
             tooltip.addPara("Only %s can exist in a system", 0f, Misc.getHighlightColor(), "1 " + this.megastructure.name);
-            tooltip.addSpacer(10f);
-            tooltip.addPara("Needs a %s in the system", 0f, Misc.getHighlightColor(), "Blue Supergiant Star");
+            tooltip.addPara("Needs a %s in the system", 10f, Misc.getHighlightColor(), "Blue Supergiant Star");
         } else if (Objects.equals(this.megastructure.id, Entities.DERELICT_CRYOSLEEPER)) {
             tooltip.addPara("Only %s can exist in a system", 0f, Misc.getHighlightColor(), "1 " + this.megastructure.name);
         } else if (Objects.equals(this.megastructure.id, Entities.INACTIVE_GATE)) {
