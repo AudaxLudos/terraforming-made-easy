@@ -1,3 +1,7 @@
+### 2.4.7a
+- Release 2.4.7a
+- Fix megastructure ui showing the same text field titles
+
 ### 2.4.7
 - Release 2.4.7
 - Update GitHub action script
