@@ -272,7 +272,7 @@ public class TMEBaseIndustry extends BaseIndustry {
                 tooltip.addSpacer(7f);
             }
         } else {
-            tooltip.addPara("To see which conditions can the structure modify press %s", 10f, Misc.getGrayColor(), Misc.getHighlightColor(), "F1");
+            tooltip.addPara("Press %s to see conditions you can add or remove", 10f, Misc.getGrayColor(), Misc.getHighlightColor(), "F1");
         }
     }
 

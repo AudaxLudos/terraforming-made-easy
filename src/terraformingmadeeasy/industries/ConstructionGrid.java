@@ -28,10 +28,8 @@ import terraformingmadeeasy.ids.TMEIds;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
-import java.util.Random;
 
 public class ConstructionGrid extends BaseIndustry {
     public static final String MEGASTRUCTURE_OPTIONS_FILE = "data/config/megastructure_options.csv";
@@ -45,6 +43,7 @@ public class ConstructionGrid extends BaseIndustry {
     public float aiCoreCurrentBuildTimeMult = 0f;
     public float aiCoreBuildProgressRemoved = 0f;
     public String prevAICoreId = null;
+    public boolean isExpanded = false;
 
     public ConstructionGrid() {
         try {
@@ -194,6 +193,17 @@ public class ConstructionGrid extends BaseIndustry {
     }
 
     @Override
+    public boolean isTooltipExpandable() {
+        return true;
+    }
+
+    @Override
+    public void createTooltip(IndustryTooltipMode mode, TooltipMakerAPI tooltip, boolean expanded) {
+        this.isExpanded = expanded;
+        super.createTooltip(mode, tooltip, expanded);
+    }
+
+    @Override
     protected void addAlphaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
         float oPad = 10f;
         Color highlight = Misc.getHighlightColor();
@@ -259,28 +269,55 @@ public class ConstructionGrid extends BaseIndustry {
                 (int) ((1f - UPKEEP_MULT) * 100f) + "%", (int) (GAMMA_BUILD_TIME_MULT * 100f) + "%");
     }
 
+    @SuppressWarnings("RedundantArrayCreation")
+    @Override
+    protected void addRightAfterDescriptionSection(TooltipMakerAPI tooltip, IndustryTooltipMode mode) {
+        if (this.isExpanded) {
+            float columnWidth = getTooltipWidth();
+            tooltip.beginTable(Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(),
+                    Misc.getBrightPlayerColor(), 25f, true,
+                    true, new Object[]{"Buildable Megastructures", columnWidth / 2f});
+            tooltip.addTableHeaderTooltip(0, "Megastructures that can be built");
+            List<Utils.BuildableMegastructure> shuffledList = new ArrayList<>(this.buildableMegastructures);
+            Collections.shuffle(shuffledList, new Random(3));
+            int rowLimit = 4;
+            int andMore = shuffledList.size() - rowLimit;
+            if (shuffledList.size() < rowLimit) {
+                rowLimit = shuffledList.size();
+                andMore = 0;
+            }
+            for (int i = 0; i < rowLimit; i++) {
+                tooltip.addRow(Alignment.MID, Misc.getTextColor(), shuffledList.get(i).name);
+            }
+            tooltip.addTable("", andMore, 10f);
+            if (andMore == 0) {
+                tooltip.addSpacer(7f);
+            }
+        } else {
+            tooltip.addPara("Press %s to see megastructure you can build", 10f, Misc.getGrayColor(), Misc.getHighlightColor(), "F1");
+        }
+    }
+
     @Override
     protected void addPostUpkeepSection(TooltipMakerAPI tooltip, IndustryTooltipMode mode) {
-        float oPad = 10f;
         float pad = 3f;
 
         if (mode == IndustryTooltipMode.NORMAL || isUpgrading()) {
-            tooltip.addSpacer(10f);
-            tooltip.addSectionHeading("Megastructure Project", Alignment.MID, 0f);
+            tooltip.addSectionHeading("Megastructure Project", Alignment.MID, 10f);
             if (isUpgrading()) {
                 TooltipMakerAPI imageWithText = tooltip.beginImageWithText(this.buildableMegastructure.icon, 40f);
-                imageWithText.addPara("Status: %s", oPad, Misc.getHighlightColor(), "Ongoing");
+                imageWithText.addPara("Status: %s", 0f, Misc.getHighlightColor(), "Ongoing");
                 imageWithText.addPara("Action: %s", pad, Misc.getHighlightColor(), "Add");
                 imageWithText.addPara("Megastructure: %s", pad, Misc.getHighlightColor(), this.buildableMegastructure.name);
                 imageWithText.addPara("Days Left: %s", pad, Misc.getHighlightColor(), Math.round(this.buildTime - this.buildProgress) + "");
-                tooltip.addImageWithText(0f);
+                tooltip.addImageWithText(10f);
             } else {
                 TooltipMakerAPI imageWithText = tooltip.beginImageWithText("graphics/icons/stable_location.png", 40f);
-                imageWithText.addPara("Status: %s", oPad, Misc.getHighlightColor(), "Idle");
+                imageWithText.addPara("Status: %s", 0f, Misc.getHighlightColor(), "Idle");
                 imageWithText.addPara("Action: %s", pad, Misc.getHighlightColor(), "-");
                 imageWithText.addPara("Megastructure: %s", pad, Misc.getHighlightColor(), "-");
                 imageWithText.addPara("Days Left: %s", pad, Misc.getHighlightColor(), "-");
-                tooltip.addImageWithText(0f);
+                tooltip.addImageWithText(10f);
             }
         }
     }
