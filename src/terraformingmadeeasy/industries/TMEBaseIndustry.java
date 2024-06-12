@@ -37,6 +37,7 @@ public class TMEBaseIndustry extends BaseIndustry {
     public float aiCoreBuildProgressRemoved = 0f;
     public String prevAICoreId = null;
     public boolean hasAtLeastOneLikedCondition = false;
+    public boolean isExpanded = false;
 
     @Override
     public void apply() {
@@ -170,6 +171,17 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     @Override
+    public boolean isTooltipExpandable() {
+        return true;
+    }
+
+    @Override
+    public void createTooltip(IndustryTooltipMode mode, TooltipMakerAPI tooltip, boolean expanded) {
+        this.isExpanded = expanded;
+        super.createTooltip(mode, tooltip, expanded);
+    }
+
+    @Override
     protected void addAlphaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
         float oPad = 10f;
         Color highlight = Misc.getHighlightColor();
@@ -233,6 +245,35 @@ public class TMEBaseIndustry extends BaseIndustry {
 
         tooltip.addPara(pre + "Reduces upkeep cost by %s. Reduces terraforming time by %s.", oPad, highlight,
                 (int) ((1f - UPKEEP_MULT) * 100f) + "%", (int) (GAMMA_BUILD_TIME_MULT * 100f) + "%");
+    }
+
+    @SuppressWarnings("RedundantArrayCreation")
+    @Override
+    protected void addRightAfterDescriptionSection(TooltipMakerAPI tooltip, IndustryTooltipMode mode) {
+        if (this.isExpanded) {
+            float columnWidth = getTooltipWidth();
+            tooltip.beginTable(Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(),
+                    Misc.getBrightPlayerColor(), 25f, true,
+                    true, new Object[]{"Modifiable Conditions", columnWidth / 2f});
+            tooltip.addTableHeaderTooltip(0, "Conditions that the structure can add or remove");
+            List<Utils.ModifiableCondition> shuffledList = new ArrayList<>(this.modifiableConditions);
+            Collections.shuffle(shuffledList, new Random(3));
+            int rowLimit = 4;
+            int andMore = shuffledList.size() - rowLimit;
+            if (shuffledList.size() < rowLimit) {
+                rowLimit = shuffledList.size();
+                andMore = 0;
+            }
+            for (int i = 0; i < rowLimit; i++) {
+                tooltip.addRow(Alignment.MID, Misc.getTextColor(), shuffledList.get(i).name);
+            }
+            tooltip.addTable("", andMore, 10f);
+            if (andMore == 0) {
+                tooltip.addSpacer(7f);
+            }
+        } else {
+            tooltip.addPara("To see which conditions can the structure modify press %s", 10f, Misc.getGrayColor(), Misc.getHighlightColor(), "F1");
+        }
     }
 
     @Override
