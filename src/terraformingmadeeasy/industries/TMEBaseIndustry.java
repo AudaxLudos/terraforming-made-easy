@@ -237,26 +237,24 @@ public class TMEBaseIndustry extends BaseIndustry {
 
     @Override
     protected void addPostUpkeepSection(TooltipMakerAPI tooltip, IndustryTooltipMode mode) {
-        float oPad = 10f;
         float pad = 3f;
 
         if (mode == IndustryTooltipMode.NORMAL || isUpgrading()) {
-            tooltip.addSpacer(10f);
-            tooltip.addSectionHeading("Terraforming Project", Alignment.MID, 0f);
+            tooltip.addSectionHeading("Terraforming Project", Alignment.MID, 10f);
             if (isUpgrading()) {
                 TooltipMakerAPI imageWithText = tooltip.beginImageWithText(this.modifiableCondition.icon, 40f, getTooltipWidth(), false);
-                imageWithText.addPara("Status: %s", oPad, Misc.getHighlightColor(), "Ongoing");
+                imageWithText.addPara("Status: %s", 0f, Misc.getHighlightColor(), "Ongoing");
                 imageWithText.addPara("Action: %s", pad, Misc.getHighlightColor(), !this.market.hasCondition(this.modifiableCondition.id) ? "Add" : "Remove");
                 imageWithText.addPara("Condition: %s", pad, Misc.getHighlightColor(), this.modifiableCondition.name);
                 imageWithText.addPara("Days Left: %s", pad, Misc.getHighlightColor(), Math.round(this.buildTime - this.buildProgress) + "");
-                tooltip.addImageWithText(0f);
+                tooltip.addImageWithText(10f);
             } else {
                 TooltipMakerAPI imageWithText = tooltip.beginImageWithText("graphics/icons/stable_location.png", 40f, getTooltipWidth(), false);
-                imageWithText.addPara("Status: %s", oPad, Misc.getHighlightColor(), "Idle");
+                imageWithText.addPara("Status: %s", 0f, Misc.getHighlightColor(), "Idle");
                 imageWithText.addPara("Action: %s", pad, Misc.getHighlightColor(), "-");
                 imageWithText.addPara("Condition: %s", pad, Misc.getHighlightColor(), "-");
                 imageWithText.addPara("Days Left: %s", pad, Misc.getHighlightColor(), "-");
-                tooltip.addImageWithText(0f);
+                tooltip.addImageWithText(10f);
             }
         }
     }
