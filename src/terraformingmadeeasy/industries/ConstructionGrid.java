@@ -305,6 +305,7 @@ public class ConstructionGrid extends BaseIndustry {
         if (mode == IndustryTooltipMode.NORMAL || isUpgrading()) {
             tooltip.addSectionHeading("Megastructure Project", Alignment.MID, 10f);
             if (isUpgrading()) {
+                tooltip.addSectionHeading("Megastructure project", Alignment.MID, 10f);
                 TooltipMakerAPI imageWithText = tooltip.beginImageWithText(this.buildableMegastructure.icon, 40f);
                 imageWithText.addPara("Status: %s", 0f, Misc.getHighlightColor(), "Ongoing");
                 imageWithText.addPara("Action: %s", pad, Misc.getHighlightColor(), "Add");
@@ -312,12 +313,7 @@ public class ConstructionGrid extends BaseIndustry {
                 imageWithText.addPara("Days Left: %s", pad, Misc.getHighlightColor(), Math.round(this.buildTime - this.buildProgress) + "");
                 tooltip.addImageWithText(10f);
             } else {
-                TooltipMakerAPI imageWithText = tooltip.beginImageWithText("graphics/icons/stable_location.png", 40f);
-                imageWithText.addPara("Status: %s", 0f, Misc.getHighlightColor(), "Idle");
-                imageWithText.addPara("Action: %s", pad, Misc.getHighlightColor(), "-");
-                imageWithText.addPara("Megastructure: %s", pad, Misc.getHighlightColor(), "-");
-                imageWithText.addPara("Days Left: %s", pad, Misc.getHighlightColor(), "-");
-                tooltip.addImageWithText(10f);
+                tooltip.addSectionHeading("No Projects started", Alignment.MID, 10f);
             }
         }
     }

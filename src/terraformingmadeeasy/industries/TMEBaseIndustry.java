@@ -281,8 +281,8 @@ public class TMEBaseIndustry extends BaseIndustry {
         float pad = 3f;
 
         if (mode == IndustryTooltipMode.NORMAL || isUpgrading()) {
-            tooltip.addSectionHeading("Terraforming Project", Alignment.MID, 10f);
             if (isUpgrading()) {
+                tooltip.addSectionHeading("Terraforming project", Alignment.MID, 10f);
                 TooltipMakerAPI imageWithText = tooltip.beginImageWithText(this.modifiableCondition.icon, 40f, getTooltipWidth(), false);
                 imageWithText.addPara("Status: %s", 0f, Misc.getHighlightColor(), "Ongoing");
                 imageWithText.addPara("Action: %s", pad, Misc.getHighlightColor(), !this.market.hasCondition(this.modifiableCondition.id) ? "Add" : "Remove");
@@ -290,12 +290,7 @@ public class TMEBaseIndustry extends BaseIndustry {
                 imageWithText.addPara("Days Left: %s", pad, Misc.getHighlightColor(), Math.round(this.buildTime - this.buildProgress) + "");
                 tooltip.addImageWithText(10f);
             } else {
-                TooltipMakerAPI imageWithText = tooltip.beginImageWithText("graphics/icons/stable_location.png", 40f, getTooltipWidth(), false);
-                imageWithText.addPara("Status: %s", 0f, Misc.getHighlightColor(), "Idle");
-                imageWithText.addPara("Action: %s", pad, Misc.getHighlightColor(), "-");
-                imageWithText.addPara("Condition: %s", pad, Misc.getHighlightColor(), "-");
-                imageWithText.addPara("Days Left: %s", pad, Misc.getHighlightColor(), "-");
-                tooltip.addImageWithText(10f);
+                tooltip.addSectionHeading("No projects started", Alignment.MID, 10f);
             }
         }
     }
