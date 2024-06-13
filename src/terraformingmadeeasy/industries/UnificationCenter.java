@@ -6,7 +6,6 @@ import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.Utils;
-import terraformingmadeeasy.conditions.DeathWorld;
 import terraformingmadeeasy.ids.TMEIds;
 
 import java.awt.*;
@@ -101,7 +100,7 @@ public class UnificationCenter extends TMEBaseIndustry {
 
     @Override
     protected void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
-        addStabilityPostDemandSection(tooltip,hasDemand,mode);
+        addStabilityPostDemandSection(tooltip, hasDemand, mode);
     }
 
     @Override

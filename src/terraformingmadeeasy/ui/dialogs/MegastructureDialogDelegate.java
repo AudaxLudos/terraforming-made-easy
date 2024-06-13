@@ -136,7 +136,7 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         TooltipMakerAPI startAngleElement = startAnglePanel.createUIElement(WIDTH / 4f, 40f, false);
         startAnglePanel.addUIElement(startAngleElement);
         orbitInputsElement.addCustom(startAnglePanel, 0f).getPosition().rightOfMid(orbitFocusPanel, 0f);
-        this.startingAngleField = addCustomTextField(startAnglePanel, startAngleElement, this.startingAngleField, "Starting Angle","360", 3, startAnglePlugin, new StartingAngleFieldTooltip());
+        this.startingAngleField = addCustomTextField(startAnglePanel, startAngleElement, this.startingAngleField, "Starting Angle", "360", 3, startAnglePlugin, new StartingAngleFieldTooltip());
         startAnglePlugin.setTextField(this.startingAngleField, 0, 0);
 
         // Orbit radius field
@@ -189,7 +189,7 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         Global.getSoundPlayer().playSound("ui_upgrade_industry", 1f, 1f, Global.getSoundPlayer().getListenerPos(), new Vector2f());
     }
 
-    public TextFieldAPI addCustomTextField(CustomPanelAPI panel, TooltipMakerAPI tooltip, TextFieldAPI textField, String textFieldTitle,String tempNum, int maxChar, TextFieldPlugin plugin, TooltipMakerAPI.TooltipCreator tip) {
+    public TextFieldAPI addCustomTextField(CustomPanelAPI panel, TooltipMakerAPI tooltip, TextFieldAPI textField, String textFieldTitle, String tempNum, int maxChar, TextFieldPlugin plugin, TooltipMakerAPI.TooltipCreator tip) {
         tooltip.addPara(textFieldTitle, 0f).setAlignment(Alignment.MID);
         tooltip.addSpacer(3f);
         TextFieldAPI tempField = tooltip.addTextField(190f, 25f, Fonts.DEFAULT_SMALL, 0f);
