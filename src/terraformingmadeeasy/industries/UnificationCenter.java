@@ -34,6 +34,11 @@ public class UnificationCenter extends TMEBaseIndustry {
     }
 
     @Override
+    protected void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
+        addStabilityPostDemandSection(tooltip,hasDemand,mode);
+    }
+
+    @Override
     protected int getBaseStabilityMod() {
         return 1;
     }

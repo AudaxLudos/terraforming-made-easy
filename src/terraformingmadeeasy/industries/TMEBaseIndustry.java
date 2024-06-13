@@ -38,6 +38,7 @@ public class TMEBaseIndustry extends BaseIndustry {
     public String prevAICoreId = null;
     public boolean hasAtLeastOneLikedCondition = false;
     public boolean isExpanded = false;
+    public boolean isShowAll = false;
 
     @Override
     public void apply() {
@@ -47,6 +48,7 @@ public class TMEBaseIndustry extends BaseIndustry {
     @Override
     public void advance(float amount) {
         super.advance(amount);
+
         if (!this.isAICoreBuildTimeMultApplied) {
             if (Objects.equals(this.aiCoreId, Commodities.ALPHA_CORE)) {
                 this.aiCoreCurrentBuildTimeMult = ALPHA_BUILD_TIME_MULT;
@@ -247,32 +249,29 @@ public class TMEBaseIndustry extends BaseIndustry {
                 (int) ((1f - UPKEEP_MULT) * 100f) + "%", (int) (GAMMA_BUILD_TIME_MULT * 100f) + "%");
     }
 
-    @SuppressWarnings("RedundantArrayCreation")
     @Override
     protected void addRightAfterDescriptionSection(TooltipMakerAPI tooltip, IndustryTooltipMode mode) {
         if (this.isExpanded) {
-            float columnWidth = getTooltipWidth();
-            tooltip.beginTable(Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(),
-                    Misc.getBrightPlayerColor(), 25f, true,
-                    true, new Object[]{"Modifiable Conditions", columnWidth / 2f});
-            tooltip.addTableHeaderTooltip(0, "Conditions that the structure can add or remove");
-            List<Utils.ModifiableCondition> shuffledList = new ArrayList<>(this.modifiableConditions);
-            Collections.shuffle(shuffledList, new Random(3));
-            int rowLimit = 4;
-            int andMore = shuffledList.size() - rowLimit;
-            if (shuffledList.size() < rowLimit) {
-                rowLimit = shuffledList.size();
+            int rowLimit = 6;
+            int andMore = this.modifiableConditions.size() - rowLimit;
+            if (this.modifiableConditions.size() < rowLimit) {
+                rowLimit = this.modifiableConditions.size();
                 andMore = 0;
             }
+
+            tooltip.addPara("Modifiable Conditions:", 10f);
             for (int i = 0; i < rowLimit; i++) {
-                tooltip.addRow(Alignment.MID, Misc.getTextColor(), shuffledList.get(i).name);
+                float pad = 1f;
+                if (i == 0) {
+                    pad = 3f;
+                }
+                tooltip.addPara("    " + this.modifiableConditions.get(i).name, Misc.getHighlightColor(), pad);
             }
-            tooltip.addTable("", andMore, 10f);
-            if (andMore == 0) {
-                tooltip.addSpacer(7f);
+            if (andMore > 0) {
+                tooltip.addPara("    ...and %s more", 0f, Misc.getTextColor(), Misc.getHighlightColor(), andMore + "");
             }
         } else {
-            tooltip.addPara("Press %s to see conditions you can add or remove", 10f, Misc.getGrayColor(), Misc.getHighlightColor(), "F1");
+            tooltip.addPara("Press %s to see conditions you can alter", 10f, Misc.getGrayColor(), Misc.getHighlightColor(), "F1");
         }
     }
 

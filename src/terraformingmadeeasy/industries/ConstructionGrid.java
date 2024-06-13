@@ -269,32 +269,29 @@ public class ConstructionGrid extends BaseIndustry {
                 (int) ((1f - UPKEEP_MULT) * 100f) + "%", (int) (GAMMA_BUILD_TIME_MULT * 100f) + "%");
     }
 
-    @SuppressWarnings("RedundantArrayCreation")
     @Override
     protected void addRightAfterDescriptionSection(TooltipMakerAPI tooltip, IndustryTooltipMode mode) {
         if (this.isExpanded) {
-            float columnWidth = getTooltipWidth();
-            tooltip.beginTable(Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(),
-                    Misc.getBrightPlayerColor(), 25f, true,
-                    true, new Object[]{"Buildable Megastructures", columnWidth / 2f});
-            tooltip.addTableHeaderTooltip(0, "Megastructures that can be built");
-            List<Utils.BuildableMegastructure> shuffledList = new ArrayList<>(this.buildableMegastructures);
-            Collections.shuffle(shuffledList, new Random(3));
-            int rowLimit = 4;
-            int andMore = shuffledList.size() - rowLimit;
-            if (shuffledList.size() < rowLimit) {
-                rowLimit = shuffledList.size();
+            int rowLimit = 6;
+            int andMore = this.buildableMegastructures.size() - rowLimit;
+            if (this.buildableMegastructures.size() < rowLimit) {
+                rowLimit = this.buildableMegastructures.size();
                 andMore = 0;
             }
+
+            tooltip.addPara("Buildable Megastructures:", 10f);
             for (int i = 0; i < rowLimit; i++) {
-                tooltip.addRow(Alignment.MID, Misc.getTextColor(), shuffledList.get(i).name);
+                float pad = 1f;
+                if (i == 0) {
+                    pad = 3f;
+                }
+                tooltip.addPara("    " + this.buildableMegastructures.get(i).name, Misc.getHighlightColor(), pad);
             }
-            tooltip.addTable("", andMore, 10f);
-            if (andMore == 0) {
-                tooltip.addSpacer(7f);
+            if (andMore > 0) {
+                tooltip.addPara("    ...and %s more", 0f, Misc.getTextColor(), Misc.getHighlightColor(), andMore + "");
             }
         } else {
-            tooltip.addPara("Press %s to see megastructure you can build", 10f, Misc.getGrayColor(), Misc.getHighlightColor(), "F1");
+            tooltip.addPara("Press %s to see megastructures you can build", 10f, Misc.getGrayColor(), Misc.getHighlightColor(), "F1");
         }
     }
 
