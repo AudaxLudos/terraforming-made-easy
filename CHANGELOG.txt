@@ -1,3 +1,11 @@
+### 2.5.0
+- Release 2.5.0
+- Add unification center AI core reduced demand of 1 effect
+- Update industries tooltip descriptions
+- Add unification center stability bonues, marine and supplies demand
+- Add unification center income value of 6
+- Update unification center build time to 180 from 360
+
 ### 2.4.7a
 - Release 2.4.7a
 - Fix megastructure ui showing the same text field titles
