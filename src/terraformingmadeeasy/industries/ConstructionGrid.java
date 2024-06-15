@@ -8,6 +8,7 @@ import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.MarketConditionAPI;
 import com.fs.starfarer.api.impl.campaign.CoronalTapParticleScript;
+import com.fs.starfarer.api.impl.campaign.GateEntityPlugin;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.*;
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
@@ -357,6 +358,9 @@ public class ConstructionGrid extends BaseIndustry {
             inactiveGate.setCircularOrbit(orbitEntity, orbitAngle, orbitRadius, orbitDays);
             inactiveGate.getMemoryWithoutUpdate().set("$gateScanned", true);
             inactiveGate.getMemoryWithoutUpdate().set("$fullName", "Active Gate");
+            GateEntityPlugin.addGateScanned();
+            GateEntityPlugin.getGateData().scanned.add(inactiveGate);
+            inactiveGate.getCustomPlugin().advance(0f);
         } else if (Objects.equals(customEntityId, "tme_station")) {
             // Pick a random station spec
             WeightedRandomPicker<String> stations = new WeightedRandomPicker<>(StarSystemGenerator.random);

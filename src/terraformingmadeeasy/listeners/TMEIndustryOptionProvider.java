@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class TMEIndustryOptionProvider extends BaseIndustryOptionProvider {
+    public class TMEIndustryOptionProvider extends BaseIndustryOptionProvider {
     public static List<String> tmeIndustries = new ArrayList<>();
     public static Object CUSTOM_PLUGIN = new Object();
 
@@ -79,9 +79,6 @@ public class TMEIndustryOptionProvider extends BaseIndustryOptionProvider {
         String description = "Cancel the terraforming project for a %s refund.";
         String refundText = "A specialized industry capable of removing and adding hazard conditions of a planet.";
         float refundCost = 0;
-        if (opt.ind.isUpgrading()) {
-            refundCost = ((TMEBaseIndustry) opt.ind).modifiableCondition.cost;
-        }
         if (Objects.equals(opt.ind.getId(), TMEIds.CONSTRUCTION_GRID)) {
             description = "A large structural grid for constructing Megastructures.";
             refundText = "Cancel the Megastructure project for a %s refund.";
@@ -91,6 +88,10 @@ public class TMEIndustryOptionProvider extends BaseIndustryOptionProvider {
         } else if (Objects.equals(opt.ind.getId(), TMEIds.PLANETARY_HOLOGRAM)) {
             description = "A specialized structure that can change a planet's visual to a different planet type.";
             refundText = "Cancel the planet visual change for a %s refund.";
+            if (opt.ind.isUpgrading()) {
+                refundCost = ((TMEBaseIndustry) opt.ind).modifiableCondition.cost;
+            }
+        } else {
             if (opt.ind.isUpgrading()) {
                 refundCost = ((TMEBaseIndustry) opt.ind).modifiableCondition.cost;
             }
