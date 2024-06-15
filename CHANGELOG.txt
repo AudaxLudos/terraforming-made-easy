@@ -1,3 +1,8 @@
+### 2.5.0a
+- Release 2.5.0a
+- Fix crash issue when canceling projects in construction grid
+- Fix issue where constructed gates can't be selected as a jump location
+
 ### 2.5.0
 - Release 2.5.0
 - Add unification center AI core reduced demand of 1 effect
