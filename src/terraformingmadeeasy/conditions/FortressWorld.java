@@ -13,7 +13,7 @@ public class FortressWorld extends BaseMarketConditionPlugin {
     public static float FLEET_SIZE_MULT = 0.50f;
     public static float GROUND_DEFENSE_MULT = 0.50f;
     public static int HEAVY_PATROL_BONUS = 1;
-    public static int SUPPLY_BONUS = 3;
+    public static int SUPPLY_BONUS = 1;
     public String[] industryIds = {
             Industries.POPULATION, Industries.ORBITALWORKS, Industries.HIGHCOMMAND, Industries.FUELPROD
     };

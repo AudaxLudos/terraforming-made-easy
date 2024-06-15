@@ -19,7 +19,7 @@ public class DeathWorld extends BaseMarketConditionPlugin {
     public static int SUPPRESS_CONDITION_PER_MONTH_MOD = 6;
     public static float MARINES_TO_TRAIN_MULT = 0.05f;
     public static float GROUND_DEFENSE_MULT = 1.00f;
-    public static int SUPPLY_BONUS = 3;
+    public static int SUPPLY_BONUS = 1;
     public List<MarketConditionAPI> suppressedConditions = new ArrayList<>();
     public int monthsActive = 0;
     public String[] industryIds = {

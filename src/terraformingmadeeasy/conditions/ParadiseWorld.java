@@ -10,7 +10,7 @@ public class ParadiseWorld extends BaseMarketConditionPlugin {
     public static float INCOME_MULT = 0.50f;
     public static float ACCESSIBILITY_MOD = 0.50f;
     public static int STABILITY_BONUS = 4;
-    public static int SUPPLY_BONUS = 3;
+    public static int SUPPLY_BONUS = 1;
     public String[] industryIds = {
             Industries.POPULATION, Industries.FARMING, Industries.AQUACULTURE, Industries.LIGHTINDUSTRY
     };

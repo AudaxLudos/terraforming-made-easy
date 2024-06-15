@@ -12,7 +12,7 @@ public class ForgeWorld extends BaseMarketConditionPlugin {
     public static float FLEET_QUALITY_MOD = 0.50f;
     public static float CUSTOM_PRODUCTION_MULT = 0.50f;
     public static int MAX_INDUSTRIES_BONUS = 1;
-    public static int SUPPLY_BONUS = 3;
+    public static int SUPPLY_BONUS = 1;
     public String[] industryIds = {
             Industries.ORBITALWORKS, Industries.MINING, Industries.REFINING, Industries.FUELPROD
     };
