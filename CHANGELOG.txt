@@ -1,3 +1,9 @@
+### 2.5.1a
+- Release 2.5.2
+- Update fortress world ground defense mult to 50% from 100%
+- Update supply bonus for tme conditions to 1 from 3
+- Add aquaculture to paradise world industries with supply bonus
+
 ### 2.5.0a
 - Release 2.5.0a
 - Fix crash issue when canceling projects in construction grid
