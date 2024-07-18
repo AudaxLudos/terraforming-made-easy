@@ -18,6 +18,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.util.Misc;
+import org.apache.log4j.Logger;
 import terraformingmadeeasy.conditions.DeathWorld;
 import terraformingmadeeasy.ids.TMEIds;
 
@@ -26,7 +27,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-public class TMEDeathWorldScript implements EconomyTickListener, ColonyInteractionListener {
+public class DeathWorldScript implements EconomyTickListener, ColonyInteractionListener {
+    public static final Logger log = Global.getLogger(DeathWorldScript.class);
+
     @Override
     public void reportPlayerOpenedMarket(MarketAPI market) {
     }
@@ -139,6 +142,7 @@ public class TMEDeathWorldScript implements EconomyTickListener, ColonyInteracti
                         MarketConditionAPI condition = conditions.get(new Random().nextInt(conditions.size()));
                         conditionPlugin.suppressedConditions.add(condition);
                         sendConditionSuppressedMessage(m, condition);
+                        log.info(String.format("Suppressing of %s condition in %s by %s", condition.getName(), m.getName(), this.getClass().getName()));
                     }
                     conditionPlugin.monthsActive = 0;
                 }

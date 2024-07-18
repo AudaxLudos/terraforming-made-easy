@@ -21,6 +21,7 @@ import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,6 +36,8 @@ import java.util.Objects;
 import java.util.Random;
 
 public class ConstructionGrid extends BaseIndustry {
+    public static final Logger log = Global.getLogger(ConstructionGrid.class);
+
     public static final String MEGASTRUCTURE_OPTIONS_FILE = "data/config/megastructure_options.csv";
     public static final float GAMMA_BUILD_TIME_MULT = 0.20f;
     public static final float BETA_BUILD_TIME_MULT = 0.30f;
@@ -146,6 +149,7 @@ public class ConstructionGrid extends BaseIndustry {
         this.buildTime = 1f;
         this.isAICoreBuildTimeMultApplied = false;
         if (this.buildableMegastructure != null) {
+            log.info(String.format("Completion of %s megastructure in %s by %s", this.buildableMegastructure.name, getMarket().getStarSystem().getName(), getCurrentName()));
             sendCompletedMessage();
             completeMegastructure();
             this.buildableMegastructure = null;
@@ -161,6 +165,7 @@ public class ConstructionGrid extends BaseIndustry {
     public void startUpgrading() {
         // Will be called from MegastructureDialogDelegate to start building megastructure
         if (this.buildableMegastructure != null && this.megastructureOrbitData != null) {
+            log.info(String.format("Construction of %s megastructure in %s by %s", this.buildableMegastructure.name, getMarket().getStarSystem().getName(), getCurrentName()));
             this.building = true;
             this.buildProgress = 0;
             this.aiCoreBuildProgressRemoved = 0f;
@@ -172,6 +177,7 @@ public class ConstructionGrid extends BaseIndustry {
     @Override
     public void cancelUpgrade() {
         // Will be called from ConfirmDialogDelegate to cancel megastructure project
+        log.info(String.format("Deconstruction of %s megastructure in %s by %s", this.buildableMegastructure.name, getMarket().getStarSystem().getName(), getCurrentName()));
         this.building = false;
         this.buildProgress = 0;
         this.aiCoreBuildProgressRemoved = 0f;

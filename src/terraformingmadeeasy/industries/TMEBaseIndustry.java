@@ -15,6 +15,7 @@ import com.fs.starfarer.api.impl.campaign.procgen.StarSystemGenerator;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,6 +27,7 @@ import java.util.List;
 import java.util.*;
 
 public class TMEBaseIndustry extends BaseIndustry {
+    public static final Logger log = Global.getLogger(TMEBaseIndustry.class);
     public static final String TERRAFORMING_OPTIONS_FILE = "data/config/terraforming_options.csv";
     public static final float GAMMA_BUILD_TIME_MULT = 0.20f;
     public static final float BETA_BUILD_TIME_MULT = 0.30f;
@@ -38,7 +40,6 @@ public class TMEBaseIndustry extends BaseIndustry {
     public String prevAICoreId = null;
     public boolean hasAtLeastOneLikedCondition = false;
     public boolean isExpanded = false;
-    public boolean isShowAll = false;
 
     @Override
     public void apply() {
@@ -118,6 +119,7 @@ public class TMEBaseIndustry extends BaseIndustry {
         this.aiCoreBuildProgressRemoved = 0f;
         this.isAICoreBuildTimeMultApplied = false;
         if (this.modifiableCondition != null) {
+            log.info(String.format("Completed %s of %s condition in %s by %s", this.modifiableCondition.name, !this.market.hasCondition(this.modifiableCondition.id) ? "Adding" : "Removing", getMarket().getName(), getCurrentName()));
             sendCompletedMessage();
             changePlanetConditions();
             changePlanetClass();
@@ -138,6 +140,7 @@ public class TMEBaseIndustry extends BaseIndustry {
     public void startUpgrading() {
         // Will be called from TerraformDialogDelegate to start terraforming
         if (this.modifiableCondition != null) {
+            log.info(String.format("Start %s of %s condition in %s by %s", this.modifiableCondition.name, !this.market.hasCondition(this.modifiableCondition.id) ? "Adding" : "Removing", getMarket().getName(), getCurrentName()));
             this.building = true;
             this.buildProgress = 0;
             this.aiCoreBuildProgressRemoved = 0f;
@@ -149,6 +152,7 @@ public class TMEBaseIndustry extends BaseIndustry {
     @Override
     public void cancelUpgrade() {
         // Will be called from ConfirmDialogDelegate to cancel terraforming
+        log.info(String.format("Cancel %s of %s condition in %s by %s", this.modifiableCondition.name, !this.market.hasCondition(this.modifiableCondition.id) ? "Adding" : "Removing", getMarket().getName(), getCurrentName()));
         this.building = false;
         this.buildProgress = 0;
         this.aiCoreBuildProgressRemoved = 0f;

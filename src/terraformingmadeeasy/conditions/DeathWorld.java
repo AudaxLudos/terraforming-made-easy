@@ -10,7 +10,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import terraformingmadeeasy.listeners.TMEDeathWorldScript;
+import terraformingmadeeasy.listeners.DeathWorldScript;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +29,8 @@ public class DeathWorld extends BaseMarketConditionPlugin {
     @Override
     public void init(MarketAPI market, MarketConditionAPI condition) {
         super.init(market, condition);
-        if (!Global.getSector().getListenerManager().hasListenerOfClass(TMEDeathWorldScript.class)) {
-            Global.getSector().getListenerManager().addListener(new TMEDeathWorldScript(), true);
+        if (!Global.getSector().getListenerManager().hasListenerOfClass(DeathWorldScript.class)) {
+            Global.getSector().getListenerManager().addListener(new DeathWorldScript(), true);
         }
     }
 
