@@ -6,13 +6,12 @@ import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.Utils;
-import terraformingmadeeasy.ids.TMEIds;
 
 import java.awt.*;
 
 public class UnificationCenter extends TMEBaseIndustry {
     public UnificationCenter() {
-        getTerraformingOptions(TMEIds.UNIFICATION_CENTER);
+        setModifiableConditions(Utils.UNIFICATION_CENTER_OPTIONS);
     }
 
     @Override

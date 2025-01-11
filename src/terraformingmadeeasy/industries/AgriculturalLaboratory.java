@@ -1,9 +1,9 @@
 package terraformingmadeeasy.industries;
 
-import terraformingmadeeasy.ids.TMEIds;
+import terraformingmadeeasy.Utils;
 
 public class AgriculturalLaboratory extends TMEBaseIndustry {
     public AgriculturalLaboratory() {
-        getTerraformingOptions(TMEIds.AGRICULTURAL_LABORATORY);
+        setModifiableConditions(Utils.AGRICULTURAL_LABORATORY_OPTIONS);
     }
 }

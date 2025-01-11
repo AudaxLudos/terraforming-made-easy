@@ -2,10 +2,16 @@ package terraformingmadeeasy;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomEntitySpecAPI;
+import com.fs.starfarer.api.campaign.PlanetSpecAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.characters.MarketConditionSpecAPI;
+import com.fs.starfarer.api.impl.campaign.procgen.PlanetGenDataSpec;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.industries.ConstructionGrid;
 import terraformingmadeeasy.industries.TMEBaseIndustry;
 import terraformingmadeeasy.ui.dialogs.TMEBaseDialogDelegate;
@@ -14,10 +20,158 @@ import terraformingmadeeasy.ui.tooltips.MegastructureTooltip;
 import terraformingmadeeasy.ui.tooltips.TerraformTooltip;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
+import java.util.*;
 
 public class Utils {
+    public static final String TERRAFORMING_OPTIONS_FILE = "data/config/terraforming_options.csv";
+    public static final String MEGASTRUCTURE_OPTIONS_FILE = "data/config/megastructure_options.csv";
+    public static final List<Utils.ModifiableCondition> AGRICULTURAL_LABORATORY_OPTIONS = getTerraformingOptions(TMEIds.AGRICULTURAL_LABORATORY);
+    public static final List<Utils.ModifiableCondition> ATMOSPHERE_REGULATOR_OPTIONS = getTerraformingOptions(TMEIds.ATMOSPHERE_REGULATOR);
+    public static final List<Utils.BuildableMegastructure> CONSTRUCTION_GRID_OPTIONS = getMegastructureOptions();
+    public static final List<Utils.ModifiableCondition> ELEMENT_SYNTHESIZER_OPTIONS = getTerraformingOptions(TMEIds.ELEMENT_SYNTHESIZER);
+    public static final List<Utils.ModifiableCondition> GEOMORPHOLOGY_STATION_OPTIONS = getTerraformingOptions(TMEIds.GEOMORPHOLOGY_STATION);
+    public static final List<Utils.ModifiableCondition> MINERAL_REPLICATOR_OPTIONS = getTerraformingOptions(TMEIds.MINERAL_REPLICATOR);
+    public static final List<Utils.ModifiableCondition> PLANETARY_HOLOGRAM_OPTIONS = getPlanetaryHologramOptions();
+    public static final List<Utils.ModifiableCondition> STELLAR_MANUFACTORY_OPTIONS = getTerraformingOptions(TMEIds.STELLAR_MANUFACTORY);
+    public static final List<Utils.ModifiableCondition> TERRESTRIAL_ENGINE_OPTIONS = getTerraformingOptions(TMEIds.TERRESTRIAL_ENGINE);
+    public static final List<Utils.ModifiableCondition> UNIFICATION_CENTER_OPTIONS = getTerraformingOptions(TMEIds.UNIFICATION_CENTER);
+
+
+    public static List<Utils.ModifiableCondition> getPlanetaryHologramOptions() {
+        List<Utils.ModifiableCondition> options = new ArrayList<>();
+        for (PlanetGenDataSpec pDataSpec : Global.getSettings().getAllSpecs(PlanetGenDataSpec.class)) {
+            for (PlanetSpecAPI pSpec : Global.getSettings().getAllPlanetSpecs()) {
+                if (Objects.equals(pDataSpec.getId(), pSpec.getPlanetType())) {
+                    options.add(new Utils.ModifiableCondition(
+                            pDataSpec.getId(),
+                            pSpec.getName(),
+                            pSpec.getTexture(),
+                            100000f,
+                            30f,
+                            true,
+                            null,
+                            null,
+                            null,
+                            null,
+                            pDataSpec.getId()
+                    ));
+                    break;
+                }
+            }
+        }
+        return options;
+    }
+
+    public static List<Utils.BuildableMegastructure> getMegastructureOptions() {
+        try {
+            List<Utils.BuildableMegastructure> buildableMegastructures = new ArrayList<>();
+            JSONArray data = Global.getSettings().loadCSV(Utils.MEGASTRUCTURE_OPTIONS_FILE);
+            for (int i = 0; i < data.length(); i++) {
+                JSONObject row = data.getJSONObject(i);
+                if (row.getString("structureId").isEmpty()) {
+                    continue;
+                }
+                if (row.getString("structureId").contains("#")) {
+                    continue;
+                }
+
+                String structureId = row.getString("structureId");
+                float cost = row.getInt("cost");
+                float buildTime = row.getInt("buildTime");
+
+                buildableMegastructures.add(new Utils.BuildableMegastructure(
+                        Global.getSettings().getCustomEntitySpec(structureId),
+                        cost,
+                        buildTime));
+            }
+            return buildableMegastructures;
+        } catch (IOException | JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static List<Utils.ModifiableCondition> getTerraformingOptions(String industryId) {
+        try {
+            List<Utils.ModifiableCondition> modifiableConditions = new ArrayList<>();
+            JSONArray data = Global.getSettings().loadCSV(Utils.TERRAFORMING_OPTIONS_FILE);
+            for (int i = 0; i < data.length(); i++) {
+                JSONObject row = data.getJSONObject(i);
+                if (!Objects.equals(row.getString("structureId"), industryId)) {
+                    continue;
+                }
+                if (row.getString("structureId").isEmpty()) {
+                    continue;
+                }
+                if (row.getString("structureId").contains("#")) {
+                    continue;
+                }
+                if (Global.getSettings().getMarketConditionSpec(row.getString("conditionId")) == null) {
+                    continue;
+                }
+
+                String conditionId = row.getString("conditionId");
+                float buildTime = row.getInt("buildTime");
+                float cost = row.getInt("cost");
+                boolean canChangeGasGiants = row.getBoolean("canChangeGasGiants");
+
+                List<String> likedConditions = new ArrayList<>();
+                List<String> hatedConditions = new ArrayList<>();
+                List<String> likedIndustries = new ArrayList<>();
+                List<String> hatedIndustries = new ArrayList<>();
+                if (!row.getString("likedConditions").isEmpty()) {
+                    likedConditions.addAll(Arrays.asList(row.getString("likedConditions").replace(" ", "").split(",")));
+                    filterUnknownSpecs(likedConditions, false);
+                }
+                if (!row.getString("hatedConditions").isEmpty()) {
+                    hatedConditions.addAll(Arrays.asList(row.getString("hatedConditions").replace(" ", "").split(",")));
+                    filterUnknownSpecs(hatedConditions, false);
+                }
+                if (!row.getString("likedIndustries").isEmpty()) {
+                    likedIndustries.addAll(Arrays.asList(row.getString("likedIndustries").replace(" ", "").split(",")));
+                    filterUnknownSpecs(likedIndustries, true);
+                }
+                if (!row.getString("hatedIndustries").isEmpty()) {
+                    hatedIndustries.addAll(Arrays.asList(row.getString("hatedIndustries").replace(" ", "").split(",")));
+                    filterUnknownSpecs(hatedIndustries, true);
+                }
+                String planetSpecOverride = row.getString("planetSpecOverride");
+
+                modifiableConditions.add(new Utils.ModifiableCondition(
+                        Global.getSettings().getMarketConditionSpec(conditionId),
+                        cost,
+                        buildTime,
+                        canChangeGasGiants,
+                        likedConditions,
+                        hatedConditions,
+                        likedIndustries,
+                        hatedIndustries,
+                        planetSpecOverride
+                ));
+            }
+            return modifiableConditions;
+        } catch (IOException | JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void filterUnknownSpecs(List<String> ids, boolean isIndustry) {
+        for (Iterator<String> itr = ids.iterator(); itr.hasNext(); ) {
+            String id = itr.next();
+
+            if (isIndustry) {
+                if (id.isEmpty() || Global.getSettings().getIndustrySpec(id) == null) {
+                    itr.remove();
+                }
+            } else {
+                if (id.isEmpty() || Global.getSettings().getMarketConditionSpec(id) == null) {
+                    itr.remove();
+                }
+            }
+        }
+    }
+
     public static void setButtonEnabledOrHighlighted(ButtonAPI button, Boolean isEnabled, Boolean isHighlighted) {
         button.setButtonPressedSound(isEnabled ? "ui_button_pressed" : "ui_button_disabled_pressed");
         button.setGlowBrightness(isEnabled ? 0.56f : 1.2f);

@@ -22,14 +22,10 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
 import org.apache.log4j.Logger;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.ids.TMEIds;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -37,8 +33,6 @@ import java.util.Random;
 
 public class ConstructionGrid extends BaseIndustry {
     public static final Logger log = Global.getLogger(ConstructionGrid.class);
-
-    public static final String MEGASTRUCTURE_OPTIONS_FILE = "data/config/megastructure_options.csv";
     public static final float GAMMA_BUILD_TIME_MULT = 0.20f;
     public static final float BETA_BUILD_TIME_MULT = 0.30f;
     public static final float ALPHA_BUILD_TIME_MULT = 0.50f;
@@ -52,29 +46,7 @@ public class ConstructionGrid extends BaseIndustry {
     public boolean isExpanded = false;
 
     public ConstructionGrid() {
-        try {
-            JSONArray data = Global.getSettings().loadCSV(MEGASTRUCTURE_OPTIONS_FILE);
-            for (int i = 0; i < data.length(); i++) {
-                JSONObject row = data.getJSONObject(i);
-                if (row.getString("structureId").isEmpty()) {
-                    continue;
-                }
-                if (row.getString("structureId").contains("#")) {
-                    continue;
-                }
-
-                String structureId = row.getString("structureId");
-                float cost = row.getInt("cost");
-                float buildTime = row.getInt("buildTime");
-
-                this.buildableMegastructures.add(new Utils.BuildableMegastructure(
-                        Global.getSettings().getCustomEntitySpec(structureId),
-                        cost,
-                        buildTime));
-            }
-        } catch (IOException | JSONException e) {
-            throw new RuntimeException(e);
-        }
+        setBuildableMegastructures(Utils.CONSTRUCTION_GRID_OPTIONS);
     }
 
     @Override
@@ -322,6 +294,10 @@ public class ConstructionGrid extends BaseIndustry {
                 tooltip.addSectionHeading("No Projects started", Alignment.MID, 10f);
             }
         }
+    }
+
+    public void setBuildableMegastructures(List<Utils.BuildableMegastructure> options) {
+        this.buildableMegastructures = this.buildableMegastructures == null ? options : this.buildableMegastructures;
     }
 
     public void sendCompletedMessage() {

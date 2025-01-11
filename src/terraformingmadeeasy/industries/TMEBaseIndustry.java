@@ -16,23 +16,18 @@ import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import org.apache.log4j.Logger;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import terraformingmadeeasy.Utils;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.List;
-import java.util.*;
+import java.util.Objects;
 
 public class TMEBaseIndustry extends BaseIndustry {
     public static final Logger log = Global.getLogger(TMEBaseIndustry.class);
-    public static final String TERRAFORMING_OPTIONS_FILE = "data/config/terraforming_options.csv";
     public static final float GAMMA_BUILD_TIME_MULT = 0.20f;
     public static final float BETA_BUILD_TIME_MULT = 0.30f;
     public static final float ALPHA_BUILD_TIME_MULT = 0.50f;
-    public List<Utils.ModifiableCondition> modifiableConditions = new ArrayList<>();
+    public List<Utils.ModifiableCondition> modifiableConditions = null;
     public Utils.ModifiableCondition modifiableCondition = null;
     public Boolean isAICoreBuildTimeMultApplied = false;
     public float aiCoreCurrentBuildTimeMult = 0f;
@@ -119,7 +114,7 @@ public class TMEBaseIndustry extends BaseIndustry {
         this.aiCoreBuildProgressRemoved = 0f;
         this.isAICoreBuildTimeMultApplied = false;
         if (this.modifiableCondition != null) {
-            log.info(String.format("Completed %s of %s condition in %s by %s", this.modifiableCondition.name, !this.market.hasCondition(this.modifiableCondition.id) ? "Adding" : "Removing", getMarket().getName(), getCurrentName()));
+            log.info(String.format("Completed %s %s condition in %s by %s", !this.market.hasCondition(this.modifiableCondition.id) ? "Adding" : "Removing", this.modifiableCondition.name, getMarket().getName(), getCurrentName()));
             sendCompletedMessage();
             changePlanetConditions();
             changePlanetClass();
@@ -140,7 +135,7 @@ public class TMEBaseIndustry extends BaseIndustry {
     public void startUpgrading() {
         // Will be called from TerraformDialogDelegate to start terraforming
         if (this.modifiableCondition != null) {
-            log.info(String.format("Start %s of %s condition in %s by %s", this.modifiableCondition.name, !this.market.hasCondition(this.modifiableCondition.id) ? "Adding" : "Removing", getMarket().getName(), getCurrentName()));
+            log.info(String.format("Started %s %s condition in %s by %s", !this.market.hasCondition(this.modifiableCondition.id) ? "Adding" : "Removing", this.modifiableCondition.name, getMarket().getName(), getCurrentName()));
             this.building = true;
             this.buildProgress = 0;
             this.aiCoreBuildProgressRemoved = 0f;
@@ -152,7 +147,7 @@ public class TMEBaseIndustry extends BaseIndustry {
     @Override
     public void cancelUpgrade() {
         // Will be called from ConfirmDialogDelegate to cancel terraforming
-        log.info(String.format("Cancel %s of %s condition in %s by %s", this.modifiableCondition.name, !this.market.hasCondition(this.modifiableCondition.id) ? "Adding" : "Removing", getMarket().getName(), getCurrentName()));
+        log.info(String.format("Cancelled %s %s condition in %s by %s", !this.market.hasCondition(this.modifiableCondition.id) ? "Adding" : "Removing", this.modifiableCondition.name, getMarket().getName(), getCurrentName()));
         this.building = false;
         this.buildProgress = 0;
         this.aiCoreBuildProgressRemoved = 0f;
@@ -298,84 +293,11 @@ public class TMEBaseIndustry extends BaseIndustry {
         }
     }
 
-    public void getTerraformingOptions(String industryId) {
-        try {
-            JSONArray data = Global.getSettings().loadCSV(TERRAFORMING_OPTIONS_FILE);
-            for (int i = 0; i < data.length(); i++) {
-                JSONObject row = data.getJSONObject(i);
-                if (!Objects.equals(row.getString("structureId"), industryId)) {
-                    continue;
-                }
-                if (row.getString("structureId").isEmpty()) {
-                    continue;
-                }
-                if (row.getString("structureId").contains("#")) {
-                    continue;
-                }
-                if (Global.getSettings().getMarketConditionSpec(row.getString("conditionId")) == null) {
-                    continue;
-                }
-
-                String conditionId = row.getString("conditionId");
-                float buildTime = row.getInt("buildTime");
-                float cost = row.getInt("cost");
-                boolean canChangeGasGiants = row.getBoolean("canChangeGasGiants");
-
-                List<String> likedConditions = new ArrayList<>();
-                List<String> hatedConditions = new ArrayList<>();
-                List<String> likedIndustries = new ArrayList<>();
-                List<String> hatedIndustries = new ArrayList<>();
-                if (!row.getString("likedConditions").isEmpty()) {
-                    likedConditions.addAll(Arrays.asList(row.getString("likedConditions").replace(" ", "").split(",")));
-                    likedConditions = filterUnknownSpecs(likedConditions, false);
-                }
-                if (!row.getString("hatedConditions").isEmpty()) {
-                    hatedConditions.addAll(Arrays.asList(row.getString("hatedConditions").replace(" ", "").split(",")));
-                    hatedConditions = filterUnknownSpecs(hatedConditions, false);
-                }
-                if (!row.getString("likedIndustries").isEmpty()) {
-                    likedIndustries.addAll(Arrays.asList(row.getString("likedIndustries").replace(" ", "").split(",")));
-                    likedIndustries = filterUnknownSpecs(likedIndustries, true);
-                }
-                if (!row.getString("hatedIndustries").isEmpty()) {
-                    hatedIndustries.addAll(Arrays.asList(row.getString("hatedIndustries").replace(" ", "").split(",")));
-                    hatedIndustries = filterUnknownSpecs(hatedIndustries, true);
-                }
-                String planetSpecOverride = row.getString("planetSpecOverride");
-
-                this.modifiableConditions.add(new Utils.ModifiableCondition(
-                        Global.getSettings().getMarketConditionSpec(conditionId),
-                        cost,
-                        buildTime,
-                        canChangeGasGiants,
-                        likedConditions,
-                        hatedConditions,
-                        likedIndustries,
-                        hatedIndustries,
-                        planetSpecOverride
-                ));
-            }
-        } catch (IOException | JSONException e) {
-            throw new RuntimeException(e);
+    public void setModifiableConditions(List<Utils.ModifiableCondition> options) {
+        if (this.modifiableConditions != null) {
+            log.warn("modifiableConditions is already set");
         }
-    }
-
-    public List<String> filterUnknownSpecs(List<String> ids, boolean isIndustry) {
-        for (Iterator<String> itr = ids.iterator(); itr.hasNext(); ) {
-            String id = itr.next();
-
-            if (isIndustry) {
-                if (id.isEmpty() || Global.getSettings().getIndustrySpec(id) == null) {
-                    itr.remove();
-                }
-            } else {
-                if (id.isEmpty() || Global.getSettings().getMarketConditionSpec(id) == null) {
-                    itr.remove();
-                }
-            }
-        }
-
-        return ids;
+        this.modifiableConditions = options;
     }
 
     public void sendCompletedMessage() {

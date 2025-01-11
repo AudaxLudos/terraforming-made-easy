@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-    public class TMEIndustryOptionProvider extends BaseIndustryOptionProvider {
+public class TMEIndustryOptionProvider extends BaseIndustryOptionProvider {
     public static List<String> tmeIndustries = new ArrayList<>();
     public static Object CUSTOM_PLUGIN = new Object();
 

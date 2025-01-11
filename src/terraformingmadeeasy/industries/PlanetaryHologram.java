@@ -1,12 +1,10 @@
 package terraformingmadeeasy.industries;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.PlanetSpecAPI;
 import com.fs.starfarer.api.campaign.comm.CommMessageAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
-import com.fs.starfarer.api.impl.campaign.procgen.PlanetGenDataSpec;
 import com.fs.starfarer.api.impl.campaign.procgen.StarSystemGenerator;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
@@ -22,27 +20,9 @@ public class PlanetaryHologram extends TMEBaseIndustry {
     boolean originalIsGasGiant = false;
 
     public PlanetaryHologram() {
-        for (PlanetGenDataSpec pDataSpec : Global.getSettings().getAllSpecs(PlanetGenDataSpec.class)) {
-            for (PlanetSpecAPI pSpec : Global.getSettings().getAllPlanetSpecs()) {
-                if (Objects.equals(pDataSpec.getId(), pSpec.getPlanetType())) {
-                    this.modifiableConditions.add(new Utils.ModifiableCondition(
-                            pDataSpec.getId(),
-                            pSpec.getName(),
-                            pSpec.getTexture(),
-                            100000f,
-                            30f,
-                            true,
-                            null,
-                            null,
-                            null,
-                            null,
-                            pDataSpec.getId()
-                    ));
-                    break;
-                }
-            }
-        }
+        setModifiableConditions(Utils.PLANETARY_HOLOGRAM_OPTIONS);
     }
+
 
     @Override
     public void advance(float amount) {
