@@ -5,7 +5,9 @@ import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.impl.campaign.ids.Entities;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import terraformingmadeeasy.Utils;
+import terraformingmadeeasy.ids.TMEIds;
 
 import java.util.List;
 
@@ -39,6 +41,11 @@ public class StellarManufactory extends TMEBaseIndustry {
             buildingFinished();
             reapply();
         }
+    }
+
+    @Override
+    public String getAOTDVOKTechId() {
+        return TMEIds.STELLAR_MANUFACTORY_TECH;
     }
 
     public void addSolarMirrors() {

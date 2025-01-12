@@ -5,7 +5,9 @@ import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import terraformingmadeeasy.Utils;
+import terraformingmadeeasy.ids.TMEIds;
 
 import java.awt.*;
 
@@ -119,5 +121,10 @@ public class UnificationCenter extends TMEBaseIndustry {
             }
         }
         return true;
+    }
+
+    @Override
+    public String getAOTDVOKTechId() {
+        return TMEIds.UNIFICATION_CENTER_TECH;
     }
 }

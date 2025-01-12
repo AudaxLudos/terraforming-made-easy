@@ -38,6 +38,9 @@ public class Utils {
     public static final List<Utils.ModifiableCondition> TERRESTRIAL_ENGINE_OPTIONS = getTerraformingOptions(TMEIds.TERRESTRIAL_ENGINE);
     public static final List<Utils.ModifiableCondition> UNIFICATION_CENTER_OPTIONS = getTerraformingOptions(TMEIds.UNIFICATION_CENTER);
 
+    public static boolean isAOTDVOKEnabled() {
+        return Global.getSettings().getModManager().isModEnabled("aotd_vok");
+    }
 
     public static List<Utils.ModifiableCondition> getPlanetaryHologramOptions() {
         List<Utils.ModifiableCondition> options = new ArrayList<>();

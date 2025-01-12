@@ -19,6 +19,18 @@ public class TMEIds {
     public static final String TERRESTRIAL_ENGINE = "tme_terrestrial_engine";
     public static final String UNIFICATION_CENTER = "tme_unification_center";
 
+    // TME AOTD Ids
+    public static final String AGRICULTURAL_LABORATORY_TECH = "tme_tech_agricultural_laboratory";
+    public static final String ATMOSPHERE_REGULATOR_TECH = "tme_tech_atmosphere_regulator";
+    public static final String CONSTRUCTION_GRID_TECH = "tme_tech_construction_grid";
+    public static final String ELEMENT_SYNTHESIZER_TECH = "tme_tech_element_synthesizer";
+    public static final String GEOMORPHOLOGY_STATION_TECH = "tme_tech_geomorphology_station";
+    public static final String MINERAL_REPLICATOR_TECH = "tme_tech_mineral_replicator";
+    public static final String PLANETARY_HOLOGRAM_TECH = "tme_tech_planetary_hologram";
+    public static final String STELLAR_MANUFACTORY_TECH = "tme_tech_stellar_manufactory";
+    public static final String TERRESTRIAL_ENGINE_TECH = "tme_tech_terrestrial_engine";
+    public static final String UNIFICATION_CENTER_TECH = "tme_tech_unification_center";
+
     // Custom entities
     public static final String TME_STATION = "tme_station";
 }

@@ -15,8 +15,10 @@ import com.fs.starfarer.api.impl.campaign.procgen.StarSystemGenerator;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import org.apache.log4j.Logger;
 import terraformingmadeeasy.Utils;
+import terraformingmadeeasy.ids.TMEIds;
 
 import java.awt.*;
 import java.util.List;
@@ -155,10 +157,10 @@ public class TMEBaseIndustry extends BaseIndustry {
 
     @Override
     public boolean isAvailableToBuild() {
-        if (!super.isAvailableToBuild()) {
-            return false;
+        if (Utils.isAOTDVOKEnabled()) {
+            return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(getAOTDVOKTechId(), this.market) && this.market.getPlanetEntity() != null && super.isAvailableToBuild();
         }
-        return this.market.getPlanetEntity() != null;
+        return this.market.getPlanetEntity() != null && super.isAvailableToBuild();
     }
 
     @Override
@@ -167,6 +169,14 @@ public class TMEBaseIndustry extends BaseIndustry {
             return super.getUnavailableReason();
         }
         return "Requires a planet";
+    }
+
+    @Override
+    public boolean showWhenUnavailable() {
+        if (Utils.isAOTDVOKEnabled()) {
+            return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(getAOTDVOKTechId(), this.market) && this.market.getPlanetEntity() != null && super.showWhenUnavailable();
+        }
+        return super.showWhenUnavailable();
     }
 
     @Override
@@ -289,6 +299,10 @@ public class TMEBaseIndustry extends BaseIndustry {
                 tooltip.addSectionHeading("No projects started", Alignment.MID, 10f);
             }
         }
+    }
+
+    public String getAOTDVOKTechId() {
+        return "";
     }
 
     public List<Utils.ModifiableCondition> getModifiableConditions() {

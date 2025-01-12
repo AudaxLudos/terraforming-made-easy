@@ -21,6 +21,7 @@ import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import org.apache.log4j.Logger;
 import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.ids.TMEIds;
@@ -159,10 +160,10 @@ public class ConstructionGrid extends BaseIndustry {
 
     @Override
     public boolean isAvailableToBuild() {
-        if (!super.isAvailableToBuild()) {
-            return false;
+        if (Utils.isAOTDVOKEnabled()) {
+            return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(getAOTDVOKTechId(), this.market) && this.market.getPlanetEntity() != null && super.isAvailableToBuild();
         }
-        return this.market.getPlanetEntity() != null;
+        return this.market.getPlanetEntity() != null && super.isAvailableToBuild();
     }
 
     @Override
@@ -171,6 +172,14 @@ public class ConstructionGrid extends BaseIndustry {
             return super.getUnavailableReason();
         }
         return "Requires a planet";
+    }
+
+    @Override
+    public boolean showWhenUnavailable() {
+        if (Utils.isAOTDVOKEnabled()) {
+            return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(getAOTDVOKTechId(), this.market) && this.market.getPlanetEntity() != null && super.showWhenUnavailable();
+        }
+        return super.showWhenUnavailable();
     }
 
     @Override
@@ -294,6 +303,10 @@ public class ConstructionGrid extends BaseIndustry {
                 tooltip.addSectionHeading("No Projects started", Alignment.MID, 10f);
             }
         }
+    }
+
+    public String getAOTDVOKTechId() {
+        return TMEIds.CONSTRUCTION_GRID_TECH;
     }
 
     public void setBuildableMegastructures(List<Utils.BuildableMegastructure> options) {
