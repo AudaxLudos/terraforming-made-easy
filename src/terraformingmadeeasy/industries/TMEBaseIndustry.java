@@ -27,14 +27,13 @@ public class TMEBaseIndustry extends BaseIndustry {
     public static final float GAMMA_BUILD_TIME_MULT = 0.20f;
     public static final float BETA_BUILD_TIME_MULT = 0.30f;
     public static final float ALPHA_BUILD_TIME_MULT = 0.50f;
-    public List<Utils.ModifiableCondition> modifiableConditions = null;
-    public Utils.ModifiableCondition modifiableCondition = null;
-    public Boolean isAICoreBuildTimeMultApplied = false;
-    public float aiCoreCurrentBuildTimeMult = 0f;
-    public float aiCoreBuildProgressRemoved = 0f;
-    public String prevAICoreId = null;
     public boolean hasAtLeastOneLikedCondition = false;
-    public boolean isExpanded = false;
+    protected List<Utils.ModifiableCondition> modifiableConditions = null;
+    protected Utils.ModifiableCondition modifiableCondition = null;
+    protected Boolean isAICoreBuildTimeMultApplied = false;
+    protected float aiCoreBuildProgressRemoved = 0f;
+    protected String prevAICoreId = null;
+    protected boolean isExpanded = false;
 
     @Override
     public void apply() {
@@ -46,18 +45,17 @@ public class TMEBaseIndustry extends BaseIndustry {
         super.advance(amount);
 
         if (!this.isAICoreBuildTimeMultApplied) {
+            float aiCoreCurrentBuildTimeMult = 0f;
             if (Objects.equals(this.aiCoreId, Commodities.ALPHA_CORE)) {
-                this.aiCoreCurrentBuildTimeMult = ALPHA_BUILD_TIME_MULT;
+                aiCoreCurrentBuildTimeMult = ALPHA_BUILD_TIME_MULT;
             } else if (Objects.equals(this.aiCoreId, Commodities.BETA_CORE)) {
-                this.aiCoreCurrentBuildTimeMult = BETA_BUILD_TIME_MULT;
+                aiCoreCurrentBuildTimeMult = BETA_BUILD_TIME_MULT;
             } else if (Objects.equals(this.aiCoreId, Commodities.GAMMA_CORE)) {
-                this.aiCoreCurrentBuildTimeMult = GAMMA_BUILD_TIME_MULT;
-            } else {
-                this.aiCoreCurrentBuildTimeMult = 0f;
+                aiCoreCurrentBuildTimeMult = GAMMA_BUILD_TIME_MULT;
             }
 
             float daysLeft = this.buildTime - this.buildProgress;
-            this.aiCoreBuildProgressRemoved = daysLeft * this.aiCoreCurrentBuildTimeMult;
+            this.aiCoreBuildProgressRemoved = daysLeft * aiCoreCurrentBuildTimeMult;
             this.buildProgress = this.buildTime - (daysLeft - this.aiCoreBuildProgressRemoved);
             this.isAICoreBuildTimeMultApplied = true;
             this.prevAICoreId = getAICoreId();
@@ -293,11 +291,23 @@ public class TMEBaseIndustry extends BaseIndustry {
         }
     }
 
+    public List<Utils.ModifiableCondition> getModifiableConditions() {
+        return this.modifiableConditions;
+    }
+
     public void setModifiableConditions(List<Utils.ModifiableCondition> options) {
         if (this.modifiableConditions != null) {
             log.warn("modifiableConditions is already set");
         }
         this.modifiableConditions = options;
+    }
+
+    public Utils.ModifiableCondition getModifiableCondition() {
+        return this.modifiableCondition;
+    }
+
+    public void setModifiableCondition(Utils.ModifiableCondition option) {
+        this.modifiableCondition = option;
     }
 
     public void sendCompletedMessage() {

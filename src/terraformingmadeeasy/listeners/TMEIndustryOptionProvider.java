@@ -89,11 +89,11 @@ public class TMEIndustryOptionProvider extends BaseIndustryOptionProvider {
             description = "A specialized structure that can change a planet's visual to a different planet type.";
             refundText = "Cancel the planet visual change for a %s refund.";
             if (opt.ind.isUpgrading()) {
-                refundCost = ((TMEBaseIndustry) opt.ind).modifiableCondition.cost;
+                refundCost = ((TMEBaseIndustry) opt.ind).getModifiableCondition().cost;
             }
         } else {
             if (opt.ind.isUpgrading()) {
-                refundCost = ((TMEBaseIndustry) opt.ind).modifiableCondition.cost;
+                refundCost = ((TMEBaseIndustry) opt.ind).getModifiableCondition().cost;
             }
         }
 
@@ -117,7 +117,7 @@ public class TMEIndustryOptionProvider extends BaseIndustryOptionProvider {
                 TerraformDialogDelegate dialogueDelegate = new TerraformDialogDelegate(800f, 464f, opt.ind);
                 ui.showDialog(TerraformDialogDelegate.WIDTH, TerraformDialogDelegate.HEIGHT, dialogueDelegate);
             } else {
-                ConfirmDialogDelegate tmeConfirmDialogueDelegate = new ConfirmDialogDelegate(opt.ind, ((TMEBaseIndustry) opt.ind).modifiableCondition.cost);
+                ConfirmDialogDelegate tmeConfirmDialogueDelegate = new ConfirmDialogDelegate(opt.ind, ((TMEBaseIndustry) opt.ind).getModifiableCondition().cost);
                 ui.showDialog(ConfirmDialogDelegate.WIDTH, ConfirmDialogDelegate.HEIGHT, tmeConfirmDialogueDelegate);
             }
         }

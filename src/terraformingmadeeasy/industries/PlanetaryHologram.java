@@ -36,7 +36,7 @@ public class PlanetaryHologram extends TMEBaseIndustry {
     public void notifyBeingRemoved(MarketAPI.MarketInteractionMode mode, boolean forUpgrade) {
         super.notifyBeingRemoved(mode, forUpgrade);
         if (this.originalPlanetSpec != null) {
-            this.modifiableCondition = null;
+            this.setModifiableCondition(null);
             changePlanetVisuals(this.originalPlanetSpec.getPlanetType());
         }
     }
@@ -59,7 +59,7 @@ public class PlanetaryHologram extends TMEBaseIndustry {
     public void sendCompletedMessage() {
         if (this.market.isPlayerOwned()) {
             MessageIntel intel = new MessageIntel("Changed the visuals of the planet %s", Misc.getBasePlayerColor(), new String[]{this.market.getName()}, Misc.getBasePlayerColor());
-            intel.addLine(BaseIntelPlugin.BULLET + "The planet's visuals are now a %s-type world", Misc.getTextColor(), new String[]{this.modifiableCondition.name.toLowerCase()}, Misc.getTextColor());
+            intel.addLine(BaseIntelPlugin.BULLET + "The planet's visuals are now a %s-type world", Misc.getTextColor(), new String[]{this.getModifiableCondition().name.toLowerCase()}, Misc.getTextColor());
             intel.setIcon(Global.getSector().getPlayerFaction().getCrest());
             intel.setSound(BaseIntelPlugin.getSoundStandardUpdate());
             Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.COLONY_INFO, this.market);
@@ -75,8 +75,8 @@ public class PlanetaryHologram extends TMEBaseIndustry {
         this.originalPlanetSpec = (PlanetSpec) Global.getSettings().getSpec(PlanetSpec.class, this.market.getPlanetEntity().getSpec().getPlanetType(), false);
         this.originalIsGasGiant = this.market.getPlanetEntity().getSpec().isGasGiant();
         this.fakePlanetSpec = (PlanetSpec) Global.getSettings().getSpec(PlanetSpec.class, planetTypeId, false);
-        if (this.modifiableCondition != null && this.modifiableCondition.planetSpecOverride != null) {
-            this.fakePlanetSpec = (PlanetSpec) Global.getSettings().getSpec(PlanetSpec.class, this.modifiableCondition.planetSpecOverride, false);
+        if (this.getModifiableCondition() != null && this.getModifiableCondition().planetSpecOverride != null) {
+            this.fakePlanetSpec = (PlanetSpec) Global.getSettings().getSpec(PlanetSpec.class, this.getModifiableCondition().planetSpecOverride, false);
         }
         String name = this.fakePlanetSpec.getName() + " (" + this.originalPlanetSpec.getName() + ")";
         if (Objects.equals(this.originalPlanetSpec.getPlanetType(), this.fakePlanetSpec.getPlanetType())) {

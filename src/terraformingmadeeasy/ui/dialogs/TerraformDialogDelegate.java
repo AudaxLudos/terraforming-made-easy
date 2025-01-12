@@ -48,7 +48,7 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
         conditionsPanel.addUIElement(conditionsHeader);
 
         TooltipMakerAPI conditionsBody = conditionsPanel.createUIElement(WIDTH, rowHeight - 22f, true);
-        List<Utils.ModifiableCondition> conditions = this.industry.modifiableConditions;
+        List<Utils.ModifiableCondition> conditions = this.industry.getModifiableConditions();
         Collections.sort(conditions, new SortCanAffordAndBuild(this.industry));
         for (Utils.ModifiableCondition condition : conditions) {
             CustomPanelAPI conditionPanel = Utils.addCustomButton(panel, condition, this.industry, this.buttons, WIDTH, this);
@@ -76,7 +76,7 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
             return;
         }
         Utils.ModifiableCondition selectedCondition = (Utils.ModifiableCondition) this.selected;
-        this.industry.modifiableCondition = selectedCondition;
+        this.industry.setModifiableCondition(selectedCondition);
         this.industry.startUpgrading();
         Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(selectedCondition.cost);
         Global.getSoundPlayer().playSound("ui_upgrade_industry", 1f, 1f, Global.getSoundPlayer().getListenerPos(), new Vector2f());
