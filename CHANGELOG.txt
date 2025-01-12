@@ -1,3 +1,8 @@
+### 2.5.3
+- Release 2.5.3
+- Add solar shades and mirrors when completing stellar manufactory terraforming
+- Fix lag spike during endgame when opening terraforming options
+
 ### 2.5.1a
 - Release 2.5.2
 - Update fortress world ground defense mult to 50% from 100%
