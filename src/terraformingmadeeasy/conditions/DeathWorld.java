@@ -10,6 +10,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.listeners.DeathWorldScript;
 
 import java.util.ArrayList;
@@ -23,7 +24,11 @@ public class DeathWorld extends BaseMarketConditionPlugin {
     public List<MarketConditionAPI> suppressedConditions = new ArrayList<>();
     public int monthsActive = 0;
     public String[] industryIds = {
-            Industries.POPULATION, Industries.ORBITALWORKS, Industries.HIGHCOMMAND, Industries.MINING
+            Industries.POPULATION, Industries.ORBITALWORKS, Industries.HIGHCOMMAND, Industries.MINING,
+    };
+    public String[] aotdVokIndustryIds = {
+            "supplyheavy", "weaponheavy", "triheavy", "hegeheavy", "orbitalheavy", "stella_manufactorium",
+            "fracking", "mining_megaplex"
     };
 
     @Override
@@ -47,6 +52,16 @@ public class DeathWorld extends BaseMarketConditionPlugin {
             Industry ind = this.market.getIndustry(industryId);
             ind.getSupplyBonusFromOther().modifyFlat(id, SUPPLY_BONUS, "Death World");
         }
+
+        if (Utils.isAOTDVOKEnabled()) {
+            for (String industryId : this.aotdVokIndustryIds) {
+                if (!this.market.hasIndustry(industryId)) {
+                    continue;
+                }
+                Industry ind = this.market.getIndustry(industryId);
+                ind.getSupplyBonusFromOther().modifyFlat(id, SUPPLY_BONUS, "Death World");
+            }
+        }
     }
 
     @Override
@@ -63,6 +78,16 @@ public class DeathWorld extends BaseMarketConditionPlugin {
             Industry ind = this.market.getIndustry(industryId);
             ind.getSupplyBonusFromOther().unmodify(id);
         }
+        if (Utils.isAOTDVOKEnabled()) {
+            for (String industryId : this.aotdVokIndustryIds) {
+                if (!this.market.hasIndustry(industryId)) {
+                    continue;
+                }
+
+                Industry ind = this.market.getIndustry(industryId);
+                ind.getSupplyBonusFromOther().unmodify(id);
+            }
+        }
     }
 
     @SuppressWarnings("RedundantArrayCreation")
@@ -74,6 +99,9 @@ public class DeathWorld extends BaseMarketConditionPlugin {
         tooltip.addPara("Trains %s of marines in the market's stockpile every %s", oPad, Misc.getHighlightColor(), Math.round(MARINES_TO_TRAIN_MULT * 100f) + "%", "month");
         tooltip.addPara("%s ground defense", oPad, Misc.getHighlightColor(), "+" + Math.round(GROUND_DEFENSE_MULT * 100f) + "%");
         tooltip.addPara("%s production to population & infrastructure, orbital works, high command, and mining", oPad, Misc.getHighlightColor(), "+" + SUPPLY_BONUS);
+        if (Utils.isAOTDVOKEnabled()) {
+            tooltip.addPara("%s production to fracking, mining megaplex, civilian heavy production, militarized heavy industry, orbital skunkworks facility, orbital fleetwork facility, and Orbital Manufactorium", oPad, Misc.getHighlightColor(), "+" + SUPPLY_BONUS);
+        }
         tooltip.beginTable2(this.market.getFaction(), 20f, true, true,
                 new Object[]{"Suppressed Conditions", tooltip.getWidthSoFar() / 2f});
         tooltip.addTableHeaderTooltip(0, "Name of the suppressed conditions");

@@ -7,6 +7,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import terraformingmadeeasy.Utils;
 
 public class ForgeWorld extends BaseMarketConditionPlugin {
     public static float FLEET_QUALITY_MOD = 0.50f;
@@ -15,6 +16,12 @@ public class ForgeWorld extends BaseMarketConditionPlugin {
     public static int SUPPLY_BONUS = 1;
     public String[] industryIds = {
             Industries.ORBITALWORKS, Industries.MINING, Industries.REFINING, Industries.FUELPROD
+    };
+    public String[] aotdVokIndustryIds = {
+            "supplyheavy", "weaponheavy", "triheavy", "hegeheavy", "orbitalheavy", "stella_manufactorium",
+            "fracking", "mining_megaplex",
+            "crystalizator", "isotope_separator", "policrystalizator", "cascade_reprocesor",
+            "blast_processing"
     };
 
     @Override
@@ -29,6 +36,16 @@ public class ForgeWorld extends BaseMarketConditionPlugin {
 
             Industry ind = this.market.getIndustry(industryId);
             ind.getSupplyBonusFromOther().modifyFlat(id, SUPPLY_BONUS, "Forge World");
+        }
+
+        if (Utils.isAOTDVOKEnabled()) {
+            for (String industryId : this.aotdVokIndustryIds) {
+                if (!this.market.hasIndustry(industryId)) {
+                    continue;
+                }
+                Industry ind = this.market.getIndustry(industryId);
+                ind.getSupplyBonusFromOther().modifyFlat(id, SUPPLY_BONUS, "Forge World");
+            }
         }
     }
 
@@ -45,17 +62,30 @@ public class ForgeWorld extends BaseMarketConditionPlugin {
             Industry ind = this.market.getIndustry(industryId);
             ind.getSupplyBonusFromOther().unmodify(id);
         }
+
+        if (Utils.isAOTDVOKEnabled()) {
+            for (String industryId : this.aotdVokIndustryIds) {
+                if (!this.market.hasIndustry(industryId)) {
+                    continue;
+                }
+
+                Industry ind = this.market.getIndustry(industryId);
+                ind.getSupplyBonusFromOther().unmodify(id);
+            }
+        }
     }
 
     @Override
     protected void createTooltipAfterDescription(TooltipMakerAPI tooltip, boolean expanded) {
-        tooltip.addSpacer(10f);
-        tooltip.addPara("%s ship quality", 0f, Misc.getHighlightColor(), "+" + Math.round(FLEET_QUALITY_MOD * 100f) + "%");
-        tooltip.addSpacer(10f);
-        tooltip.addPara("%s maximum value of custom ship and weapon production per month", 0f, Misc.getHighlightColor(), "+" + Math.round(CUSTOM_PRODUCTION_MULT * 100f) + "%");
-        tooltip.addSpacer(10f);
-        tooltip.addPara("%s maximum number of industries", 0f, Misc.getHighlightColor(), "+" + MAX_INDUSTRIES_BONUS);
-        tooltip.addSpacer(10f);
-        tooltip.addPara("%s production to orbital works, refining, mining and fuel production", 0f, Misc.getHighlightColor(), "+" + SUPPLY_BONUS);
+        tooltip.addPara("%s ship quality", 10f, Misc.getHighlightColor(), "+" + Math.round(FLEET_QUALITY_MOD * 100f) + "%");
+        tooltip.addPara("%s maximum value of custom ship and weapon production per month", 10f, Misc.getHighlightColor(), "+" + Math.round(CUSTOM_PRODUCTION_MULT * 100f) + "%");
+        tooltip.addPara("%s maximum number of industries", 10f, Misc.getHighlightColor(), "+" + MAX_INDUSTRIES_BONUS);
+        tooltip.addPara("%s production to orbital works, refining, mining and fuel production", 10f, Misc.getHighlightColor(), "+" + SUPPLY_BONUS);
+        if (Utils.isAOTDVOKEnabled()) {
+            tooltip.addPara("%s production to fracking, mining megaplex, " +
+                    "civilian heavy production, militarized heavy industry, orbital skunkworks facility, orbital fleetwork facility, Orbital Manufactorium, " +
+                    "crystalizator, isotope separator, policrystalizator, cascade reprocesor," +
+                    "and, blast processing unit", 10f, Misc.getHighlightColor(), "+" + SUPPLY_BONUS);
+        }
     }
 }

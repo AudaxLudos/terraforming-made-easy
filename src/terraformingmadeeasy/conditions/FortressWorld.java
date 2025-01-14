@@ -6,6 +6,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import terraformingmadeeasy.Utils;
 
 import java.util.Objects;
 
@@ -16,6 +17,10 @@ public class FortressWorld extends BaseMarketConditionPlugin {
     public static int SUPPLY_BONUS = 1;
     public String[] industryIds = {
             Industries.POPULATION, Industries.ORBITALWORKS, Industries.HIGHCOMMAND, Industries.FUELPROD
+    };
+    public String[] aotdVokIndustryIds = {
+            "supplyheavy", "weaponheavy", "triheavy", "hegeheavy", "orbitalheavy", "stella_manufactorium",
+            "blast_processing"
     };
 
     @Override
@@ -38,6 +43,15 @@ public class FortressWorld extends BaseMarketConditionPlugin {
                 this.market.getStats().getDynamic().getMod(Stats.PATROL_NUM_HEAVY_MOD).modifyFlat(id, HEAVY_PATROL_BONUS);
             }
         }
+        if (Utils.isAOTDVOKEnabled()) {
+            for (String industryId : this.aotdVokIndustryIds) {
+                if (!this.market.hasIndustry(industryId)) {
+                    continue;
+                }
+                Industry ind = this.market.getIndustry(industryId);
+                ind.getSupplyBonusFromOther().modifyFlat(id, SUPPLY_BONUS, "Fortress World");
+            }
+        }
     }
 
     @Override
@@ -54,17 +68,27 @@ public class FortressWorld extends BaseMarketConditionPlugin {
             Industry ind = this.market.getIndustry(industryId);
             ind.getSupplyBonusFromOther().unmodify(id);
         }
+        if (Utils.isAOTDVOKEnabled()) {
+            for (String industryId : this.aotdVokIndustryIds) {
+                if (!this.market.hasIndustry(industryId)) {
+                    continue;
+                }
+
+                Industry ind = this.market.getIndustry(industryId);
+                ind.getSupplyBonusFromOther().unmodify(id);
+            }
+        }
     }
 
     @Override
     protected void createTooltipAfterDescription(TooltipMakerAPI tooltip, boolean expanded) {
-        tooltip.addSpacer(10f);
-        tooltip.addPara("%s fleet size", 0f, Misc.getHighlightColor(), "+" + Math.round(FLEET_SIZE_MULT * 100f) + "%");
-        tooltip.addSpacer(10f);
-        tooltip.addPara("%s ground defense", 0f, Misc.getHighlightColor(), "+" + Math.round(GROUND_DEFENSE_MULT * 100f) + "%");
-        tooltip.addSpacer(10f);
-        tooltip.addPara("%s number of heavy patrols", 0f, Misc.getHighlightColor(), "+" + HEAVY_PATROL_BONUS);
-        tooltip.addSpacer(10f);
-        tooltip.addPara("%s production to population & infrastructure, orbital works, high command, and fuel production", 0f, Misc.getHighlightColor(), "+" + SUPPLY_BONUS);
+        tooltip.addPara("%s fleet size", 10f, Misc.getHighlightColor(), "+" + Math.round(FLEET_SIZE_MULT * 100f) + "%");
+        tooltip.addPara("%s ground defense", 10f, Misc.getHighlightColor(), "+" + Math.round(GROUND_DEFENSE_MULT * 100f) + "%");
+        tooltip.addPara("%s number of heavy patrols", 10f, Misc.getHighlightColor(), "+" + HEAVY_PATROL_BONUS);
+        tooltip.addPara("%s production to population & infrastructure, orbital works, high command, and fuel production", 10f, Misc.getHighlightColor(), "+" + SUPPLY_BONUS);
+        if (Utils.isAOTDVOKEnabled()) {
+            tooltip.addPara("civilian heavy production, militarized heavy industry, orbital skunkworks facility, orbital fleetwork facility, Orbital Manufactorium, " +
+                    "and, blast processing unit", 10f, Misc.getHighlightColor(), "+" + SUPPLY_BONUS);
+        }
     }
 }

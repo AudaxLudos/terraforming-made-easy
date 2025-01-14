@@ -61,7 +61,7 @@ public class UnificationCenter extends TMEBaseIndustry {
                         case Industries.HEAVYINDUSTRY: {
                             String newExpression = String.format(
                                     "needOne:%s|%s|%s|%s|%s|%s|%s, ",
-                                    "heavyindustry",
+                                    "orbitalworks",
                                     "supplyheavy",
                                     "weaponheavy",
                                     "triheavy",

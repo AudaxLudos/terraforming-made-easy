@@ -5,6 +5,7 @@ import com.fs.starfarer.api.impl.campaign.econ.BaseMarketConditionPlugin;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import terraformingmadeeasy.Utils;
 
 public class ParadiseWorld extends BaseMarketConditionPlugin {
     public static float INCOME_MULT = 0.50f;
@@ -13,6 +14,10 @@ public class ParadiseWorld extends BaseMarketConditionPlugin {
     public static int SUPPLY_BONUS = 1;
     public String[] industryIds = {
             Industries.POPULATION, Industries.FARMING, Industries.AQUACULTURE, Industries.LIGHTINDUSTRY
+    };
+    public String[] aotdVokIndustryIds = {
+            "artifarming", "subfarming",
+            "hightech", "druglight", "consumerindustry"
     };
 
     @Override
@@ -27,6 +32,15 @@ public class ParadiseWorld extends BaseMarketConditionPlugin {
 
             Industry ind = this.market.getIndustry(industryId);
             ind.getSupplyBonusFromOther().modifyFlat(id, SUPPLY_BONUS, "Paradise World");
+        }
+        if (Utils.isAOTDVOKEnabled()) {
+            for (String industryId : this.aotdVokIndustryIds) {
+                if (!this.market.hasIndustry(industryId)) {
+                    continue;
+                }
+                Industry ind = this.market.getIndustry(industryId);
+                ind.getSupplyBonusFromOther().modifyFlat(id, SUPPLY_BONUS, "Paradise World");
+            }
         }
     }
 
@@ -43,17 +57,27 @@ public class ParadiseWorld extends BaseMarketConditionPlugin {
             Industry ind = this.market.getIndustry(industryId);
             ind.getSupplyBonusFromOther().unmodify(id);
         }
+        if (Utils.isAOTDVOKEnabled()) {
+            for (String industryId : this.aotdVokIndustryIds) {
+                if (!this.market.hasIndustry(industryId)) {
+                    continue;
+                }
+
+                Industry ind = this.market.getIndustry(industryId);
+                ind.getSupplyBonusFromOther().unmodify(id);
+            }
+        }
     }
 
     @Override
     protected void createTooltipAfterDescription(TooltipMakerAPI tooltip, boolean expanded) {
-        tooltip.addSpacer(10f);
-        tooltip.addPara("%s income", 0f, Misc.getHighlightColor(), "+" + Math.round(INCOME_MULT * 100f) + "%");
-        tooltip.addSpacer(10f);
-        tooltip.addPara("%s accessibility", 0f, Misc.getHighlightColor(), "+" + Math.round(ACCESSIBILITY_MOD * 100f) + "%");
-        tooltip.addSpacer(10f);
-        tooltip.addPara("%s stability", 0f, Misc.getHighlightColor(), "+" + STABILITY_BONUS);
-        tooltip.addSpacer(10f);
-        tooltip.addPara("%s production to population & infrastructure, farming, and light industry", 0f, Misc.getHighlightColor(), "+" + SUPPLY_BONUS);
+        tooltip.addPara("%s income", 10f, Misc.getHighlightColor(), "+" + Math.round(INCOME_MULT * 100f) + "%");
+        tooltip.addPara("%s accessibility", 10f, Misc.getHighlightColor(), "+" + Math.round(ACCESSIBILITY_MOD * 100f) + "%");
+        tooltip.addPara("%s stability", 10f, Misc.getHighlightColor(), "+" + STABILITY_BONUS);
+        tooltip.addPara("%s production to population & infrastructure, farming, and light industry", 10f, Misc.getHighlightColor(), "+" + SUPPLY_BONUS);
+        if (Utils.isAOTDVOKEnabled()) {
+            tooltip.addPara("%s production to light industry, high-tech industry, biosynth labolatory, consumer industry, " +
+                    "artisinal farming, and subsidized farming", 10f, Misc.getHighlightColor(), "+" + SUPPLY_BONUS);
+        }
     }
 }
