@@ -1,0 +1,16 @@
+{
+  "graphics": {
+    "ui_icons_tech_tree": {
+      "tme_agricultural_laboratory_sub": "graphics/icons/tech/tme_agricultural_laboratory_sub.png",
+      "tme_atmosphere_regulator_sub": "graphics/icons/tech/tme_atmosphere_regulator_sub.png",
+      "tme_construction_grid_sub": "graphics/icons/tech/tme_orbital_construction_sub.png",
+      "tme_element_synthesizer_sub": "graphics/icons/tech/tme_element_synthesizer_sub.png",
+      "tme_geomorphology_station_sub": "graphics/icons/tech/tme_geomorphology_station_sub.png",
+      "tme_mineral_replicator_sub": "graphics/icons/tech/tme_mineral_replicator_sub.png",
+      "tme_planetary_hologram_sub": "graphics/icons/tech/tme_planetary_hologram_sub.png",
+      "tme_stellar_manufactory_sub": "graphics/icons/tech/tme_stellar_manufactory_sub.png",
+      "tme_terrestrial_engine_sub": "graphics/icons/tech/tme_terrestrial_engine_sub.png",
+      "tme_unification_center_sub": "graphics/icons/tech/tme_unification_center_sub.png"
+    }
+  }
+}
