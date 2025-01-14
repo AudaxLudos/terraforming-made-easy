@@ -21,8 +21,12 @@ import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.ids.TMEIds;
 
 import java.awt.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TMEBaseIndustry extends BaseIndustry {
     public static final Logger log = Global.getLogger(TMEBaseIndustry.class);
@@ -345,9 +349,22 @@ public class TMEBaseIndustry extends BaseIndustry {
         } else {
             this.market.addCondition(this.modifiableCondition.id);
             this.market.getFirstCondition(this.modifiableCondition.id).setSurveyed(true);
-            for (String restriction : this.modifiableCondition.hatedConditions) {
-                if (this.market.hasCondition(restriction)) {
-                    this.market.removeCondition(restriction);
+
+            // remove all hated conditions
+            String textExpression = this.modifiableCondition.hatedConditions;
+            String[] expressions = textExpression.split(",");
+            for (String s : expressions) {
+                String expression = s;
+                if (expression.contains("needAll")) {
+                    expression = expression.replaceAll("needAll:", "");
+                } else if (expression.contains("needOne")) {
+                    expression = expression.replaceAll("needOne:", "");
+                }
+                String[] ids = expression.split("\\|");
+                for (String id : ids) {
+                    if (this.market.hasCondition(id)) {
+                        this.market.removeCondition(id);
+                    }
                 }
             }
         }
@@ -574,32 +591,64 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     public Boolean canTerraformCondition(Utils.ModifiableCondition condition) {
-        return hasLikedConditions(condition) && hasLikedIndustries(condition);
+        return hasRequiredConditions(condition) && hasRequiredIndustries(condition);
     }
 
-    public boolean hasLikedConditions(Utils.ModifiableCondition condition) {
-        // Checks if market has at least one of these condition
-        this.hasAtLeastOneLikedCondition = true;
-        if (!condition.likedConditions.isEmpty()) {
-            boolean hasOneLikedCondition = false;
-            for (String conditionId : condition.likedConditions) {
-                hasOneLikedCondition = hasOneLikedCondition || this.market.hasCondition(conditionId);
-            }
-            return hasOneLikedCondition;
+    public boolean hasRequiredConditions(Utils.ModifiableCondition condition) {
+        String text = condition.likedConditions;
+
+        if (text.isEmpty()) {
+            return true;
         }
-        return true;
+
+        String[] expressions = text.split(",");
+        boolean[] expressionsResult = new boolean[expressions.length];
+
+        for (int i = 0; i < expressions.length; i++) {
+            String expression = expressions[i];
+            if (expression.contains("needAll")) {
+                expression = expression.replaceAll("needAll:", "").replaceAll("\\|", "&&");
+            } else if (expression.contains("needOne")) {
+                expression = expression.replaceAll("needOne:", "").replaceAll("\\|", "||");
+            }
+
+            String[] Ids = expression.split("&&|\\|\\|");
+            Map<String, Boolean> values = new HashMap<>();
+            for (String id : Ids) {
+                values.put(id, this.market.hasCondition(id));
+            }
+            expressionsResult[i] = Utils.evaluateExpression(expression, values);
+        }
+
+        return Utils.isAllTrue(expressionsResult);
     }
 
-    public boolean hasLikedIndustries(Utils.ModifiableCondition condition) {
-        // Checks if market has all industries
-        if (!condition.likedIndustries.isEmpty()) {
-            for (String industryId : condition.likedIndustries) {
-                if (!this.market.hasIndustry(industryId)) {
-                    return false;
-                }
-            }
+    public boolean hasRequiredIndustries(Utils.ModifiableCondition condition) {
+        String text = condition.likedIndustries;
+
+        if (text.isEmpty()) {
+            return true;
         }
 
-        return true;
+        String[] expressions = text.split(",");
+        boolean[] expressionsResult = new boolean[expressions.length];
+
+        for (int i = 0; i < expressions.length; i++) {
+            String expression = expressions[i];
+            if (expression.contains("needAll")) {
+                expression = expression.replaceAll("needAll:", "").replaceAll("\\|", "&&");
+            } else if (expression.contains("needOne")) {
+                expression = expression.replaceAll("needOne:", "").replaceAll("\\|", "||");
+            }
+
+            String[] Ids = expression.split("&&|\\|\\|");
+            Map<String, Boolean> values = new HashMap<>();
+            for (String id : Ids) {
+                values.put(id, this.market.hasIndustry(id));
+            }
+            expressionsResult[i] = Utils.evaluateExpression(expression, values);
+        }
+
+        return Utils.isAllTrue(expressionsResult);
     }
 }

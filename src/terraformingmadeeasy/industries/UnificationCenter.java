@@ -10,10 +10,18 @@ import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.ids.TMEIds;
 
 import java.awt.*;
+import java.util.*;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class UnificationCenter extends TMEBaseIndustry {
     public UnificationCenter() {
         setModifiableConditions(Utils.UNIFICATION_CENTER_OPTIONS);
+
+        if (Utils.isAOTDVOKEnabled()) {
+            List<Utils.ModifiableCondition> modifiableConditionsCopy = new ArrayList<>(getModifiableConditions());
+        }
     }
 
     @Override
@@ -107,20 +115,6 @@ public class UnificationCenter extends TMEBaseIndustry {
     @Override
     protected int getBaseStabilityMod() {
         return 1;
-    }
-
-    @Override
-    public boolean hasLikedConditions(Utils.ModifiableCondition condition) {
-        // Checks if market has all conditions
-        this.hasAtLeastOneLikedCondition = false;
-        if (!condition.likedConditions.isEmpty()) {
-            for (String conditionId : condition.likedConditions) {
-                if (!this.market.hasCondition(conditionId)) {
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 
     @Override

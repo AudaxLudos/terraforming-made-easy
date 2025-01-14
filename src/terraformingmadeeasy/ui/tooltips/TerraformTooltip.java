@@ -9,10 +9,8 @@ import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.industries.TMEBaseIndustry;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
 
 public class TerraformTooltip extends BaseTooltipCreator {
     public Utils.ModifiableCondition condition;
@@ -30,57 +28,63 @@ public class TerraformTooltip extends BaseTooltipCreator {
 
     @Override
     public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-        float oPad = 10f;
-        displayPreferences(tooltip, this.condition.likedConditions, true, false, this.industry.hasAtLeastOneLikedCondition, 0f);
-        displayPreferences(tooltip, this.condition.hatedConditions, false, false, this.industry.hasAtLeastOneLikedCondition, oPad);
-        displayPreferences(tooltip, this.condition.likedIndustries, true, true, this.industry.hasAtLeastOneLikedCondition, oPad);
-        displayPreferences(tooltip, this.condition.hatedIndustries, false, true, this.industry.hasAtLeastOneLikedCondition, oPad);
+        displayPreferences2(tooltip, this.condition.likedConditions, false, true,0f);
+        displayPreferences2(tooltip, this.condition.likedIndustries, false, false,10f);
+        displayPreferences2(tooltip, this.condition.hatedConditions, true, true,10f);
         Color textColor = this.condition.canChangeGasGiants ? Misc.getHighlightColor() : Misc.getNegativeHighlightColor();
         String textFormat = this.condition.canChangeGasGiants ? "Can" : "Cannot";
-        tooltip.addPara("%s be used on gas giants", oPad, textColor, textFormat);
+        tooltip.addPara("%s be used on gas giants", 10f, textColor, textFormat);
         if (this.condition.planetSpecOverride != null) {
             for (PlanetSpecAPI spec : Global.getSettings().getAllPlanetSpecs()) {
                 if (spec.isStar()) {
                     continue;
                 }
                 if (Objects.equals(spec.getPlanetType(), this.condition.planetSpecOverride)) {
-                    tooltip.addPara("The planet will be terraformed into a %s world", oPad, Misc.getHighlightColor(), spec.getName());
+                    tooltip.addPara("The planet will be terraformed into a %s world", 10f, Misc.getHighlightColor(), spec.getName());
                     break;
                 }
             }
         }
     }
 
-    public void displayPreferences(TooltipMakerAPI tooltip, List<String> preferences, boolean likes, boolean isIndustry, boolean hasAtLeastOneLikedCondition, float pad) {
-        String preferenceText = likes ? "Requires " : "Removes ";
-        preferenceText = likes && hasAtLeastOneLikedCondition && !isIndustry && preferences.size() > 1 ? preferenceText + "at least one of these " : preferenceText;
-        preferenceText = !isIndustry ? preferenceText + "conditions: " : preferenceText + "industries: ";
-        String industryText = "none";
-        if (!preferences.isEmpty()) {
-            StringBuilder text = new StringBuilder();
-            List<String> names = new ArrayList<>();
-            for (Iterator<String> itr = preferences.iterator(); itr.hasNext(); ) {
-                if (isIndustry) {
-                    names.add(Global.getSettings().getIndustrySpec(itr.next()).getName());
-                } else {
-                    names.add(Global.getSettings().getMarketConditionSpec(itr.next()).getName());
-                }
+    public void displayPreferences2(TooltipMakerAPI tooltip, String textExpression, boolean isHated, boolean isCondition, float pad) {
+        String titlePrefix = isHated ? "Removes " : "Required ";
+        String titleSuffix = isCondition ?  "Conditions" : "Industries";
 
-                if (preferences.size() == 1) {
-                    text.append("%s");
-                } else if (!itr.hasNext()) {
-                    if (!isIndustry && hasAtLeastOneLikedCondition && likes) {
-                        text.append("or %s");
-                    } else {
-                        text.append("and %s");
-                    }
-                } else {
-                    text.append("%s, ");
-                }
+        if (textExpression.isEmpty()) {
+            tooltip.addPara(titlePrefix + titleSuffix + ": %s", pad, Misc.getHighlightColor(), "None");
+            return;
+        }
+
+        String[] expressions = textExpression.split(",");
+        tooltip.addPara(titlePrefix + titleSuffix + ":", pad, Misc.getTextColor());
+
+        for (String s : expressions) {
+            String expression = s;
+            String bulletPrefix = isHated ? "Removes " : "Needs ";
+            String bulletTitle = "";
+            if (expression.contains("needAll")) {
+                bulletTitle = bulletPrefix + "All:";
+                expression = expression.replaceAll("needAll:", "");
+            } else if (expression.contains("needOne")) {
+                bulletTitle = bulletPrefix + "One:";
+                expression = expression.replaceAll("needOne:", "");
             }
-            tooltip.addPara(preferenceText + text, pad, Misc.getHighlightColor(), names.toArray(new String[0]));
-        } else {
-            tooltip.addPara(preferenceText + " %s", pad, Misc.getTextColor(), industryText);
+            String[] ids = expression.split("\\|");
+
+            if (!isHated) {
+                tooltip.setBulletedListMode("    ");
+                tooltip.addPara(bulletTitle, 3f, Misc.getTextColor());
+            }
+
+            tooltip.setBulletedListMode("        ");
+            for (String id : ids) {
+                boolean hasRequirement = isCondition ? this.industry.getMarket().hasCondition(id) : this.industry.getMarket().hasIndustry(id);
+                String name = isCondition ? Global.getSettings().getMarketConditionSpec(id).getName() : Global.getSettings().getIndustrySpec(id).getName();
+                Color color = isHated ? Misc.getHighlightColor() : hasRequirement ? Misc.getStoryBrightColor() : Misc.getNegativeHighlightColor();
+                tooltip.addPara(name, color, 0f);
+            }
+            tooltip.setBulletedListMode(null);
         }
     }
 }

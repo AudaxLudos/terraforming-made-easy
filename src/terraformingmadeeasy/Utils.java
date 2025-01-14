@@ -23,6 +23,8 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utils {
     public static final String TERRAFORMING_OPTIONS_FILE = "data/config/terraforming_options.csv";
@@ -42,6 +44,61 @@ public class Utils {
         return Global.getSettings().getModManager().isModEnabled("aotd_vok");
     }
 
+    public static boolean isAllTrue(boolean[] array) {
+        for (boolean b : array) {
+            if (!b) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean evaluateExpression(String text, Map<String, Boolean> values) {
+        // Resolve parentheses recursively
+        String expression = text.replaceAll("\\s+", "");
+        Pattern pattern = Pattern.compile("\\([^()]*\\)");
+        Matcher matcher = pattern.matcher(expression);
+        while (matcher.find()) {
+            String subExpression = matcher.group();
+            boolean result = evaluateExpression(subExpression.substring(1, subExpression.length() - 1), values);
+            expression = expression.substring(0, matcher.start()) + result + expression.substring(matcher.end());
+            matcher = pattern.matcher(expression); // Reset matcher after modification
+        }
+
+        // Evaluate AND (&&)
+        if (expression.contains("&&")) {
+            for (String part : expression.split("&&")) {
+                if (!evaluateExpression(part, values)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // Evaluate OR (||)
+        if (expression.contains("||")) {
+            for (String part : expression.split("\\|\\|")) {
+                if (evaluateExpression(part, values)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // Return the value of the term (true/false or variable)
+        if (expression.equals("true")) {
+            return true;
+        }
+        if (expression.equals("false")) {
+            return false;
+        }
+        Boolean value = values.get(expression);
+        if (value == null) {
+            throw new IllegalArgumentException("Unknown variable: " + expression);
+        }
+        return value;
+    }
+
     public static List<Utils.ModifiableCondition> getPlanetaryHologramOptions() {
         List<Utils.ModifiableCondition> options = new ArrayList<>();
         for (PlanetGenDataSpec pDataSpec : Global.getSettings().getAllSpecs(PlanetGenDataSpec.class)) {
@@ -54,7 +111,6 @@ public class Utils {
                             100000f,
                             30f,
                             true,
-                            null,
                             null,
                             null,
                             null,
@@ -119,26 +175,9 @@ public class Utils {
                 float cost = row.getInt("cost");
                 boolean canChangeGasGiants = row.getBoolean("canChangeGasGiants");
 
-                List<String> likedConditions = new ArrayList<>();
-                List<String> hatedConditions = new ArrayList<>();
-                List<String> likedIndustries = new ArrayList<>();
-                List<String> hatedIndustries = new ArrayList<>();
-                if (!row.getString("likedConditions").isEmpty()) {
-                    likedConditions.addAll(Arrays.asList(row.getString("likedConditions").replace(" ", "").split(",")));
-                    filterUnknownSpecs(likedConditions, false);
-                }
-                if (!row.getString("hatedConditions").isEmpty()) {
-                    hatedConditions.addAll(Arrays.asList(row.getString("hatedConditions").replace(" ", "").split(",")));
-                    filterUnknownSpecs(hatedConditions, false);
-                }
-                if (!row.getString("likedIndustries").isEmpty()) {
-                    likedIndustries.addAll(Arrays.asList(row.getString("likedIndustries").replace(" ", "").split(",")));
-                    filterUnknownSpecs(likedIndustries, true);
-                }
-                if (!row.getString("hatedIndustries").isEmpty()) {
-                    hatedIndustries.addAll(Arrays.asList(row.getString("hatedIndustries").replace(" ", "").split(",")));
-                    filterUnknownSpecs(hatedIndustries, true);
-                }
+                String likedConditions = row.getString("likedConditions");
+                String likedIndustries = row.getString("likedIndustries");
+                String hatedConditions = row.getString("hatedConditions");
                 String planetSpecOverride = row.getString("planetSpecOverride");
 
                 modifiableConditions.add(new Utils.ModifiableCondition(
@@ -147,9 +186,8 @@ public class Utils {
                         buildTime,
                         canChangeGasGiants,
                         likedConditions,
-                        hatedConditions,
                         likedIndustries,
-                        hatedIndustries,
+                        hatedConditions,
                         planetSpecOverride
                 ));
             }
@@ -303,53 +341,34 @@ public class Utils {
         public float cost;
         public float buildTime;
         public boolean canChangeGasGiants;
-        public List<String> likedConditions = new ArrayList<>();
-        public List<String> hatedConditions = new ArrayList<>();
-        public List<String> likedIndustries = new ArrayList<>();
-        public List<String> hatedIndustries = new ArrayList<>();
-        public String planetSpecOverride = null;
+        public String likedConditions;
+        public String likedIndustries;
+        public String hatedConditions;
+        public String planetSpecOverride;
 
-        public ModifiableCondition(MarketConditionSpecAPI spec, float cost, float buildTime, boolean canChangeGasGiants, List<String> likedConditions, List<String> hatedConditions, List<String> likedIndustries, List<String> hatedIndustries, String planetSpecOverride) {
+        public ModifiableCondition(MarketConditionSpecAPI spec, float cost, float buildTime, boolean canChangeGasGiants, String likedConditions, String likedIndustries, String hatedConditions, String planetSpecOverride) {
             this.id = spec.getId();
             this.name = spec.getName();
             this.icon = spec.getIcon();
             this.cost = cost;
             this.buildTime = buildTime;
             this.canChangeGasGiants = canChangeGasGiants;
-            if (likedConditions != null) {
-                this.likedConditions = likedConditions;
-            }
-            if (hatedConditions != null) {
-                this.hatedConditions = hatedConditions;
-            }
-            if (likedIndustries != null) {
-                this.likedIndustries = likedIndustries;
-            }
-            if (hatedIndustries != null) {
-                this.hatedIndustries = hatedIndustries;
-            }
+            this.likedConditions = likedConditions;
+            this.likedIndustries = likedIndustries;
+            this.hatedConditions = hatedConditions;
             this.planetSpecOverride = planetSpecOverride;
         }
 
-        public ModifiableCondition(String id, String name, String icon, float cost, float buildTime, boolean canChangeGasGiants, List<String> likedConditions, List<String> hatedConditions, List<String> likedIndustries, List<String> hatedIndustries, String planetSpecOverride) {
+        public ModifiableCondition(String id, String name, String icon, float cost, float buildTime, boolean canChangeGasGiants, String likedConditions, String likedIndustries, String hatedConditions, String planetSpecOverride) {
             this.id = id;
             this.name = name;
             this.icon = icon;
             this.cost = cost;
             this.buildTime = buildTime;
             this.canChangeGasGiants = canChangeGasGiants;
-            if (likedConditions != null) {
-                this.likedConditions = likedConditions;
-            }
-            if (hatedConditions != null) {
-                this.hatedConditions = hatedConditions;
-            }
-            if (likedIndustries != null) {
-                this.likedIndustries = likedIndustries;
-            }
-            if (hatedIndustries != null) {
-                this.hatedIndustries = hatedIndustries;
-            }
+            this.likedConditions = likedConditions;
+            this.likedIndustries = likedIndustries;
+            this.hatedConditions = hatedConditions;
             this.planetSpecOverride = planetSpecOverride;
         }
     }
