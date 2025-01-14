@@ -5,7 +5,6 @@ import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.impl.campaign.ids.Entities;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
-import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.ids.TMEIds;
 

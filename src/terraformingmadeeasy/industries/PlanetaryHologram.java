@@ -10,7 +10,6 @@ import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.loading.specs.PlanetSpec;
-import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.ids.TMEIds;
 

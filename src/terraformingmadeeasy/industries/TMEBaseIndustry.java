@@ -18,22 +18,18 @@ import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import org.apache.log4j.Logger;
 import terraformingmadeeasy.Utils;
-import terraformingmadeeasy.ids.TMEIds;
 
 import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class TMEBaseIndustry extends BaseIndustry {
     public static final Logger log = Global.getLogger(TMEBaseIndustry.class);
     public static final float GAMMA_BUILD_TIME_MULT = 0.20f;
     public static final float BETA_BUILD_TIME_MULT = 0.30f;
     public static final float ALPHA_BUILD_TIME_MULT = 0.50f;
-    public boolean hasAtLeastOneLikedCondition = false;
     protected List<Utils.ModifiableCondition> modifiableConditions = null;
     protected Utils.ModifiableCondition modifiableCondition = null;
     protected Boolean isAICoreBuildTimeMultApplied = false;
@@ -314,9 +310,6 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     public void setModifiableConditions(List<Utils.ModifiableCondition> options) {
-        if (this.modifiableConditions != null) {
-            log.warn("modifiableConditions is already set");
-        }
         this.modifiableConditions = options;
     }
 
@@ -612,9 +605,9 @@ public class TMEBaseIndustry extends BaseIndustry {
                 expression = expression.replaceAll("needOne:", "").replaceAll("\\|", "||");
             }
 
-            String[] Ids = expression.split("&&|\\|\\|");
+            String[] ids = expression.split("&&|\\|\\|");
             Map<String, Boolean> values = new HashMap<>();
-            for (String id : Ids) {
+            for (String id : ids) {
                 values.put(id, this.market.hasCondition(id));
             }
             expressionsResult[i] = Utils.evaluateExpression(expression, values);
@@ -630,7 +623,7 @@ public class TMEBaseIndustry extends BaseIndustry {
             return true;
         }
 
-        String[] expressions = text.split(",");
+        String[] expressions = text.replaceAll(" ", "").split(",");
         boolean[] expressionsResult = new boolean[expressions.length];
 
         for (int i = 0; i < expressions.length; i++) {
@@ -641,9 +634,9 @@ public class TMEBaseIndustry extends BaseIndustry {
                 expression = expression.replaceAll("needOne:", "").replaceAll("\\|", "||");
             }
 
-            String[] Ids = expression.split("&&|\\|\\|");
+            String[] ids = expression.split("&&|\\|\\|");
             Map<String, Boolean> values = new HashMap<>();
-            for (String id : Ids) {
+            for (String id : ids) {
                 values.put(id, this.market.hasIndustry(id));
             }
             expressionsResult[i] = Utils.evaluateExpression(expression, values);
