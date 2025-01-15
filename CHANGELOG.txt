@@ -1,3 +1,16 @@
+### 2.6.0
+- Release 2.6.0
+- Update research tech ids for AotD-VoK
+- Add AoTd research tech icons
+- Add aotd industry sub icons
+- Update tme research tree names and structure
+- Update pollution option to geomorphology station from atmosphere regulator
+- Update extreme weather and mild climate options to stellar manufactory from atmosphere regulator
+- Update tme market conditions to be compatible with AotD-Vok
+- Update unification center options to be compatible with AoTD-VoK
+- Update terraforming required conditions and industries format and functionality
+- Add AoTD-VOK research compatibility for structures
+
 ### 2.5.3
 - Release 2.5.3
 - Add solar shades and mirrors when completing stellar manufactory terraforming

@@ -46,7 +46,7 @@ public class PlanetaryHologram extends TMEBaseIndustry {
         float oPad = 10f;
         float pad = 3f;
 
-        if (mode == IndustryTooltipMode.NORMAL) {
+        if (mode == IndustryTooltipMode.NORMAL && this.market.getPlanetEntity() != null) {
             tooltip.addSpacer(10f);
             tooltip.addSectionHeading("Projected Hologram", Alignment.MID, 0f);
             String[] text = this.market.getPlanetEntity().getSpec().getName().split("[()]");
