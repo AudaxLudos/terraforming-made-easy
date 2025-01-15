@@ -27,7 +27,6 @@ import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.ids.TMEIds;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -37,7 +36,7 @@ public class ConstructionGrid extends BaseIndustry {
     public static final float GAMMA_BUILD_TIME_MULT = 0.20f;
     public static final float BETA_BUILD_TIME_MULT = 0.30f;
     public static final float ALPHA_BUILD_TIME_MULT = 0.50f;
-    public List<Utils.BuildableMegastructure> buildableMegastructures = new ArrayList<>();
+    public List<Utils.BuildableMegastructure> buildableMegastructures = null;
     public Utils.BuildableMegastructure buildableMegastructure = null;
     public Utils.OrbitData megastructureOrbitData = null;
     public Boolean isAICoreBuildTimeMultApplied = false;
@@ -310,7 +309,7 @@ public class ConstructionGrid extends BaseIndustry {
     }
 
     public void setBuildableMegastructures(List<Utils.BuildableMegastructure> options) {
-        this.buildableMegastructures = this.buildableMegastructures == null ? options : this.buildableMegastructures;
+        this.buildableMegastructures = options;
     }
 
     public void sendCompletedMessage() {

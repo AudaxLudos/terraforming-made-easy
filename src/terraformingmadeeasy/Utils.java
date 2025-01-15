@@ -129,6 +129,7 @@ public class Utils {
             JSONArray data = Global.getSettings().loadCSV(Utils.MEGASTRUCTURE_OPTIONS_FILE);
             for (int i = 0; i < data.length(); i++) {
                 JSONObject row = data.getJSONObject(i);
+                System.out.println(row);
                 if (row.getString("structureId").isEmpty()) {
                     continue;
                 }

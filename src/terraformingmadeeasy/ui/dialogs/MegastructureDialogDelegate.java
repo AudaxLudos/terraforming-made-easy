@@ -136,7 +136,7 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         TooltipMakerAPI startAngleElement = startAnglePanel.createUIElement(WIDTH / 4f, 40f, false);
         startAnglePanel.addUIElement(startAngleElement);
         orbitInputsElement.addCustom(startAnglePanel, 0f).getPosition().rightOfMid(orbitFocusPanel, 0f);
-        this.startingAngleField = addCustomTextField(startAnglePanel, startAngleElement, this.startingAngleField, "Starting Angle", "360", 20, startAnglePlugin, new StartingAngleFieldTooltip());
+        this.startingAngleField = addCustomTextField(startAnglePanel, startAngleElement, this.startingAngleField, "Starting Angle", "360", 7, startAnglePlugin, new StartingAngleFieldTooltip());
         startAnglePlugin.setTextField(this.startingAngleField, 0, 0);
 
         // Orbit radius field
@@ -145,7 +145,7 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         TooltipMakerAPI orbitRadiusElement = orbitRadiusPanel.createUIElement(WIDTH / 4f, 40f, false);
         orbitRadiusPanel.addUIElement(orbitRadiusElement);
         orbitInputsElement.addCustom(orbitRadiusPanel, 0f).getPosition().rightOfMid(startAnglePanel, 0f);
-        this.orbitRadiusField = addCustomTextField(orbitRadiusPanel, orbitRadiusElement, this.orbitRadiusField, "Orbit Radius", "1000", 20, orbitRadiusPlugin, new OrbitRadiusFieldTooltip());
+        this.orbitRadiusField = addCustomTextField(orbitRadiusPanel, orbitRadiusElement, this.orbitRadiusField, "Orbit Radius", "1000", 7, orbitRadiusPlugin, new OrbitRadiusFieldTooltip());
         orbitRadiusPlugin.setTextField(this.orbitRadiusField, 0, 0);
 
         // Orbit days field
@@ -154,7 +154,7 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         TooltipMakerAPI orbitDaysElement = orbitDaysPanel.createUIElement(WIDTH / 4f, 40f, false);
         orbitDaysPanel.addUIElement(orbitDaysElement);
         orbitInputsElement.addCustom(orbitDaysPanel, 0f).getPosition().rightOfMid(orbitRadiusPanel, 0f);
-        this.orbitDaysField = addCustomTextField(orbitDaysPanel, orbitDaysElement, this.orbitDaysField, "Orbit Days", "100", 20, orbitDaysPlugin, new OrbitDaysFieldTooltip());
+        this.orbitDaysField = addCustomTextField(orbitDaysPanel, orbitDaysElement, this.orbitDaysField, "Orbit Days", "100", 7, orbitDaysPlugin, new OrbitDaysFieldTooltip());
         orbitDaysPlugin.setTextField(this.orbitDaysField, 0, 0);
 
         // Display player credits
@@ -163,6 +163,8 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         creditsElement.addPara("Credits: %s", 0f, Misc.getGrayColor(), Misc.getHighlightColor(),
                 Misc.getWithDGS(Global.getSector().getPlayerFleet().getCargo().getCredits().get()));
         this.mPanel.addUIElement(creditsElement).inBL(0f, -32f);
+
+        System.out.println(this.industry.buildableMegastructures);
     }
 
     @Override
