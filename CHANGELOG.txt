@@ -1,3 +1,8 @@
+### 2.6.0b
+- Release 2.6.0b
+- Fix issue with construction grid options not showing up
+- Update the max character limit for megastructure ui inputs
+
 ### 2.6.0a
 - Release 2.6.0a
 - Fix crash when viewing planetary hologram tooltip in Aotd Research menu
