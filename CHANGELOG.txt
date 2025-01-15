@@ -1,5 +1,6 @@
-### 2.6.0
-- Release 2.6.0
+### 2.6.0a
+- Release 2.6.0a
+- Fix crash when viewing planetary hologram tooltip in Aotd Research menu
 - Update research tech ids for AotD-VoK
 - Add AoTd research tech icons
 - Add aotd industry sub icons
