@@ -1,3 +1,9 @@
+### 2.6.0c
+- Release 2.6.0c
+- Fix crash issue when there is no hated or liked conditions or industries of terraforming options
+- Update fetching of data to trim and remove whitespaces of strings
+- Fix planetary hologram options not showing up
+
 ### 2.6.0b
 - Release 2.6.0b
 - Fix issue with construction grid options not showing up
