@@ -1,3 +1,8 @@
+### 2.6.1
+- Release 2.6.1
+- Update reduced most terraforming and megastructure options time and cost by around 50%
+- Update switch icons of agricultural enrichment and climate reformation tech
+
 ### 2.6.0c
 - Release 2.6.0c
 - Fix crash issue when there is no hated or liked conditions or industries of terraforming options
