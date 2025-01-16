@@ -27,9 +27,9 @@ public class TerraformTooltip extends BaseTooltipCreator {
 
     @Override
     public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-        displayPreferences2(tooltip, this.condition.likedConditions, false, true, 0f);
-        displayPreferences2(tooltip, this.condition.likedIndustries, false, false, 10f);
-        displayPreferences2(tooltip, this.condition.hatedConditions, true, true, 10f);
+        displayPreferences(tooltip, this.condition.likedConditions, false, true, 0f);
+        displayPreferences(tooltip, this.condition.likedIndustries, false, false, 10f);
+        displayPreferences(tooltip, this.condition.hatedConditions, true, true, 10f);
         Color textColor = this.condition.canChangeGasGiants ? Misc.getHighlightColor() : Misc.getNegativeHighlightColor();
         String textFormat = this.condition.canChangeGasGiants ? "Can" : "Cannot";
         tooltip.addPara("%s be used on gas giants", 10f, textColor, textFormat);
@@ -46,7 +46,7 @@ public class TerraformTooltip extends BaseTooltipCreator {
         }
     }
 
-    public void displayPreferences2(TooltipMakerAPI tooltip, String textExpression, boolean isHated, boolean isCondition, float pad) {
+    public void displayPreferences(TooltipMakerAPI tooltip, String textExpression, boolean isHated, boolean isCondition, float pad) {
         String titlePrefix = isHated ? "Removes " : "Required ";
         String titleSuffix = isCondition ? "Conditions" : "Industries";
 
@@ -55,7 +55,7 @@ public class TerraformTooltip extends BaseTooltipCreator {
             return;
         }
 
-        String[] expressions = textExpression.replaceAll(" ", "").split(",");
+        String[] expressions = textExpression.split(",");
         tooltip.addPara(titlePrefix + titleSuffix + ":", pad, Misc.getTextColor());
 
         for (String s : expressions) {

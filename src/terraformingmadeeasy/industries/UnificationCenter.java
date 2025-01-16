@@ -96,7 +96,7 @@ public class UnificationCenter extends TMEBaseIndustry {
                     }
                 }
 
-                condition.likedIndustries = needOne.append(needAll.toString().replaceFirst(".$", "")).toString();
+                condition.likedIndustries = needOne.append(needAll.toString().replaceFirst(".$", "")).toString().replaceAll("\\s", "").trim();
             }
             setModifiableConditions(modifiableConditionsCopy);
         }
@@ -202,7 +202,7 @@ public class UnificationCenter extends TMEBaseIndustry {
 
     protected String[] getUniqueIds(String text) {
         StringBuilder tempText = new StringBuilder();
-        String[] expressions = text.replaceAll(" ", "").split(",");
+        String[] expressions = text.split(",");
 
         for (String s : expressions) {
             if (s.contains("needAll")) {

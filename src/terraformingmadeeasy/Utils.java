@@ -55,7 +55,7 @@ public class Utils {
 
     public static boolean evaluateExpression(String text, Map<String, Boolean> values) {
         // Resolve parentheses recursively
-        String expression = text.replaceAll("\\s+", "");
+        String expression = text;
         Pattern pattern = Pattern.compile("\\([^()]*\\)");
         Matcher matcher = pattern.matcher(expression);
         while (matcher.find()) {
@@ -136,7 +136,7 @@ public class Utils {
                     continue;
                 }
 
-                String structureId = row.getString("structureId");
+                String structureId = row.getString("structureId").replaceAll("\\s","").trim();
                 float cost = row.getInt("cost");
                 float buildTime = row.getInt("buildTime");
 
@@ -170,15 +170,15 @@ public class Utils {
                     continue;
                 }
 
-                String conditionId = row.getString("conditionId");
+                String conditionId = row.getString("conditionId").replaceAll("\\s","").trim();
                 float buildTime = row.getInt("buildTime");
                 float cost = row.getInt("cost");
                 boolean canChangeGasGiants = row.getBoolean("canChangeGasGiants");
 
-                String likedConditions = row.getString("likedConditions");
-                String likedIndustries = row.getString("likedIndustries");
-                String hatedConditions = row.getString("hatedConditions");
-                String planetSpecOverride = row.getString("planetSpecOverride");
+                String likedConditions = row.getString("likedConditions").replaceAll("\\s","").trim();
+                String likedIndustries = row.getString("likedIndustries").replaceAll("\\s","").trim();
+                String hatedConditions = row.getString("hatedConditions").replaceAll("\\s","").trim();
+                String planetSpecOverride = row.getString("planetSpecOverride").replaceAll("\\s","").trim();
 
                 modifiableConditions.add(new Utils.ModifiableCondition(
                         Global.getSettings().getMarketConditionSpec(conditionId),

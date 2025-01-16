@@ -13,6 +13,7 @@ public class ModPlugin extends BaseModPlugin {
         TMEIndustryOptionProvider.register();
         TMEPeople.register();
 
+        // Have to set it here as planet specs are not loaded yet if I do it outside
         Utils.AGRICULTURAL_LABORATORY_OPTIONS = Utils.getTerraformingOptions(TMEIds.AGRICULTURAL_LABORATORY);
         Utils.ATMOSPHERE_REGULATOR_OPTIONS = Utils.getTerraformingOptions(TMEIds.ATMOSPHERE_REGULATOR);
         Utils.CONSTRUCTION_GRID_OPTIONS = Utils.getMegastructureOptions();
