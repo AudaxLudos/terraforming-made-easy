@@ -6,8 +6,8 @@ structureId,cost,buildTime,buildLimit
 #rat_abyss_fabrication,1,1,1
 #rat_abyss_research,1,1,1
 ,,,
-coronal_tap,18000000,1080,1
-derelict_cryosleeper,12000000,720,1
-inactive_gate,12000000,720,1
-tme_station,10000000,360,3
+coronal_tap,10000000,540,1
+derelict_cryosleeper,6000000,360,1
+inactive_gate,6000000,360,1
+tme_station,4000000,180,3
 ,,,
