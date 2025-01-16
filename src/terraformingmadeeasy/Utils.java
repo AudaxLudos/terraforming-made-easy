@@ -29,16 +29,16 @@ import java.util.regex.Pattern;
 public class Utils {
     public static final String TERRAFORMING_OPTIONS_FILE = "data/config/terraforming_options.csv";
     public static final String MEGASTRUCTURE_OPTIONS_FILE = "data/config/megastructure_options.csv";
-    public static final List<Utils.ModifiableCondition> AGRICULTURAL_LABORATORY_OPTIONS = getTerraformingOptions(TMEIds.AGRICULTURAL_LABORATORY);
-    public static final List<Utils.ModifiableCondition> ATMOSPHERE_REGULATOR_OPTIONS = getTerraformingOptions(TMEIds.ATMOSPHERE_REGULATOR);
-    public static final List<Utils.BuildableMegastructure> CONSTRUCTION_GRID_OPTIONS = getMegastructureOptions();
-    public static final List<Utils.ModifiableCondition> ELEMENT_SYNTHESIZER_OPTIONS = getTerraformingOptions(TMEIds.ELEMENT_SYNTHESIZER);
-    public static final List<Utils.ModifiableCondition> GEOMORPHOLOGY_STATION_OPTIONS = getTerraformingOptions(TMEIds.GEOMORPHOLOGY_STATION);
-    public static final List<Utils.ModifiableCondition> MINERAL_REPLICATOR_OPTIONS = getTerraformingOptions(TMEIds.MINERAL_REPLICATOR);
-    public static final List<Utils.ModifiableCondition> PLANETARY_HOLOGRAM_OPTIONS = getPlanetaryHologramOptions();
-    public static final List<Utils.ModifiableCondition> STELLAR_MANUFACTORY_OPTIONS = getTerraformingOptions(TMEIds.STELLAR_MANUFACTORY);
-    public static final List<Utils.ModifiableCondition> TERRESTRIAL_ENGINE_OPTIONS = getTerraformingOptions(TMEIds.TERRESTRIAL_ENGINE);
-    public static final List<Utils.ModifiableCondition> UNIFICATION_CENTER_OPTIONS = getTerraformingOptions(TMEIds.UNIFICATION_CENTER);
+    public static List<Utils.ModifiableCondition> AGRICULTURAL_LABORATORY_OPTIONS = new ArrayList<>();
+    public static List<Utils.ModifiableCondition> ATMOSPHERE_REGULATOR_OPTIONS = new ArrayList<>();
+    public static List<Utils.BuildableMegastructure> CONSTRUCTION_GRID_OPTIONS = new ArrayList<>();
+    public static List<Utils.ModifiableCondition> ELEMENT_SYNTHESIZER_OPTIONS = new ArrayList<>();
+    public static List<Utils.ModifiableCondition> GEOMORPHOLOGY_STATION_OPTIONS = new ArrayList<>();
+    public static List<Utils.ModifiableCondition> MINERAL_REPLICATOR_OPTIONS = new ArrayList<>();
+    public static List<Utils.ModifiableCondition> PLANETARY_HOLOGRAM_OPTIONS = new ArrayList<>();
+    public static List<Utils.ModifiableCondition> STELLAR_MANUFACTORY_OPTIONS = new ArrayList<>();
+    public static List<Utils.ModifiableCondition> TERRESTRIAL_ENGINE_OPTIONS = new ArrayList<>();
+    public static List<Utils.ModifiableCondition> UNIFICATION_CENTER_OPTIONS = new ArrayList<>();
 
     public static boolean isAOTDVOKEnabled() {
         return Global.getSettings().getModManager().isModEnabled("aotd_vok");
@@ -129,7 +129,6 @@ public class Utils {
             JSONArray data = Global.getSettings().loadCSV(Utils.MEGASTRUCTURE_OPTIONS_FILE);
             for (int i = 0; i < data.length(); i++) {
                 JSONObject row = data.getJSONObject(i);
-                System.out.println(row);
                 if (row.getString("structureId").isEmpty()) {
                     continue;
                 }
@@ -195,22 +194,6 @@ public class Utils {
             return modifiableConditions;
         } catch (IOException | JSONException e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    public static void filterUnknownSpecs(List<String> ids, boolean isIndustry) {
-        for (Iterator<String> itr = ids.iterator(); itr.hasNext(); ) {
-            String id = itr.next();
-
-            if (isIndustry) {
-                if (id.isEmpty() || Global.getSettings().getIndustrySpec(id) == null) {
-                    itr.remove();
-                }
-            } else {
-                if (id.isEmpty() || Global.getSettings().getMarketConditionSpec(id) == null) {
-                    itr.remove();
-                }
-            }
         }
     }
 

@@ -590,7 +590,7 @@ public class TMEBaseIndustry extends BaseIndustry {
     public boolean hasRequiredConditions(Utils.ModifiableCondition condition) {
         String text = condition.likedConditions;
 
-        if (text.isEmpty()) {
+        if (text == null || text.isEmpty()) {
             return true;
         }
 
@@ -619,7 +619,7 @@ public class TMEBaseIndustry extends BaseIndustry {
     public boolean hasRequiredIndustries(Utils.ModifiableCondition condition) {
         String text = condition.likedIndustries;
 
-        if (text.isEmpty()) {
+        if (text == null || text.isEmpty()) {
             return true;
         }
 

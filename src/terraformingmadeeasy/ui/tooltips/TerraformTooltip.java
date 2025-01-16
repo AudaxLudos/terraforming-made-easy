@@ -50,7 +50,7 @@ public class TerraformTooltip extends BaseTooltipCreator {
         String titlePrefix = isHated ? "Removes " : "Required ";
         String titleSuffix = isCondition ? "Conditions" : "Industries";
 
-        if (textExpression.isEmpty()) {
+        if (textExpression == null || textExpression.isEmpty()) {
             tooltip.addPara(titlePrefix + titleSuffix + ": %s", pad, Misc.getHighlightColor(), "None");
             return;
         }
