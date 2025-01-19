@@ -39,7 +39,7 @@ public class TMEBaseIndustry extends BaseIndustry {
 
     @Override
     public void apply() {
-        apply(true);
+        super.apply(true);
     }
 
     @Override
@@ -623,7 +623,7 @@ public class TMEBaseIndustry extends BaseIndustry {
             return true;
         }
 
-        String[] expressions = text.replaceAll(" ", "").split(",");
+        String[] expressions = text.split(",");
         boolean[] expressionsResult = new boolean[expressions.length];
 
         for (int i = 0; i < expressions.length; i++) {
