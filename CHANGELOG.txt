@@ -1,3 +1,11 @@
+### 2.6.3b
+- Release 2.6.3b
+- Add vanilla time and cost multiplier settings
+- Update apply luna settings to terraforming and megastructure options
+- Update initialization of unification center aotd compatibility settings
+- Add initial soft compatibility with lunalib mod
+- Update moved options files to ../data/campaign folder
+
 ### 2.6.1
 - Release 2.6.1
 - Update reduced most terraforming and megastructure options time and cost by around 50%
