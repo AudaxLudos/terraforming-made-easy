@@ -27,8 +27,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Utils {
-    public static final String TERRAFORMING_OPTIONS_FILE = "data/config/terraforming_options.csv";
-    public static final String MEGASTRUCTURE_OPTIONS_FILE = "data/config/megastructure_options.csv";
+    public static final String TERRAFORMING_OPTIONS_FILE = "data/campaign/terraforming_options.csv";
+    public static final String MEGASTRUCTURE_OPTIONS_FILE = "data/campaign/megastructure_options.csv";
     public static List<Utils.ModifiableCondition> AGRICULTURAL_LABORATORY_OPTIONS = new ArrayList<>();
     public static List<Utils.ModifiableCondition> ATMOSPHERE_REGULATOR_OPTIONS = new ArrayList<>();
     public static List<Utils.BuildableMegastructure> CONSTRUCTION_GRID_OPTIONS = new ArrayList<>();
