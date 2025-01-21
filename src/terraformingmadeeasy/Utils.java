@@ -61,7 +61,11 @@ public class Utils {
                 value = 2.0f;
                 break;
             case "Custom":
-                value = getSettingsFloat(customFieldId);
+                if (isLunaLibEnabled()) {
+                    value = getSettingsFloat(customFieldId);
+                } else {
+                    value = Global.getSettings().getFloat(customFieldId);
+                }
                 break;
         }
         return value;
