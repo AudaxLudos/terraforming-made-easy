@@ -363,8 +363,8 @@ public class Utils {
             if (spec.getInteractionImage() != null) {
                 this.icon = spec.getInteractionImage();
             }
-            this.cost = cost;
-            this.buildTime = buildTime;
+            this.cost = cost * BUILD_COST_MULTIPLIER;
+            this.buildTime = buildTime * BUILD_TIME_MULTIPLIER;
         }
     }
 
@@ -398,8 +398,8 @@ public class Utils {
             this.id = spec.getId();
             this.name = spec.getName();
             this.icon = spec.getIcon();
-            this.cost = cost;
-            this.buildTime = buildTime;
+            this.cost = cost * BUILD_COST_MULTIPLIER;
+            this.buildTime = buildTime * BUILD_TIME_MULTIPLIER;
             this.canChangeGasGiants = canChangeGasGiants;
             this.likedConditions = likedConditions;
             this.likedIndustries = likedIndustries;
@@ -411,8 +411,8 @@ public class Utils {
             this.id = id;
             this.name = name;
             this.icon = icon;
-            this.cost = cost;
-            this.buildTime = buildTime;
+            this.cost = cost * BUILD_COST_MULTIPLIER;
+            this.buildTime = buildTime * BUILD_TIME_MULTIPLIER;
             this.canChangeGasGiants = canChangeGasGiants;
             this.likedConditions = likedConditions;
             this.likedIndustries = likedIndustries;
