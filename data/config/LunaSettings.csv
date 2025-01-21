@@ -1,0 +1,13 @@
+fieldID,fieldName,fieldType,defaultValue,secondaryValue,fieldDescription,minValue,maxValue,tab
+tme_build_time_settings,Build Time Multiplier,Radio,Normal,"Fast, Normal, Slow, Custom ","Fast - 0.5
+Normal - 1.0
+Slow - 2.0
+Custom - Uses the custom build time multiplier settings field",,,
+tme_custom_build_time_settings,Custom Build Time Multiplier,Double,1,,Custom build time multiplier,0.1,10,
+,,,,,,,,
+tme_build_cost_settings,Build Cost Multiplier,Radio,Normal,"Fast, Normal, Slow, Custom ","Fast - 0.5
+Normal - 1.0
+Slow - 2.0
+Custom - Uses the custom build time multiplier settings field",,,
+tme_custom_build_cost_settings,Custom Build Cost Multiplier,Double,1,,Custom build cost multiplier,0.1,10,
+,,,,,,,,

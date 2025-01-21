@@ -8,6 +8,7 @@ import com.fs.starfarer.api.characters.MarketConditionSpecAPI;
 import com.fs.starfarer.api.impl.campaign.procgen.PlanetGenDataSpec;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
+import lunalib.lunaSettings.LunaSettings;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,6 +40,51 @@ public class Utils {
     public static List<Utils.ModifiableCondition> STELLAR_MANUFACTORY_OPTIONS = new ArrayList<>();
     public static List<Utils.ModifiableCondition> TERRESTRIAL_ENGINE_OPTIONS = new ArrayList<>();
     public static List<Utils.ModifiableCondition> UNIFICATION_CENTER_OPTIONS = new ArrayList<>();
+    public static float BUILD_TIME_MULTIPLIER = 1.0f;
+    public static float BUILD_COST_MULTIPLIER = 1.0f;
+
+    public static void loadLunaSettings() {
+        BUILD_TIME_MULTIPLIER = getBuildCostSettingValue(getSettingsString("tme_build_time_settings"), "tme_custom_build_time_settings");
+        BUILD_COST_MULTIPLIER = getBuildCostSettingValue(getSettingsString("tme_build_cost_settings"), "tme_custom_build_cost_settings");
+    }
+
+    public static float getBuildCostSettingValue(String setting, String customFieldId) {
+        float value = 1f;
+        switch (setting) {
+            case "Fast":
+                value = 0.5f;
+                break;
+            case "Normal":
+                value = 1.0f;
+                break;
+            case "Slow":
+                value = 2.0f;
+                break;
+            case "Custom":
+                value = getSettingsFloat(customFieldId);
+                break;
+        }
+        return value;
+    }
+
+    public static float getSettingsFloat(String fieldId) {
+        Float val = LunaSettings.getFloat(TMEIds.MOD_ID, fieldId);
+        if (val == null)
+            return 1f;
+        return val;
+    }
+
+    public static String getSettingsString(String fieldId) {
+        String val = LunaSettings.getString(TMEIds.MOD_ID, fieldId);
+        if (val == null || val.isEmpty()) {
+            return "Normal";
+        }
+        return val;
+    }
+
+    public static boolean isLunaLibEnabled() {
+        return Global.getSettings().getModManager().isModEnabled("lunalib");
+    }
 
     public static boolean isAOTDVOKEnabled() {
         return Global.getSettings().getModManager().isModEnabled("aotd_vok");

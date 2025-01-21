@@ -1,6 +1,7 @@
 package terraformingmadeeasy;
 
 import com.fs.starfarer.api.BaseModPlugin;
+import lunalib.lunaSettings.LunaSettings;
 import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.ids.TMEPeople;
 import terraformingmadeeasy.listeners.TMEIndustryOptionProvider;
@@ -12,6 +13,11 @@ public class ModPlugin extends BaseModPlugin {
     public void onGameLoad(boolean newGame) {
         TMEIndustryOptionProvider.register();
         TMEPeople.register();
+
+        if (Utils.isLunaLibEnabled()) {
+            Utils.loadLunaSettings();
+            LunaSettings.addSettingsListener(new TMELunaSettingsListener());
+        }
 
         // Have to set it here as planet specs are not loaded yet if I do it outside
         Utils.AGRICULTURAL_LABORATORY_OPTIONS = Utils.getTerraformingOptions(TMEIds.AGRICULTURAL_LABORATORY);

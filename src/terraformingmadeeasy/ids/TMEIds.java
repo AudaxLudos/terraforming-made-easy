@@ -1,6 +1,8 @@
 package terraformingmadeeasy.ids;
 
 public class TMEIds {
+    public static String MOD_ID = "terraformingmadeeasy";
+
     // TME conditions
     public static final String DEATH_WORLD = "tme_death_world";
     public static final String FORGE_WORLD = "tme_forge_world";
