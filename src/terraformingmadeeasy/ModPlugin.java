@@ -1,11 +1,13 @@
 package terraformingmadeeasy;
 
 import com.fs.starfarer.api.BaseModPlugin;
+import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import lunalib.lunaSettings.LunaSettings;
 import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.ids.TMEPeople;
 import terraformingmadeeasy.listeners.TMEIndustryOptionProvider;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ModPlugin extends BaseModPlugin {
@@ -30,5 +32,89 @@ public class ModPlugin extends BaseModPlugin {
         Utils.STELLAR_MANUFACTORY_OPTIONS = Utils.getTerraformingOptions(TMEIds.STELLAR_MANUFACTORY);
         Utils.TERRESTRIAL_ENGINE_OPTIONS = Utils.getTerraformingOptions(TMEIds.TERRESTRIAL_ENGINE);
         Utils.UNIFICATION_CENTER_OPTIONS = Utils.getTerraformingOptions(TMEIds.UNIFICATION_CENTER);
+
+        if (Utils.isAOTDVOKEnabled()) {
+            List<Utils.ModifiableCondition> modifiableConditionsCopy = new ArrayList<>(Utils.UNIFICATION_CENTER_OPTIONS);
+
+            for (Utils.ModifiableCondition condition : modifiableConditionsCopy) {
+                StringBuilder needOne = new StringBuilder();
+                StringBuilder needAll = new StringBuilder("needAll:");
+                String[] ids = Utils.getUniqueIds(condition.likedIndustries);
+
+                for (String id : ids) {
+                    switch (id) {
+                        case Industries.MINING: {
+                            String newExpression = String.format(
+                                    "needOne:%s|%s|%s, ",
+                                    "mining",
+                                    "fracking",
+                                    "mining_megaplex");
+                            needOne.append(newExpression);
+                            break;
+                        }
+                        case Industries.REFINING: {
+                            String newExpression = String.format(
+                                    "needOne:%s|%s|%s|%s|%s, ",
+                                    "refining",
+                                    "crystalizator",
+                                    "isotope_separator",
+                                    "policrystalizator",
+                                    "cascade_reprocesor");
+                            needOne.append(newExpression);
+                            break;
+                        }
+                        case Industries.LIGHTINDUSTRY: {
+                            String newExpression = String.format(
+                                    "needOne:%s|%s|%s|%s, ",
+                                    "lightindustry",
+                                    "hightech",
+                                    "druglight",
+                                    "consumerindustry");
+                            needOne.append(newExpression);
+                            break;
+                        }
+                        case Industries.ORBITALWORKS:
+                        case Industries.HEAVYINDUSTRY: {
+                            String newExpression = String.format(
+                                    "needOne:%s|%s|%s|%s|%s|%s|%s, ",
+                                    "orbitalworks",
+                                    "supplyheavy",
+                                    "weaponheavy",
+                                    "triheavy",
+                                    "hegeheavy",
+                                    "orbitalheavy",
+                                    "stella_manufactorium");
+                            needOne.append(newExpression);
+                            break;
+                        }
+                        case Industries.FARMING: {
+                            String newExpression = String.format(
+                                    "needOne:%s|%s|%s, ",
+                                    "farming",
+                                    "artifarming",
+                                    "subfarming");
+                            needOne.append(newExpression);
+                            break;
+                        }
+                        case Industries.FUELPROD: {
+                            String newExpression = String.format(
+                                    "needOne:%s|%s, ",
+                                    "fuelprod",
+                                    "blast_processing");
+                            needOne.append(newExpression);
+                            break;
+                        }
+                        case Industries.HIGHCOMMAND:
+                        case Industries.COMMERCE:
+                        case Industries.MEGAPORT: {
+                            needAll.append(id).append("|");
+                        }
+                    }
+                }
+
+                condition.likedIndustries = needOne.append(needAll.toString().replaceFirst(".$", "")).toString().replaceAll("\\s", "").trim();
+            }
+            Utils.UNIFICATION_CENTER_OPTIONS = modifiableConditionsCopy;
+        }
     }
 }

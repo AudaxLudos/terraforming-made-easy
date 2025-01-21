@@ -16,90 +16,6 @@ import java.util.*;
 public class UnificationCenter extends TMEBaseIndustry {
     public UnificationCenter() {
         setModifiableConditions(Utils.UNIFICATION_CENTER_OPTIONS);
-
-        if (Utils.isAOTDVOKEnabled()) {
-            List<Utils.ModifiableCondition> modifiableConditionsCopy = new ArrayList<>(getModifiableConditions());
-
-            for (Utils.ModifiableCondition condition : modifiableConditionsCopy) {
-                StringBuilder needOne = new StringBuilder();
-                StringBuilder needAll = new StringBuilder("needAll:");
-                String[] ids = getUniqueIds(condition.likedIndustries);
-
-                for (String id : ids) {
-                    switch (id) {
-                        case Industries.MINING: {
-                            String newExpression = String.format(
-                                    "needOne:%s|%s|%s, ",
-                                    "mining",
-                                    "fracking",
-                                    "mining_megaplex");
-                            needOne.append(newExpression);
-                            break;
-                        }
-                        case Industries.REFINING: {
-                            String newExpression = String.format(
-                                    "needOne:%s|%s|%s|%s|%s, ",
-                                    "refining",
-                                    "crystalizator",
-                                    "isotope_separator",
-                                    "policrystalizator",
-                                    "cascade_reprocesor");
-                            needOne.append(newExpression);
-                            break;
-                        }
-                        case Industries.LIGHTINDUSTRY: {
-                            String newExpression = String.format(
-                                    "needOne:%s|%s|%s|%s, ",
-                                    "lightindustry",
-                                    "hightech",
-                                    "druglight",
-                                    "consumerindustry");
-                            needOne.append(newExpression);
-                            break;
-                        }
-                        case Industries.ORBITALWORKS:
-                        case Industries.HEAVYINDUSTRY: {
-                            String newExpression = String.format(
-                                    "needOne:%s|%s|%s|%s|%s|%s|%s, ",
-                                    "orbitalworks",
-                                    "supplyheavy",
-                                    "weaponheavy",
-                                    "triheavy",
-                                    "hegeheavy",
-                                    "orbitalheavy",
-                                    "stella_manufactorium");
-                            needOne.append(newExpression);
-                            break;
-                        }
-                        case Industries.FARMING: {
-                            String newExpression = String.format(
-                                    "needOne:%s|%s|%s, ",
-                                    "farming",
-                                    "artifarming",
-                                    "subfarming");
-                            needOne.append(newExpression);
-                            break;
-                        }
-                        case Industries.FUELPROD: {
-                            String newExpression = String.format(
-                                    "needOne:%s|%s, ",
-                                    "fuelprod",
-                                    "blast_processing");
-                            needOne.append(newExpression);
-                            break;
-                        }
-                        case Industries.HIGHCOMMAND:
-                        case Industries.COMMERCE:
-                        case Industries.MEGAPORT: {
-                            needAll.append(id).append("|");
-                        }
-                    }
-                }
-
-                condition.likedIndustries = needOne.append(needAll.toString().replaceFirst(".$", "")).toString().replaceAll("\\s", "").trim();
-            }
-            setModifiableConditions(modifiableConditionsCopy);
-        }
     }
 
     @Override
@@ -198,23 +114,5 @@ public class UnificationCenter extends TMEBaseIndustry {
     @Override
     public String getAOTDVOKTechId() {
         return TMEIds.UNIFICATION_CENTER_TECH;
-    }
-
-    protected String[] getUniqueIds(String text) {
-        StringBuilder tempText = new StringBuilder();
-        String[] expressions = text.split(",");
-
-        for (String s : expressions) {
-            if (s.contains("needAll")) {
-                tempText.append(s.replaceAll("needAll:", ""));
-            } else if (s.contains("needOne")) {
-                tempText.append(s.replaceAll("needOne:", ""));
-            }
-            tempText.append("|");
-        }
-
-        String[] ids = tempText.toString().split("\\|");
-        Set<String> setIds = new HashSet<>(Arrays.asList(ids));
-        return setIds.toArray(new String[0]);
     }
 }

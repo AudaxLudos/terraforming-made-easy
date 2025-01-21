@@ -99,6 +99,24 @@ public class Utils {
         return true;
     }
 
+    public static String[] getUniqueIds(String text) {
+        StringBuilder tempText = new StringBuilder();
+        String[] expressions = text.split(",");
+
+        for (String s : expressions) {
+            if (s.contains("needAll")) {
+                tempText.append(s.replaceAll("needAll:", ""));
+            } else if (s.contains("needOne")) {
+                tempText.append(s.replaceAll("needOne:", ""));
+            }
+            tempText.append("|");
+        }
+
+        String[] ids = tempText.toString().split("\\|");
+        Set<String> setIds = new HashSet<>(Arrays.asList(ids));
+        return setIds.toArray(new String[0]);
+    }
+
     public static boolean evaluateExpression(String text, Map<String, Boolean> values) {
         // Resolve parentheses recursively
         String expression = text;
