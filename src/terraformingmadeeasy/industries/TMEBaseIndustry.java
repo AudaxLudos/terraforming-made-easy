@@ -585,6 +585,25 @@ public class TMEBaseIndustry extends BaseIndustry {
                 (int) ((1f - UPKEEP_MULT) * 100f) + "%", (int) (GAMMA_BUILD_TIME_MULT * 100f) + "%");
     }
 
+    @Override
+    protected void addPostUpkeepSection(TooltipMakerAPI tooltip, IndustryTooltipMode mode) {
+        float pad = 3f;
+
+        if (mode == IndustryTooltipMode.NORMAL || isUpgrading()) {
+            if (isUpgrading()) {
+                tooltip.addSectionHeading("Terraforming project", Alignment.MID, 10f);
+                TooltipMakerAPI imageWithText = tooltip.beginImageWithText(this.modifiableCondition.icon, 40f, getTooltipWidth(), false);
+                imageWithText.addPara("Status: %s", 0f, Misc.getHighlightColor(), "Ongoing");
+                imageWithText.addPara("Action: %s", pad, Misc.getHighlightColor(), !this.market.hasCondition(this.modifiableCondition.id) ? "Add" : "Remove");
+                imageWithText.addPara("Condition: %s", pad, Misc.getHighlightColor(), this.modifiableCondition.name);
+                imageWithText.addPara("Days Left: %s", pad, Misc.getHighlightColor(), Math.round(this.buildTime - this.buildProgress) + "");
+                tooltip.addImageWithText(10f);
+            } else {
+                tooltip.addSectionHeading("No projects started", Alignment.MID, 10f);
+            }
+        }
+    }
+
     public void addTerraformingOptionList(TooltipMakerAPI tooltip, IndustryTooltipMode mode, boolean expanded) {
         if (expanded) {
             int rowLimit = 6;
@@ -607,25 +626,6 @@ public class TMEBaseIndustry extends BaseIndustry {
             }
         } else {
             tooltip.addPara("Press %s to see conditions you can alter", 10f, Misc.getGrayColor(), Misc.getHighlightColor(), "F1");
-        }
-    }
-
-    @Override
-    protected void addPostUpkeepSection(TooltipMakerAPI tooltip, IndustryTooltipMode mode) {
-        float pad = 3f;
-
-        if (mode == IndustryTooltipMode.NORMAL || isUpgrading()) {
-            if (isUpgrading()) {
-                tooltip.addSectionHeading("Terraforming project", Alignment.MID, 10f);
-                TooltipMakerAPI imageWithText = tooltip.beginImageWithText(this.modifiableCondition.icon, 40f, getTooltipWidth(), false);
-                imageWithText.addPara("Status: %s", 0f, Misc.getHighlightColor(), "Ongoing");
-                imageWithText.addPara("Action: %s", pad, Misc.getHighlightColor(), !this.market.hasCondition(this.modifiableCondition.id) ? "Add" : "Remove");
-                imageWithText.addPara("Condition: %s", pad, Misc.getHighlightColor(), this.modifiableCondition.name);
-                imageWithText.addPara("Days Left: %s", pad, Misc.getHighlightColor(), Math.round(this.buildTime - this.buildProgress) + "");
-                tooltip.addImageWithText(10f);
-            } else {
-                tooltip.addSectionHeading("No projects started", Alignment.MID, 10f);
-            }
         }
     }
 
