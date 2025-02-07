@@ -1,3 +1,9 @@
+### 2.6.3c
+- Release 2.6.3c
+- Update luna settings details
+- Update reformat tooltip for construction grid
+- Update reformat tooltip TMEBaseIndustry
+
 ### 2.6.3b
 - Release 2.6.3b
 - Add vanilla time and cost multiplier settings
