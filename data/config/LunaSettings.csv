@@ -1,18 +1,22 @@
 fieldID,fieldName,fieldType,defaultValue,secondaryValue,fieldDescription,minValue,maxValue,tab
+tme_note_header,Note,Header,Notes,,,,,
 tme_note,Note,Text,Reload the save and re-build TME structures for settings to take affect during gameplay.,,,,,
+,,,,,,,,
+tme_build_time_settings_header,Build Time Settings,Header,Build Time Settings,,,,,
 tme_build_time_settings,Build Time Multiplier,Radio,Normal,"Fast, Normal, Slow, Custom ","This value will be multiplied to the build time of a terraforming or megastructure option.
 
 Fast - 0.5
 Normal - 1.0
 Slow - 2.0
 Custom - Uses the custom build time multiplier settings field",,,
-tme_custom_build_time_settings,Custom Build Time Multiplier,Double,1,,,0.1,10,
+tme_custom_build_time_settings,Custom Build Time Multiplier,Double,1,,,0.2,10,
 ,,,,,,,,
-tme_build_cost_settings,Build Cost Multiplier,Radio,Normal,"Fast, Normal, Slow, Custom ","This value will be multiplied to the build cost of a terraforming or megastructure option.
+tme_build_cost_settings_header,Build Cost Settings,Header,Build Cost Settings,,,,,
+tme_build_cost_settings,Build Cost Multiplier,Radio,Normal,"High, Normal, Low, Custom ","This value will be multiplied to the build cost of a terraforming or megastructure option.
 
-Fast - 0.5
+Low - 0.5
 Normal - 1.0
-Slow - 2.0
-Custom - Uses the custom build time multiplier settings field",,,
-tme_custom_build_cost_settings,Custom Build Cost Multiplier,Double,1,,,0.1,10,
+High - 2.0
+Custom - Uses the custom build cost multiplier settings field",,,
+tme_custom_build_cost_settings,Custom Build Cost Multiplier,Double,1,,,0.2,10,
 ,,,,,,,,
