@@ -50,17 +50,18 @@ public class Utils {
 
     public static float getBuildCostSettingValue(String setting, String customFieldId) {
         float value = 1f;
-        switch (setting) {
-            case "Fast":
+        switch (setting.toLowerCase()) {
+            case "low":
+            case "fast":
                 value = 0.5f;
                 break;
-            case "Normal":
+            case "normal":
                 value = 1.0f;
                 break;
-            case "Slow":
+            case "slow":
                 value = 2.0f;
                 break;
-            case "Custom":
+            case "custom":
                 if (isLunaLibEnabled()) {
                     value = getSettingsFloat(customFieldId);
                 } else {
@@ -81,7 +82,7 @@ public class Utils {
     public static String getSettingsString(String fieldId) {
         String val = LunaSettings.getString(TMEIds.MOD_ID, fieldId);
         if (val == null || val.isEmpty()) {
-            return "Normal";
+            return "normal";
         }
         return val;
     }
