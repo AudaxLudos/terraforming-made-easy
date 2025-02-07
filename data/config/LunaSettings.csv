@@ -12,7 +12,7 @@ Custom - Uses the custom build time multiplier settings field",,,
 tme_custom_build_time_settings,Custom Build Time Multiplier,Double,1,,,0.2,10,
 ,,,,,,,,
 tme_build_cost_settings_header,Build Cost Settings,Header,Build Cost Settings,,,,,
-tme_build_cost_settings,Build Cost Multiplier,Radio,Normal,"High, Normal, Low, Custom ","This value will be multiplied to the build cost of a terraforming or megastructure option.
+tme_build_cost_settings,Build Cost Multiplier,Radio,Normal,"Low, Normal, High, Custom ","This value will be multiplied to the build cost of a terraforming or megastructure option.
 
 Low - 0.5
 Normal - 1.0
