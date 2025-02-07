@@ -58,6 +58,7 @@ public class Utils {
             case "normal":
                 value = 1.0f;
                 break;
+            case "high":
             case "slow":
                 value = 2.0f;
                 break;

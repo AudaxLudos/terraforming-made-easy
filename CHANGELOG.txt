@@ -1,3 +1,7 @@
+### 2.6.3d
+- Release 2.6.3d
+- Fix vanilla mod settings not applying properly
+
 ### 2.6.3c
 - Release 2.6.3c
 - Update luna settings details

@@ -8,9 +8,9 @@
   "tme_custom_build_time_multiplier": 1.0,
 
   # This values will be multiplied to the build cost of a terraforming or megastructure option.
-  # Fast - 0.5
+  # Low - 0.5
   # Normal - 1.0
-  # Slow - 2.0
+  # High - 2.0
   # Custom - Uses the custom build cost multiplier field
   "tme_build_cost_setting": "normal", # Replace text with the above options
   "tme_custom_build_cost_multiplier": 1.0,
