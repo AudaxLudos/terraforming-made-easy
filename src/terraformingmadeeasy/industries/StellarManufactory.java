@@ -27,8 +27,11 @@ public class StellarManufactory extends TMEBaseIndustry {
             sendCompletedMessage();
             addSolarMirrors();
             addSolarShades();
-            changePlanetConditions();
-            changePlanetClass();
+            terraformPlanet();
+            updatePlanetConditions();
+            String category = evaluatePlanetCategory();
+            String type = evaluatePlanetType(category);
+            updatePlanetVisuals(type);
             reapply();
             // Force reapply demands and supply
             for (Industry ind : this.market.getIndustries()) {

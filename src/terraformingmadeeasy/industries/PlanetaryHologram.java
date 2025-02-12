@@ -28,7 +28,7 @@ public class PlanetaryHologram extends TMEBaseIndustry {
     public void advance(float amount) {
         super.advance(amount);
         if (this.fakePlanetSpec != null && !Objects.equals(this.market.getPlanetEntity().getTypeId(), this.fakePlanetSpec.getPlanetType()) && !isUpgrading()) {
-            changePlanetVisuals(this.fakePlanetSpec.getPlanetType());
+            updatePlanetVisuals(this.fakePlanetSpec.getPlanetType());
         }
     }
 
@@ -37,7 +37,7 @@ public class PlanetaryHologram extends TMEBaseIndustry {
         super.notifyBeingRemoved(mode, forUpgrade);
         if (this.originalPlanetSpec != null) {
             this.setModifiableCondition(null);
-            changePlanetVisuals(this.originalPlanetSpec.getPlanetType());
+            updatePlanetVisuals(this.originalPlanetSpec.getPlanetType());
         }
     }
 
@@ -67,11 +67,11 @@ public class PlanetaryHologram extends TMEBaseIndustry {
     }
 
     @Override
-    public void changePlanetConditions() {
+    public void terraformPlanet() {
     }
 
     @Override
-    public void changePlanetVisuals(String planetTypeId) {
+    public void updatePlanetVisuals(String planetTypeId) {
         this.originalPlanetSpec = (PlanetSpec) Global.getSettings().getSpec(PlanetSpec.class, this.market.getPlanetEntity().getSpec().getPlanetType(), false);
         this.originalIsGasGiant = this.market.getPlanetEntity().getSpec().isGasGiant();
         this.fakePlanetSpec = (PlanetSpec) Global.getSettings().getSpec(PlanetSpec.class, planetTypeId, false);
