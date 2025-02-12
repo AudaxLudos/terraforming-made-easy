@@ -23,6 +23,7 @@ import com.fs.starfarer.api.ui.IconRenderMode;
 import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import com.fs.starfarer.api.util.WeightedRandomPicker;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import org.apache.log4j.Logger;
 import terraformingmadeeasy.Utils;
@@ -801,14 +802,14 @@ public class TMEBaseIndustry extends BaseIndustry {
         if (this.market.hasCondition(Conditions.THIN_ATMOSPHERE)) {
             result = "cat_hab1";
         }
+        if (this.market.hasCondition(Conditions.VERY_HOT) || this.market.hasCondition(Conditions.EXTREME_TECTONIC_ACTIVITY)) {
+            result = "cat_lava";
+        }
         if (this.market.hasCondition(Conditions.NO_ATMOSPHERE)) {
             result = "cat_barren";
         }
         if (this.market.hasCondition(Conditions.VERY_COLD)) {
             result = "cat_frozen";
-        }
-        if (this.market.hasCondition(Conditions.VERY_HOT) || this.market.hasCondition(Conditions.EXTREME_TECTONIC_ACTIVITY)) {
-            result = "cat_lava";
         }
         if (this.market.hasCondition(Conditions.TOXIC_ATMOSPHERE)) {
             result = "cat_toxic";
@@ -834,17 +835,38 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     public String evaluatePlanetType(String category) {
-        List<String> results = new ArrayList<>();
+        WeightedRandomPicker<String> picker = new WeightedRandomPicker<>(Misc.random);
         Collection<PlanetGenDataSpec> specs = Global.getSettings().getAllSpecs(PlanetGenDataSpec.class);
         for (PlanetGenDataSpec spec: specs) {
             if (Objects.equals(spec.getCategory(), category)) {
                 if (spec.getFrequency() > 0) {
-                    results.add(spec.getId());
+                    picker.add(spec.getId(), 1);
                 }
             }
         }
 
-        return results.get(Misc.random.nextInt(results.size()));
+        List<String> items = picker.getItems();
+        if (Objects.equals(category, "cat_hab3")) {
+            if (items.contains("water")) {
+                int index = items.indexOf("water");
+                if (this.market.hasCondition(Conditions.WATER_SURFACE)) {
+                    picker.setWeight(index, 100f);
+                } else {
+                    picker.setWeight(index, 0f);
+                }
+            }
+        } else if (Objects.equals(category, "cat_barren")) {
+            if (items.contains("rocky_unstable")) {
+                int index = items.indexOf("rocky_unstable");
+                if (this.market.hasCondition(Conditions.TECTONIC_ACTIVITY) || this.market.hasCondition(Conditions.EXTREME_TECTONIC_ACTIVITY)) {
+                    picker.setWeight(index, 100f);
+                } else {
+                    picker.setWeight(index, 0f);
+                }
+            }
+        }
+
+        return picker.pick();
     }
 
     public void removeWaterSurface() {
