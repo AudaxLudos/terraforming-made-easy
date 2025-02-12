@@ -29,8 +29,8 @@ import org.apache.log4j.Logger;
 import terraformingmadeeasy.Utils;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 public class TMEBaseIndustry extends BaseIndustry {
     public static final Logger log = Global.getLogger(TMEBaseIndustry.class);
@@ -837,7 +837,7 @@ public class TMEBaseIndustry extends BaseIndustry {
     public String evaluatePlanetType(String category) {
         WeightedRandomPicker<String> picker = new WeightedRandomPicker<>(Misc.random);
         Collection<PlanetGenDataSpec> specs = Global.getSettings().getAllSpecs(PlanetGenDataSpec.class);
-        for (PlanetGenDataSpec spec: specs) {
+        for (PlanetGenDataSpec spec : specs) {
             if (Objects.equals(spec.getCategory(), category)) {
                 if (spec.getFrequency() > 0) {
                     picker.add(spec.getId(), 1);

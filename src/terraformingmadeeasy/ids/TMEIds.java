@@ -1,14 +1,11 @@
 package terraformingmadeeasy.ids;
 
 public class TMEIds {
-    public static String MOD_ID = "terraformingmadeeasy";
-
     // TME conditions
     public static final String DEATH_WORLD = "tme_death_world";
     public static final String FORGE_WORLD = "tme_forge_world";
     public static final String FORTRESS_WORLD = "tme_fortress_world";
     public static final String PARADISE_WORLD = "tme_paradise_world";
-
     // TME industries
     public static final String AGRICULTURAL_LABORATORY = "tme_agricultural_laboratory";
     public static final String ATMOSPHERE_REGULATOR = "tme_atmosphere_regulator";
@@ -20,7 +17,6 @@ public class TMEIds {
     public static final String STELLAR_MANUFACTORY = "tme_stellar_manufactory";
     public static final String TERRESTRIAL_ENGINE = "tme_terrestrial_engine";
     public static final String UNIFICATION_CENTER = "tme_unification_center";
-
     // TME AoTD-VoK Ids
     public static final String AGRICULTURAL_LABORATORY_TECH = "tme_tech_agricultural_enrichment";
     public static final String ATMOSPHERE_REGULATOR_TECH = "tme_tech_atmospheric_regulation";
@@ -32,7 +28,7 @@ public class TMEIds {
     public static final String STELLAR_MANUFACTORY_TECH = "tme_tech_climate_reformation";
     public static final String TERRESTRIAL_ENGINE_TECH = "tme_tech_core_manipulation";
     public static final String UNIFICATION_CENTER_TECH = "tme_tech_global_centralization";
-
     // Custom entities
     public static final String TME_STATION = "tme_station";
+    public static String MOD_ID = "terraformingmadeeasy";
 }

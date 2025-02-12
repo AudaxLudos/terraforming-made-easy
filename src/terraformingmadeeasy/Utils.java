@@ -206,7 +206,7 @@ public class Utils {
                     continue;
                 }
 
-                String structureId = row.getString("structureId").replaceAll("\\s","").trim();
+                String structureId = row.getString("structureId").replaceAll("\\s", "").trim();
                 float cost = row.getInt("cost");
                 float buildTime = row.getInt("buildTime");
 
@@ -240,15 +240,15 @@ public class Utils {
                     continue;
                 }
 
-                String conditionId = row.getString("conditionId").replaceAll("\\s","").trim();
+                String conditionId = row.getString("conditionId").replaceAll("\\s", "").trim();
                 float buildTime = row.getInt("buildTime");
                 float cost = row.getInt("cost");
                 boolean canChangeGasGiants = row.getBoolean("canChangeGasGiants");
 
-                String likedConditions = row.getString("likedConditions").replaceAll("\\s","").trim();
-                String likedIndustries = row.getString("likedIndustries").replaceAll("\\s","").trim();
-                String hatedConditions = row.getString("hatedConditions").replaceAll("\\s","").trim();
-                String planetSpecOverride = row.getString("planetSpecOverride").replaceAll("\\s","").trim();
+                String likedConditions = row.getString("likedConditions").replaceAll("\\s", "").trim();
+                String likedIndustries = row.getString("likedIndustries").replaceAll("\\s", "").trim();
+                String hatedConditions = row.getString("hatedConditions").replaceAll("\\s", "").trim();
+                String planetSpecOverride = row.getString("planetSpecOverride").replaceAll("\\s", "").trim();
 
                 modifiableConditions.add(new Utils.ModifiableCondition(
                         Global.getSettings().getMarketConditionSpec(conditionId),

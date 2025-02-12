@@ -4,7 +4,6 @@ import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import lunalib.lunaSettings.LunaSettings;
-import org.json.JSONException;
 import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.ids.TMEPeople;
 import terraformingmadeeasy.listeners.TMEIndustryOptionProvider;
@@ -22,7 +21,7 @@ public class ModPlugin extends BaseModPlugin {
             Utils.loadLunaSettings();
             LunaSettings.addSettingsListener(new TMELunaSettingsListener());
         } else {
-            Utils.BUILD_TIME_MULTIPLIER = Utils.getBuildCostSettingValue( Global.getSettings().getString("tme_build_time_setting"), "tme_custom_build_time_settings");
+            Utils.BUILD_TIME_MULTIPLIER = Utils.getBuildCostSettingValue(Global.getSettings().getString("tme_build_time_setting"), "tme_custom_build_time_settings");
             Utils.BUILD_COST_MULTIPLIER = Utils.getBuildCostSettingValue(Global.getSettings().getString("tme_build_cost_setting"), "tme_custom_build_cost_settings");
         }
 
