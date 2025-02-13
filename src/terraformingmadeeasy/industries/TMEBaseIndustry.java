@@ -884,7 +884,7 @@ public class TMEBaseIndustry extends BaseIndustry {
                     this.market.removeIndustry("fishery", null, false);
                     this.market.addIndustry("subfarming");
                 }
-            } else if (this.market.hasCondition(Conditions.WATER_SURFACE) && (this.market.hasIndustry(Industries.FARMING) || this.market.hasIndustry("subfarming") || this.market.hasIndustry("artifarming"))) {
+            } else if (this.market.hasCondition(Conditions.WATER_SURFACE)) {
                 if (this.market.hasIndustry(Industries.FARMING)) {
                     this.market.removeIndustry(Industries.FARMING, null, false);
                     this.market.addIndustry(Industries.AQUACULTURE);
