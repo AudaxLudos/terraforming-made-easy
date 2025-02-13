@@ -1,4 +1,6 @@
-### 2.6.4
+### 2.6.4c
+- Release 2.6.4c
+- Fix farming/aquaculture structures not changing when terraforming into a water world with AoTD
 - Update changing of planet types to remove lobsters from barren worlds
 - Update changing of planet types functionality to include specific use cases (does not include modded types)
 - Update changing of planet types functionality to include modded conditions
