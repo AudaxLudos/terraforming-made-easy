@@ -719,6 +719,7 @@ public class TMEBaseIndustry extends BaseIndustry {
                 this.market.hasCondition(Conditions.VERY_COLD) || this.market.hasCondition(Conditions.EXTREME_TECTONIC_ACTIVITY)) {
             removeFarming = true;
             removeOrganics = true;
+            removeLobsters = true;
             removeWaterSurface = true;
         }
         if (this.market.hasCondition(Conditions.THIN_ATMOSPHERE)) {
