@@ -875,12 +875,35 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     public void updateFarmingOrAquaculture() {
-        if (!this.market.hasCondition(Conditions.WATER_SURFACE) && this.market.hasIndustry(Industries.AQUACULTURE)) {
-            this.market.removeIndustry(Industries.AQUACULTURE, null, false);
-            this.market.addIndustry(Industries.FARMING);
-        } else if (this.market.hasCondition(Conditions.WATER_SURFACE) && this.market.hasIndustry(Industries.FARMING)) {
-            this.market.removeIndustry(Industries.FARMING, null, false);
-            this.market.addIndustry(Industries.AQUACULTURE);
+        if (Utils.isAOTDVOKEnabled()) {
+            if (!this.market.hasCondition(Conditions.WATER_SURFACE)) {
+                if (this.market.hasIndustry(Industries.AQUACULTURE)) {
+                    this.market.removeIndustry(Industries.AQUACULTURE, null, false);
+                    this.market.addIndustry(Industries.FARMING);
+                } else if (this.market.hasIndustry("fishery")) {
+                    this.market.removeIndustry("fishery", null, false);
+                    this.market.addIndustry("subfarming");
+                }
+            } else if (this.market.hasCondition(Conditions.WATER_SURFACE) && (this.market.hasIndustry(Industries.FARMING) || this.market.hasIndustry("subfarming") || this.market.hasIndustry("artifarming"))) {
+                if (this.market.hasIndustry(Industries.FARMING)) {
+                    this.market.removeIndustry(Industries.FARMING, null, false);
+                    this.market.addIndustry(Industries.AQUACULTURE);
+                } else if (this.market.hasIndustry("subfarming")) {
+                    this.market.removeIndustry("subfarming", null, false);
+                    this.market.addIndustry("fishery");
+                } else if (this.market.hasIndustry("artifarming")) {
+                    this.market.removeIndustry("artifarming", null, false);
+                    this.market.addIndustry("fishery");
+                }
+            }
+        } else {
+            if (!this.market.hasCondition(Conditions.WATER_SURFACE) && this.market.hasIndustry(Industries.AQUACULTURE)) {
+                this.market.removeIndustry(Industries.AQUACULTURE, null, false);
+                this.market.addIndustry(Industries.FARMING);
+            } else if (this.market.hasCondition(Conditions.WATER_SURFACE) && this.market.hasIndustry(Industries.FARMING)) {
+                this.market.removeIndustry(Industries.FARMING, null, false);
+                this.market.addIndustry(Industries.AQUACULTURE);
+            }
         }
     }
 
