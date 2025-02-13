@@ -78,7 +78,7 @@ public class PlanetaryHologram extends TMEBaseIndustry {
         if (this.getModifiableCondition() != null && this.getModifiableCondition().planetSpecOverride != null) {
             this.fakePlanetSpec = (PlanetSpec) Global.getSettings().getSpec(PlanetSpec.class, this.getModifiableCondition().planetSpecOverride, false);
         }
-        String name = this.fakePlanetSpec.getName() + " (" + this.originalPlanetSpec.getName() + ")";
+        String name = this.fakePlanetSpec.getName();
         if (Objects.equals(this.originalPlanetSpec.getPlanetType(), this.fakePlanetSpec.getPlanetType())) {
             name = this.originalPlanetSpec.getName();
         }
