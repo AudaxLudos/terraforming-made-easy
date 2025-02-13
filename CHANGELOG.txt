@@ -1,3 +1,9 @@
+### 2.6.4
+- Update changing of planet types to remove lobsters from barren worlds
+- Update changing of planet types functionality to include specific use cases (does not include modded types)
+- Update changing of planet types functionality to include modded conditions
+- Update luna mod settings build cost details
+
 ### 2.6.3d
 - Release 2.6.3d
 - Fix vanilla mod settings not applying properly
