@@ -1,3 +1,7 @@
+### 2.6.4d
+- Release 2.6.4d
+- Fix construction grid consuming installed items when it finishes
+
 ### 2.6.4c
 - Release 2.6.4c
 - Fix farming/aquaculture structures not changing when terraforming into a water world with AoTD
