@@ -75,8 +75,9 @@ public class Utils {
 
     public static float getSettingsFloat(String fieldId) {
         Float val = LunaSettings.getFloat(TMEIds.MOD_ID, fieldId);
-        if (val == null)
+        if (val == null) {
             return 1f;
+        }
         return val;
     }
 

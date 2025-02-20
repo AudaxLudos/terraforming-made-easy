@@ -227,8 +227,12 @@ public class TMEBaseIndustry extends BaseIndustry {
         reapply();
 
         String type = "";
-        if (isIndustry()) type = " - Industry";
-        if (isStructure()) type = " - Structure";
+        if (isIndustry()) {
+            type = " - Industry";
+        }
+        if (isStructure()) {
+            type = " - Structure";
+        }
 
         tooltip.addTitle(getCurrentName() + type, color);
 
@@ -277,9 +281,13 @@ public class TMEBaseIndustry extends BaseIndustry {
 
         if (isDisrupted()) {
             int left = (int) getDisruptedDays();
-            if (left < 1) left = 1;
+            if (left < 1) {
+                left = 1;
+            }
             String days = "days";
-            if (left == 1) days = "day";
+            if (left == 1) {
+                days = "day";
+            }
 
             tooltip.addPara("Operations disrupted! %s " + days + " until return to normal function.",
                     oPad, Misc.getNegativeHighlightColor(), highlight, "" + left);
@@ -424,14 +432,18 @@ public class TMEBaseIndustry extends BaseIndustry {
             boolean hasSupply = false;
             for (MutableCommodityQuantity curr : this.supply.values()) {
                 int qty = curr.getQuantity().getModifiedInt();
-                if (qty <= 0) continue;
+                if (qty <= 0) {
+                    continue;
+                }
                 hasSupply = true;
                 break;
             }
             boolean hasDemand = false;
             for (MutableCommodityQuantity curr : this.demand.values()) {
                 int qty = curr.getQuantity().getModifiedInt();
-                if (qty <= 0) continue;
+                if (qty <= 0) {
+                    continue;
+                }
                 hasDemand = true;
                 break;
             }
@@ -475,7 +487,9 @@ public class TMEBaseIndustry extends BaseIndustry {
                 tooltip.setIconSpacingMedium();
                 for (MutableCommodityQuantity curr : this.demand.values()) {
                     int qty = curr.getQuantity().getModifiedInt();
-                    if (qty <= 0) continue;
+                    if (qty <= 0) {
+                        continue;
+                    }
 
                     CommodityOnMarketAPI com = orig.getCommodityData(curr.getCommodityId());
                     int available = com.getAvailable();
