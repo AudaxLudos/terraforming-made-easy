@@ -1,10 +1,12 @@
 package terraformingmadeeasy.industries;
 
+import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.impl.campaign.ids.Entities;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
+import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.ids.TMEIds;
 
@@ -25,8 +27,9 @@ public class StellarManufactory extends TMEBaseIndustry {
         if (this.modifiableCondition != null) {
             log.info(String.format("Completed %s %s condition in %s by %s", !this.market.hasCondition(this.modifiableCondition.id) ? "Adding" : "Removing", this.modifiableCondition.name, getMarket().getName(), getCurrentName()));
             sendCompletedMessage();
-            addSolarMirrors();
-            addSolarShades();
+            float randomAngle = Misc.random.nextFloat() * 360f;
+            addSolarMirrors(randomAngle);
+            addSolarShades(randomAngle);
             terraformPlanet();
             updatePlanetConditions();
             String category = evaluatePlanetCategory();
@@ -50,34 +53,42 @@ public class StellarManufactory extends TMEBaseIndustry {
         return TMEIds.STELLAR_MANUFACTORY_TECH;
     }
 
-    public void addSolarMirrors() {
+    public void addSolarMirrors(float randAngle) {
         if (hasSolarMirrors()) {
             return;
         }
 
         PlanetAPI planet = getMarket().getPlanetEntity();
-        float period = planet.getCircularOrbitPeriod();
-        float angle = planet.getCircularOrbitAngle() - 60f;
-        float radius = 270f + planet.getRadius();
+        float period = 100f;
+        float angle = randAngle;
+        float radius = planet.getRadius() + 270f;
+        if (!planet.getStarSystem().isNebula() || planet.getCircularOrbitPeriod() > 0f) {
+            period = planet.getCircularOrbitPeriod();
+            angle = planet.getCircularOrbitAngle() - 60f;
+        }
 
         for (int i = 0; i < 5; i++) {
             SectorEntityToken mirror = getMarket().getStarSystem().addCustomEntity(null, null, Entities.STELLAR_MIRROR, Factions.NEUTRAL);
             mirror.setCircularOrbitPointingDown(getMarket().getPlanetEntity(), angle, radius, period);
-            angle += 30;
+            angle += 30f;
         }
 
         log.info(String.format("Added 5 Stellar Mirrors to %s", getMarket().getName()));
     }
 
-    public void addSolarShades() {
+    public void addSolarShades(float randAngle) {
         if (hasSolarShades()) {
             return;
         }
 
         PlanetAPI planet = getMarket().getPlanetEntity();
-        float period = planet.getCircularOrbitPeriod();
-        float angle = planet.getCircularOrbitAngle() + 180f - 25f;
-        float radius = 270f + planet.getRadius();
+        float period = 100f;
+        float angle = randAngle + 180f + 25f;
+        float radius = planet.getRadius() + 270f;
+        if (!planet.getStarSystem().isNebula() || planet.getCircularOrbitPeriod() > 0f) {
+             period = planet.getCircularOrbitPeriod();
+             angle = planet.getCircularOrbitAngle() + 180f - 25f;
+        }
 
         for (int i = 0; i < 3; i++) {
             SectorEntityToken mirror = getMarket().getStarSystem().addCustomEntity(null, null, Entities.STELLAR_SHADE, Factions.NEUTRAL);
