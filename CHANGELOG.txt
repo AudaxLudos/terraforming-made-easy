@@ -1,3 +1,7 @@
+### 2.6.4e
+- Release 2.6.4e
+- Fix stellar manufactory solar mirrors not properly added in non-orbiting planets
+
 ### 2.6.4d
 - Release 2.6.4d
 - Fix construction grid consuming installed items when it finishes
