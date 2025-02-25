@@ -1,3 +1,8 @@
+### 2.6.4g
+- Release 2.6.4g
+- Update tme conditions to work on AoTD-VoK experimental structures
+- Update unification center to include AoTD-VoK experimental structures
+
 ### 2.6.4e
 - Release 2.6.4e
 - Fix stellar manufactory solar mirrors not properly added in non-orbiting planets
