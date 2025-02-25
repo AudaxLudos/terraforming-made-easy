@@ -49,10 +49,11 @@ public class ModPlugin extends BaseModPlugin {
                     switch (id) {
                         case Industries.MINING: {
                             String newExpression = String.format(
-                                    "needOne:%s|%s|%s, ",
+                                    "needOne:%s|%s|%s|%s, ",
                                     "mining",
                                     "fracking",
-                                    "mining_megaplex");
+                                    "mining_megaplex",
+                                    "pluto_station");
                             needOne.append(newExpression);
                             break;
                         }
@@ -80,14 +81,15 @@ public class ModPlugin extends BaseModPlugin {
                         case Industries.ORBITALWORKS:
                         case Industries.HEAVYINDUSTRY: {
                             String newExpression = String.format(
-                                    "needOne:%s|%s|%s|%s|%s|%s|%s, ",
+                                    "needOne:%s|%s|%s|%s|%s|%s|%s|%s, ",
                                     "orbitalworks",
                                     "supplyheavy",
                                     "weaponheavy",
                                     "triheavy",
                                     "hegeheavy",
                                     "orbitalheavy",
-                                    "stella_manufactorium");
+                                    "stella_manufactorium",
+                                    "nidavelir_complex");
                             needOne.append(newExpression);
                             break;
                         }
