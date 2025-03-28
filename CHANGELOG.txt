@@ -1,3 +1,8 @@
+### 2.6.5a
+- Release 2.6.5a
+- Update game version to 0.98a from 0.97a
+- Update java version to 17 from 7
+
 ### 2.6.4g
 - Release 2.6.4g
 - Update tme conditions to work on AoTD-VoK experimental structures
