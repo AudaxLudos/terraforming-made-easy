@@ -1,11 +1,10 @@
 package terraformingmadeeasy;
 
 import lunalib.lunaSettings.LunaSettingsListener;
-import org.jetbrains.annotations.NotNull;
 
 public class TMELunaSettingsListener implements LunaSettingsListener {
     @Override
-    public void settingsChanged(@NotNull String modId) {
+    public void settingsChanged(String modId) {
         Utils.loadLunaSettings();
     }
 }
