@@ -879,6 +879,14 @@ public class TMEBaseIndustry extends BaseIndustry {
                     picker.setWeight(index, 0f);
                 }
             }
+            if (items.contains("rocky_ice")) {
+                int index = items.indexOf("rocky_ice");
+                if (this.market.hasCondition(Conditions.COLD)) {
+                    picker.setWeight(index, 100f);
+                } else {
+                    picker.setWeight(index, 0f);
+                }
+            }
         }
 
         return picker.pick();

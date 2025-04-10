@@ -1,6 +1,5 @@
 package terraformingmadeeasy.industries;
 
-import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.econ.Industry;
@@ -86,8 +85,8 @@ public class StellarManufactory extends TMEBaseIndustry {
         float angle = randAngle + 180f + 25f;
         float radius = planet.getRadius() + 270f;
         if (!planet.getStarSystem().isNebula() || planet.getCircularOrbitPeriod() > 0f) {
-             period = planet.getCircularOrbitPeriod();
-             angle = planet.getCircularOrbitAngle() + 180f - 25f;
+            period = planet.getCircularOrbitPeriod();
+            angle = planet.getCircularOrbitAngle() + 180f - 25f;
         }
 
         for (int i = 0; i < 3; i++) {

@@ -18,6 +18,10 @@ import java.util.List;
 import java.util.Map;
 
 public class TMEIntro extends HubMissionWithBarEvent {
+    public enum Stage {
+        ESCORT_CONTACT,
+        COMPLETED,
+    }
     public MarketAPI createdAt;
     public MarketAPI market;
     public SectorEntityToken planet;
@@ -148,10 +152,5 @@ public class TMEIntro extends HubMissionWithBarEvent {
     @Override
     public String getBaseName() {
         return "Inadire's Requests";
-    }
-
-    public enum Stage {
-        ESCORT_CONTACT,
-        COMPLETED,
     }
 }
