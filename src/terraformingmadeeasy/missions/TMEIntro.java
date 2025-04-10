@@ -22,6 +22,7 @@ public class TMEIntro extends HubMissionWithBarEvent {
         ESCORT_CONTACT,
         COMPLETED,
     }
+
     public MarketAPI createdAt;
     public MarketAPI market;
     public SectorEntityToken planet;
