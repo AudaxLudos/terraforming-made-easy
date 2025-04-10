@@ -870,6 +870,14 @@ public class TMEBaseIndustry extends BaseIndustry {
                     picker.setWeight(index, 0f);
                 }
             }
+            if (items.contains("tundra")) {
+                int index = items.indexOf("tundra");
+                if (this.market.hasCondition(Conditions.COLD)) {
+                    picker.setWeight(index, 100f);
+                } else {
+                    picker.setWeight(index, 0f);
+                }
+            }
         } else if (Objects.equals(category, "cat_barren")) {
             if (items.contains("rocky_unstable")) {
                 int index = items.indexOf("rocky_unstable");
