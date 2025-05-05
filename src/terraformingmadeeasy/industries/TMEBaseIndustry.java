@@ -621,6 +621,26 @@ public class TMEBaseIndustry extends BaseIndustry {
         }
     }
 
+    @Override
+    protected void applyAICoreToIncomeAndUpkeep() {
+        if (this.aiCoreId == null) {
+            getUpkeep().unmodifyMult("ind_core");
+            return;
+        }
+
+        float mult = UPKEEP_MULT;
+        String name = "AI Core assigned";
+        if (Objects.equals(this.aiCoreId, Commodities.ALPHA_CORE)) {
+            name = "Alpha Core assigned";
+        } else if (Objects.equals(this.aiCoreId, Commodities.BETA_CORE)) {
+            name = "Beta Core assigned";
+        } else if (Objects.equals(this.aiCoreId, Commodities.GAMMA_CORE)) {
+            name = "Gamma Core assigned";
+        }
+
+        getUpkeep().modifyMult("ind_core", mult, name);
+    }
+
     public void addTerraformingOptionList(TooltipMakerAPI tooltip, IndustryTooltipMode mode, boolean expanded) {
         if (expanded) {
             int rowLimit = 6;
