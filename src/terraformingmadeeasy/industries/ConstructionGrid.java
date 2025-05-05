@@ -696,7 +696,7 @@ public class ConstructionGrid extends BaseIndustry {
             system.addScript(new CoronalTapParticleScript(coronalTap));
             coronalTap.getMemoryWithoutUpdate().removeAllRequired("$defenderFleet");
             coronalTap.getMemoryWithoutUpdate().removeAllRequired("$hasNonStation");
-            coronalTap.getMemoryWithoutUpdate().set("$beingRepaired", true);
+            coronalTap.getMemoryWithoutUpdate().set("$beingRepaired", true, 5f);
             coronalTap.getMemoryWithoutUpdate().set("$defenderFleetDefeated", true);
             coronalTap.getMemoryWithoutUpdate().set("$hasDefenders", false);
             coronalTap.getMemoryWithoutUpdate().set("$usable", true);
