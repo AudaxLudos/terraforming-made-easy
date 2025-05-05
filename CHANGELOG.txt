@@ -1,3 +1,8 @@
+### 2.6.5f
+- Release 2.6.5f
+- Fix megastructure coronal tap stuck on being repaired
+- Fix gamma core upkeep reduction not applying to tme structures
+
 ### 2.6.5d
 - Release 2.6.5d
 - Prevent ice giants from forming on hot gas giants
