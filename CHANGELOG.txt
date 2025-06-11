@@ -1,3 +1,8 @@
+### 2.6.5h
+- Release 2.6.5h
+- Fix coronal tap being repaired bugfix not being applied on old saves
+- Remove TME prefix on structure names
+
 ### 2.6.5f
 - Release 2.6.5f
 - Fix megastructure coronal tap stuck on being repaired
