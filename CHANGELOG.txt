@@ -1,3 +1,7 @@
+### 2.6.5i
+- Release 2.6.5i
+- Update JAR file
+
 ### 2.6.5h
 - Release 2.6.5h
 - Fix coronal tap being repaired bugfix not being applied on old saves
