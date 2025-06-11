@@ -4,6 +4,7 @@ import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
+import com.fs.starfarer.api.impl.campaign.ids.Entities;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.util.Misc;
@@ -14,15 +15,22 @@ import terraformingmadeeasy.listeners.TMEIndustryOptionProvider;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ModPlugin extends BaseModPlugin {
     @Override
     public void onGameLoad(boolean newGame) {
         // Fix for coronal taps made from this that are stuck on repairing
         for (StarSystemAPI system : Misc.getPlayerSystems(false)) {
-            SectorEntityToken coronalTap = system.getEntityById(Tags.CORONAL_TAP);
-            if (coronalTap != null && coronalTap.getMemoryWithoutUpdate().getBoolean("$usable") && coronalTap.getMemoryWithoutUpdate().getBoolean("$beingRepaired")) {
-                coronalTap.getMemoryWithoutUpdate().unset("$beingRepaired");
+            List<SectorEntityToken> entities = system.getAllEntities();
+            for (SectorEntityToken entity : entities) {
+                if (!Objects.equals(entity.getCustomEntityType(), Entities.CORONAL_TAP)) {
+                    continue;
+                }
+                if (!entity.getMemoryWithoutUpdate().getBoolean("$usable") && !entity.getMemoryWithoutUpdate().getBoolean("$beingRepaired")) {
+                    continue;
+                }
+                entity.getMemoryWithoutUpdate().set("$beingRepaired", true , 5f);
             }
         }
 
