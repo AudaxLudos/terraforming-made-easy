@@ -32,14 +32,6 @@ public class DeathWorld extends BaseMarketConditionPlugin {
     };
 
     @Override
-    public void init(MarketAPI market, MarketConditionAPI condition) {
-        super.init(market, condition);
-        if (!Global.getSector().getListenerManager().hasListenerOfClass(DeathWorldScript.class)) {
-            Global.getSector().getListenerManager().addListener(new DeathWorldScript(), true);
-        }
-    }
-
-    @Override
     public void apply(String id) {
         this.market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).modifyMult(id, 1f + GROUND_DEFENSE_MULT, "Death World");
         for (MarketConditionAPI c : this.suppressedConditions) {

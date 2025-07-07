@@ -11,6 +11,7 @@ import com.fs.starfarer.api.campaign.econ.MarketConditionAPI;
 import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
 import com.fs.starfarer.api.campaign.listeners.ColonyInteractionListener;
 import com.fs.starfarer.api.campaign.listeners.EconomyTickListener;
+import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
 import com.fs.starfarer.api.impl.PlayerFleetPersonnelTracker;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
@@ -29,6 +30,13 @@ import java.util.Random;
 
 public class DeathWorldScript implements EconomyTickListener, ColonyInteractionListener {
     public static final Logger log = Global.getLogger(DeathWorldScript.class);
+
+    public static void register() {
+        ListenerManagerAPI listeners = Global.getSector().getListenerManager();
+        if (!listeners.hasListenerOfClass(DeathWorldScript.class)) {
+            listeners.addListener(new DeathWorldScript(), true);
+        }
+    }
 
     @Override
     public void reportPlayerOpenedMarket(MarketAPI market) {

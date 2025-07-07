@@ -11,6 +11,7 @@ import com.fs.starfarer.api.util.Misc;
 import lunalib.lunaSettings.LunaSettings;
 import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.ids.TMEPeople;
+import terraformingmadeeasy.listeners.DeathWorldScript;
 import terraformingmadeeasy.listeners.TMEIndustryOptionProvider;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class ModPlugin extends BaseModPlugin {
             }
         }
 
+        DeathWorldScript.register();
         TMEIndustryOptionProvider.register();
         TMEPeople.register();
 
