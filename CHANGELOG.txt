@@ -1,3 +1,7 @@
+### 2.6.5j
+- Release 2.6.5j
+- Fix death world marine training script not working when reloading save
+
 ### 2.6.5i
 - Release 2.6.5i
 - Update JAR file
