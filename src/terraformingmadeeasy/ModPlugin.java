@@ -6,7 +6,6 @@ import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Entities;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
-import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.util.Misc;
 import lunalib.lunaSettings.LunaSettings;
 import terraformingmadeeasy.ids.TMEIds;
@@ -31,7 +30,7 @@ public class ModPlugin extends BaseModPlugin {
                 if (!entity.getMemoryWithoutUpdate().getBoolean("$usable") && !entity.getMemoryWithoutUpdate().getBoolean("$beingRepaired")) {
                     continue;
                 }
-                entity.getMemoryWithoutUpdate().set("$beingRepaired", true , 5f);
+                entity.getMemoryWithoutUpdate().set("$beingRepaired", true, 5f);
             }
         }
 

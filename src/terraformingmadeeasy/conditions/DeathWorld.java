@@ -1,8 +1,6 @@
 package terraformingmadeeasy.conditions;
 
-import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.Industry;
-import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.MarketConditionAPI;
 import com.fs.starfarer.api.impl.campaign.econ.BaseMarketConditionPlugin;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
@@ -11,7 +9,6 @@ import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.Utils;
-import terraformingmadeeasy.listeners.DeathWorldScript;
 
 import java.util.ArrayList;
 import java.util.List;

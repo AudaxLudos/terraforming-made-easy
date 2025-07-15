@@ -182,11 +182,6 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     @Override
-    public boolean isTooltipExpandable() {
-        return true;
-    }
-
-    @Override
     protected void addAlphaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
         float oPad = 10f;
         Color highlight = Misc.getHighlightColor();
@@ -255,6 +250,9 @@ public class TMEBaseIndustry extends BaseIndustry {
     @Override
     protected void addRightAfterDescriptionSection(TooltipMakerAPI tooltip, IndustryTooltipMode mode) {
         addTerraformingOptionList(tooltip, mode);
+        if (Global.CODEX_TOOLTIP_MODE) {
+            tooltip.addPara("test", 0f);
+        }
     }
 
     @Override
