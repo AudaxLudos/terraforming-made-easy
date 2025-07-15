@@ -538,7 +538,7 @@ public class TMEBaseIndustry extends BaseIndustry {
                 if (this.market.hasCondition(Conditions.WATER_SURFACE)) {
                     picker.setWeight(index, 100f);
                 } else {
-                    picker.setWeight(index, 0f);
+                    picker.remove("water");
                 }
             }
             if (items.contains("tundra")) {
@@ -546,7 +546,7 @@ public class TMEBaseIndustry extends BaseIndustry {
                 if (this.market.hasCondition(Conditions.COLD)) {
                     picker.setWeight(index, 100f);
                 } else {
-                    picker.setWeight(index, 0f);
+                    picker.remove("tundra");
                 }
             }
         } else if (Objects.equals(category, "cat_barren")) {
@@ -555,7 +555,7 @@ public class TMEBaseIndustry extends BaseIndustry {
                 if (this.market.hasCondition(Conditions.TECTONIC_ACTIVITY) || this.market.hasCondition(Conditions.EXTREME_TECTONIC_ACTIVITY)) {
                     picker.setWeight(index, 100f);
                 } else {
-                    picker.setWeight(index, 0f);
+                    picker.remove("rocky_unstable");
                 }
             }
             if (items.contains("rocky_ice")) {
@@ -563,7 +563,7 @@ public class TMEBaseIndustry extends BaseIndustry {
                 if (this.market.hasCondition(Conditions.COLD)) {
                     picker.setWeight(index, 100f);
                 } else {
-                    picker.setWeight(index, 0f);
+                    picker.remove("rocky_ice");
                 }
             }
         } else if (Objects.equals(category, "cat_giant")) {
@@ -572,7 +572,7 @@ public class TMEBaseIndustry extends BaseIndustry {
                 if (this.market.hasCondition(Conditions.COLD) || this.market.hasCondition(Conditions.VERY_COLD)) {
                     picker.setWeight(index, 100f);
                 } else {
-                    picker.setWeight(index, 0f);
+                    picker.remove("ice_giant");
                 }
             }
         }
