@@ -12,11 +12,13 @@ import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.Utils;
+import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.ui.tooltips.MegastructureTooltip;
 import terraformingmadeeasy.ui.tooltips.TerraformTooltip;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
@@ -125,8 +127,12 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
         initPad = oPad;
 
         tooltip.addPara(spec.getDesc(), initPad);
-        tooltip.addSectionHeading("Terraforming Options", Alignment.MID, initPad);
-        tooltip.addPara("Planetary conditions can be added or removed at any time. Once a terraforming project is completed, the planet will be terraformed immediately based on its current conditions.", initPad);
+        String optionsText = Objects.equals(this.id, TMEIds.CONSTRUCTION_GRID) ? "Megastructure" : "Terraforming";
+        tooltip.addSectionHeading(optionsText + " Options", Alignment.MID, initPad);
+        String optionsDesc = Objects.equals(this.id, TMEIds.CONSTRUCTION_GRID)
+                ? "A construction grid can only be used once. When a megastructure project is completed, the construction grid is consumed."
+                : "Planetary conditions can be added or removed at any time. Once a terraforming project is completed, the planet will be terraformed immediately based on its current conditions.";
+        tooltip.addPara(optionsDesc, initPad);
         tooltip.addSpacer(oPad);
         float columnOneWidth = tw / 3f + 100f;
         float columnWidth = (tw - columnOneWidth) / 2f;
