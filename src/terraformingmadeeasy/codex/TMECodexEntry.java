@@ -127,11 +127,19 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
         initPad = oPad;
 
         tooltip.addPara(spec.getDesc(), initPad);
-        String optionsText = Objects.equals(this.id, TMEIds.CONSTRUCTION_GRID) ? "Megastructure" : "Terraforming";
+        String optionsText = "Terraforming";
+        String optionsDesc = "Planetary conditions can be added or removed at any time. Once a terraforming project is completed, the planet will be terraformed immediately based on its current conditions.";
+        String optionNameText = "Name of the condition to terraform on a planet";
+        String optionDurationText = "Build time, in days. Until the terraforming project finishes.";
+        String optionCostText = "One-time cost to begin terraforming project, in credits";
+        if (Objects.equals(this.id, TMEIds.CONSTRUCTION_GRID)) {
+            optionsText = "Megastructure";
+            optionsDesc = "A construction grid can only be used once. When a megastructure project is completed, the construction grid is consumed.";
+            optionNameText = "Name of megastructure to build";
+            optionDurationText = "Build time, in days. Until the megastructure project finishes.";
+            optionCostText = "One-time cost to begin megastructure project, in credits";
+        }
         tooltip.addSectionHeading(optionsText + " Options", Alignment.MID, initPad);
-        String optionsDesc = Objects.equals(this.id, TMEIds.CONSTRUCTION_GRID)
-                ? "A construction grid can only be used once. When a megastructure project is completed, the construction grid is consumed."
-                : "Planetary conditions can be added or removed at any time. Once a terraforming project is completed, the planet will be terraformed immediately based on its current conditions.";
         tooltip.addPara(optionsDesc, initPad);
         tooltip.addSpacer(oPad);
         float columnOneWidth = tw / 3f + 100f;
@@ -141,9 +149,9 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
         conditionsHeader.beginTable(Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(),
                 0f, false, true,
                 new Object[]{"Name", columnOneWidth, "Build time", columnWidth, "Cost", columnWidth - 6f});
-        conditionsHeader.addTableHeaderTooltip(0, "Name of the condition to terraform on a planet");
-        conditionsHeader.addTableHeaderTooltip(1, "Build time, in days. Until the terraforming project finishes.");
-        conditionsHeader.addTableHeaderTooltip(2, "One-time cost to begin terraforming project, in credits");
+        conditionsHeader.addTableHeaderTooltip(0, optionNameText);
+        conditionsHeader.addTableHeaderTooltip(1, optionDurationText);
+        conditionsHeader.addTableHeaderTooltip(2, optionCostText);
         conditionsHeader.addTable("", 0, 0f);
         conditionsHeader.getPrev().getPosition().setXAlignOffset(0f);
         conditionsHeader.getPosition().inTMid(0);
