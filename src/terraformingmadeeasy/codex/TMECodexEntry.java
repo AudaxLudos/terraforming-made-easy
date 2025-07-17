@@ -12,6 +12,7 @@ import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.Utils;
+import terraformingmadeeasy.ui.tooltips.TerraformTooltip;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -199,7 +200,7 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
             buildTime = Math.round(cond.buildTime);
             icon = cond.icon;
             name = cond.name;
-            // tooltip = new TerraformTooltip(cond, ind);
+            tooltip = new TerraformTooltip(cond, null);
         } else if (data instanceof Utils.BuildableMegastructure) {
             Utils.BuildableMegastructure struct = (Utils.BuildableMegastructure) data;
             cost = struct.cost;
@@ -214,6 +215,7 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
         TooltipMakerAPI optionButtonElement = optionPanel.createUIElement(width, 44f, false);
         ButtonAPI optionButton = optionButtonElement.addButton("", data, new Color(0, 195, 255, 190), new Color(0, 0, 0, 255), Alignment.MID, CutStyle.NONE, width, 44f, 0f);
         optionButton.setClickable(false);
+        optionButtonElement.addTooltipTo(tooltip, optionButton, TooltipMakerAPI.TooltipLocation.RIGHT);
         optionButtonElement.getPosition().setXAlignOffset(-10f);
         optionPanel.addUIElement(optionButtonElement);
 

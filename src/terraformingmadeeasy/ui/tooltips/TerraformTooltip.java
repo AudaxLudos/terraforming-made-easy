@@ -78,14 +78,25 @@ public class TerraformTooltip extends BaseTooltipCreator {
 
             tooltip.setBulletedListMode("        ");
             for (String id : ids) {
-                boolean hasRequirement = isCondition ? this.industry.getMarket().hasCondition(id) : this.industry.getMarket().hasIndustry(id);
-                Color color = isHated ? Misc.getHighlightColor() : hasRequirement ? Misc.getStoryBrightColor() : Misc.getNegativeHighlightColor();
-                if (isCondition && Global.getSettings().getMarketConditionSpec(id) != null) {
-                    String name = Global.getSettings().getMarketConditionSpec(id).getName();
-                    tooltip.addPara(name, color, 0f);
-                } else if (!isCondition && Global.getSettings().getIndustrySpec(id) != null) {
-                    String name = Global.getSettings().getIndustrySpec(id).getName();
-                    tooltip.addPara(name, color, 0f);
+                if (this.industry != null) {
+                    boolean hasRequirement = isCondition ? this.industry.getMarket().hasCondition(id) : this.industry.getMarket().hasIndustry(id);
+                    Color color = isHated ? Misc.getHighlightColor() : hasRequirement ? Misc.getStoryBrightColor() : Misc.getNegativeHighlightColor();
+                    if (isCondition && Global.getSettings().getMarketConditionSpec(id) != null) {
+                        String name = Global.getSettings().getMarketConditionSpec(id).getName();
+                        tooltip.addPara(name, color, 0f);
+                    } else if (!isCondition && Global.getSettings().getIndustrySpec(id) != null) {
+                        String name = Global.getSettings().getIndustrySpec(id).getName();
+                        tooltip.addPara(name, color, 0f);
+                    }
+                } else {
+                    Color color = Misc.getHighlightColor();
+                    if (isCondition && Global.getSettings().getMarketConditionSpec(id) != null) {
+                        String name = Global.getSettings().getMarketConditionSpec(id).getName();
+                        tooltip.addPara(name, color, 0f);
+                    } else if (!isCondition && Global.getSettings().getIndustrySpec(id) != null) {
+                        String name = Global.getSettings().getIndustrySpec(id).getName();
+                        tooltip.addPara(name, color, 0f);
+                    }
                 }
             }
             tooltip.setBulletedListMode(null);
