@@ -15,8 +15,6 @@ import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.ui.tooltips.TerraformTooltip;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -32,21 +30,22 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
         super(id, title, icon, param);
         this.param2 = param2;
         this.spec = (IndustrySpecAPI) this.param;
-        this.options =  Utils.castList(this.param2, Utils.ModifiableCondition.class);
+        this.options = Utils.castList(this.param2, Utils.ModifiableCondition.class);
     }
 
     public static void replaceTMEIndustryCodex(String industryId, Object options) {
         IndustrySpecAPI spec = Global.getSettings().getIndustrySpec(industryId);
 
+        // Remove existing entry from parent
         String entryId = CodexDataV2.getIndustryEntryId(spec.getId());
         CodexEntryV2 currEntry = (CodexEntryV2) CodexDataV2.ENTRIES.get(entryId);
         CodexEntryV2 parentEntry = (CodexEntryV2) currEntry.getParent();
         parentEntry.getChildren().remove(currEntry);
-        CodexDataV2.ENTRIES.remove(entryId);
 
-        // Replace removed TME industry codex
+        // Replace vanilla entry with custom one
         TMECodexEntry codexEntry = new TMECodexEntry(spec.getId(), spec.getName(), spec.getImageName(), spec, options);
         parentEntry.addChild(codexEntry);
+        CodexDataV2.ENTRIES.put(entryId, codexEntry);
     }
 
     @Override
@@ -102,19 +101,16 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
         this.relatedEntries = relatedEntries;
         this.codex = codex;
         IndustrySpecAPI spec = (IndustrySpecAPI) this.param;
-        Color color = Misc.getBasePlayerColor();
-        Color dark = Misc.getDarkPlayerColor();
         Color h = Misc.getHighlightColor();
         Color g = Misc.getGrayColor();
         float oPad = 10f;
         float pad = 3f;
-        float small = 5f;
         float width = panel.getPosition().getWidth();
         float initPad = 0f;
-        float horzBoxPad = 30f;
+        float horizontalBoxPad = 30f;
         // the right width for a tooltip wrapped in a box to fit next to relatedEntries
         // 290 is the width of the related entries widget, but it may be null
-        float tw = width - 290f - oPad - horzBoxPad + 10f;
+        float tw = width - 290f - oPad - horizontalBoxPad + 10f;
 
         TooltipMakerAPI tooltip = panel.createUIElement(tw, 0, false);
         tooltip.setParaSmallInsignia();
@@ -130,6 +126,7 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
 
         tooltip.addPara(spec.getDesc(), initPad);
         tooltip.addSectionHeading("Terraforming Options", Alignment.MID, initPad);
+        tooltip.addPara("Planetary conditions can be added or removed at any time. Once a terraforming project is completed, the planet will be terraformed immediately based on its current conditions.", initPad);
         tooltip.addSpacer(oPad);
         float columnOneWidth = tw / 3f + 100f;
         float columnWidth = (tw - columnOneWidth) / 2f;
@@ -221,7 +218,7 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
 
         TooltipMakerAPI optionNameElement = optionPanel.createUIElement(columnOneWidth, 40f, false);
         TooltipMakerAPI optionImage = optionNameElement.beginImageWithText(icon, 40f);
-        optionImage.addPara("Add / Remove " + name, Misc.getTextColor(), 0f);
+        optionImage.addPara(name, Misc.getTextColor(), 0f);
         optionNameElement.addImageWithText(0f);
         optionNameElement.getPosition().setXAlignOffset(-8f).setYAlignOffset(2f);
         optionPanel.addUIElement(optionNameElement);
