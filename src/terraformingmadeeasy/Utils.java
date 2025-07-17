@@ -268,13 +268,10 @@ public class Utils {
         }
     }
 
-    public static <T> List<T> castList(Object obj, Class<T> clazz)
-    {
+    public static <T> List<T> castList(Object obj, Class<T> clazz) {
         List<T> result = new ArrayList<T>();
-        if(obj instanceof List<?>)
-        {
-            for (Object o : (List<?>) obj)
-            {
+        if (obj instanceof List<?>) {
+            for (Object o : (List<?>) obj) {
                 result.add(clazz.cast(o));
             }
             return result;

@@ -12,6 +12,7 @@ import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.Utils;
+import terraformingmadeeasy.ui.tooltips.MegastructureTooltip;
 import terraformingmadeeasy.ui.tooltips.TerraformTooltip;
 
 import java.awt.*;
@@ -24,16 +25,14 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
     protected UIPanelAPI box;
     protected CodexDialogAPI codex;
     protected IndustrySpecAPI spec;
-    protected List<Utils.ModifiableCondition> options;
 
     public TMECodexEntry(String id, String title, String icon, Object param, Object param2) {
         super(id, title, icon, param);
         this.param2 = param2;
         this.spec = (IndustrySpecAPI) this.param;
-        this.options = Utils.castList(this.param2, Utils.ModifiableCondition.class);
     }
 
-    public static void replaceTMEIndustryCodex(String industryId, Object options) {
+    public static TMECodexEntry replaceTMEIndustryCodex(String industryId, Object options) {
         IndustrySpecAPI spec = Global.getSettings().getIndustrySpec(industryId);
 
         // Remove existing entry from parent
@@ -46,6 +45,8 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
         TMECodexEntry codexEntry = new TMECodexEntry(spec.getId(), spec.getName(), spec.getImageName(), spec, options);
         parentEntry.addChild(codexEntry);
         CodexDataV2.ENTRIES.put(entryId, codexEntry);
+
+        return codexEntry;
     }
 
     @Override
@@ -104,9 +105,8 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
         Color h = Misc.getHighlightColor();
         Color g = Misc.getGrayColor();
         float oPad = 10f;
-        float pad = 3f;
         float width = panel.getPosition().getWidth();
-        float initPad = 0f;
+        float initPad;
         float horizontalBoxPad = 30f;
         // the right width for a tooltip wrapped in a box to fit next to relatedEntries
         // 290 is the width of the related entries widget, but it may be null
@@ -145,10 +145,12 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
         conditionsPanel.getPosition().setSize(tw, conditionsHeader.getHeightSoFar() + conditionsPanel.getPosition().getHeight());
 
         TooltipMakerAPI conditionsBody = conditionsPanel.createUIElement(tw, 0, false);
-        List<Utils.ModifiableCondition> conditions = this.options;
-        for (Utils.ModifiableCondition condition : conditions) {
-            CustomPanelAPI conditionPanel = addOptionInfo(panel, condition, tw);
-            conditionsBody.addCustom(conditionPanel, 0f);
+        if (this.param2 instanceof List<?>) {
+            List<?> options = (List<?>) this.param2;
+            for (Object option : options) {
+                CustomPanelAPI conditionPanel = addOptionInfo(panel, option, tw);
+                conditionsBody.addCustom(conditionPanel, 0f);
+            }
         }
 
         conditionsPanel.addUIElement(conditionsBody);
@@ -204,7 +206,7 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
             buildTime = Math.round(struct.buildTime);
             icon = struct.icon;
             name = struct.name;
-            // tooltip = new MegastructureTooltip(struct);
+            tooltip = new MegastructureTooltip(struct);
         }
 
         CustomPanelAPI optionPanel = panel.createCustomPanel(width, 44f, null);

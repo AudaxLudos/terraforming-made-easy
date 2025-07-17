@@ -9,7 +9,6 @@ import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.codex.CodexDataV2;
 import com.fs.starfarer.api.util.Misc;
 import lunalib.lunaSettings.LunaSettings;
-import org.lwjgl.openal.Util;
 import terraformingmadeeasy.codex.TMECodexEntry;
 import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.ids.TMEPeople;
@@ -123,7 +122,7 @@ public class ModPlugin extends BaseModPlugin {
 
         TMECodexEntry.replaceTMEIndustryCodex(TMEIds.AGRICULTURAL_LABORATORY, Utils.AGRICULTURAL_LABORATORY_OPTIONS);
         TMECodexEntry.replaceTMEIndustryCodex(TMEIds.ATMOSPHERE_REGULATOR, Utils.ATMOSPHERE_REGULATOR_OPTIONS);
-        // TMECodexEntry.replaceTMEIndustryCodex(TMEIds.CONSTRUCTION_GRID, Utils.CONSTRUCTION_GRID_OPTIONS);
+        TMECodexEntry.replaceTMEIndustryCodex(TMEIds.CONSTRUCTION_GRID, Utils.CONSTRUCTION_GRID_OPTIONS);
         TMECodexEntry.replaceTMEIndustryCodex(TMEIds.ELEMENT_SYNTHESIZER, Utils.ELEMENT_SYNTHESIZER_OPTIONS);
         TMECodexEntry.replaceTMEIndustryCodex(TMEIds.GEOMORPHOLOGY_STATION, Utils.GEOMORPHOLOGY_STATION_OPTIONS);
         TMECodexEntry.replaceTMEIndustryCodex(TMEIds.MINERAL_REPLICATOR, Utils.MINERAL_REPLICATOR_OPTIONS);
