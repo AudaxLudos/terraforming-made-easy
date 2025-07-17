@@ -268,6 +268,20 @@ public class Utils {
         }
     }
 
+    public static <T> List<T> castList(Object obj, Class<T> clazz)
+    {
+        List<T> result = new ArrayList<T>();
+        if(obj instanceof List<?>)
+        {
+            for (Object o : (List<?>) obj)
+            {
+                result.add(clazz.cast(o));
+            }
+            return result;
+        }
+        return null;
+    }
+
     public static void setButtonEnabledOrHighlighted(ButtonAPI button, Boolean isEnabled, Boolean isHighlighted) {
         button.setButtonPressedSound(isEnabled ? "ui_button_pressed" : "ui_button_disabled_pressed");
         button.setGlowBrightness(isEnabled ? 0.56f : 1.2f);

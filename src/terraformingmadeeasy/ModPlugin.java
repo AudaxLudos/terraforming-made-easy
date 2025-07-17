@@ -6,8 +6,11 @@ import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Entities;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
+import com.fs.starfarer.api.impl.codex.CodexDataV2;
 import com.fs.starfarer.api.util.Misc;
 import lunalib.lunaSettings.LunaSettings;
+import org.lwjgl.openal.Util;
+import terraformingmadeeasy.codex.TMECodexEntry;
 import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.ids.TMEPeople;
 import terraformingmadeeasy.listeners.DeathWorldScript;
@@ -19,33 +22,7 @@ import java.util.Objects;
 
 public class ModPlugin extends BaseModPlugin {
     @Override
-    public void onGameLoad(boolean newGame) {
-        // Fix for coronal taps made from this that are stuck on repairing
-        for (StarSystemAPI system : Misc.getPlayerSystems(false)) {
-            List<SectorEntityToken> entities = system.getAllEntities();
-            for (SectorEntityToken entity : entities) {
-                if (!Objects.equals(entity.getCustomEntityType(), Entities.CORONAL_TAP)) {
-                    continue;
-                }
-                if (!entity.getMemoryWithoutUpdate().getBoolean("$usable") && !entity.getMemoryWithoutUpdate().getBoolean("$beingRepaired")) {
-                    continue;
-                }
-                entity.getMemoryWithoutUpdate().set("$beingRepaired", true, 5f);
-            }
-        }
-
-        DeathWorldScript.register();
-        TMEIndustryOptionProvider.register();
-        TMEPeople.register();
-
-        if (Utils.isLunaLibEnabled()) {
-            Utils.loadLunaSettings();
-            LunaSettings.addSettingsListener(new TMELunaSettingsListener());
-        } else {
-            Utils.BUILD_TIME_MULTIPLIER = Utils.getBuildCostSettingValue(Global.getSettings().getString("tme_build_time_setting"), "tme_custom_build_time_settings");
-            Utils.BUILD_COST_MULTIPLIER = Utils.getBuildCostSettingValue(Global.getSettings().getString("tme_build_cost_setting"), "tme_custom_build_cost_settings");
-        }
-
+    public void onCodexDataGenerated() {
         // Have to set it here as planet specs are not loaded yet if I do it outside
         Utils.AGRICULTURAL_LABORATORY_OPTIONS = Utils.getTerraformingOptions(TMEIds.AGRICULTURAL_LABORATORY);
         Utils.ATMOSPHERE_REGULATOR_OPTIONS = Utils.getTerraformingOptions(TMEIds.ATMOSPHERE_REGULATOR);
@@ -142,6 +119,47 @@ public class ModPlugin extends BaseModPlugin {
                 condition.likedIndustries = needOne.append(needAll.toString().replaceFirst(".$", "")).toString().replaceAll("\\s", "").trim();
             }
             Utils.UNIFICATION_CENTER_OPTIONS = modifiableConditionsCopy;
+        }
+
+        TMECodexEntry.replaceTMEIndustryCodex(TMEIds.AGRICULTURAL_LABORATORY, Utils.AGRICULTURAL_LABORATORY_OPTIONS);
+        TMECodexEntry.replaceTMEIndustryCodex(TMEIds.ATMOSPHERE_REGULATOR, Utils.ATMOSPHERE_REGULATOR_OPTIONS);
+        // TMECodexEntry.replaceTMEIndustryCodex(TMEIds.CONSTRUCTION_GRID, Utils.CONSTRUCTION_GRID_OPTIONS);
+        TMECodexEntry.replaceTMEIndustryCodex(TMEIds.ELEMENT_SYNTHESIZER, Utils.ELEMENT_SYNTHESIZER_OPTIONS);
+        TMECodexEntry.replaceTMEIndustryCodex(TMEIds.GEOMORPHOLOGY_STATION, Utils.GEOMORPHOLOGY_STATION_OPTIONS);
+        TMECodexEntry.replaceTMEIndustryCodex(TMEIds.MINERAL_REPLICATOR, Utils.MINERAL_REPLICATOR_OPTIONS);
+        TMECodexEntry.replaceTMEIndustryCodex(TMEIds.PLANETARY_HOLOGRAM, Utils.PLANETARY_HOLOGRAM_OPTIONS);
+        TMECodexEntry.replaceTMEIndustryCodex(TMEIds.STELLAR_MANUFACTORY, Utils.STELLAR_MANUFACTORY_OPTIONS);
+        TMECodexEntry.replaceTMEIndustryCodex(TMEIds.TERRESTRIAL_ENGINE, Utils.TERRESTRIAL_ENGINE_OPTIONS);
+        TMECodexEntry.replaceTMEIndustryCodex(TMEIds.UNIFICATION_CENTER, Utils.UNIFICATION_CENTER_OPTIONS);
+        CodexDataV2.linkRelatedEntries();
+    }
+
+    @Override
+    public void onGameLoad(boolean newGame) {
+        // Fix for coronal taps made from this that are stuck on repairing
+        for (StarSystemAPI system : Misc.getPlayerSystems(false)) {
+            List<SectorEntityToken> entities = system.getAllEntities();
+            for (SectorEntityToken entity : entities) {
+                if (!Objects.equals(entity.getCustomEntityType(), Entities.CORONAL_TAP)) {
+                    continue;
+                }
+                if (!entity.getMemoryWithoutUpdate().getBoolean("$usable") && !entity.getMemoryWithoutUpdate().getBoolean("$beingRepaired")) {
+                    continue;
+                }
+                entity.getMemoryWithoutUpdate().set("$beingRepaired", true, 5f);
+            }
+        }
+
+        DeathWorldScript.register();
+        TMEIndustryOptionProvider.register();
+        TMEPeople.register();
+
+        if (Utils.isLunaLibEnabled()) {
+            Utils.loadLunaSettings();
+            LunaSettings.addSettingsListener(new TMELunaSettingsListener());
+        } else {
+            Utils.BUILD_TIME_MULTIPLIER = Utils.getBuildCostSettingValue(Global.getSettings().getString("tme_build_time_setting"), "tme_custom_build_time_settings");
+            Utils.BUILD_COST_MULTIPLIER = Utils.getBuildCostSettingValue(Global.getSettings().getString("tme_build_cost_setting"), "tme_custom_build_cost_settings");
         }
     }
 }
