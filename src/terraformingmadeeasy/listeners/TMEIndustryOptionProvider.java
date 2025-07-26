@@ -7,6 +7,7 @@ import com.fs.starfarer.api.campaign.listeners.DialogCreatorUI;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.industries.ConstructionGrid;
 import terraformingmadeeasy.industries.TMEBaseIndustry;
@@ -83,17 +84,17 @@ public class TMEIndustryOptionProvider extends BaseIndustryOptionProvider {
             description = "A large structural grid for constructing Megastructures.";
             refundText = "Cancel the Megastructure project for a %s refund.";
             if (opt.ind.isUpgrading()) {
-                refundCost = ((ConstructionGrid) opt.ind).buildableMegastructure.cost;
+                refundCost = ((ConstructionGrid) opt.ind).buildableMegastructure.cost * Utils.BUILD_COST_MULTIPLIER;
             }
         } else if (Objects.equals(opt.ind.getId(), TMEIds.PLANETARY_HOLOGRAM)) {
             description = "A specialized structure that can change a planet's visual to a different planet type.";
             refundText = "Cancel the planet visual change for a %s refund.";
             if (opt.ind.isUpgrading()) {
-                refundCost = ((TMEBaseIndustry) opt.ind).getModifiableCondition().cost;
+                refundCost = ((TMEBaseIndustry) opt.ind).getModifiableCondition().cost * Utils.BUILD_COST_MULTIPLIER;
             }
         } else {
             if (opt.ind.isUpgrading()) {
-                refundCost = ((TMEBaseIndustry) opt.ind).getModifiableCondition().cost;
+                refundCost = ((TMEBaseIndustry) opt.ind).getModifiableCondition().cost * Utils.BUILD_COST_MULTIPLIER;
             }
         }
 
@@ -109,7 +110,7 @@ public class TMEIndustryOptionProvider extends BaseIndustryOptionProvider {
                 MegastructureDialogDelegate dialogueDelegate = new MegastructureDialogDelegate(800f, 464f, (ConstructionGrid) opt.ind);
                 ui.showDialog(800f, 464f, dialogueDelegate);
             } else {
-                ConfirmDialogDelegate dialogueDelegate = new ConfirmDialogDelegate(opt.ind, ((ConstructionGrid) opt.ind).buildableMegastructure.cost);
+                ConfirmDialogDelegate dialogueDelegate = new ConfirmDialogDelegate(opt.ind, ((ConstructionGrid) opt.ind).buildableMegastructure.cost * Utils.BUILD_COST_MULTIPLIER);
                 ui.showDialog(ConfirmDialogDelegate.WIDTH, ConfirmDialogDelegate.HEIGHT, dialogueDelegate);
             }
         } else {
@@ -117,7 +118,7 @@ public class TMEIndustryOptionProvider extends BaseIndustryOptionProvider {
                 TerraformDialogDelegate dialogueDelegate = new TerraformDialogDelegate(800f, 464f, opt.ind);
                 ui.showDialog(TerraformDialogDelegate.WIDTH, TerraformDialogDelegate.HEIGHT, dialogueDelegate);
             } else {
-                ConfirmDialogDelegate tmeConfirmDialogueDelegate = new ConfirmDialogDelegate(opt.ind, ((TMEBaseIndustry) opt.ind).getModifiableCondition().cost);
+                ConfirmDialogDelegate tmeConfirmDialogueDelegate = new ConfirmDialogDelegate(opt.ind, ((TMEBaseIndustry) opt.ind).getModifiableCondition().cost * Utils.BUILD_COST_MULTIPLIER);
                 ui.showDialog(ConfirmDialogDelegate.WIDTH, ConfirmDialogDelegate.HEIGHT, tmeConfirmDialogueDelegate);
             }
         }
