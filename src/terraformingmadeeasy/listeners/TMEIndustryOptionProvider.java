@@ -59,7 +59,7 @@ public class TMEIndustryOptionProvider extends BaseIndustryOptionProvider {
         List<IndustryOptionData> result = new ArrayList<>();
 
         String isNotUpgradingText = "Terraform planet...";
-        String isUpgradingText = "Cancel project...";
+        String isUpgradingText = "Cancel terraforming project...";
         if (Objects.equals(ind.getId(), TMEIds.CONSTRUCTION_GRID)) {
             isNotUpgradingText = "Build a megastructure...";
             isUpgradingText = "Cancel the megastructure project...";
@@ -76,8 +76,8 @@ public class TMEIndustryOptionProvider extends BaseIndustryOptionProvider {
     }
 
     public void createTooltip(IndustryOptionData opt, TooltipMakerAPI tooltip, float width) {
-        String description = "Cancel the terraforming project for a %s refund.";
-        String refundText = "A specialized industry capable of removing and adding hazard conditions of a planet.";
+        String description = "A specialized industry capable of removing and adding hazard conditions of a planet.";
+        String refundText = "Cancel the terraforming project for a %s refund.";
         float refundCost = 0;
         if (Objects.equals(opt.ind.getId(), TMEIds.CONSTRUCTION_GRID)) {
             description = "A large structural grid for constructing Megastructures.";
