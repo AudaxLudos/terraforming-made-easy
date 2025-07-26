@@ -214,13 +214,13 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
             icon = cond.icon;
             name = cond.name;
             tooltip = new TerraformTooltip(cond, null);
-        } else if (data instanceof Utils.BuildableMegastructure) {
-            Utils.BuildableMegastructure struct = (Utils.BuildableMegastructure) data;
-            cost = struct.cost;
-            buildTime = Math.round(struct.buildTime);
-            icon = struct.icon;
-            name = struct.name;
-            tooltip = new MegastructureTooltip(struct);
+        } else if (data instanceof Utils.ProjectData) {
+            Utils.ProjectData project = (Utils.ProjectData) data;
+            cost = project.cost;
+            buildTime = Math.round(project.buildTime);
+            icon = project.icon;
+            name = project.name;
+            tooltip = new MegastructureTooltip(project);
         }
 
         CustomPanelAPI optionPanel = panel.createCustomPanel(width, 44f, null);

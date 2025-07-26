@@ -76,10 +76,10 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         megaStructsPanel.addUIElement(megaStructHeader);
 
         TooltipMakerAPI megaStructsElement = megaStructsPanel.createUIElement(WIDTH, rowHeight - 22f, true);
-        List<Utils.BuildableMegastructure> megastructures = this.industry.buildableMegastructures;
-        Collections.sort(megastructures, new SortCanAffordAndBuild(this.industry));
-        for (Utils.BuildableMegastructure megastructure : megastructures) {
-            CustomPanelAPI megaStructPanel = Utils.addCustomButton(this.mPanel, megastructure, this.industry, this.buttons, WIDTH, this);
+        List<Utils.ProjectData> projects = this.industry.getProjects();
+        Collections.sort(projects, new SortCanAffordAndBuild(this.industry));
+        for (Utils.ProjectData project : projects) {
+            CustomPanelAPI megaStructPanel = Utils.addCustomButton(this.mPanel, project, this.industry, this.buttons, WIDTH, this);
             megaStructsElement.addCustom(megaStructPanel, 0f);
         }
         megaStructsPanel.addUIElement(megaStructsElement);
@@ -136,7 +136,7 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         TooltipMakerAPI startAngleElement = startAnglePanel.createUIElement(WIDTH / 4f, 40f, false);
         startAnglePanel.addUIElement(startAngleElement);
         orbitInputsElement.addCustom(startAnglePanel, 0f).getPosition().rightOfMid(orbitFocusPanel, 0f);
-        this.startingAngleField = addCustomTextField(startAnglePanel, startAngleElement, this.startingAngleField, "Starting Angle", "360", 7, startAnglePlugin, new StartingAngleFieldTooltip());
+        this.startingAngleField = addCustomTextField(startAnglePanel, startAngleElement, this.startingAngleField, "Starting Angle", "0", 7, startAnglePlugin, new StartingAngleFieldTooltip());
         startAnglePlugin.setTextField(this.startingAngleField, 0, 0);
 
         // Orbit radius field
@@ -173,19 +173,24 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
     @Override
     public void customDialogConfirm() {
         if (this.selected == null || this.orbitFocusField == null || this.startingAngleField == null || this.orbitRadiusField == null || this.orbitDaysField == null) {
+            System.out.println(this.selected);
+            System.out.println(this.orbitFocusField);
+            System.out.println(this.startingAngleField);
+            System.out.println(this.orbitRadiusField);
+            System.out.println(this.orbitDaysField);
             return;
         }
 
-        Utils.BuildableMegastructure megastructure = (Utils.BuildableMegastructure) this.selected;
+        Utils.ProjectData project = (Utils.ProjectData) this.selected;
         Utils.OrbitData orbitData = new Utils.OrbitData(
                 this.orbitFocusField,
                 Float.parseFloat(this.startingAngleField.getText().trim()),
                 Float.parseFloat(this.orbitRadiusField.getText().trim()),
                 Float.parseFloat(this.orbitDaysField.getText().trim()));
-        this.industry.buildableMegastructure = megastructure;
-        this.industry.megastructureOrbitData = orbitData;
+        this.industry.setProject(project);
+        this.industry.orbitData = orbitData;
         this.industry.startUpgrading();
-        Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(megastructure.cost * Utils.BUILD_COST_MULTIPLIER);
+        Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(project.cost * Utils.BUILD_COST_MULTIPLIER);
         Global.getSoundPlayer().playSound("ui_upgrade_industry", 1f, 1f, Global.getSoundPlayer().getListenerPos(), new Vector2f());
     }
 
@@ -204,7 +209,7 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         return tempField;
     }
 
-    public static class SortCanAffordAndBuild implements Comparator<Utils.BuildableMegastructure> {
+    public static class SortCanAffordAndBuild implements Comparator<Utils.ProjectData> {
         ConstructionGrid industry;
 
         public SortCanAffordAndBuild(ConstructionGrid industry) {
@@ -212,12 +217,12 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         }
 
         @Override
-        public int compare(Utils.BuildableMegastructure o1, Utils.BuildableMegastructure o2) {
+        public int compare(Utils.ProjectData o1, Utils.ProjectData o2) {
             return Boolean.compare(canAffordAndBuild(o1), canAffordAndBuild(o2));
         }
 
-        public boolean canAffordAndBuild(Utils.BuildableMegastructure structure) {
-            return !(Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= structure.cost) || !this.industry.canBuildMegastructure(structure.id);
+        public boolean canAffordAndBuild(Utils.ProjectData project) {
+            return !(Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= project.cost) || !this.industry.canBuildMegastructure(project.id);
         }
     }
 }

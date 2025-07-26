@@ -4,12 +4,10 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.campaign.comm.CommMessageAPI;
-import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.MarketConditionAPI;
 import com.fs.starfarer.api.impl.campaign.CoronalTapParticleScript;
 import com.fs.starfarer.api.impl.campaign.GateEntityPlugin;
-import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.*;
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
@@ -21,112 +19,15 @@ import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
-import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
-import org.apache.log4j.Logger;
 import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.ids.TMEIds;
 
-import java.awt.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
-public class ConstructionGrid extends BaseIndustry {
-    public static final Logger log = Global.getLogger(ConstructionGrid.class);
-    public static final float GAMMA_BUILD_TIME_MULT = 0.20f;
-    public static final float BETA_BUILD_TIME_MULT = 0.30f;
-    public static final float ALPHA_BUILD_TIME_MULT = 0.50f;
-    public List<Utils.BuildableMegastructure> buildableMegastructures = null;
-    public Utils.BuildableMegastructure buildableMegastructure = null;
-    public Utils.OrbitData megastructureOrbitData = null;
-    public Boolean isAICoreBuildTimeMultApplied = false;
-    public float aiCoreBuildProgressRemoved = 0f;
-    public String prevAICoreId = null;
-
-    public ConstructionGrid() {
-        setBuildableMegastructures(Utils.CONSTRUCTION_GRID_OPTIONS);
-    }
-
-    @Override
-    public void apply() {
-        apply(true);
-    }
-
-    @Override
-    protected void applyNoAICoreModifiers() {
-        if (this.isAICoreBuildTimeMultApplied && !Objects.equals(getAICoreId(), this.prevAICoreId)) {
-            this.buildProgress = this.buildProgress - this.aiCoreBuildProgressRemoved;
-            this.aiCoreBuildProgressRemoved = 0f;
-            this.isAICoreBuildTimeMultApplied = false;
-        }
-    }
-
-    @Override
-    protected void applyGammaCoreModifiers() {
-        if (!this.isAICoreBuildTimeMultApplied) {
-            applyNoAICoreModifiers();
-            applyBuildTimeMultiplier(GAMMA_BUILD_TIME_MULT);
-        }
-    }
-
-    @Override
-    protected void applyBetaCoreModifiers() {
-        if (!this.isAICoreBuildTimeMultApplied) {
-            applyNoAICoreModifiers();
-            applyBuildTimeMultiplier(BETA_BUILD_TIME_MULT);
-        }
-    }
-
-    @Override
-    protected void applyAlphaCoreModifiers() {
-        if (!this.isAICoreBuildTimeMultApplied) {
-            applyNoAICoreModifiers();
-            applyBuildTimeMultiplier(ALPHA_BUILD_TIME_MULT);
-        }
-    }
-
-    protected void applyBuildTimeMultiplier(float mult) {
-        if (!this.isAICoreBuildTimeMultApplied) {
-            applyNoAICoreModifiers();
-            float daysLeft = this.buildTime - this.buildProgress;
-            this.aiCoreBuildProgressRemoved = daysLeft * mult;
-            this.buildProgress = this.buildTime - (daysLeft - this.aiCoreBuildProgressRemoved);
-            this.isAICoreBuildTimeMultApplied = true;
-            this.prevAICoreId = getAICoreId();
-        }
-    }
-
-    @Override
-    public boolean isUpgrading() {
-        return this.building && this.buildableMegastructure != null;
-    }
-
-    @Override
-    public String getBuildOrUpgradeProgressText() {
-        if (isDisrupted()) {
-            int left = (int) getDisruptedDays();
-            if (left < 1) {
-                left = 1;
-            }
-            String days = "days";
-            if (left == 1) {
-                days = "day";
-            }
-
-            return "Disrupted: " + left + " " + days + " left";
-        }
-
-        int left = (int) (this.buildTime - this.buildProgress);
-        if (left < 1) {
-            left = 1;
-        }
-        String days = "days";
-        if (left == 1) {
-            days = "day";
-        }
-
-        return "Building: " + left + " " + days + " left";
-    }
+public class ConstructionGrid extends TMEBaseIndustryTest {
+    public Utils.OrbitData orbitData = null;
 
     @Override
     public void finishBuildingOrUpgrading() {
@@ -134,14 +35,9 @@ public class ConstructionGrid extends BaseIndustry {
         this.buildProgress = 0;
         this.buildTime = 1f;
         this.isAICoreBuildTimeMultApplied = false;
-        if (this.buildableMegastructure != null) {
-            log.info(String.format("Completion of %s megastructure in %s by %s", this.buildableMegastructure.name, getMarket().getStarSystem().getName(), getCurrentName()));
-            sendCompletedMessage();
-            completeMegastructure();
-            this.buildableMegastructure = null;
-            this.megastructureOrbitData = null;
-            notifyBeingRemoved(MarketAPI.MarketInteractionMode.REMOTE, false);
-            this.market.removeIndustry(getId(), null, false);
+        if (this.project != null) {
+            log.info(String.format("Completion of %s megastructure in %s by %s", this.project.name, getMarket().getStarSystem().getName(), getCurrentName()));
+            completeProject();
         } else {
             buildingFinished();
             reapply();
@@ -150,206 +46,54 @@ public class ConstructionGrid extends BaseIndustry {
 
     @Override
     public void startUpgrading() {
-        // Will be called from MegastructureDialogDelegate to start building megastructure
-        if (this.buildableMegastructure != null && this.megastructureOrbitData != null) {
-            log.info(String.format("Construction of %s megastructure in %s by %s", this.buildableMegastructure.name, getMarket().getStarSystem().getName(), getCurrentName()));
+        if (this.project != null && this.orbitData != null) {
+            log.info(String.format("Construction of %s megastructure in %s by %s", this.project.name, getMarket().getStarSystem().getName(), getCurrentName()));
             this.building = true;
             this.buildProgress = 0;
             this.aiCoreBuildProgressRemoved = 0f;
             this.isAICoreBuildTimeMultApplied = false;
-            this.buildTime = this.buildableMegastructure.buildTime * Utils.BUILD_TIME_MULTIPLIER;
+            this.buildTime = this.project.buildTime * Utils.BUILD_TIME_MULTIPLIER;
         }
     }
 
     @Override
-    public void cancelUpgrade() {
-        // Will be called from ConfirmDialogDelegate to cancel megastructure project
-        log.info(String.format("Deconstruction of %s megastructure in %s by %s", this.buildableMegastructure.name, getMarket().getStarSystem().getName(), getCurrentName()));
-        this.building = false;
-        this.buildProgress = 0;
-        this.aiCoreBuildProgressRemoved = 0f;
-        this.isAICoreBuildTimeMultApplied = false;
-        this.buildableMegastructure = null;
-    }
-
-    @Override
-    public boolean isAvailableToBuild() {
-        if (Utils.isAOTDVOKEnabled()) {
-            return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(getAOTDVOKTechId(), this.market) && this.market.getPlanetEntity() != null && super.isAvailableToBuild();
-        }
-        return this.market.getPlanetEntity() != null && super.isAvailableToBuild();
-    }
-
-    @Override
-    public String getUnavailableReason() {
-        if (!super.isAvailableToBuild()) {
-            return super.getUnavailableReason();
-        }
-        return "Requires a planet";
-    }
-
-    @Override
-    public boolean showWhenUnavailable() {
-        if (Utils.isAOTDVOKEnabled()) {
-            return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(getAOTDVOKTechId(), this.market) && this.market.getPlanetEntity() != null && super.showWhenUnavailable();
-        }
-        return super.showWhenUnavailable();
-    }
-
-    @Override
-    protected void addAlphaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
-        float oPad = 10f;
-        Color highlight = Misc.getHighlightColor();
-
-        String pre = "Alpha-level AI core currently assigned. ";
-        if (mode == AICoreDescriptionMode.MANAGE_CORE_DIALOG_LIST || mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP) {
-            pre = "Alpha-level AI core. ";
-        }
-        if (mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP || mode == AICoreDescriptionMode.MANAGE_CORE_TOOLTIP) {
-            CommoditySpecAPI coreSpec = Global.getSettings().getCommoditySpec(this.aiCoreId);
-            TooltipMakerAPI text = tooltip.beginImageWithText(coreSpec.getIconName(), 48);
-            text.addPara(pre + "Reduces upkeep cost by %s. Reduces megastructure build time by %s.", oPad, highlight,
-                    (int) ((1f - UPKEEP_MULT) * 100f) + "%", (int) (ALPHA_BUILD_TIME_MULT * 100f) + "%");
-            tooltip.addImageWithText(oPad);
-            return;
-        }
-
-        tooltip.addPara(pre + "Reduces upkeep cost by %s. Reduces megastructure build time by %s.", oPad, highlight,
-                (int) ((1f - UPKEEP_MULT) * 100f) + "%", (int) (ALPHA_BUILD_TIME_MULT * 100f) + "%");
-    }
-
-    @Override
-    protected void addBetaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
-        float oPad = 10f;
-        Color highlight = Misc.getHighlightColor();
-
-        String pre = "Beta-level AI core currently assigned. ";
-        if (mode == AICoreDescriptionMode.MANAGE_CORE_DIALOG_LIST || mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP) {
-            pre = "Beta-level AI core. ";
-        }
-        if (mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP || mode == AICoreDescriptionMode.MANAGE_CORE_TOOLTIP) {
-            CommoditySpecAPI coreSpec = Global.getSettings().getCommoditySpec(this.aiCoreId);
-            TooltipMakerAPI text = tooltip.beginImageWithText(coreSpec.getIconName(), 48);
-            text.addPara(pre + "Reduces upkeep cost by %s. Reduces megastructure build time by %s.", oPad, highlight,
-                    (int) ((1f - UPKEEP_MULT) * 100f) + "%", (int) (BETA_BUILD_TIME_MULT * 100f) + "%");
-            tooltip.addImageWithText(oPad);
-            return;
-        }
-
-        tooltip.addPara(pre + "Reduces upkeep cost by %s. Reduces megastructure build time by %s.", oPad, highlight,
-                (int) ((1f - UPKEEP_MULT) * 100f) + "%", (int) (BETA_BUILD_TIME_MULT * 100f) + "%");
-    }
-
-    @Override
-    protected void addGammaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
-        float oPad = 10f;
-        Color highlight = Misc.getHighlightColor();
-
-        String pre = "Gamma-level AI core currently assigned. ";
-        if (mode == AICoreDescriptionMode.MANAGE_CORE_DIALOG_LIST || mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP) {
-            pre = "Gamma-level AI core. ";
-        }
-        if (mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP || mode == AICoreDescriptionMode.MANAGE_CORE_TOOLTIP) {
-            CommoditySpecAPI coreSpec = Global.getSettings().getCommoditySpec(this.aiCoreId);
-            TooltipMakerAPI text = tooltip.beginImageWithText(coreSpec.getIconName(), 48);
-            text.addPara(pre + "Reduces upkeep cost by %s. Reduces megastructure build time by %s.", oPad, highlight,
-                    (int) ((1f - UPKEEP_MULT) * 100f) + "%", (int) (GAMMA_BUILD_TIME_MULT * 100f) + "%");
-            tooltip.addImageWithText(oPad);
-            return;
-        }
-
-        tooltip.addPara(pre + "Reduces upkeep cost by %s. Reduces megastructure build time by %s.", oPad, highlight,
-                (int) ((1f - UPKEEP_MULT) * 100f) + "%", (int) (GAMMA_BUILD_TIME_MULT * 100f) + "%");
-    }
-
-    @Override
-    protected void applyAICoreToIncomeAndUpkeep() {
-        if (this.aiCoreId == null) {
-            getUpkeep().unmodifyMult("ind_core");
-            return;
-        }
-
-        float mult = UPKEEP_MULT;
-        String name = "AI Core assigned";
-        if (Objects.equals(this.aiCoreId, Commodities.ALPHA_CORE)) {
-            name = "Alpha Core assigned";
-        } else if (Objects.equals(this.aiCoreId, Commodities.BETA_CORE)) {
-            name = "Beta Core assigned";
-        } else if (Objects.equals(this.aiCoreId, Commodities.GAMMA_CORE)) {
-            name = "Gamma Core assigned";
-        }
-
-        getUpkeep().modifyMult("ind_core", mult, name);
-    }
-
-    public void addMegastructuresListSection(TooltipMakerAPI tooltip, IndustryTooltipMode mode, boolean expanded) {
-        if (expanded) {
-            int rowLimit = 6;
-            int andMore = this.buildableMegastructures.size() - rowLimit;
-            if (this.buildableMegastructures.size() < rowLimit) {
-                rowLimit = this.buildableMegastructures.size();
-                andMore = 0;
-            }
-
-            tooltip.addPara("Buildable Megastructures:", 10f);
-            for (int i = 0; i < rowLimit; i++) {
-                float pad = 1f;
-                if (i == 0) {
-                    pad = 3f;
-                }
-                tooltip.addPara("    " + this.buildableMegastructures.get(i).name, Misc.getHighlightColor(), pad);
-            }
-            if (andMore > 0) {
-                tooltip.addPara("    ...and %s more", 0f, Misc.getTextColor(), Misc.getHighlightColor(), andMore + "");
-            }
-        } else {
-            tooltip.addPara("Press %s to see megastructures you can build", 10f, Misc.getGrayColor(), Misc.getHighlightColor(), "F1");
-        }
-    }
-
-    @Override
-    protected void addPostUpkeepSection(TooltipMakerAPI tooltip, IndustryTooltipMode mode) {
-        float pad = 3f;
-
+    protected void addProjectSection(TooltipMakerAPI tooltip, IndustryTooltipMode mode) {
         if (mode == IndustryTooltipMode.NORMAL || isUpgrading()) {
+            float oPad = 10f;
+            float pad = 3f;
+
             if (isUpgrading()) {
-                tooltip.addSectionHeading("Megastructure project", Alignment.MID, 10f);
-                TooltipMakerAPI imageWithText = tooltip.beginImageWithText(this.buildableMegastructure.icon, 40f);
+                tooltip.addSectionHeading("Megastructure project", Alignment.MID, oPad);
+                TooltipMakerAPI imageWithText = tooltip.beginImageWithText(this.project.icon, 40f);
                 imageWithText.addPara("Status: %s", 0f, Misc.getHighlightColor(), "Ongoing");
                 imageWithText.addPara("Action: %s", pad, Misc.getHighlightColor(), "Add");
-                imageWithText.addPara("Megastructure: %s", pad, Misc.getHighlightColor(), this.buildableMegastructure.name);
+                imageWithText.addPara("Megastructure: %s", pad, Misc.getHighlightColor(), this.project.name);
                 imageWithText.addPara("Days Left: %s", pad, Misc.getHighlightColor(), Math.round(this.buildTime - this.buildProgress) + "");
-                tooltip.addImageWithText(10f);
+                tooltip.addImageWithText(oPad);
             } else {
-                tooltip.addSectionHeading("No Projects started", Alignment.MID, 10f);
+                tooltip.addSectionHeading("No Projects started", Alignment.MID, oPad);
             }
         }
     }
 
+    @Override
     public String getAOTDVOKTechId() {
         return TMEIds.CONSTRUCTION_GRID_TECH;
     }
 
-    public void setBuildableMegastructures(List<Utils.BuildableMegastructure> options) {
-        this.buildableMegastructures = options;
+    @Override
+    public List<Utils.ProjectData> getProjects() {
+        return Utils.CONSTRUCTION_GRID_OPTIONS;
     }
 
-    public void sendCompletedMessage() {
-        if (this.market.isPlayerOwned()) {
-            MessageIntel intel = new MessageIntel(this.buildableMegastructure.name + " megastructure completed", Misc.getBasePlayerColor());
-            intel.setIcon(Global.getSector().getPlayerFaction().getCrest());
-            intel.setSound(BaseIntelPlugin.getSoundStandardUpdate());
-            Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.COLONY_INFO, this.market);
-        }
-    }
-
-    public void completeMegastructure() {
+    @Override
+    public void completeProject() {
         StarSystemAPI system = getMarket().getStarSystem();
-        String customEntityId = this.buildableMegastructure.id;
-        SectorEntityToken orbitEntity = this.megastructureOrbitData.entity;
-        float orbitAngle = this.megastructureOrbitData.orbitAngle;
-        float orbitRadius = this.megastructureOrbitData.orbitRadius;
-        float orbitDays = this.megastructureOrbitData.orbitDays;
+        String customEntityId = this.project.id;
+        SectorEntityToken orbitEntity = this.orbitData.entity;
+        float orbitAngle = this.orbitData.orbitAngle;
+        float orbitRadius = this.orbitData.orbitRadius;
+        float orbitDays = this.orbitData.orbitDays;
         if (Objects.equals(customEntityId, Entities.CORONAL_TAP)) {
             SectorEntityToken coronalTap = system.addCustomEntity(null, null, Entities.CORONAL_TAP, Factions.NEUTRAL);
             coronalTap.setCircularOrbit(orbitEntity, orbitAngle, orbitRadius, orbitDays);
@@ -423,6 +167,22 @@ public class ConstructionGrid extends BaseIndustry {
         } else {
             SectorEntityToken entity = system.addCustomEntity(null, null, customEntityId, Factions.NEUTRAL);
             entity.setCircularOrbit(orbitEntity, orbitAngle, orbitRadius, orbitDays);
+        }
+
+        sendCompletedMessage();
+        this.project = null;
+        this.orbitData = null;
+        notifyBeingRemoved(MarketAPI.MarketInteractionMode.REMOTE, false);
+        this.market.removeIndustry(getId(), null, false);
+    }
+
+    @Override
+    public void sendCompletedMessage() {
+        if (this.market.isPlayerOwned()) {
+            MessageIntel intel = new MessageIntel(this.project.name + " megastructure completed", Misc.getBasePlayerColor());
+            intel.setIcon(Global.getSector().getPlayerFaction().getCrest());
+            intel.setSound(BaseIntelPlugin.getSoundStandardUpdate());
+            Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.COLONY_INFO, this.market);
         }
     }
 

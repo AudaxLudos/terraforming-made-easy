@@ -16,11 +16,9 @@ public class SelectButtonPlugin extends BaseCustomUIPanelPlugin {
     public void buttonPressed(Object buttonId) {
         if (buttonId == null) {
             return;
-        } else if (buttonId instanceof Utils.BuildableMegastructure) {
-            this.delegate.selected = buttonId;
-        } else if (buttonId instanceof Utils.ModifiableCondition) {
-            this.delegate.selected = buttonId;
         }
+
+        this.delegate.selected = buttonId;
 
         boolean isHighlighted = false;
         for (ButtonAPI button : this.delegate.buttons) {
