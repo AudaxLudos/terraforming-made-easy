@@ -142,7 +142,7 @@ public class TMEBaseIndustry extends BaseIndustry {
             this.buildProgress = 0;
             this.aiCoreBuildProgressRemoved = 0f;
             this.isAICoreBuildTimeMultApplied = false;
-            this.buildTime = this.modifiableCondition.buildTime;
+            this.buildTime = this.modifiableCondition.buildTime * Utils.BUILD_TIME_MULTIPLIER;
         }
     }
 

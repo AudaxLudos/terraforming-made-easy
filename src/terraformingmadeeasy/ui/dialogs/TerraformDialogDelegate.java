@@ -78,7 +78,7 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
         Utils.ModifiableCondition selectedCondition = (Utils.ModifiableCondition) this.selected;
         this.industry.setModifiableCondition(selectedCondition);
         this.industry.startUpgrading();
-        Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(selectedCondition.cost);
+        Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(selectedCondition.cost * Utils.BUILD_COST_MULTIPLIER);
         Global.getSoundPlayer().playSound("ui_upgrade_industry", 1f, 1f, Global.getSoundPlayer().getListenerPos(), new Vector2f());
     }
 

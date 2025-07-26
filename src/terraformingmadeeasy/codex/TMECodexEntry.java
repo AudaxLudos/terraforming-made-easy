@@ -240,12 +240,12 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
         optionPanel.addUIElement(optionNameElement);
 
         TooltipMakerAPI optionBuildTimeElement = optionPanel.createUIElement(columnWidth, 40f, false);
-        optionBuildTimeElement.addPara(buildTime + "", Misc.getHighlightColor(), 12f).setAlignment(Alignment.MID);
+        optionBuildTimeElement.addPara(Math.round(buildTime * Utils.BUILD_TIME_MULTIPLIER) + "", Misc.getHighlightColor(), 12f).setAlignment(Alignment.MID);
         optionBuildTimeElement.getPosition().rightOfMid(optionNameElement, 0f);
         optionPanel.addUIElement(optionBuildTimeElement);
 
         TooltipMakerAPI optionCostElement = optionPanel.createUIElement(columnWidth, 40f, false);
-        optionCostElement.addPara(Misc.getDGSCredits(cost), Misc.getHighlightColor(), 12f).setAlignment(Alignment.MID);
+        optionCostElement.addPara(Misc.getDGSCredits(cost * Utils.BUILD_COST_MULTIPLIER), Misc.getHighlightColor(), 12f).setAlignment(Alignment.MID);
         optionCostElement.getPosition().rightOfMid(optionBuildTimeElement, 0f);
         optionPanel.addUIElement(optionCostElement);
 

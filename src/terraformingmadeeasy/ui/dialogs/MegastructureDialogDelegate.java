@@ -187,7 +187,7 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         this.industry.buildableMegastructure = megastructure;
         this.industry.megastructureOrbitData = orbitData;
         this.industry.startUpgrading();
-        Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(megastructure.cost);
+        Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(megastructure.cost * Utils.BUILD_COST_MULTIPLIER);
         Global.getSoundPlayer().playSound("ui_upgrade_industry", 1f, 1f, Global.getSoundPlayer().getListenerPos(), new Vector2f());
     }
 

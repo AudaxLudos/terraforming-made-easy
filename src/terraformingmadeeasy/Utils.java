@@ -351,12 +351,12 @@ public class Utils {
         optionPanel.addUIElement(optionNameElement);
 
         TooltipMakerAPI optionBuildTimeElement = optionPanel.createUIElement(columnWidth, 40f, false);
-        optionBuildTimeElement.addPara(buildTime + "", Misc.getHighlightColor(), 12f).setAlignment(Alignment.MID);
+        optionBuildTimeElement.addPara(Math.round(buildTime * BUILD_TIME_MULTIPLIER) + "", Misc.getHighlightColor(), 12f).setAlignment(Alignment.MID);
         optionBuildTimeElement.getPosition().rightOfMid(optionNameElement, 0f);
         optionPanel.addUIElement(optionBuildTimeElement);
 
         TooltipMakerAPI optionCostElement = optionPanel.createUIElement(columnWidth, 40f, false);
-        optionCostElement.addPara(Misc.getDGSCredits(cost), canAfford ? Misc.getHighlightColor() : Misc.getNegativeHighlightColor(), 12f).setAlignment(Alignment.MID);
+        optionCostElement.addPara(Misc.getDGSCredits(cost * BUILD_COST_MULTIPLIER), canAfford ? Misc.getHighlightColor() : Misc.getNegativeHighlightColor(), 12f).setAlignment(Alignment.MID);
         optionCostElement.getPosition().rightOfMid(optionBuildTimeElement, 0f);
         optionPanel.addUIElement(optionCostElement);
 
@@ -381,8 +381,8 @@ public class Utils {
             if (spec.getInteractionImage() != null) {
                 this.icon = spec.getInteractionImage();
             }
-            this.cost = cost * BUILD_COST_MULTIPLIER;
-            this.buildTime = buildTime * BUILD_TIME_MULTIPLIER;
+            this.cost = cost;
+            this.buildTime = buildTime;
         }
     }
 
@@ -416,8 +416,8 @@ public class Utils {
             this.id = spec.getId();
             this.name = spec.getName();
             this.icon = spec.getIcon();
-            this.cost = cost * BUILD_COST_MULTIPLIER;
-            this.buildTime = buildTime * BUILD_TIME_MULTIPLIER;
+            this.cost = cost;
+            this.buildTime = buildTime;
             this.canChangeGasGiants = canChangeGasGiants;
             this.likedConditions = likedConditions;
             this.likedIndustries = likedIndustries;
@@ -429,8 +429,8 @@ public class Utils {
             this.id = id;
             this.name = name;
             this.icon = icon;
-            this.cost = cost * BUILD_COST_MULTIPLIER;
-            this.buildTime = buildTime * BUILD_TIME_MULTIPLIER;
+            this.cost = cost;
+            this.buildTime = buildTime;
             this.canChangeGasGiants = canChangeGasGiants;
             this.likedConditions = likedConditions;
             this.likedIndustries = likedIndustries;

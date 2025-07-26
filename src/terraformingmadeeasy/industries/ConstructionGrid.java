@@ -142,7 +142,7 @@ public class ConstructionGrid extends BaseIndustry {
             this.buildProgress = 0;
             this.aiCoreBuildProgressRemoved = 0f;
             this.isAICoreBuildTimeMultApplied = false;
-            this.buildTime = this.buildableMegastructure.buildTime;
+            this.buildTime = this.buildableMegastructure.buildTime * Utils.BUILD_TIME_MULTIPLIER;
         }
     }
 
