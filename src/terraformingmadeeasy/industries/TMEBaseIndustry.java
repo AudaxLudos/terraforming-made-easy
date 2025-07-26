@@ -248,14 +248,6 @@ public class TMEBaseIndustry extends BaseIndustry {
     }
 
     @Override
-    protected void addRightAfterDescriptionSection(TooltipMakerAPI tooltip, IndustryTooltipMode mode) {
-        addTerraformingOptionList(tooltip, mode);
-        if (Global.CODEX_TOOLTIP_MODE) {
-            tooltip.addPara("test", 0f);
-        }
-    }
-
-    @Override
     protected void addPostUpkeepSection(TooltipMakerAPI tooltip, IndustryTooltipMode mode) {
         float pad = 3f;
 
