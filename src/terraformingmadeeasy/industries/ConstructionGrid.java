@@ -40,7 +40,6 @@ public class ConstructionGrid extends BaseIndustry {
     public Utils.BuildableMegastructure buildableMegastructure = null;
     public Utils.OrbitData megastructureOrbitData = null;
     public Boolean isAICoreBuildTimeMultApplied = false;
-    public float aiCoreCurrentBuildTimeMult = 0f;
     public float aiCoreBuildProgressRemoved = 0f;
     public String prevAICoreId = null;
 
@@ -54,30 +53,46 @@ public class ConstructionGrid extends BaseIndustry {
     }
 
     @Override
-    public void advance(float amount) {
-        super.advance(amount);
-        if (!this.isAICoreBuildTimeMultApplied) {
-            if (Objects.equals(this.aiCoreId, Commodities.ALPHA_CORE)) {
-                this.aiCoreCurrentBuildTimeMult = ALPHA_BUILD_TIME_MULT;
-            } else if (Objects.equals(this.aiCoreId, Commodities.BETA_CORE)) {
-                this.aiCoreCurrentBuildTimeMult = BETA_BUILD_TIME_MULT;
-            } else if (Objects.equals(this.aiCoreId, Commodities.GAMMA_CORE)) {
-                this.aiCoreCurrentBuildTimeMult = GAMMA_BUILD_TIME_MULT;
-            } else {
-                this.aiCoreCurrentBuildTimeMult = 0f;
-            }
-
-            float daysLeft = this.buildTime - this.buildProgress;
-            this.aiCoreBuildProgressRemoved = daysLeft * this.aiCoreCurrentBuildTimeMult;
-            this.buildProgress = this.buildTime - (daysLeft - this.aiCoreBuildProgressRemoved);
-            this.isAICoreBuildTimeMultApplied = true;
-            this.prevAICoreId = getAICoreId();
-        }
-
+    protected void applyNoAICoreModifiers() {
         if (this.isAICoreBuildTimeMultApplied && !Objects.equals(getAICoreId(), this.prevAICoreId)) {
             this.buildProgress = this.buildProgress - this.aiCoreBuildProgressRemoved;
             this.aiCoreBuildProgressRemoved = 0f;
             this.isAICoreBuildTimeMultApplied = false;
+        }
+    }
+
+    @Override
+    protected void applyGammaCoreModifiers() {
+        if (!this.isAICoreBuildTimeMultApplied) {
+            applyNoAICoreModifiers();
+            applyBuildTimeMultiplier(GAMMA_BUILD_TIME_MULT);
+        }
+    }
+
+    @Override
+    protected void applyBetaCoreModifiers() {
+        if (!this.isAICoreBuildTimeMultApplied) {
+            applyNoAICoreModifiers();
+            applyBuildTimeMultiplier(BETA_BUILD_TIME_MULT);
+        }
+    }
+
+    @Override
+    protected void applyAlphaCoreModifiers() {
+        if (!this.isAICoreBuildTimeMultApplied) {
+            applyNoAICoreModifiers();
+            applyBuildTimeMultiplier(ALPHA_BUILD_TIME_MULT);
+        }
+    }
+
+    protected void applyBuildTimeMultiplier(float mult) {
+        if (!this.isAICoreBuildTimeMultApplied) {
+            applyNoAICoreModifiers();
+            float daysLeft = this.buildTime - this.buildProgress;
+            this.aiCoreBuildProgressRemoved = daysLeft * mult;
+            this.buildProgress = this.buildTime - (daysLeft - this.aiCoreBuildProgressRemoved);
+            this.isAICoreBuildTimeMultApplied = true;
+            this.prevAICoreId = getAICoreId();
         }
     }
 

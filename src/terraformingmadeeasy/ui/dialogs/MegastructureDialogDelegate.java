@@ -163,8 +163,6 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         creditsElement.addPara("Credits: %s", 0f, Misc.getGrayColor(), Misc.getHighlightColor(),
                 Misc.getWithDGS(Global.getSector().getPlayerFleet().getCargo().getCredits().get()));
         this.mPanel.addUIElement(creditsElement).inBL(0f, -32f);
-
-        System.out.println(this.industry.buildableMegastructures);
     }
 
     @Override
