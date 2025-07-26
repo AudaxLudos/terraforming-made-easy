@@ -3,13 +3,16 @@ package terraformingmadeeasy.industries;
 import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.ids.TMEIds;
 
-public class GeomorphologyStation extends TMEBaseIndustry {
-    public GeomorphologyStation() {
-        setModifiableConditions(Utils.GEOMORPHOLOGY_STATION_OPTIONS);
-    }
+import java.util.List;
 
+public class GeomorphologyStation extends BaseTerraformingIndustry {
     @Override
     public String getAOTDVOKTechId() {
         return TMEIds.GEOMORPHOLOGY_STATION_TECH;
+    }
+
+    @Override
+    public List<Utils.ProjectData> getProjects() {
+        return Utils.GEOMORPHOLOGY_STATION_OPTIONS;
     }
 }

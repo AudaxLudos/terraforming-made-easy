@@ -6,17 +6,17 @@ import com.fs.starfarer.api.ui.BaseTooltipCreator;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.Utils;
-import terraformingmadeeasy.industries.TMEBaseIndustry;
+import terraformingmadeeasy.industries.BaseTerraformingIndustry;
 
 import java.awt.*;
 import java.util.Objects;
 
 public class TerraformTooltip extends BaseTooltipCreator {
-    public Utils.ModifiableCondition condition;
-    public TMEBaseIndustry industry;
+    public Utils.ProjectData project;
+    public BaseTerraformingIndustry industry;
 
-    public TerraformTooltip(Utils.ModifiableCondition condition, TMEBaseIndustry industry) {
-        this.condition = condition;
+    public TerraformTooltip(Utils.ProjectData condition, BaseTerraformingIndustry industry) {
+        this.project = condition;
         this.industry = industry;
     }
 
@@ -27,18 +27,18 @@ public class TerraformTooltip extends BaseTooltipCreator {
 
     @Override
     public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-        displayPreferences(tooltip, this.condition.likedConditions, false, true, 0f);
-        displayPreferences(tooltip, this.condition.likedIndustries, false, false, 10f);
-        displayPreferences(tooltip, this.condition.hatedConditions, true, true, 10f);
-        Color textColor = this.condition.canChangeGasGiants ? Misc.getHighlightColor() : Misc.getNegativeHighlightColor();
-        String textFormat = this.condition.canChangeGasGiants ? "Can" : "Cannot";
+        displayPreferences(tooltip, this.project.likedConditions, false, true, 0f);
+        displayPreferences(tooltip, this.project.likedIndustries, false, false, 10f);
+        displayPreferences(tooltip, this.project.hatedConditions, true, true, 10f);
+        Color textColor = this.project.canChangeGasGiants ? Misc.getHighlightColor() : Misc.getNegativeHighlightColor();
+        String textFormat = this.project.canChangeGasGiants ? "Can" : "Cannot";
         tooltip.addPara("%s be used on gas giants", 10f, textColor, textFormat);
-        if (this.condition.planetSpecOverride != null) {
+        if (this.project.planetSpecOverride != null) {
             for (PlanetSpecAPI spec : Global.getSettings().getAllPlanetSpecs()) {
                 if (spec.isStar()) {
                     continue;
                 }
-                if (Objects.equals(spec.getPlanetType(), this.condition.planetSpecOverride)) {
+                if (Objects.equals(spec.getPlanetType(), this.project.planetSpecOverride)) {
                     tooltip.addPara("The planet will be terraformed into a %s world", 10f, Misc.getHighlightColor(), spec.getName());
                     break;
                 }

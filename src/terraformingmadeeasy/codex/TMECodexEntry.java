@@ -162,7 +162,7 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
         if (this.param2 instanceof List<?>) {
             List<?> options = (List<?>) this.param2;
             for (Object option : options) {
-                CustomPanelAPI conditionPanel = addOptionInfo(panel, option, tw);
+                CustomPanelAPI conditionPanel = addOptionInfo(panel, option, this.spec.getId(), tw);
                 conditionsBody.addCustom(conditionPanel, 0f);
             }
         }
@@ -198,29 +198,20 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
         panel.getPosition().setSize(width, height);
     }
 
-    public CustomPanelAPI addOptionInfo(CustomPanelAPI panel, Object data, float width) {
+    public CustomPanelAPI addOptionInfo(CustomPanelAPI panel, Object data, String industryId, float width) {
         float columnOneWidth = width / 3f + 100f;
         float columnWidth = (width - columnOneWidth) / 2f;
-        float cost = 0;
-        int buildTime = 0;
-        String icon = "";
-        String name = "";
+        Utils.ProjectData project = (Utils.ProjectData) data;
+        String name = project.name;
+        String icon = project.icon;
+        float cost = Math.round(project.cost * Utils.BUILD_COST_MULTIPLIER);
+        float buildTime = Math.round(project.buildTime * Utils.BUILD_TIME_MULTIPLIER);
         TooltipMakerAPI.TooltipCreator tooltip = null;
 
-        if (data instanceof Utils.ModifiableCondition) {
-            Utils.ModifiableCondition cond = (Utils.ModifiableCondition) data;
-            cost = cond.cost;
-            buildTime = Math.round(cond.buildTime);
-            icon = cond.icon;
-            name = cond.name;
-            tooltip = new TerraformTooltip(cond, null);
-        } else if (data instanceof Utils.ProjectData) {
-            Utils.ProjectData project = (Utils.ProjectData) data;
-            cost = project.cost;
-            buildTime = Math.round(project.buildTime);
-            icon = project.icon;
-            name = project.name;
+        if (Objects.equals(industryId, TMEIds.CONSTRUCTION_GRID)) {
             tooltip = new MegastructureTooltip(project);
+        } else {
+            tooltip = new TerraformTooltip(project, null);
         }
 
         CustomPanelAPI optionPanel = panel.createCustomPanel(width, 44f, null);
@@ -240,12 +231,12 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
         optionPanel.addUIElement(optionNameElement);
 
         TooltipMakerAPI optionBuildTimeElement = optionPanel.createUIElement(columnWidth, 40f, false);
-        optionBuildTimeElement.addPara(Math.round(buildTime * Utils.BUILD_TIME_MULTIPLIER) + "", Misc.getHighlightColor(), 12f).setAlignment(Alignment.MID);
+        optionBuildTimeElement.addPara(Misc.getWithDGS(buildTime), Misc.getHighlightColor(), 12f).setAlignment(Alignment.MID);
         optionBuildTimeElement.getPosition().rightOfMid(optionNameElement, 0f);
         optionPanel.addUIElement(optionBuildTimeElement);
 
         TooltipMakerAPI optionCostElement = optionPanel.createUIElement(columnWidth, 40f, false);
-        optionCostElement.addPara(Misc.getDGSCredits(cost * Utils.BUILD_COST_MULTIPLIER), Misc.getHighlightColor(), 12f).setAlignment(Alignment.MID);
+        optionCostElement.addPara(Misc.getDGSCredits(cost), Misc.getHighlightColor(), 12f).setAlignment(Alignment.MID);
         optionCostElement.getPosition().rightOfMid(optionBuildTimeElement, 0f);
         optionPanel.addUIElement(optionCostElement);
 

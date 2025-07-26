@@ -35,9 +35,9 @@ public class ModPlugin extends BaseModPlugin {
         Utils.UNIFICATION_CENTER_OPTIONS = Utils.getTerraformingOptions(TMEIds.UNIFICATION_CENTER);
 
         if (Utils.isAOTDVOKEnabled()) {
-            List<Utils.ModifiableCondition> modifiableConditionsCopy = new ArrayList<>(Utils.UNIFICATION_CENTER_OPTIONS);
+            List<Utils.ProjectData> projectsCopy = new ArrayList<>(Utils.UNIFICATION_CENTER_OPTIONS);
 
-            for (Utils.ModifiableCondition condition : modifiableConditionsCopy) {
+            for (Utils.ProjectData condition : projectsCopy) {
                 StringBuilder needOne = new StringBuilder();
                 StringBuilder needAll = new StringBuilder("needAll:");
                 String[] ids = Utils.getUniqueIds(condition.likedIndustries);
@@ -117,7 +117,7 @@ public class ModPlugin extends BaseModPlugin {
 
                 condition.likedIndustries = needOne.append(needAll.toString().replaceFirst(".$", "")).toString().replaceAll("\\s", "").trim();
             }
-            Utils.UNIFICATION_CENTER_OPTIONS = modifiableConditionsCopy;
+            Utils.UNIFICATION_CENTER_OPTIONS = projectsCopy;
         }
 
         TMECodexEntry.replaceTMEIndustryCodex(TMEIds.AGRICULTURAL_LABORATORY, Utils.AGRICULTURAL_LABORATORY_OPTIONS);

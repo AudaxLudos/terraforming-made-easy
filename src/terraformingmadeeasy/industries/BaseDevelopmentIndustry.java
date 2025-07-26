@@ -14,8 +14,8 @@ import java.awt.*;
 import java.util.List;
 import java.util.Objects;
 
-public class TMEBaseIndustryTest extends BaseIndustry {
-    public static final Logger log = Global.getLogger(TMEBaseIndustryTest.class);
+public class BaseDevelopmentIndustry extends BaseIndustry {
+    public static final Logger log = Global.getLogger(BaseDevelopmentIndustry.class);
     public static final float GAMMA_BUILD_TIME_MULT = 0.20f;
     public static final float BETA_BUILD_TIME_MULT = 0.30f;
     public static final float ALPHA_BUILD_TIME_MULT = 0.50f;
@@ -108,7 +108,6 @@ public class TMEBaseIndustryTest extends BaseIndustry {
         this.isAICoreBuildTimeMultApplied = false;
         if (this.project != null) {
             completeProject();
-            sendCompletedMessage();
         } else {
             buildingFinished();
             reapply();

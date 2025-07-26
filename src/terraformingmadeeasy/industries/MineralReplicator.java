@@ -3,13 +3,16 @@ package terraformingmadeeasy.industries;
 import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.ids.TMEIds;
 
-public class MineralReplicator extends TMEBaseIndustry {
-    public MineralReplicator() {
-        setModifiableConditions(Utils.MINERAL_REPLICATOR_OPTIONS);
-    }
+import java.util.List;
 
+public class MineralReplicator extends BaseTerraformingIndustry {
     @Override
     public String getAOTDVOKTechId() {
         return TMEIds.MINERAL_REPLICATOR_TECH;
+    }
+
+    @Override
+    public List<Utils.ProjectData> getProjects() {
+        return Utils.MINERAL_REPLICATOR_OPTIONS;
     }
 }

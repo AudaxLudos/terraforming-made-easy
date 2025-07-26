@@ -15,7 +15,6 @@ import terraformingmadeeasy.ui.tooltips.OrbitRadiusFieldTooltip;
 import terraformingmadeeasy.ui.tooltips.StartingAngleFieldTooltip;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 
@@ -77,7 +76,7 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
 
         TooltipMakerAPI megaStructsElement = megaStructsPanel.createUIElement(WIDTH, rowHeight - 22f, true);
         List<Utils.ProjectData> projects = this.industry.getProjects();
-        Collections.sort(projects, new SortCanAffordAndBuild(this.industry));
+        Collections.sort(projects, new Utils.SortCanAffordAndBuild(this.industry));
         for (Utils.ProjectData project : projects) {
             CustomPanelAPI megaStructPanel = Utils.addCustomButton(this.mPanel, project, this.industry, this.buttons, WIDTH, this);
             megaStructsElement.addCustom(megaStructPanel, 0f);
@@ -207,22 +206,5 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         plugin.setTextField(textField, 0, 0);
         tooltip.addTooltipTo(tip, panel, TooltipMakerAPI.TooltipLocation.BELOW);
         return tempField;
-    }
-
-    public static class SortCanAffordAndBuild implements Comparator<Utils.ProjectData> {
-        ConstructionGrid industry;
-
-        public SortCanAffordAndBuild(ConstructionGrid industry) {
-            this.industry = industry;
-        }
-
-        @Override
-        public int compare(Utils.ProjectData o1, Utils.ProjectData o2) {
-            return Boolean.compare(canAffordAndBuild(o1), canAffordAndBuild(o2));
-        }
-
-        public boolean canAffordAndBuild(Utils.ProjectData project) {
-            return !(Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= project.cost) || !this.industry.canBuildMegastructure(project.id);
-        }
     }
 }

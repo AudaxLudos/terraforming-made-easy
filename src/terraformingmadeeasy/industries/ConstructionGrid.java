@@ -26,28 +26,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
-public class ConstructionGrid extends TMEBaseIndustryTest {
+public class ConstructionGrid extends BaseDevelopmentIndustry {
     public Utils.OrbitData orbitData = null;
-
-    @Override
-    public void finishBuildingOrUpgrading() {
-        this.building = false;
-        this.buildProgress = 0;
-        this.buildTime = 1f;
-        this.isAICoreBuildTimeMultApplied = false;
-        if (this.project != null) {
-            log.info(String.format("Completion of %s megastructure in %s by %s", this.project.name, getMarket().getStarSystem().getName(), getCurrentName()));
-            completeProject();
-        } else {
-            buildingFinished();
-            reapply();
-        }
-    }
 
     @Override
     public void startUpgrading() {
         if (this.project != null && this.orbitData != null) {
-            log.info(String.format("Construction of %s megastructure in %s by %s", this.project.name, getMarket().getStarSystem().getName(), getCurrentName()));
             this.building = true;
             this.buildProgress = 0;
             this.aiCoreBuildProgressRemoved = 0f;
@@ -88,6 +72,17 @@ public class ConstructionGrid extends TMEBaseIndustryTest {
 
     @Override
     public void completeProject() {
+        log.info(String.format("Completion of %s megastructure in %s by %s", this.project.name, getMarket().getStarSystem().getName(), getCurrentName()));
+
+        buildMegastructure();
+        sendCompletedMessage();
+        this.project = null;
+        this.orbitData = null;
+        notifyBeingRemoved(MarketAPI.MarketInteractionMode.REMOTE, false);
+        this.market.removeIndustry(getId(), null, false);
+    }
+
+    public void buildMegastructure() {
         StarSystemAPI system = getMarket().getStarSystem();
         String customEntityId = this.project.id;
         SectorEntityToken orbitEntity = this.orbitData.entity;
@@ -168,12 +163,6 @@ public class ConstructionGrid extends TMEBaseIndustryTest {
             SectorEntityToken entity = system.addCustomEntity(null, null, customEntityId, Factions.NEUTRAL);
             entity.setCircularOrbit(orbitEntity, orbitAngle, orbitRadius, orbitDays);
         }
-
-        sendCompletedMessage();
-        this.project = null;
-        this.orbitData = null;
-        notifyBeingRemoved(MarketAPI.MarketInteractionMode.REMOTE, false);
-        this.market.removeIndustry(getId(), null, false);
     }
 
     @Override

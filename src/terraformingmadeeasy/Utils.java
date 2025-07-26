@@ -13,8 +13,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import terraformingmadeeasy.ids.TMEIds;
+import terraformingmadeeasy.industries.BaseDevelopmentIndustry;
+import terraformingmadeeasy.industries.BaseTerraformingIndustry;
 import terraformingmadeeasy.industries.ConstructionGrid;
-import terraformingmadeeasy.industries.TMEBaseIndustry;
 import terraformingmadeeasy.ui.dialogs.TMEBaseDialogDelegate;
 import terraformingmadeeasy.ui.plugins.SelectButtonPlugin;
 import terraformingmadeeasy.ui.tooltips.MegastructureTooltip;
@@ -30,16 +31,16 @@ import java.util.regex.Pattern;
 public class Utils {
     public static final String TERRAFORMING_OPTIONS_FILE = "data/campaign/terraforming_options.csv";
     public static final String MEGASTRUCTURE_OPTIONS_FILE = "data/campaign/megastructure_options.csv";
-    public static List<Utils.ModifiableCondition> AGRICULTURAL_LABORATORY_OPTIONS = new ArrayList<>();
-    public static List<Utils.ModifiableCondition> ATMOSPHERE_REGULATOR_OPTIONS = new ArrayList<>();
+    public static List<Utils.ProjectData> AGRICULTURAL_LABORATORY_OPTIONS = new ArrayList<>();
+    public static List<Utils.ProjectData> ATMOSPHERE_REGULATOR_OPTIONS = new ArrayList<>();
     public static List<Utils.ProjectData> CONSTRUCTION_GRID_OPTIONS = new ArrayList<>();
-    public static List<Utils.ModifiableCondition> ELEMENT_SYNTHESIZER_OPTIONS = new ArrayList<>();
-    public static List<Utils.ModifiableCondition> GEOMORPHOLOGY_STATION_OPTIONS = new ArrayList<>();
-    public static List<Utils.ModifiableCondition> MINERAL_REPLICATOR_OPTIONS = new ArrayList<>();
-    public static List<Utils.ModifiableCondition> PLANETARY_HOLOGRAM_OPTIONS = new ArrayList<>();
-    public static List<Utils.ModifiableCondition> STELLAR_MANUFACTORY_OPTIONS = new ArrayList<>();
-    public static List<Utils.ModifiableCondition> TERRESTRIAL_ENGINE_OPTIONS = new ArrayList<>();
-    public static List<Utils.ModifiableCondition> UNIFICATION_CENTER_OPTIONS = new ArrayList<>();
+    public static List<Utils.ProjectData> ELEMENT_SYNTHESIZER_OPTIONS = new ArrayList<>();
+    public static List<Utils.ProjectData> GEOMORPHOLOGY_STATION_OPTIONS = new ArrayList<>();
+    public static List<Utils.ProjectData> MINERAL_REPLICATOR_OPTIONS = new ArrayList<>();
+    public static List<Utils.ProjectData> PLANETARY_HOLOGRAM_OPTIONS = new ArrayList<>();
+    public static List<Utils.ProjectData> STELLAR_MANUFACTORY_OPTIONS = new ArrayList<>();
+    public static List<Utils.ProjectData> TERRESTRIAL_ENGINE_OPTIONS = new ArrayList<>();
+    public static List<Utils.ProjectData> UNIFICATION_CENTER_OPTIONS = new ArrayList<>();
     public static float BUILD_TIME_MULTIPLIER = 1.0f;
     public static float BUILD_COST_MULTIPLIER = 1.0f;
 
@@ -54,9 +55,6 @@ public class Utils {
             case "low":
             case "fast":
                 value = 0.5f;
-                break;
-            case "normal":
-                value = 1.0f;
                 break;
             case "high":
             case "slow":
@@ -104,6 +102,21 @@ public class Utils {
             }
         }
         return true;
+    }
+
+    public static boolean canAffordAndBuild(BaseDevelopmentIndustry industry, Utils.ProjectData project) {
+        boolean canAfford = Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= project.cost * Utils.BUILD_COST_MULTIPLIER;
+        boolean canBuild = true;
+        if (industry instanceof BaseTerraformingIndustry) {
+            boolean canBeRemoved = industry.getMarket().hasCondition(project.id);
+            canBuild = ((BaseTerraformingIndustry) industry).canTerraformCondition(project) || canBeRemoved;
+            if (industry.getMarket().getPlanetEntity().isGasGiant()) {
+                canBuild = canBuild && project.canChangeGasGiants;
+            }
+        } else if (industry instanceof ConstructionGrid) {
+            canBuild = ((ConstructionGrid) industry).canBuildMegastructure(project.id);
+        }
+        return !(canAfford && canBuild);
     }
 
     public static String[] getUniqueIds(String text) {
@@ -170,12 +183,12 @@ public class Utils {
         return value;
     }
 
-    public static List<Utils.ModifiableCondition> getPlanetaryHologramOptions() {
-        List<Utils.ModifiableCondition> options = new ArrayList<>();
+    public static List<Utils.ProjectData> getPlanetaryHologramOptions() {
+        List<Utils.ProjectData> options = new ArrayList<>();
         for (PlanetGenDataSpec pDataSpec : Global.getSettings().getAllSpecs(PlanetGenDataSpec.class)) {
             for (PlanetSpecAPI pSpec : Global.getSettings().getAllPlanetSpecs()) {
                 if (Objects.equals(pDataSpec.getId(), pSpec.getPlanetType())) {
-                    options.add(new Utils.ModifiableCondition(
+                    options.add(new Utils.ProjectData(
                             pDataSpec.getId(),
                             pSpec.getName(),
                             pSpec.getTexture(),
@@ -223,9 +236,9 @@ public class Utils {
         }
     }
 
-    public static List<Utils.ModifiableCondition> getTerraformingOptions(String industryId) {
+    public static List<Utils.ProjectData> getTerraformingOptions(String industryId) {
         try {
-            List<Utils.ModifiableCondition> modifiableConditions = new ArrayList<>();
+            List<Utils.ProjectData> projects = new ArrayList<>();
             JSONArray data = Global.getSettings().loadCSV(Utils.TERRAFORMING_OPTIONS_FILE);
             for (int i = 0; i < data.length(); i++) {
                 JSONObject row = data.getJSONObject(i);
@@ -252,7 +265,7 @@ public class Utils {
                 String hatedConditions = row.getString("hatedConditions").replaceAll("\\s", "").trim();
                 String planetSpecOverride = row.getString("planetSpecOverride").replaceAll("\\s", "").trim();
 
-                modifiableConditions.add(new Utils.ModifiableCondition(
+                projects.add(new Utils.ProjectData(
                         Global.getSettings().getMarketConditionSpec(conditionId),
                         cost,
                         buildTime,
@@ -263,7 +276,7 @@ public class Utils {
                         planetSpecOverride
                 ));
             }
-            return modifiableConditions;
+            return projects;
         } catch (IOException | JSONException e) {
             throw new RuntimeException(e);
         }
@@ -296,42 +309,24 @@ public class Utils {
     public static CustomPanelAPI addCustomButton(CustomPanelAPI panel, Object data, Object industry, List<ButtonAPI> buttons, float width, TMEBaseDialogDelegate delegate) {
         float columnOneWidth = width / 3f + 100f;
         float columnWidth = (width - columnOneWidth) / 2f;
-        float cost = 0;
-        int buildTime = 0;
-        boolean canAfford = true;
-        boolean canBuild = true;
-        boolean canBeRemoved = false;
-        boolean canAffordAndBuild = true;
-        String icon = "";
-        String name = "";
+
+        Utils.ProjectData project = (Utils.ProjectData) data;
+        String name = project.name;
+        String prefix = "";
+        String icon = project.icon;
+        float cost = Math.round(project.cost * Utils.BUILD_COST_MULTIPLIER);
+        float buildTime = Math.round(project.buildTime * Utils.BUILD_TIME_MULTIPLIER);
+        boolean canAfford = Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= cost;
+        boolean canAffordAndBuild = !Utils.canAffordAndBuild((BaseDevelopmentIndustry) industry, project);
         TooltipMakerAPI.TooltipCreator tooltip = null;
 
-        if (data instanceof Utils.ModifiableCondition) {
-            Utils.ModifiableCondition cond = (ModifiableCondition) data;
-            TMEBaseIndustry ind = (TMEBaseIndustry) industry;
-            cost = cond.cost;
-            buildTime = Math.round(cond.buildTime);
-            canAfford = Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= cost;
-            canBeRemoved = ind.getMarket().hasCondition(cond.id);
-            canBuild = ind.canTerraformCondition(cond) || canBeRemoved;
-            if (ind.getMarket().getPlanetEntity().isGasGiant()) {
-                canBuild = canBuild && cond.canChangeGasGiants;
-            }
-            canAffordAndBuild = canBuild && canAfford;
-            icon = cond.icon;
-            name = cond.name;
-            tooltip = new TerraformTooltip(cond, ind);
-        } else if (data instanceof Utils.ProjectData) {
-            Utils.ProjectData project = (Utils.ProjectData) data;
-            ConstructionGrid ind = (ConstructionGrid) industry;
-            cost = project.cost;
-            buildTime = Math.round(project.buildTime);
-            canAfford = Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= cost;
-            canBuild = ind.canBuildMegastructure(project.id);
-            canAffordAndBuild = canBuild && canAfford;
-            icon = project.icon;
-            name = project.name;
+        if (industry instanceof ConstructionGrid) {
+            prefix = "Construct ";
             tooltip = new MegastructureTooltip(project);
+        } else if (industry instanceof BaseTerraformingIndustry) {
+            BaseTerraformingIndustry ind = (BaseTerraformingIndustry) industry;
+            prefix = ind.getMarket().hasCondition(project.id) ? "Remove " : "Add ";
+            tooltip = new TerraformTooltip(project, ind);
         }
 
         CustomPanelAPI optionPanel = panel.createCustomPanel(width, 44f, new SelectButtonPlugin(delegate));
@@ -345,19 +340,18 @@ public class Utils {
 
         TooltipMakerAPI optionNameElement = optionPanel.createUIElement(columnOneWidth, 40f, false);
         TooltipMakerAPI optionImage = optionNameElement.beginImageWithText(icon, 40f);
-        String addOrRemoveText = canBeRemoved ? "Remove " : "Add ";
-        optionImage.addPara(addOrRemoveText + name, canAffordAndBuild ? Misc.getBasePlayerColor() : Misc.getNegativeHighlightColor(), 0f);
+        optionImage.addPara(prefix + name, canAffordAndBuild ? Misc.getBasePlayerColor() : Misc.getNegativeHighlightColor(), 0f);
         optionNameElement.addImageWithText(0f);
         optionNameElement.getPosition().setXAlignOffset(-8f).setYAlignOffset(2f);
         optionPanel.addUIElement(optionNameElement);
 
         TooltipMakerAPI optionBuildTimeElement = optionPanel.createUIElement(columnWidth, 40f, false);
-        optionBuildTimeElement.addPara(Math.round(buildTime * BUILD_TIME_MULTIPLIER) + "", Misc.getHighlightColor(), 12f).setAlignment(Alignment.MID);
+        optionBuildTimeElement.addPara(Misc.getWithDGS(buildTime), Misc.getHighlightColor(), 12f).setAlignment(Alignment.MID);
         optionBuildTimeElement.getPosition().rightOfMid(optionNameElement, 0f);
         optionPanel.addUIElement(optionBuildTimeElement);
 
         TooltipMakerAPI optionCostElement = optionPanel.createUIElement(columnWidth, 40f, false);
-        optionCostElement.addPara(Misc.getDGSCredits(cost * BUILD_COST_MULTIPLIER), canAfford ? Misc.getHighlightColor() : Misc.getNegativeHighlightColor(), 12f).setAlignment(Alignment.MID);
+        optionCostElement.addPara(Misc.getDGSCredits(cost), canAfford ? Misc.getHighlightColor() : Misc.getNegativeHighlightColor(), 12f).setAlignment(Alignment.MID);
         optionCostElement.getPosition().rightOfMid(optionBuildTimeElement, 0f);
         optionPanel.addUIElement(optionCostElement);
 
@@ -368,22 +362,16 @@ public class Utils {
         return optionPanel;
     }
 
-    public static class BuildableMegastructure {
-        public String id;
-        public String name;
-        public String icon;
-        public float cost;
-        public float buildTime;
+    public static class SortCanAffordAndBuild implements Comparator<Utils.ProjectData> {
+        BaseDevelopmentIndustry industry;
 
-        public BuildableMegastructure(CustomEntitySpecAPI spec, float cost, float buildTime) {
-            this.id = spec.getId();
-            this.name = spec.getDefaultName();
-            this.icon = "graphics/illustrations/bombardment_saturation.jpg";
-            if (spec.getInteractionImage() != null) {
-                this.icon = spec.getInteractionImage();
-            }
-            this.cost = cost;
-            this.buildTime = buildTime;
+        public SortCanAffordAndBuild(BaseDevelopmentIndustry industry) {
+            this.industry = industry;
+        }
+
+        @Override
+        public int compare(Utils.ProjectData o1, Utils.ProjectData o2) {
+            return Boolean.compare(canAffordAndBuild(this.industry, o1), canAffordAndBuild(this.industry, o2));
         }
     }
 
@@ -401,7 +389,7 @@ public class Utils {
         }
     }
 
-    public static class ModifiableCondition {
+    public static class ProjectData {
         public String id;
         public String name;
         public String icon;
@@ -412,40 +400,6 @@ public class Utils {
         public String likedIndustries;
         public String hatedConditions;
         public String planetSpecOverride;
-
-        public ModifiableCondition(MarketConditionSpecAPI spec, float cost, float buildTime, boolean canChangeGasGiants, String likedConditions, String likedIndustries, String hatedConditions, String planetSpecOverride) {
-            this.id = spec.getId();
-            this.name = spec.getName();
-            this.icon = spec.getIcon();
-            this.cost = cost;
-            this.buildTime = buildTime;
-            this.canChangeGasGiants = canChangeGasGiants;
-            this.likedConditions = likedConditions;
-            this.likedIndustries = likedIndustries;
-            this.hatedConditions = hatedConditions;
-            this.planetSpecOverride = planetSpecOverride;
-        }
-
-        public ModifiableCondition(String id, String name, String icon, float cost, float buildTime, boolean canChangeGasGiants, String likedConditions, String likedIndustries, String hatedConditions, String planetSpecOverride) {
-            this.id = id;
-            this.name = name;
-            this.icon = icon;
-            this.cost = cost;
-            this.buildTime = buildTime;
-            this.canChangeGasGiants = canChangeGasGiants;
-            this.likedConditions = likedConditions;
-            this.likedIndustries = likedIndustries;
-            this.hatedConditions = hatedConditions;
-            this.planetSpecOverride = planetSpecOverride;
-        }
-    }
-
-    public static class ProjectData {
-        public String id;
-        public String name;
-        public String icon;
-        public float cost;
-        public float buildTime;
 
         public ProjectData(String id, String name, String icon, float cost, float buildTime) {
             this.id = id;
@@ -465,17 +419,13 @@ public class Utils {
             this.cost = cost;
             this.buildTime = buildTime;
         }
-    }
 
-    public static class ProjectConditionData extends ProjectData {
-        public boolean canChangeGasGiants;
-        public String likedConditions;
-        public String likedIndustries;
-        public String hatedConditions;
-        public String planetSpecOverride;
-
-        public ProjectConditionData(MarketConditionSpecAPI spec, float cost, float buildTime, boolean canChangeGasGiants, String likedConditions, String likedIndustries, String hatedConditions, String planetSpecOverride) {
-            super(spec.getId(), spec.getName(), spec.getIcon(), cost ,buildTime);
+        public ProjectData(MarketConditionSpecAPI spec, float cost, float buildTime, boolean canChangeGasGiants, String likedConditions, String likedIndustries, String hatedConditions, String planetSpecOverride) {
+            this.id = spec.getId();
+            this.name = spec.getName();
+            this.icon = spec.getIcon();
+            this.cost = cost;
+            this.buildTime = buildTime;
             this.canChangeGasGiants = canChangeGasGiants;
             this.likedConditions = likedConditions;
             this.likedIndustries = likedIndustries;
@@ -483,8 +433,12 @@ public class Utils {
             this.planetSpecOverride = planetSpecOverride;
         }
 
-        public ProjectConditionData(String id, String name, String icon, float cost, float buildTime, boolean canChangeGasGiants, String likedConditions, String likedIndustries, String hatedConditions, String planetSpecOverride) {
-            super(id, name, icon, cost ,buildTime);
+        public ProjectData(String id, String name, String icon, float cost, float buildTime, boolean canChangeGasGiants, String likedConditions, String likedIndustries, String hatedConditions, String planetSpecOverride) {
+            this.id = id;
+            this.name = name;
+            this.icon = icon;
+            this.cost = cost;
+            this.buildTime = buildTime;
             this.canChangeGasGiants = canChangeGasGiants;
             this.likedConditions = likedConditions;
             this.likedIndustries = likedIndustries;

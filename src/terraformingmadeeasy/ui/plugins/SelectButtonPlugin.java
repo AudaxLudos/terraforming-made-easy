@@ -2,7 +2,6 @@ package terraformingmadeeasy.ui.plugins;
 
 import com.fs.starfarer.api.campaign.BaseCustomUIPanelPlugin;
 import com.fs.starfarer.api.ui.ButtonAPI;
-import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.ui.dialogs.MegastructureDialogDelegate;
 import terraformingmadeeasy.ui.dialogs.TMEBaseDialogDelegate;
 

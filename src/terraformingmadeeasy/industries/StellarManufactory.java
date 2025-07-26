@@ -2,7 +2,6 @@ package terraformingmadeeasy.industries;
 
 import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
-import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.impl.campaign.ids.Entities;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.util.Misc;
@@ -11,45 +10,23 @@ import terraformingmadeeasy.ids.TMEIds;
 
 import java.util.List;
 
-public class StellarManufactory extends TMEBaseIndustry {
-    public StellarManufactory() {
-        setModifiableConditions(Utils.STELLAR_MANUFACTORY_OPTIONS);
-    }
-
-    @Override
-    public void finishBuildingOrUpgrading() {
-        this.building = false;
-        this.buildProgress = 0;
-        this.buildTime = 1f;
-        this.aiCoreBuildProgressRemoved = 0f;
-        this.isAICoreBuildTimeMultApplied = false;
-        if (this.modifiableCondition != null) {
-            log.info(String.format("Completed %s %s condition in %s by %s", !this.market.hasCondition(this.modifiableCondition.id) ? "Adding" : "Removing", this.modifiableCondition.name, getMarket().getName(), getCurrentName()));
-            sendCompletedMessage();
-            float randomAngle = Misc.random.nextFloat() * 360f;
-            addSolarMirrors(randomAngle);
-            addSolarShades(randomAngle);
-            terraformPlanet();
-            updatePlanetConditions();
-            String category = evaluatePlanetCategory();
-            String type = evaluatePlanetType(category);
-            updatePlanetVisuals(type);
-            reapply();
-            // Force reapply demands and supply
-            for (Industry ind : this.market.getIndustries()) {
-                ind.doPreSaveCleanup();
-                ind.doPostSaveRestore();
-            }
-            this.modifiableCondition = null;
-        } else {
-            buildingFinished();
-            reapply();
-        }
-    }
-
+public class StellarManufactory extends BaseTerraformingIndustry {
     @Override
     public String getAOTDVOKTechId() {
         return TMEIds.STELLAR_MANUFACTORY_TECH;
+    }
+
+    @Override
+    public List<Utils.ProjectData> getProjects() {
+        return Utils.STELLAR_MANUFACTORY_OPTIONS;
+    }
+
+    @Override
+    public void completeProject() {
+        super.completeProject();
+        float randomAngle = Misc.random.nextFloat() * 360f;
+        addSolarMirrors(randomAngle);
+        addSolarShades(randomAngle);
     }
 
     public void addSolarMirrors(float randAngle) {

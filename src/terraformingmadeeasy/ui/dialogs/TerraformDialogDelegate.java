@@ -1,25 +1,23 @@
 package terraformingmadeeasy.ui.dialogs;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import org.lwjgl.util.vector.Vector2f;
 import terraformingmadeeasy.Utils;
-import terraformingmadeeasy.industries.TMEBaseIndustry;
+import terraformingmadeeasy.industries.BaseTerraformingIndustry;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
-    public TMEBaseIndustry industry;
+    public BaseTerraformingIndustry industry;
 
-    public TerraformDialogDelegate(float width, float height, Industry industry) {
+    public TerraformDialogDelegate(float width, float height, BaseTerraformingIndustry industry) {
         WIDTH = width;
         HEIGHT = height;
-        this.industry = (TMEBaseIndustry) industry;
+        this.industry = industry;
     }
 
     @SuppressWarnings("RedundantArrayCreation")
@@ -48,9 +46,9 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
         conditionsPanel.addUIElement(conditionsHeader);
 
         TooltipMakerAPI conditionsBody = conditionsPanel.createUIElement(WIDTH, rowHeight - 22f, true);
-        List<Utils.ModifiableCondition> conditions = this.industry.getModifiableConditions();
-        Collections.sort(conditions, new SortCanAffordAndBuild(this.industry));
-        for (Utils.ModifiableCondition condition : conditions) {
+        List<Utils.ProjectData> projects = this.industry.getProjects();
+        Collections.sort(projects, new Utils.SortCanAffordAndBuild(this.industry));
+        for (Utils.ProjectData condition : projects) {
             CustomPanelAPI conditionPanel = Utils.addCustomButton(panel, condition, this.industry, this.buttons, WIDTH, this);
             conditionsBody.addCustom(conditionPanel, 0f);
         }
@@ -75,33 +73,10 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
         if (this.selected == null) {
             return;
         }
-        Utils.ModifiableCondition selectedCondition = (Utils.ModifiableCondition) this.selected;
-        this.industry.setModifiableCondition(selectedCondition);
+        Utils.ProjectData selectedProject = (Utils.ProjectData) this.selected;
+        this.industry.setProject(selectedProject);
         this.industry.startUpgrading();
-        Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(selectedCondition.cost * Utils.BUILD_COST_MULTIPLIER);
+        Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(selectedProject.cost * Utils.BUILD_COST_MULTIPLIER);
         Global.getSoundPlayer().playSound("ui_upgrade_industry", 1f, 1f, Global.getSoundPlayer().getListenerPos(), new Vector2f());
-    }
-
-    public static class SortCanAffordAndBuild implements Comparator<Utils.ModifiableCondition> {
-        TMEBaseIndustry industry;
-
-        public SortCanAffordAndBuild(TMEBaseIndustry industry) {
-            this.industry = industry;
-        }
-
-        @Override
-        public int compare(Utils.ModifiableCondition o1, Utils.ModifiableCondition o2) {
-            return Boolean.compare(canAffordAndBuild(o1), canAffordAndBuild(o2));
-        }
-
-        public boolean canAffordAndBuild(Utils.ModifiableCondition condition) {
-            boolean canAfford = Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= condition.cost;
-            boolean canBeRemoved = this.industry.getMarket().hasCondition(condition.id);
-            boolean canBuild = this.industry.canTerraformCondition(condition) || canBeRemoved;
-            if (this.industry.getMarket().getPlanetEntity().isGasGiant()) {
-                canBuild = canBuild && condition.canChangeGasGiants;
-            }
-            return !(canBuild && canAfford);
-        }
     }
 }
