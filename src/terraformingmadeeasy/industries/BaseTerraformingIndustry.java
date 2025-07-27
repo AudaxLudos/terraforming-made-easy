@@ -48,8 +48,8 @@ public class BaseTerraformingIndustry extends BaseDevelopmentIndustry {
     public void completeProject() {
         log.info(String.format("Completed %s %s condition in %s by %s", !this.market.hasCondition(this.project.id) ? "Adding" : "Removing", this.project.name, getMarket().getName(), getCurrentName()));
 
-        terraformPlanet();
         sendCompletedMessage();
+        terraformPlanet();
         updatePlanetConditions();
         String category = evaluatePlanetCategory();
         String type = evaluatePlanetType(category);

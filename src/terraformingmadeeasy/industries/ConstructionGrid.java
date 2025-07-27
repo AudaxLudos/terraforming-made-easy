@@ -74,8 +74,8 @@ public class ConstructionGrid extends BaseDevelopmentIndustry {
     public void completeProject() {
         log.info(String.format("Completion of %s megastructure in %s by %s", this.project.name, getMarket().getStarSystem().getName(), getCurrentName()));
 
-        buildMegastructure();
         sendCompletedMessage();
+        buildMegastructure();
         this.project = null;
         this.orbitData = null;
         notifyBeingRemoved(MarketAPI.MarketInteractionMode.REMOTE, false);
