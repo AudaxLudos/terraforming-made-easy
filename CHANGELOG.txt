@@ -1,3 +1,25 @@
+### 2.8.0
+- Release 2.8.0
+- Add dialog delegate credits tooltip
+- Add planetary hologram specific texts
+- Fix completed message showing wrong result
+- Update base industry implementation
+- Update construction grid implementation
+- Fix cancel button refund cost applying wrong value
+- Fix terraforming cancel button showing wrong text and description
+- Update build time mult ai core effect implementation
+- Update build time and cost setting implementation
+- Hide old megastructure options list
+- Hide old terraforming options list
+- Add custom codex desc for construction grid
+- Show tme conditions in codex
+- Show megastructure options in codex for construction grid
+- Add tooltip for terraforming options in codex entries
+- Replace auto generated codex entries for structures with custom entries
+- Update industry tooltip to not be expandable
+- Ensure undesirable planet types are removed when evaluating category
+- Use vanilla methods to display terraforming options list
+
 ### 2.6.5j
 - Release 2.6.5j
 - Fix death world marine training script not working when reloading save
