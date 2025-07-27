@@ -1,3 +1,7 @@
+### 2.8.0a
+- Release 2.8.0a
+- Update Jar file
+
 ### 2.8.0
 - Release 2.8.0
 - Add dialog delegate credits tooltip
