@@ -2,6 +2,7 @@ package terraformingmadeeasy;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomEntitySpecAPI;
+import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.campaign.PlanetSpecAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.characters.MarketConditionSpecAPI;
@@ -16,6 +17,7 @@ import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.industries.BaseDevelopmentIndustry;
 import terraformingmadeeasy.industries.BaseTerraformingIndustry;
 import terraformingmadeeasy.industries.ConstructionGrid;
+import terraformingmadeeasy.industries.PlanetaryHologram;
 import terraformingmadeeasy.ui.dialogs.TMEBaseDialogDelegate;
 import terraformingmadeeasy.ui.plugins.SelectButtonPlugin;
 import terraformingmadeeasy.ui.tooltips.MegastructureTooltip;
@@ -313,6 +315,7 @@ public class Utils {
         Utils.ProjectData project = (Utils.ProjectData) data;
         String name = project.name;
         String prefix = "";
+        String suffix = "";
         String icon = project.icon;
         float cost = Math.round(project.cost * Utils.BUILD_COST_MULTIPLIER);
         float buildTime = Math.round(project.buildTime * Utils.BUILD_TIME_MULTIPLIER);
@@ -326,6 +329,10 @@ public class Utils {
         } else if (industry instanceof BaseTerraformingIndustry) {
             BaseTerraformingIndustry ind = (BaseTerraformingIndustry) industry;
             prefix = ind.getMarket().hasCondition(project.id) ? "Remove " : "Add ";
+            if (Objects.equals(ind.getId(), TMEIds.PLANETARY_HOLOGRAM)) {
+                prefix = "Set Visual to ";
+                suffix = " World";
+            }
             tooltip = new TerraformTooltip(project, ind);
         }
 
@@ -340,7 +347,7 @@ public class Utils {
 
         TooltipMakerAPI optionNameElement = optionPanel.createUIElement(columnOneWidth, 40f, false);
         TooltipMakerAPI optionImage = optionNameElement.beginImageWithText(icon, 40f);
-        optionImage.addPara(prefix + name, canAffordAndBuild ? Misc.getBasePlayerColor() : Misc.getNegativeHighlightColor(), 0f);
+        optionImage.addPara(prefix + name + suffix, canAffordAndBuild ? Misc.getBasePlayerColor() : Misc.getNegativeHighlightColor(), 0f);
         optionNameElement.addImageWithText(0f);
         optionNameElement.getPosition().setXAlignOffset(-8f).setYAlignOffset(2f);
         optionPanel.addUIElement(optionNameElement);

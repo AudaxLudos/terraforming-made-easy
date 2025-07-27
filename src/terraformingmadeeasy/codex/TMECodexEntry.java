@@ -134,11 +134,18 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
         String optionCostText = "One-time cost to begin terraforming project, in credits";
         if (Objects.equals(this.id, TMEIds.CONSTRUCTION_GRID)) {
             optionsText = "Megastructure";
-            optionsDesc = "A construction grid can only be used once. When a megastructure project is completed, the construction grid is consumed.";
+            optionsDesc = "The construction grid can only be used once. Once a megastructure project is completed, the structure is used and the megastructure is created.";
             optionNameText = "Name of megastructure to build";
             optionDurationText = "Build time, in days. Until the megastructure project finishes.";
             optionCostText = "One-time cost to begin megastructure project, in credits";
+        } else if (Objects.equals(this.id, TMEIds.PLANETARY_HOLOGRAM)) {
+            optionsText = "Visual";
+            optionsDesc = "A planet's visual can be changed at any time. Removing the structure will revert the planet's visual to its original state.";
+            optionNameText = "Name of planet type to change into";
+            optionDurationText = "Build time, in days. Until a planet's visual changes.";
+            optionCostText = "One-time cost to change a planet's visual, in credits";
         }
+
         tooltip.addSectionHeading(optionsText + " Options", Alignment.MID, initPad);
         tooltip.addPara(optionsDesc, initPad);
         tooltip.addSpacer(oPad);

@@ -6,10 +6,12 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import org.lwjgl.util.vector.Vector2f;
 import terraformingmadeeasy.Utils;
+import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.industries.BaseTerraformingIndustry;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
     public BaseTerraformingIndustry industry;
@@ -32,15 +34,24 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
         float columnWidth = (WIDTH - columnOneWidth) / 2f;
         float rowHeight = 440f;
 
+        String optionNameText = "Name of the condition to terraform on a planet";
+        String optionDurationText = "Build time, in days. Until the terraforming project finishes.";
+        String optionCostText = "One-time cost to begin terraforming project, in credits";
+        if (Objects.equals(this.industry.getId(), TMEIds.PLANETARY_HOLOGRAM)) {
+            optionNameText = "Name of planet type to change into";
+            optionDurationText = "Build time, in days. Until a planet's visual changes.";
+            optionCostText = "One-time cost to change a planet's visual, in credits";
+        }
+
         // Terraforming options selection area
         CustomPanelAPI conditionsPanel = panel.createCustomPanel(WIDTH, rowHeight, null);
         TooltipMakerAPI conditionsHeader = conditionsPanel.createUIElement(WIDTH, rowHeight, false);
         conditionsHeader.beginTable(Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(),
                 0f, false, true,
                 new Object[]{"Name", columnOneWidth, "Build time", columnWidth, "Cost", columnWidth - 6f});
-        conditionsHeader.addTableHeaderTooltip(0, "Name of the condition to terraform on a planet");
-        conditionsHeader.addTableHeaderTooltip(1, "Build time, in days. Until the terraforming project finishes.");
-        conditionsHeader.addTableHeaderTooltip(2, "One-time cost to begin terraforming project, in credits");
+        conditionsHeader.addTableHeaderTooltip(0, optionNameText);
+        conditionsHeader.addTableHeaderTooltip(1, optionDurationText);
+        conditionsHeader.addTableHeaderTooltip(2, optionCostText);
         conditionsHeader.addTable("", 0, 0f);
         conditionsHeader.getPrev().getPosition().setXAlignOffset(0f);
         conditionsPanel.addUIElement(conditionsHeader);

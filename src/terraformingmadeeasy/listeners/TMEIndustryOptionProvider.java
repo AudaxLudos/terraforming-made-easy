@@ -44,6 +44,31 @@ public class TMEIndustryOptionProvider extends BaseIndustryOptionProvider {
         }
     }
 
+    @Override
+    public List<IndustryOptionData> getIndustryOptions(Industry ind) {
+        if (isUnsuitable(ind, false)) {
+            return null;
+        }
+        List<IndustryOptionData> result = new ArrayList<>();
+
+        String isNotUpgradingText = "Terraform planet...";
+        String isUpgradingText = "Cancel terraforming project...";
+        if (Objects.equals(ind.getId(), TMEIds.CONSTRUCTION_GRID)) {
+            isNotUpgradingText = "Build megastructure...";
+            isUpgradingText = "Cancel megastructure project...";
+        } else if (Objects.equals(ind.getId(), TMEIds.PLANETARY_HOLOGRAM)) {
+            isNotUpgradingText = "Change planet visual...";
+            isUpgradingText = "Cancel planet visual change...";
+        }
+
+        String text = ind.isUpgrading() ? isUpgradingText : isNotUpgradingText;
+        IndustryOptionData opt = new IndustryOptionData(text, CUSTOM_PLUGIN, ind, this);
+        result.add(opt);
+
+        return result;
+    }
+
+    @Override
     public boolean isUnsuitable(Industry ind, boolean allowUnderConstruction) {
         return (super.isUnsuitable(ind, allowUnderConstruction) || !isSuitable(ind));
     }
@@ -54,31 +79,9 @@ public class TMEIndustryOptionProvider extends BaseIndustryOptionProvider {
         return isTMEIndustry && isPlayerOwned;
     }
 
-    public List<IndustryOptionData> getIndustryOptions(Industry ind) {
-        if (isUnsuitable(ind, false)) {
-            return null;
-        }
-        List<IndustryOptionData> result = new ArrayList<>();
-
-        String isNotUpgradingText = "Terraform planet...";
-        String isUpgradingText = "Cancel terraforming project...";
-        if (Objects.equals(ind.getId(), TMEIds.CONSTRUCTION_GRID)) {
-            isNotUpgradingText = "Build a megastructure...";
-            isUpgradingText = "Cancel the megastructure project...";
-        } else if (Objects.equals(ind.getId(), TMEIds.PLANETARY_HOLOGRAM)) {
-            isNotUpgradingText = "Change planet visual...";
-            isUpgradingText = "Cancel the planet visual change...";
-        }
-
-        String text = ind.isUpgrading() ? isUpgradingText : isNotUpgradingText;
-        IndustryOptionData opt = new IndustryOptionData(text, CUSTOM_PLUGIN, ind, this);
-        result.add(opt);
-
-        return result;
-    }
-
+    @Override
     public void createTooltip(IndustryOptionData opt, TooltipMakerAPI tooltip, float width) {
-        String description = "A specialized industry capable of removing and adding hazard conditions of a planet.";
+        String description = "A specialized industry capable of removing and adding planetary conditions of a planet.";
         String refundText = "Cancel the terraforming project for a %s refund.";
         float refundCost = 0;
         if (Objects.equals(opt.ind.getId(), TMEIds.CONSTRUCTION_GRID)) {
@@ -105,6 +108,7 @@ public class TMEIndustryOptionProvider extends BaseIndustryOptionProvider {
         }
     }
 
+    @Override
     public void optionSelected(IndustryOptionData opt, DialogCreatorUI ui) {
         if (opt.id == CUSTOM_PLUGIN && Objects.equals(opt.ind.getId(), TMEIds.CONSTRUCTION_GRID)) {
             if (!opt.ind.isUpgrading()) {
