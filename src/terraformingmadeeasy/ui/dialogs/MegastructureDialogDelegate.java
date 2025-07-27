@@ -9,10 +9,7 @@ import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.industries.ConstructionGrid;
 import terraformingmadeeasy.ui.plugins.DropDownPlugin;
 import terraformingmadeeasy.ui.plugins.TextFieldPlugin;
-import terraformingmadeeasy.ui.tooltips.OrbitDaysFieldTooltip;
-import terraformingmadeeasy.ui.tooltips.OrbitFocusFieldTooltip;
-import terraformingmadeeasy.ui.tooltips.OrbitRadiusFieldTooltip;
-import terraformingmadeeasy.ui.tooltips.StartingAngleFieldTooltip;
+import terraformingmadeeasy.ui.tooltips.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -156,11 +153,17 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         this.orbitDaysField = addCustomTextField(orbitDaysPanel, orbitDaysElement, this.orbitDaysField, "Orbit Days", "100", 7, orbitDaysPlugin, new OrbitDaysFieldTooltip());
         orbitDaysPlugin.setTextField(this.orbitDaysField, 0, 0);
 
-        // Display player credits
+        // Show player credits
         TooltipMakerAPI creditsElement = this.mPanel.createUIElement(WIDTH, 0f, false);
-        creditsElement.setParaSmallInsignia();
-        creditsElement.addPara("Credits: %s", 0f, Misc.getGrayColor(), Misc.getHighlightColor(),
+        TooltipMakerAPI creditsSubElement = creditsElement.beginSubTooltip(380f);
+        creditsSubElement.setParaSmallInsignia();
+        LabelAPI creditsLabel = creditsSubElement.addPara("Credits: %s", 3f, Misc.getGrayColor(), Misc.getHighlightColor(),
                 Misc.getWithDGS(Global.getSector().getPlayerFleet().getCargo().getCredits().get()));
+        creditsLabel.setHighlightOnMouseover(true);
+        creditsLabel.getPosition().setXAlignOffset(0f);
+        creditsElement.endSubTooltip();
+        creditsElement.addCustom(creditsSubElement, 0f);
+        creditsElement.addTooltipToPrevious(new TextTooltip("Credits available"), TooltipMakerAPI.TooltipLocation.ABOVE);
         this.mPanel.addUIElement(creditsElement).inBL(0f, -32f);
     }
 

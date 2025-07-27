@@ -2,12 +2,14 @@ package terraformingmadeeasy.ui.dialogs;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
+import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import org.lwjgl.util.vector.Vector2f;
 import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.industries.BaseTerraformingIndustry;
+import terraformingmadeeasy.ui.tooltips.TextTooltip;
 
 import java.util.Collections;
 import java.util.List;
@@ -68,9 +70,15 @@ public class TerraformDialogDelegate extends TMEBaseDialogDelegate {
 
         // Show player credits
         TooltipMakerAPI creditsElement = panel.createUIElement(WIDTH, 0f, false);
-        creditsElement.setParaSmallInsignia();
-        creditsElement.addPara("Credits: %s", 0f, Misc.getGrayColor(), Misc.getHighlightColor(),
+        TooltipMakerAPI creditsSubElement = creditsElement.beginSubTooltip(380f);
+        creditsSubElement.setParaSmallInsignia();
+        LabelAPI creditsLabel = creditsSubElement.addPara("Credits: %s", 3f, Misc.getGrayColor(), Misc.getHighlightColor(),
                 Misc.getWithDGS(Global.getSector().getPlayerFleet().getCargo().getCredits().get()));
+        creditsLabel.setHighlightOnMouseover(true);
+        creditsLabel.getPosition().setXAlignOffset(0f);
+        creditsElement.endSubTooltip();
+        creditsElement.addCustom(creditsSubElement, 0f);
+        creditsElement.addTooltipToPrevious(new TextTooltip("Credits available"), TooltipMakerAPI.TooltipLocation.ABOVE);
         panel.addUIElement(creditsElement).inBL(0f, -32f);
     }
 
