@@ -27,14 +27,27 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
     protected UIPanelAPI box;
     protected CodexDialogAPI codex;
     protected IndustrySpecAPI spec;
+    protected List<Utils.ProjectData> projects;
 
     public TMECodexEntry(String id, String title, String icon, Object param, Object param2) {
         super(id, title, icon, param);
-        this.param2 = param2;
         this.spec = (IndustrySpecAPI) this.param;
+        this.param2 = param2;
+        this.projects = Utils.castList(param2, Utils.ProjectData.class);
+
+        for (Utils.ProjectData project : this.projects) {
+            if (Objects.equals(this.spec.getId(), TMEIds.PLANETARY_HOLOGRAM)) {
+                addRelatedEntry(CodexDataV2.getPlanetEntryId(project.id));
+            } else if (Objects.equals(this.spec.getId(), TMEIds.CONSTRUCTION_GRID)) {
+                // No codex data exists for project
+                return;
+            } else {
+                addRelatedEntry(CodexDataV2.getConditionEntryId(project.id));
+            }
+        }
     }
 
-    public static TMECodexEntry replaceTMEIndustryCodex(String industryId, Object options) {
+    public static void replaceTMEIndustryCodex(String industryId, Object options) {
         IndustrySpecAPI spec = Global.getSettings().getIndustrySpec(industryId);
 
         // Remove existing entry from parent
@@ -47,8 +60,6 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
         TMECodexEntry codexEntry = new TMECodexEntry(spec.getId(), spec.getName(), spec.getImageName(), spec, options);
         parentEntry.addChild(codexEntry);
         CodexDataV2.ENTRIES.put(entryId, codexEntry);
-
-        return codexEntry;
     }
 
     @Override
@@ -166,12 +177,9 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
         conditionsPanel.getPosition().setSize(tw, conditionsHeader.getHeightSoFar() + conditionsPanel.getPosition().getHeight());
 
         TooltipMakerAPI conditionsBody = conditionsPanel.createUIElement(tw, 0, false);
-        if (this.param2 instanceof List<?>) {
-            List<?> options = (List<?>) this.param2;
-            for (Object option : options) {
-                CustomPanelAPI conditionPanel = addOptionInfo(panel, option, this.spec.getId(), tw);
-                conditionsBody.addCustom(conditionPanel, 0f);
-            }
+        for (Utils.ProjectData project : this.projects) {
+            CustomPanelAPI conditionPanel = addOptionInfo(panel, project, this.spec.getId(), tw);
+            conditionsBody.addCustom(conditionPanel, 0f);
         }
 
         conditionsPanel.addUIElement(conditionsBody);
