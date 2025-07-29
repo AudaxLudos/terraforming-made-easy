@@ -232,7 +232,6 @@ public class Utils {
                         cost,
                         buildTime));
             }
-            System.out.println(projects);
             return projects;
         } catch (IOException | JSONException e) {
             throw new RuntimeException(e);

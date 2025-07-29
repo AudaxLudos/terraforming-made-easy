@@ -175,11 +175,6 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
     @Override
     public void customDialogConfirm() {
         if (this.selected == null || this.orbitFocusField == null || this.startingAngleField == null || this.orbitRadiusField == null || this.orbitDaysField == null) {
-            System.out.println(this.selected);
-            System.out.println(this.orbitFocusField);
-            System.out.println(this.startingAngleField);
-            System.out.println(this.orbitRadiusField);
-            System.out.println(this.orbitDaysField);
             return;
         }
 
