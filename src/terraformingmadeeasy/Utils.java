@@ -2,14 +2,12 @@ package terraformingmadeeasy;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomEntitySpecAPI;
-import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.campaign.PlanetSpecAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.characters.MarketConditionSpecAPI;
 import com.fs.starfarer.api.impl.campaign.procgen.PlanetGenDataSpec;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
-import com.fs.starfarer.api.util.MutableValue;
 import lunalib.lunaSettings.LunaSettings;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,7 +16,6 @@ import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.industries.BaseDevelopmentIndustry;
 import terraformingmadeeasy.industries.BaseTerraformingIndustry;
 import terraformingmadeeasy.industries.ConstructionGrid;
-import terraformingmadeeasy.industries.PlanetaryHologram;
 import terraformingmadeeasy.ui.dialogs.TMEBaseDialogDelegate;
 import terraformingmadeeasy.ui.plugins.SelectButtonPlugin;
 import terraformingmadeeasy.ui.tooltips.MegastructureTooltip;
@@ -285,7 +282,7 @@ public class Utils {
     }
 
     public static <T> List<T> castList(Object obj, Class<T> clazz) {
-        List<T> result = new ArrayList<T>();
+        List<T> result = new ArrayList<>();
         if (obj instanceof List<?>) {
             for (Object o : (List<?>) obj) {
                 result.add(clazz.cast(o));
