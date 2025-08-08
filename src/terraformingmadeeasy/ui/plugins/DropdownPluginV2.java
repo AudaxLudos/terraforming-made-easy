@@ -45,7 +45,7 @@ public class DropdownPluginV2 extends BaseCustomUIPanelPlugin {
         this.label.getPosition().inTL(10f, yPad);
 
         this.menuPanel = this.dropdownPanel.createCustomPanel(width, height * 4f, null);
-        TooltipMakerAPI menuElement = this.menuPanel.createUIElement(width, height * 4f, true);
+        TooltipMakerAPI menuElement = this.menuPanel.createUIElement(width, height * 3.5f - 1f, true);
         for (Map.Entry<String, Object> entry : this.options.entrySet()) {
             CustomPanelAPI optionPanel = this.menuPanel.createCustomPanel(width, height, this);
 
@@ -75,17 +75,20 @@ public class DropdownPluginV2 extends BaseCustomUIPanelPlugin {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ZERO);
 
-        GL11.glColor4ub((byte) color.getRed(),
-                (byte) color.getGreen(),
-                (byte) color.getBlue(),
-                (byte) ((float) color.getAlpha() * alphaMult));
+        GL11.glColor4f(
+                color.getRed() / 255f,
+                color.getGreen() / 255f,
+                color.getBlue() / 255f,
+                (color.getAlpha() / 255f) * alphaMult
+        );
         GL11.glLineWidth(thickness);
         GL11.glBegin(GL11.GL_LINE_LOOP);
         {
-            GL11.glVertex2f(x, y);
-            GL11.glVertex2f(x, y + height);
-            GL11.glVertex2f(x + width, y + height);
-            GL11.glVertex2f(x + width, y);
+            float offset = thickness / 2f;
+            GL11.glVertex2f(x + offset, y + offset);
+            GL11.glVertex2f(x + offset, y + height - offset);
+            GL11.glVertex2f(x + width - offset, y + height - offset);
+            GL11.glVertex2f(x + width - offset, y + offset);
         }
         GL11.glEnd();
     }
@@ -105,7 +108,6 @@ public class DropdownPluginV2 extends BaseCustomUIPanelPlugin {
             renderQuadBorder(x, y, width, height, Misc.getDarkPlayerColor(), alphaMult, 1f);
         }
         if (this.isDropped && !this.isRendered) {
-            System.out.println("Render menu");
             this.isRendered = true;
             this.menuPanel.setOpacity(1f);
         }
@@ -129,26 +131,30 @@ public class DropdownPluginV2 extends BaseCustomUIPanelPlugin {
             this.button.unhighlight();
             this.isRendered = false;
         }
-        if (buttonId instanceof SectorEntityToken) {
-            this.selected = buttonId;
-            this.label.setText(((SectorEntityToken) buttonId).getName());
-            this.button.setCustomData(this.selected);
-            float yPad = this.button.getPosition().getHeight() / 2f - this.label.computeTextHeight(this.label.getText()) / 2f;
-            this.label.getPosition().inTL(10f, yPad);
-            this.isRendered = false;
 
-            for (ButtonAPI button : this.buttons) {
-                if (button.getCustomData() == buttonId) {
-                    button.highlight();
-                    continue;
-                }
-                if (button.isHighlighted()) {
-                    button.unhighlight();
-                }
+        this.selected = buttonId;
+        this.label.setText(((SectorEntityToken) buttonId).getName());
+        this.button.setCustomData(this.selected);
+        float yPad = this.button.getPosition().getHeight() / 2f - this.label.computeTextHeight(this.label.getText()) / 2f;
+        this.label.getPosition().inTL(10f, yPad);
+        this.isRendered = false;
+
+        for (ButtonAPI button : this.buttons) {
+            if (button.getCustomData() == buttonId) {
+                button.highlight();
+                continue;
+            }
+            if (button.isHighlighted()) {
+                button.unhighlight();
             }
         }
+
         if (!this.isRendered) {
             this.menuPanel.setOpacity(0f);
         }
+    }
+
+    public Object getSelected() {
+        return this.selected;
     }
 }

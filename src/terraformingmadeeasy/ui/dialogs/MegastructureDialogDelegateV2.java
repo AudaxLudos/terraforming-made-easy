@@ -22,7 +22,7 @@ import java.util.Map;
 
 public class MegastructureDialogDelegateV2 extends TMEBaseDialogDelegate {
     public ConstructionGrid industry;
-    public SectorEntityToken orbitFocusField = null;
+    public DropdownPluginV2 orbitFocusField = null;
     public TextFieldAPI startingAngleField = null;
     public TextFieldAPI orbitRadiusField = null;
     public TextFieldAPI orbitDaysField = null;
@@ -101,21 +101,16 @@ public class MegastructureDialogDelegateV2 extends TMEBaseDialogDelegate {
         CustomPanelAPI orbitInputsPanel = this.mPanel.createCustomPanel(WIDTH, 50f, null);
         TooltipMakerAPI orbitInputsElement = orbitInputsPanel.createUIElement(WIDTH, 50f, false);
         orbitInputsPanel.addUIElement(orbitInputsElement);
-        mElement.addCustom(orbitInputsPanel, 0f).getPosition().setXAlignOffset(-5f);
+        mElement.addCustom(orbitInputsPanel, 0f);
 
-        // Orbit focus field container
+        // Orbit focus field panel
         CustomPanelAPI orbitFocusPanel = this.mPanel.createCustomPanel(WIDTH / 4f, 40f, null);
         TooltipMakerAPI orbitFocusElement = orbitFocusPanel.createUIElement(WIDTH / 4f, 40f, false);
         orbitFocusPanel.addUIElement(orbitFocusElement);
-        orbitInputsElement.addCustom(orbitFocusPanel, 0f);
-
-        // Orbit focus field name
-        CustomPanelAPI orbitFocusNamePanel = orbitFocusPanel.createCustomPanel(WIDTH / 4f, 15f, null);
-        TooltipMakerAPI orbitFocusNameElement = orbitFocusNamePanel.createUIElement(WIDTH / 4f, 15f, false);
-        orbitFocusNamePanel.addUIElement(orbitFocusNameElement);
-        orbitFocusElement.addCustom(orbitFocusNamePanel, 0f);
-        orbitFocusNameElement.addPara("Orbit Focus", 0f).setAlignment(Alignment.MID);
-        orbitFocusNameElement.setParaSmallInsignia();
+        orbitInputsElement.addCustom(orbitFocusPanel, 0f).getPosition().setXAlignOffset(-10f);
+        orbitFocusElement.addPara("Orbit Focus", 0f).setAlignment(Alignment.MID);
+        orbitFocusElement.setParaSmallInsignia();
+        orbitFocusElement.addSpacer(3f);
 
         // Orbit focus field dropdown button
         Map<String, Object> options = new LinkedHashMap<>();
@@ -123,7 +118,7 @@ public class MegastructureDialogDelegateV2 extends TMEBaseDialogDelegate {
             options.put(planet.getName(), planet);
         }
         DropdownPluginV2 test = new DropdownPluginV2(orbitInputsPanel, 190f, 25f, options);
-        orbitFocusElement.addCustom(test.dropdownPanel, 0f).getPosition().setYAlignOffset(-3f);
+        orbitFocusElement.addCustom(test.dropdownPanel, 0f);
         orbitInputsElement.addTooltipTo(new OrbitFocusFieldTooltip(), orbitFocusPanel, TooltipMakerAPI.TooltipLocation.BELOW);
 
         // CustomPanelAPI orbitFocusPanel = this.mPanel.createCustomPanel(WIDTH / 4f, 40f, new DropDownPlugin(this));
@@ -153,32 +148,32 @@ public class MegastructureDialogDelegateV2 extends TMEBaseDialogDelegate {
         // }
         // orbitFocusTitleElement.addTooltipTo(new OrbitFocusFieldTooltip(), orbitFocusPanel, TooltipMakerAPI.TooltipLocation.BELOW);
 
-        // Start angle field
-        TextFieldPlugin startAnglePlugin = new TextFieldPlugin();
-        CustomPanelAPI startAnglePanel = this.mPanel.createCustomPanel(WIDTH / 4f, 40f, startAnglePlugin);
-        TooltipMakerAPI startAngleElement = startAnglePanel.createUIElement(WIDTH / 4f, 40f, false);
-        startAnglePanel.addUIElement(startAngleElement);
-        orbitInputsElement.addCustom(startAnglePanel, 0f).getPosition().rightOfMid(orbitFocusPanel, 0f);
-        this.startingAngleField = addCustomTextField(startAnglePanel, startAngleElement, this.startingAngleField, "Starting Angle", "0", 7, startAnglePlugin, new StartingAngleFieldTooltip());
-        startAnglePlugin.setTextField(this.startingAngleField, 0, 0);
-
-        // Orbit radius field
-        TextFieldPlugin orbitRadiusPlugin = new TextFieldPlugin();
-        CustomPanelAPI orbitRadiusPanel = this.mPanel.createCustomPanel(WIDTH / 4f, 40f, orbitRadiusPlugin);
-        TooltipMakerAPI orbitRadiusElement = orbitRadiusPanel.createUIElement(WIDTH / 4f, 40f, false);
-        orbitRadiusPanel.addUIElement(orbitRadiusElement);
-        orbitInputsElement.addCustom(orbitRadiusPanel, 0f).getPosition().rightOfMid(startAnglePanel, 0f);
-        this.orbitRadiusField = addCustomTextField(orbitRadiusPanel, orbitRadiusElement, this.orbitRadiusField, "Orbit Radius", "1000", 7, orbitRadiusPlugin, new OrbitRadiusFieldTooltip());
-        orbitRadiusPlugin.setTextField(this.orbitRadiusField, 0, 0);
-
-        // Orbit days field
-        TextFieldPlugin orbitDaysPlugin = new TextFieldPlugin();
-        CustomPanelAPI orbitDaysPanel = this.mPanel.createCustomPanel(WIDTH / 4f, 40f, orbitDaysPlugin);
-        TooltipMakerAPI orbitDaysElement = orbitDaysPanel.createUIElement(WIDTH / 4f, 40f, false);
-        orbitDaysPanel.addUIElement(orbitDaysElement);
-        orbitInputsElement.addCustom(orbitDaysPanel, 0f).getPosition().rightOfMid(orbitRadiusPanel, 0f);
-        this.orbitDaysField = addCustomTextField(orbitDaysPanel, orbitDaysElement, this.orbitDaysField, "Orbit Days", "100", 7, orbitDaysPlugin, new OrbitDaysFieldTooltip());
-        orbitDaysPlugin.setTextField(this.orbitDaysField, 0, 0);
+        // // Start angle field
+        // TextFieldPlugin startAnglePlugin = new TextFieldPlugin();
+        // CustomPanelAPI startAnglePanel = this.mPanel.createCustomPanel(WIDTH / 4f, 40f, startAnglePlugin);
+        // TooltipMakerAPI startAngleElement = startAnglePanel.createUIElement(WIDTH / 4f, 40f, false);
+        // startAnglePanel.addUIElement(startAngleElement);
+        // orbitInputsElement.addCustom(startAnglePanel, 0f).getPosition().rightOfMid(orbitFocusPanel, 0f);
+        // this.startingAngleField = addCustomTextField(startAnglePanel, startAngleElement, this.startingAngleField, "Starting Angle", "0", 7, startAnglePlugin, new StartingAngleFieldTooltip());
+        // startAnglePlugin.setTextField(this.startingAngleField, 0, 0);
+        //
+        // // Orbit radius field
+        // TextFieldPlugin orbitRadiusPlugin = new TextFieldPlugin();
+        // CustomPanelAPI orbitRadiusPanel = this.mPanel.createCustomPanel(WIDTH / 4f, 40f, orbitRadiusPlugin);
+        // TooltipMakerAPI orbitRadiusElement = orbitRadiusPanel.createUIElement(WIDTH / 4f, 40f, false);
+        // orbitRadiusPanel.addUIElement(orbitRadiusElement);
+        // orbitInputsElement.addCustom(orbitRadiusPanel, 0f).getPosition().rightOfMid(startAnglePanel, 0f);
+        // this.orbitRadiusField = addCustomTextField(orbitRadiusPanel, orbitRadiusElement, this.orbitRadiusField, "Orbit Radius", "1000", 7, orbitRadiusPlugin, new OrbitRadiusFieldTooltip());
+        // orbitRadiusPlugin.setTextField(this.orbitRadiusField, 0, 0);
+        //
+        // // Orbit days field
+        // TextFieldPlugin orbitDaysPlugin = new TextFieldPlugin();
+        // CustomPanelAPI orbitDaysPanel = this.mPanel.createCustomPanel(WIDTH / 4f, 40f, orbitDaysPlugin);
+        // TooltipMakerAPI orbitDaysElement = orbitDaysPanel.createUIElement(WIDTH / 4f, 40f, false);
+        // orbitDaysPanel.addUIElement(orbitDaysElement);
+        // orbitInputsElement.addCustom(orbitDaysPanel, 0f).getPosition().rightOfMid(orbitRadiusPanel, 0f);
+        // this.orbitDaysField = addCustomTextField(orbitDaysPanel, orbitDaysElement, this.orbitDaysField, "Orbit Days", "100", 7, orbitDaysPlugin, new OrbitDaysFieldTooltip());
+        // orbitDaysPlugin.setTextField(this.orbitDaysField, 0, 0);
 
         // Show player credits
         // CustomPanelAPI creditsPanel = this.mPanel.createCustomPanel(WIDTH, 0f, null);
@@ -216,7 +211,7 @@ public class MegastructureDialogDelegateV2 extends TMEBaseDialogDelegate {
 
         Utils.ProjectData project = (Utils.ProjectData) this.selected;
         Utils.OrbitData orbitData = new Utils.OrbitData(
-                this.orbitFocusField,
+                (SectorEntityToken) this.orbitFocusField.getSelected(),
                 Float.parseFloat(this.startingAngleField.getText().trim()),
                 Float.parseFloat(this.orbitRadiusField.getText().trim()),
                 Float.parseFloat(this.orbitDaysField.getText().trim()));
