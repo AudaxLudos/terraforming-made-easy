@@ -2,7 +2,6 @@ package terraformingmadeeasy.ui.plugins;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.BaseCustomUIPanelPlugin;
-import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
@@ -44,7 +43,7 @@ public class DropdownPluginV2 extends BaseCustomUIPanelPlugin {
         float yPad = height / 2f - this.label.computeTextHeight(this.label.getText()) / 2f;
         this.label.getPosition().inTL(10f, yPad);
 
-        this.menuPanel = this.dropdownPanel.createCustomPanel(width, height * 4f, null);
+        this.menuPanel = this.dropdownPanel.createCustomPanel(width, height * 3.5f, null);
         TooltipMakerAPI menuElement = this.menuPanel.createUIElement(width, height * 3.5f - 1f, true);
         for (Map.Entry<String, Object> entry : this.options.entrySet()) {
             CustomPanelAPI optionPanel = this.menuPanel.createCustomPanel(width, height, this);
@@ -160,7 +159,7 @@ public class DropdownPluginV2 extends BaseCustomUIPanelPlugin {
 
     public void setSelected(Object data) {
         for (Map.Entry<String, Object> entry : this.options.entrySet()) {
-            if (entry.getValue() == entry) {
+            if (entry.getValue() == data) {
                 this.button.setCustomData(data);
                 this.selected = data;
                 this.label.setText(entry.getKey());
