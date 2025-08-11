@@ -154,6 +154,17 @@ public class DropdownPluginV2 extends BaseCustomUIPanelPlugin {
         }
     }
 
+    public void setSelected(Object data) {
+        for (Map.Entry<String, Object> entry : this.options.entrySet()) {
+            if (entry.getValue() == entry) {
+                this.button.setCustomData(data);
+                this.selected = data;
+                this.label.setText(entry.getKey());
+                return;
+            }
+        }
+    }
+
     public Object getSelected() {
         return this.selected;
     }
