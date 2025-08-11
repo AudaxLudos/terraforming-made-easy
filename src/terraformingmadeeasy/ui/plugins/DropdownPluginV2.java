@@ -132,20 +132,24 @@ public class DropdownPluginV2 extends BaseCustomUIPanelPlugin {
             this.isRendered = false;
         }
 
-        this.selected = buttonId;
-        this.label.setText(((SectorEntityToken) buttonId).getName());
-        this.button.setCustomData(this.selected);
-        float yPad = this.button.getPosition().getHeight() / 2f - this.label.computeTextHeight(this.label.getText()) / 2f;
-        this.label.getPosition().inTL(10f, yPad);
-        this.isRendered = false;
-
-        for (ButtonAPI button : this.buttons) {
-            if (button.getCustomData() == buttonId) {
-                button.highlight();
-                continue;
-            }
-            if (button.isHighlighted()) {
-                button.unhighlight();
+        for (Map.Entry<String, Object> entry : this.options.entrySet()) {
+            if (entry.getValue() == buttonId) {
+                this.label.setText(entry.getKey());
+                this.selected = buttonId;
+                this.button.setCustomData(this.selected);
+                float yPad = this.button.getPosition().getHeight() / 2f - this.label.computeTextHeight(this.label.getText()) / 2f;
+                this.label.getPosition().inTL(10f, yPad);
+                this.isRendered = false;
+                for (ButtonAPI button : this.buttons) {
+                    if (button.getCustomData() == buttonId) {
+                        button.highlight();
+                        continue;
+                    }
+                    if (button.isHighlighted()) {
+                        button.unhighlight();
+                    }
+                }
+                break;
             }
         }
 
