@@ -157,6 +157,10 @@ public class DropdownPluginV2 extends BaseCustomUIPanelPlugin {
         }
     }
 
+    public Object getSelected() {
+        return this.selected;
+    }
+
     public void setSelected(Object data) {
         for (Map.Entry<String, Object> entry : this.options.entrySet()) {
             if (entry.getValue() == data) {
@@ -166,9 +170,5 @@ public class DropdownPluginV2 extends BaseCustomUIPanelPlugin {
                 return;
             }
         }
-    }
-
-    public Object getSelected() {
-        return this.selected;
     }
 }

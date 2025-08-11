@@ -1,6 +1,5 @@
 package terraformingmadeeasy.ui.plugins;
 
-import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.BaseCustomUIPanelPlugin;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
@@ -52,5 +51,9 @@ public class TextFieldPluginV2 extends BaseCustomUIPanelPlugin {
 
     protected boolean clickedOutsideTextArea(InputEventAPI event) {
         return !this.textField.getTextLabelAPI().getPosition().containsEvent(event);
+    }
+
+    public String getText() {
+        return this.textField.getText();
     }
 }
