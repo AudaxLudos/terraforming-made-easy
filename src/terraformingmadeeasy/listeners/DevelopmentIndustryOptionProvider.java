@@ -11,16 +11,15 @@ import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.industries.BaseDevelopmentIndustry;
 import terraformingmadeeasy.industries.BaseTerraformingIndustry;
-import terraformingmadeeasy.industries.ConstructionGrid;
 import terraformingmadeeasy.ui.dialogs.ConfirmDialogDelegate;
-import terraformingmadeeasy.ui.dialogs.MegastructureDialogDelegate;
-import terraformingmadeeasy.ui.dialogs.TerraformDialogDelegate;
+import terraformingmadeeasy.ui.dialogs.DevelopmentDialogDelegate;
+import terraformingmadeeasy.ui.dialogs.TerraformingDialogDelegate;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class TMEIndustryOptionProvider extends BaseIndustryOptionProvider {
+public class DevelopmentIndustryOptionProvider extends BaseIndustryOptionProvider {
     public static List<String> tmeIndustries = new ArrayList<>();
     public static Object CUSTOM_PLUGIN = new Object();
 
@@ -39,8 +38,8 @@ public class TMEIndustryOptionProvider extends BaseIndustryOptionProvider {
 
     public static void register() {
         ListenerManagerAPI listeners = Global.getSector().getListenerManager();
-        if (!listeners.hasListenerOfClass(TMEIndustryOptionProvider.class)) {
-            listeners.addListener(new TMEIndustryOptionProvider(), true);
+        if (!listeners.hasListenerOfClass(DevelopmentIndustryOptionProvider.class)) {
+            listeners.addListener(new DevelopmentIndustryOptionProvider(), true);
         }
     }
 
@@ -112,18 +111,18 @@ public class TMEIndustryOptionProvider extends BaseIndustryOptionProvider {
     public void optionSelected(IndustryOptionData opt, DialogCreatorUI ui) {
         if (opt.id == CUSTOM_PLUGIN && Objects.equals(opt.ind.getId(), TMEIds.CONSTRUCTION_GRID)) {
             if (!opt.ind.isUpgrading()) {
-                MegastructureDialogDelegate dialogueDelegate = new MegastructureDialogDelegate(800f, 464f, (ConstructionGrid) opt.ind);
-                ui.showDialog(800f, 464f, dialogueDelegate);
+                DevelopmentDialogDelegate dialogDelegate = new DevelopmentDialogDelegate(800f, 464f, true, (BaseDevelopmentIndustry) opt.ind);
+                ui.showDialog(dialogDelegate.width, dialogDelegate.height, dialogDelegate);
             } else {
                 ConfirmDialogDelegate dialogueDelegate = new ConfirmDialogDelegate(opt.ind, ((BaseDevelopmentIndustry) opt.ind).getProject().cost * Utils.BUILD_COST_MULTIPLIER);
                 ui.showDialog(ConfirmDialogDelegate.WIDTH, ConfirmDialogDelegate.HEIGHT, dialogueDelegate);
             }
         } else {
             if (!opt.ind.isUpgrading()) {
-                TerraformDialogDelegate dialogueDelegate = new TerraformDialogDelegate(800f, 464f, (BaseTerraformingIndustry) opt.ind);
-                ui.showDialog(TerraformDialogDelegate.WIDTH, TerraformDialogDelegate.HEIGHT, dialogueDelegate);
+                TerraformingDialogDelegate dialogDelegate = new TerraformingDialogDelegate(800f, 464f, false, (BaseDevelopmentIndustry) opt.ind);
+                ui.showDialog(dialogDelegate.width, dialogDelegate.height, dialogDelegate);
             } else {
-                ConfirmDialogDelegate tmeConfirmDialogueDelegate = new ConfirmDialogDelegate(opt.ind, ((BaseTerraformingIndustry) opt.ind).getProject().cost * Utils.BUILD_COST_MULTIPLIER);
+                ConfirmDialogDelegate tmeConfirmDialogueDelegate = new ConfirmDialogDelegate(opt.ind, ((BaseDevelopmentIndustry) opt.ind).getProject().cost * Utils.BUILD_COST_MULTIPLIER);
                 ui.showDialog(ConfirmDialogDelegate.WIDTH, ConfirmDialogDelegate.HEIGHT, tmeConfirmDialogueDelegate);
             }
         }

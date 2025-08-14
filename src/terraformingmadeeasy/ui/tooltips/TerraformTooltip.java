@@ -6,16 +6,16 @@ import com.fs.starfarer.api.ui.BaseTooltipCreator;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.Utils;
-import terraformingmadeeasy.industries.BaseTerraformingIndustry;
+import terraformingmadeeasy.industries.BaseDevelopmentIndustry;
 
 import java.awt.*;
 import java.util.Objects;
 
 public class TerraformTooltip extends BaseTooltipCreator {
     public Utils.ProjectData project;
-    public BaseTerraformingIndustry industry;
+    public BaseDevelopmentIndustry industry;
 
-    public TerraformTooltip(Utils.ProjectData condition, BaseTerraformingIndustry industry) {
+    public TerraformTooltip(Utils.ProjectData condition, BaseDevelopmentIndustry industry) {
         this.project = condition;
         this.industry = industry;
     }

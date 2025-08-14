@@ -13,7 +13,7 @@ import terraformingmadeeasy.codex.TMECodexEntry;
 import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.ids.TMEPeople;
 import terraformingmadeeasy.listeners.DeathWorldScript;
-import terraformingmadeeasy.listeners.TMEIndustryOptionProvider;
+import terraformingmadeeasy.listeners.DevelopmentIndustryOptionProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -150,7 +150,7 @@ public class ModPlugin extends BaseModPlugin {
         }
 
         DeathWorldScript.register();
-        TMEIndustryOptionProvider.register();
+        DevelopmentIndustryOptionProvider.register();
         TMEPeople.register();
 
         if (Utils.isLunaLibEnabled()) {
