@@ -13,8 +13,7 @@ import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.ids.TMEIds;
-import terraformingmadeeasy.ui.tooltips.MegastructureTooltip;
-import terraformingmadeeasy.ui.tooltips.TerraformTooltip;
+import terraformingmadeeasy.ui.plugins.ProjectListPlugin;
 
 import java.awt.*;
 import java.util.List;
@@ -108,7 +107,6 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
         this.codex = null;
     }
 
-    @SuppressWarnings("RedundantArrayCreation")
     @Override
     public void createCustomDetail(CustomPanelAPI panel, UIPanelAPI relatedEntries, CodexDialogAPI codex) {
         this.panel = panel;
@@ -140,52 +138,21 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
         tooltip.addPara(spec.getDesc(), initPad);
         String optionsText = "Terraforming";
         String optionsDesc = "Planetary conditions can be added or removed at any time. Once a terraforming project is completed, the planet will be terraformed immediately based on its current conditions.";
-        String optionNameText = "Name of the condition to terraform on a planet";
-        String optionDurationText = "Build time, in days. Until the terraforming project finishes.";
-        String optionCostText = "One-time cost to begin terraforming project, in credits";
         if (Objects.equals(this.id, TMEIds.CONSTRUCTION_GRID)) {
             optionsText = "Megastructure";
             optionsDesc = "The construction grid can only be used once. Once a megastructure project is completed, the structure is used and the megastructure is created.";
-            optionNameText = "Name of megastructure to build";
-            optionDurationText = "Build time, in days. Until the megastructure project finishes.";
-            optionCostText = "One-time cost to begin megastructure project, in credits";
         } else if (Objects.equals(this.id, TMEIds.PLANETARY_HOLOGRAM)) {
             optionsText = "Visual";
             optionsDesc = "A planet's visual can be changed at any time. Removing the structure will revert the planet's visual to its original state.";
-            optionNameText = "Name of planet type to change into";
-            optionDurationText = "Build time, in days. Until a planet's visual changes.";
-            optionCostText = "One-time cost to change a planet's visual, in credits";
         }
 
         tooltip.addSectionHeading(optionsText + " Options", Alignment.MID, initPad);
         tooltip.addPara(optionsDesc, initPad);
         tooltip.addSpacer(oPad);
-        float columnOneWidth = tw / 3f + 100f;
-        float columnWidth = (tw - columnOneWidth) / 2f;
-        CustomPanelAPI conditionsPanel = panel.createCustomPanel(tw, 0, null);
-        TooltipMakerAPI conditionsHeader = conditionsPanel.createUIElement(tw, 0, false);
-        conditionsHeader.beginTable(Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(),
-                0f, false, true,
-                new Object[]{"Name", columnOneWidth, "Build time", columnWidth, "Cost", columnWidth - 6f});
-        conditionsHeader.addTableHeaderTooltip(0, optionNameText);
-        conditionsHeader.addTableHeaderTooltip(1, optionDurationText);
-        conditionsHeader.addTableHeaderTooltip(2, optionCostText);
-        conditionsHeader.addTable("", 0, 0f);
-        conditionsHeader.getPrev().getPosition().setXAlignOffset(0f);
-        conditionsHeader.getPosition().inTMid(0);
-        conditionsPanel.addUIElement(conditionsHeader);
-        conditionsPanel.getPosition().setSize(tw, conditionsHeader.getHeightSoFar() + conditionsPanel.getPosition().getHeight());
 
-        TooltipMakerAPI conditionsBody = conditionsPanel.createUIElement(tw, 0, false);
-        for (Utils.ProjectData project : this.projects) {
-            CustomPanelAPI conditionPanel = addOptionInfo(panel, project, this.spec.getId(), tw);
-            conditionsBody.addCustom(conditionPanel, 0f);
-        }
-
-        conditionsPanel.addUIElement(conditionsBody);
-        conditionsPanel.getPosition().setSize(tw, conditionsBody.getHeightSoFar() + conditionsPanel.getPosition().getHeight());
-        conditionsPanel.updateUIElementSizeAndMakeItProcessInput(conditionsBody);
-        tooltip.addCustom(conditionsPanel, 0f).getPosition().setXAlignOffset(-5);
+        List<Utils.ProjectData> projects = this.projects;
+        ProjectListPlugin projectListPlugin = new ProjectListPlugin(panel, null, this.spec.getId(), projects, tw, 0f, true);
+        tooltip.addCustom(projectListPlugin.projectsPanel, 0f).getPosition().setXAlignOffset(-5f);
 
         tooltip.setParaFontDefault();
         tooltip.addPara("Construction cost: %s", oPad, g, h, Misc.getDGSCredits(spec.getCost()));
@@ -211,51 +178,6 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
             height = Math.max(height, relatedEntries.getPosition().getHeight());
         }
         panel.getPosition().setSize(width, height);
-    }
-
-    public CustomPanelAPI addOptionInfo(CustomPanelAPI panel, Object data, String industryId, float width) {
-        float columnOneWidth = width / 3f + 100f;
-        float columnWidth = (width - columnOneWidth) / 2f;
-        Utils.ProjectData project = (Utils.ProjectData) data;
-        String name = project.name;
-        String icon = project.icon;
-        float cost = Math.round(project.cost * Utils.BUILD_COST_MULTIPLIER);
-        float buildTime = Math.round(project.buildTime * Utils.BUILD_TIME_MULTIPLIER);
-        TooltipMakerAPI.TooltipCreator tooltip = null;
-
-        if (Objects.equals(industryId, TMEIds.CONSTRUCTION_GRID)) {
-            tooltip = new MegastructureTooltip(project);
-        } else {
-            tooltip = new TerraformTooltip(project, null);
-        }
-
-        CustomPanelAPI optionPanel = panel.createCustomPanel(width, 44f, null);
-
-        TooltipMakerAPI optionButtonElement = optionPanel.createUIElement(width, 44f, false);
-        ButtonAPI optionButton = optionButtonElement.addButton("", data, new Color(0, 195, 255, 190), new Color(0, 0, 0, 255), Alignment.MID, CutStyle.NONE, width, 44f, 0f);
-        optionButton.setClickable(false);
-        optionButtonElement.addTooltipTo(tooltip, optionButton, TooltipMakerAPI.TooltipLocation.RIGHT);
-        optionButtonElement.getPosition().setXAlignOffset(-10f);
-        optionPanel.addUIElement(optionButtonElement);
-
-        TooltipMakerAPI optionNameElement = optionPanel.createUIElement(columnOneWidth, 40f, false);
-        TooltipMakerAPI optionImage = optionNameElement.beginImageWithText(icon, 40f);
-        optionImage.addPara(name, Misc.getTextColor(), 0f);
-        optionNameElement.addImageWithText(0f);
-        optionNameElement.getPosition().setXAlignOffset(-8f).setYAlignOffset(2f);
-        optionPanel.addUIElement(optionNameElement);
-
-        TooltipMakerAPI optionBuildTimeElement = optionPanel.createUIElement(columnWidth, 40f, false);
-        optionBuildTimeElement.addPara(Misc.getWithDGS(buildTime), Misc.getHighlightColor(), 12f).setAlignment(Alignment.MID);
-        optionBuildTimeElement.getPosition().rightOfMid(optionNameElement, 0f);
-        optionPanel.addUIElement(optionBuildTimeElement);
-
-        TooltipMakerAPI optionCostElement = optionPanel.createUIElement(columnWidth, 40f, false);
-        optionCostElement.addPara(Misc.getDGSCredits(cost), Misc.getHighlightColor(), 12f).setAlignment(Alignment.MID);
-        optionCostElement.getPosition().rightOfMid(optionBuildTimeElement, 0f);
-        optionPanel.addUIElement(optionCostElement);
-
-        return optionPanel;
     }
 
     @Override

@@ -66,7 +66,7 @@ public class DevelopmentDialogDelegate extends BaseCustomDialogDelegate {
     public void addOptionList(CustomPanelAPI panel, TooltipMakerAPI tooltip, float height) {
         List<Utils.ProjectData> projects = this.industry.getProjects();
         Collections.sort(projects, new Utils.SortCanAffordAndBuild(this.industry));
-        this.data = new ProjectListPlugin(panel, this.industry, projects, this.width, height);
+        this.data = new ProjectListPlugin(panel, this.industry, this.industry.getId(), projects, this.width, height, false);
         tooltip.addCustom(((ProjectListPlugin) this.data).projectsPanel, 0f).getPosition().setXAlignOffset(0f);
     }
 

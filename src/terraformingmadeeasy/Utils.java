@@ -105,7 +105,7 @@ public class Utils {
     }
 
     public static boolean canAffordAndBuild(BaseDevelopmentIndustry industry, Utils.ProjectData project) {
-        boolean canAfford = Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= project.cost * Utils.BUILD_COST_MULTIPLIER;
+        boolean canAfford = Global.getSettings().isInCampaignState() && Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= project.cost * Utils.BUILD_COST_MULTIPLIER;
         boolean canBuild = true;
         if (industry instanceof BaseTerraformingIndustry) {
             boolean canBeRemoved = industry.getMarket().hasCondition(project.id);
