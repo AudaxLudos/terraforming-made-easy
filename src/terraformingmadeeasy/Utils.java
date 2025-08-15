@@ -2,8 +2,10 @@ package terraformingmadeeasy;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomEntitySpecAPI;
+import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.campaign.PlanetSpecAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
+import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.characters.MarketConditionSpecAPI;
 import com.fs.starfarer.api.impl.campaign.procgen.PlanetGenDataSpec;
 import com.fs.starfarer.api.ui.*;
@@ -108,9 +110,10 @@ public class Utils {
         boolean canAfford = Global.getSettings().isInCampaignState() && Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= project.cost * Utils.BUILD_COST_MULTIPLIER;
         boolean canBuild = true;
         if (industry instanceof BaseTerraformingIndustry) {
-            boolean canBeRemoved = industry.getMarket().hasCondition(project.id);
+            MarketAPI market = industry.getMarket();
+            boolean canBeRemoved = market.hasCondition(project.id);
             canBuild = ((BaseTerraformingIndustry) industry).canTerraformCondition(project) || canBeRemoved;
-            if (industry.getMarket().getPlanetEntity().isGasGiant()) {
+            if (market.getPrimaryEntity() instanceof PlanetAPI && ((PlanetAPI) market.getPrimaryEntity()).isGasGiant()) {
                 canBuild = canBuild && project.canChangeGasGiants;
             }
         } else if (industry instanceof ConstructionGrid) {

@@ -111,7 +111,7 @@ public class MegastructureDialogDelegateV2 extends TMEBaseDialogDelegate {
         }
         this.orbitFocusDropdownPlugin = new DropdownPluginV2(orbitFocusPanel, 190f, 25f, options);
         this.orbitFocusDropdownPlugin.setSelected(this.industry.getMarket().getPrimaryEntity());
-        orbitFocusElement.addCustom(this.orbitFocusDropdownPlugin.dropdownPanel, 0f);
+        orbitFocusElement.addCustom(this.orbitFocusDropdownPlugin.panel, 0f);
         inputsBodyElement.addTooltipTo(new OrbitFocusFieldTooltip(), orbitFocusPanel, TooltipMakerAPI.TooltipLocation.BELOW);
 
         // Start angle input

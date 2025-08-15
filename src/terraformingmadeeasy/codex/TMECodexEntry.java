@@ -107,6 +107,7 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
         this.codex = null;
     }
 
+    @SuppressWarnings("RedundantArrayCreation")
     @Override
     public void createCustomDetail(CustomPanelAPI panel, UIPanelAPI relatedEntries, CodexDialogAPI codex) {
         this.panel = panel;
@@ -138,21 +139,44 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
         tooltip.addPara(spec.getDesc(), initPad);
         String optionsText = "Terraforming";
         String optionsDesc = "Planetary conditions can be added or removed at any time. Once a terraforming project is completed, the planet will be terraformed immediately based on its current conditions.";
+        String nameTooltipText = "Name of the condition to terraform on a planet";
+        String timeTooltipText = "Build time, in days. Until the terraforming project finishes.";
+        String costTooltipText = "One-time cost to begin terraforming project, in credits";
         if (Objects.equals(this.id, TMEIds.CONSTRUCTION_GRID)) {
             optionsText = "Megastructure";
             optionsDesc = "The construction grid can only be used once. Once a megastructure project is completed, the structure is used and the megastructure is created.";
+            nameTooltipText = "Name of megastructure to build";
+            timeTooltipText = "Build time, in days. Until the megastructure project finishes.";
+            costTooltipText = "One-time cost to begin megastructure project, in credits";
         } else if (Objects.equals(this.id, TMEIds.PLANETARY_HOLOGRAM)) {
             optionsText = "Visual";
             optionsDesc = "A planet's visual can be changed at any time. Removing the structure will revert the planet's visual to its original state.";
+            nameTooltipText = "Name of planet type to change into";
+            timeTooltipText = "Build time, in days. Until a planet's visual changes.";
+            costTooltipText = "One-time cost to change a planet's visual, in credits";
         }
 
         tooltip.addSectionHeading(optionsText + " Options", Alignment.MID, initPad);
         tooltip.addPara(optionsDesc, initPad);
         tooltip.addSpacer(oPad);
 
+        float columnOneWidth = tw / 3f + 100f;
+        float columnWidth = (tw - columnOneWidth) / 2f;
+        CustomPanelAPI projectsPanel = panel.createCustomPanel(tw, 22f, null);
+        TooltipMakerAPI projectsElement = projectsPanel.createUIElement(tw, 22f, false);
+        projectsElement.beginTable(Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(),
+                0f, false, true,
+                new Object[]{"Name", columnOneWidth, "Build time", columnWidth, "Cost", columnWidth - 6f});
+        projectsElement.addTableHeaderTooltip(0, nameTooltipText);
+        projectsElement.addTableHeaderTooltip(1, timeTooltipText);
+        projectsElement.addTableHeaderTooltip(2, costTooltipText);
+        projectsElement.addTable("", 0, 0f);
+        projectsPanel.addUIElement(projectsElement).setXAlignOffset(-10f);
+        tooltip.addCustom(projectsPanel, 0f);
+
         List<Utils.ProjectData> projects = this.projects;
         ProjectListPlugin projectListPlugin = new ProjectListPlugin(panel, null, this.spec.getId(), projects, tw, 0f, true);
-        tooltip.addCustom(projectListPlugin.projectsPanel, 0f).getPosition().setXAlignOffset(-5f);
+        tooltip.addCustom(projectListPlugin.panel, 0f).getPosition().setXAlignOffset(-5f);
 
         tooltip.setParaFontDefault();
         tooltip.addPara("Construction cost: %s", oPad, g, h, Misc.getDGSCredits(spec.getCost()));

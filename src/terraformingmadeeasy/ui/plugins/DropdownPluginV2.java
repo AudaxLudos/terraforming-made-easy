@@ -14,7 +14,6 @@ import java.util.Map;
 
 public class DropdownPluginV2 extends BaseCustomUIPanelPlugin {
     public CustomPanelAPI panel;
-    public CustomPanelAPI dropdownPanel;
     public CustomPanelAPI menuPanel;
     public ButtonAPI button;
     public LabelAPI label;
@@ -25,11 +24,9 @@ public class DropdownPluginV2 extends BaseCustomUIPanelPlugin {
     public Object selected;
 
     public DropdownPluginV2(CustomPanelAPI panel, float width, float height, Map<String, Object> options) {
-        this.panel = panel;
         this.options = options;
-        this.dropdownPanel = this.panel.createCustomPanel(width, height, this);
-        TooltipMakerAPI dropdownElement = this.dropdownPanel.createUIElement(width, height, false);
-        this.dropdownPanel.addUIElement(dropdownElement);
+        this.panel = panel.createCustomPanel(width, height, this);
+        TooltipMakerAPI dropdownElement = this.panel.createUIElement(width, height, false);
 
         String name = "";
         Object data = null;
@@ -43,7 +40,7 @@ public class DropdownPluginV2 extends BaseCustomUIPanelPlugin {
         float yPad = height / 2f - this.label.computeTextHeight(this.label.getText()) / 2f;
         this.label.getPosition().inTL(10f, yPad);
 
-        this.menuPanel = this.dropdownPanel.createCustomPanel(width, height * 3.5f, null);
+        this.menuPanel = this.panel.createCustomPanel(width, height * 3.5f, null);
         TooltipMakerAPI menuElement = this.menuPanel.createUIElement(width, height * 3.5f - 1f, true);
         for (Map.Entry<String, Object> entry : this.options.entrySet()) {
             CustomPanelAPI optionPanel = this.menuPanel.createCustomPanel(width, height, this);
@@ -59,14 +56,15 @@ public class DropdownPluginV2 extends BaseCustomUIPanelPlugin {
             optionName.getPosition().inTL(0f, yOptionPad);
             optionPanel.addUIElement(optionNameElement);
 
-            this.buttons.add(optionButton);
-
             menuElement.addCustom(optionPanel, 0f);
-        }
 
+            this.buttons.add(optionButton);
+        }
+        this.menuPanel.setOpacity(0f);
         this.menuPanel.addUIElement(menuElement);
         dropdownElement.addCustom(this.menuPanel, 0f).getPosition().setXAlignOffset(-5f).setYAlignOffset(-8f);
-        this.menuPanel.setOpacity(0f);
+
+        this.panel.addUIElement(dropdownElement).inTL(0f, 0f);
     }
 
     public static void renderQuadBorder(float x, float y, float width, float height, Color color, float alphaMult, float thickness) {
@@ -162,6 +160,10 @@ public class DropdownPluginV2 extends BaseCustomUIPanelPlugin {
     }
 
     public void setSelected(Object data) {
+        if (this.label == null || this.button == null) {
+            return;
+        }
+
         for (Map.Entry<String, Object> entry : this.options.entrySet()) {
             if (entry.getValue() == data) {
                 this.button.setCustomData(data);

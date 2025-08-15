@@ -9,6 +9,7 @@ import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.Utils;
+import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.industries.BaseDevelopmentIndustry;
 import terraformingmadeeasy.industries.ConstructionGrid;
 import terraformingmadeeasy.ui.plugins.DropdownPluginV2;
@@ -49,7 +50,7 @@ public class DevelopmentDialogDelegate extends BaseCustomDialogDelegate {
         } else {
             addOptionList(panel, mElement, this.height);
         }
-        panel.addUIElement(mElement);
+        panel.addUIElement(mElement).inTL(0f, 0f).setXAlignOffset(-5f);
     }
 
     public void addPlayerCredits(CustomPanelAPI panel) {
@@ -63,11 +64,40 @@ public class DevelopmentDialogDelegate extends BaseCustomDialogDelegate {
         panel.addUIElement(creditsElement);
     }
 
+    @SuppressWarnings("RedundantArrayCreation")
     public void addOptionList(CustomPanelAPI panel, TooltipMakerAPI tooltip, float height) {
+        String nameTooltipText = "Name of the condition to terraform on a planet";
+        String timeTooltipText = "Build time, in days. Until the terraforming project finishes.";
+        String costTooltipText = "One-time cost to begin terraforming project, in credits";
+        if (this.industry.getId().equals(TMEIds.CONSTRUCTION_GRID)) {
+            nameTooltipText = "Name of megastructure to build";
+            timeTooltipText = "Build time, in days. Until the megastructure project finishes.";
+            costTooltipText = "One-time cost to begin megastructure project, in credits";
+        } else if (this.industry.getId().equals(TMEIds.PLANETARY_HOLOGRAM)) {
+            nameTooltipText = "Name of planet type to change into";
+            timeTooltipText = "Build time, in days. Until a planet's visual changes.";
+            costTooltipText = "One-time cost to change a planet's visual, in credits";
+        }
+
+        float columnOneWidth = this.width / 3f + 100f;
+        float columnWidth = (this.width - columnOneWidth) / 2f;
+        CustomPanelAPI projectsPanel = panel.createCustomPanel(this.width, 22f, null);
+        TooltipMakerAPI projectsElement = projectsPanel.createUIElement(this.width, 22f, false);
+        projectsElement.beginTable(Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(),
+                0f, false, true,
+                new Object[]{"Name", columnOneWidth, "Build time", columnWidth, "Cost", columnWidth - 6f});
+        projectsElement.addTableHeaderTooltip(0, nameTooltipText);
+        projectsElement.addTableHeaderTooltip(1, timeTooltipText);
+        projectsElement.addTableHeaderTooltip(2, costTooltipText);
+        projectsElement.addTable("", 0, 0f);
+        projectsElement.getPrev().getPosition().setXAlignOffset(0f);
+        projectsPanel.addUIElement(projectsElement);
+        tooltip.addCustom(projectsPanel, 0f);
+
         List<Utils.ProjectData> projects = this.industry.getProjects();
         Collections.sort(projects, new Utils.SortCanAffordAndBuild(this.industry));
         this.data = new ProjectListPlugin(panel, this.industry, this.industry.getId(), projects, this.width, height, false);
-        tooltip.addCustom(((ProjectListPlugin) this.data).projectsPanel, 0f).getPosition().setXAlignOffset(0f);
+        tooltip.addCustom(((ProjectListPlugin) this.data).panel, 0f);
     }
 
     @SuppressWarnings("RedundantArrayCreation")
@@ -102,7 +132,7 @@ public class DevelopmentDialogDelegate extends BaseCustomDialogDelegate {
         }
         this.data2 = new DropdownPluginV2(orbitFocusPanel, 190f, 25f, options);
         ((DropdownPluginV2) this.data2).setSelected(this.industry.getMarket().getPrimaryEntity());
-        orbitFocusElement.addCustom(((DropdownPluginV2) this.data2).dropdownPanel, 0f);
+        orbitFocusElement.addCustom(((DropdownPluginV2) this.data2).panel, 0f);
         orbitFocusPanel.addUIElement(orbitFocusElement);
         inputsBodyElement.addComponent(orbitFocusPanel).setXAlignOffset(-5f);
         inputsBodyElement.addTooltipTo(new OrbitFocusFieldTooltip(), orbitFocusPanel, TooltipMakerAPI.TooltipLocation.BELOW);

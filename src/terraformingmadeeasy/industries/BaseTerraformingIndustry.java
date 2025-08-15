@@ -1,6 +1,7 @@
 package terraformingmadeeasy.industries;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.campaign.PlanetSpecAPI;
 import com.fs.starfarer.api.campaign.comm.CommMessageAPI;
 import com.fs.starfarer.api.campaign.econ.Industry;
@@ -50,10 +51,12 @@ public class BaseTerraformingIndustry extends BaseDevelopmentIndustry {
 
         sendCompletedMessage();
         terraformPlanet();
-        updatePlanetConditions();
-        String category = evaluatePlanetCategory();
-        String type = evaluatePlanetType(category);
-        updatePlanetVisuals(type);
+        if (this.market.getPrimaryEntity() instanceof PlanetAPI) {
+            updatePlanetConditions();
+            String category = evaluatePlanetCategory();
+            String type = evaluatePlanetType(category);
+            updatePlanetVisuals(type);
+        }
         reapply();
         // Force reapply demands and supply
         for (Industry ind : this.market.getIndustries()) {

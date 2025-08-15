@@ -7,7 +7,6 @@ import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.industries.BaseDevelopmentIndustry;
-import terraformingmadeeasy.industries.BaseTerraformingIndustry;
 import terraformingmadeeasy.ui.tooltips.MegastructureTooltip;
 import terraformingmadeeasy.ui.tooltips.TerraformTooltip;
 
@@ -17,45 +16,16 @@ import java.util.List;
 import java.util.Objects;
 
 public class ProjectListPlugin extends BaseCustomUIPanelPlugin {
-    public CustomPanelAPI projectsPanel;
+    public CustomPanelAPI panel;
     public Utils.ProjectData selected;
     public List<ButtonAPI> buttons = new ArrayList<>();
 
-    @SuppressWarnings("RedundantArrayCreation")
     public ProjectListPlugin(CustomPanelAPI panel, BaseDevelopmentIndustry industry, String industryId, List<Utils.ProjectData> projects, float width, float height, boolean isForCodex) {
-        String nameTooltipText = "Name of the condition to terraform on a planet";
-        String timeTooltipText = "Build time, in days. Until the terraforming project finishes.";
-        String costTooltipText = "One-time cost to begin terraforming project, in credits";
-        if (industryId.equals(TMEIds.CONSTRUCTION_GRID)) {
-            nameTooltipText = "Name of megastructure to build";
-            timeTooltipText = "Build time, in days. Until the megastructure project finishes.";
-            costTooltipText = "One-time cost to begin megastructure project, in credits";
-        } else if (industryId.equals(TMEIds.PLANETARY_HOLOGRAM)) {
-            nameTooltipText = "Name of planet type to change into";
-            timeTooltipText = "Build time, in days. Until a planet's visual changes.";
-            costTooltipText = "One-time cost to change a planet's visual, in credits";
-        }
-
         float columnOneWidth = width / 3f + 100f;
         float columnWidth = (width - columnOneWidth) / 2f;
 
-        this.projectsPanel = panel.createCustomPanel(width, height, null);
-        TooltipMakerAPI projectsHeaderElement = this.projectsPanel.createUIElement(width, height, false);
-        projectsHeaderElement.beginTable(Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(),
-                0f, false, true,
-                new Object[]{"Name", columnOneWidth, "Build time", columnWidth, "Cost", columnWidth - 6f});
-        projectsHeaderElement.addTableHeaderTooltip(0, nameTooltipText);
-        projectsHeaderElement.addTableHeaderTooltip(1, timeTooltipText);
-        projectsHeaderElement.addTableHeaderTooltip(2, costTooltipText);
-        projectsHeaderElement.addTable("", 0, 0f);
-        projectsHeaderElement.getPrev().getPosition().setXAlignOffset(0f);
-        projectsHeaderElement.getPosition().inTMid(0);
-        this.projectsPanel.addUIElement(projectsHeaderElement);
-        if (isForCodex) {
-            this.projectsPanel.getPosition().setSize(width, projectsHeaderElement.getHeightSoFar() + this.projectsPanel.getPosition().getHeight());
-        }
-
-        TooltipMakerAPI projectsElement = this.projectsPanel.createUIElement(width, height - 22f, !isForCodex);
+        this.panel = panel.createCustomPanel(width, height, null);
+        TooltipMakerAPI projectsElement = this.panel.createUIElement(width, height, !isForCodex);
         for (Utils.ProjectData project : projects) {
             String name = project.name;
             String prefix = "";
@@ -72,16 +42,18 @@ public class ProjectListPlugin extends BaseCustomUIPanelPlugin {
                 tooltip = new MegastructureTooltip(project);
             } else if (industryId.equals(TMEIds.PLANETARY_HOLOGRAM)) {
                 if (industry != null) {
-                    BaseTerraformingIndustry ind = (BaseTerraformingIndustry) industry;
-                    prefix = ind.getMarket().hasCondition(project.id) ? "Remove " : "Add ";
-                    if (Objects.equals(ind.getId(), TMEIds.PLANETARY_HOLOGRAM)) {
+                    if (Objects.equals(industry.getId(), TMEIds.PLANETARY_HOLOGRAM)) {
                         prefix = "Set Visual to ";
                         suffix = " World";
                     }
                 }
+            } else {
+                if (industry != null) {
+                    prefix = industry.getMarket().hasCondition(project.id) ? "Remove " : "Add ";
+                }
             }
 
-            if (!isForCodex) {
+            if (isForCodex) {
                 prefix = "";
                 suffix = "";
             }
@@ -122,9 +94,9 @@ public class ProjectListPlugin extends BaseCustomUIPanelPlugin {
             }
         }
 
-        this.projectsPanel.addUIElement(projectsElement);
+        this.panel.addUIElement(projectsElement).inTL(0f, 0f);
         if (isForCodex) {
-            this.projectsPanel.getPosition().setSize(width, projectsElement.getHeightSoFar() + this.projectsPanel.getPosition().getHeight());
+            this.panel.getPosition().setSize(width, projectsElement.getHeightSoFar() + this.panel.getPosition().getHeight());
         }
     }
 
