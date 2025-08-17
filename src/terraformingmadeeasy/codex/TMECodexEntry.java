@@ -162,8 +162,8 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
 
         float columnOneWidth = tw / 3f + 100f;
         float columnWidth = (tw - columnOneWidth) / 2f;
-        CustomPanelAPI projectsPanel = panel.createCustomPanel(tw, 22f, null);
-        TooltipMakerAPI projectsElement = projectsPanel.createUIElement(tw, 22f, false);
+        CustomPanelAPI projectsPanel = panel.createCustomPanel(tw, 23f, null);
+        TooltipMakerAPI projectsElement = projectsPanel.createUIElement(tw, 23f, false);
         projectsElement.beginTable(Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(),
                 0f, false, true,
                 new Object[]{"Name", columnOneWidth, "Build time", columnWidth, "Cost", columnWidth - 6f});

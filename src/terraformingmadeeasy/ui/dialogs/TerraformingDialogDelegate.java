@@ -40,8 +40,8 @@ public class TerraformingDialogDelegate extends DevelopmentDialogDelegate {
         inputsElement.getPosition().inTL(0f, 3f);
         inputsElement.beginTable(Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(),
                 0f, false, true,
-                new Object[]{"Orbit Data", this.width});
-        inputsElement.addTableHeaderTooltip(0, "Determines the location where the megastructure will be constructed");
+                new Object[]{"Stellar Mirror Data", this.width});
+        inputsElement.addTableHeaderTooltip(0, "Determines the amount of stellar mirrors that will be created or removed in orbit");
         inputsElement.addTable("", 0, 0f);
         inputsElement.getPrev().getPosition().setXAlignOffset(0f);
 
@@ -106,9 +106,6 @@ public class TerraformingDialogDelegate extends DevelopmentDialogDelegate {
 
             StellarManufactory.StellarMirrorOptions mirrorData = (StellarManufactory.StellarMirrorOptions) ((DropdownPluginV2) this.data2).getSelected();
             StellarManufactory.StellarMirrorOptions shadeData = (StellarManufactory.StellarMirrorOptions) ((DropdownPluginV2) this.data3).getSelected();
-
-            System.out.println(mirrorData);
-            System.out.println(shadeData);
 
             if (mirrorData == null || shadeData == null) {
                 return;

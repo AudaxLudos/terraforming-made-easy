@@ -114,16 +114,16 @@ public class DevelopmentIndustryOptionProvider extends BaseIndustryOptionProvide
                 DevelopmentDialogDelegate dialogDelegate = new DevelopmentDialogDelegate(800f, 464f, true, (BaseDevelopmentIndustry) opt.ind);
                 ui.showDialog(dialogDelegate.width, dialogDelegate.height, dialogDelegate);
             } else {
-                ConfirmDialogDelegate dialogueDelegate = new ConfirmDialogDelegate(opt.ind, ((BaseDevelopmentIndustry) opt.ind).getProject().cost * Utils.BUILD_COST_MULTIPLIER);
-                ui.showDialog(ConfirmDialogDelegate.WIDTH, ConfirmDialogDelegate.HEIGHT, dialogueDelegate);
+                ConfirmDialogDelegate dialogDelegate = new ConfirmDialogDelegate(opt.ind, ((BaseDevelopmentIndustry) opt.ind).getProject().cost * Utils.BUILD_COST_MULTIPLIER);
+                ui.showDialog(ConfirmDialogDelegate.WIDTH, ConfirmDialogDelegate.HEIGHT, dialogDelegate);
             }
         } else {
             if (!opt.ind.isUpgrading()) {
                 TerraformingDialogDelegate dialogDelegate = new TerraformingDialogDelegate(800f, 464f, false, (BaseDevelopmentIndustry) opt.ind);
                 ui.showDialog(dialogDelegate.width, dialogDelegate.height, dialogDelegate);
             } else {
-                ConfirmDialogDelegate tmeConfirmDialogueDelegate = new ConfirmDialogDelegate(opt.ind, ((BaseDevelopmentIndustry) opt.ind).getProject().cost * Utils.BUILD_COST_MULTIPLIER);
-                ui.showDialog(ConfirmDialogDelegate.WIDTH, ConfirmDialogDelegate.HEIGHT, tmeConfirmDialogueDelegate);
+                ConfirmDialogDelegate dialogDelegate = new ConfirmDialogDelegate(opt.ind, ((BaseDevelopmentIndustry) opt.ind).getProject().cost * Utils.BUILD_COST_MULTIPLIER);
+                ui.showDialog(ConfirmDialogDelegate.WIDTH, ConfirmDialogDelegate.HEIGHT, dialogDelegate);
             }
         }
     }

@@ -30,5 +30,5 @@ public class TMEIds {
     public static final String UNIFICATION_CENTER_TECH = "tme_tech_global_centralization";
     // Custom entities
     public static final String TME_STATION = "tme_station";
-    public static String MOD_ID = "terraformingmadeeasy";
+    public static final String MOD_ID = "terraformingmadeeasy";
 }

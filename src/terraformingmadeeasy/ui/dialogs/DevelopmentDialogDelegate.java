@@ -81,8 +81,8 @@ public class DevelopmentDialogDelegate extends BaseCustomDialogDelegate {
 
         float columnOneWidth = this.width / 3f + 100f;
         float columnWidth = (this.width - columnOneWidth) / 2f;
-        CustomPanelAPI projectsPanel = panel.createCustomPanel(this.width, 22f, null);
-        TooltipMakerAPI projectsElement = projectsPanel.createUIElement(this.width, 22f, false);
+        CustomPanelAPI projectsPanel = panel.createCustomPanel(this.width, 23f, null);
+        TooltipMakerAPI projectsElement = projectsPanel.createUIElement(this.width, 23f, false);
         projectsElement.beginTable(Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(),
                 0f, false, true,
                 new Object[]{"Name", columnOneWidth, "Build time", columnWidth, "Cost", columnWidth - 6f});
@@ -91,12 +91,11 @@ public class DevelopmentDialogDelegate extends BaseCustomDialogDelegate {
         projectsElement.addTableHeaderTooltip(2, costTooltipText);
         projectsElement.addTable("", 0, 0f);
         projectsElement.getPrev().getPosition().setXAlignOffset(0f);
-        projectsPanel.addUIElement(projectsElement);
+        projectsPanel.addUIElement(projectsElement).inTL(0f, 0f);
         tooltip.addCustom(projectsPanel, 0f);
-
         List<Utils.ProjectData> projects = this.industry.getProjects();
         Collections.sort(projects, new Utils.SortCanAffordAndBuild(this.industry));
-        this.data = new ProjectListPlugin(panel, this.industry, this.industry.getId(), projects, this.width, height, false);
+        this.data = new ProjectListPlugin(panel, this.industry, this.industry.getId(), projects, this.width, height - 23f, false);
         tooltip.addCustom(((ProjectListPlugin) this.data).panel, 0f);
     }
 
@@ -188,6 +187,10 @@ public class DevelopmentDialogDelegate extends BaseCustomDialogDelegate {
 
     @Override
     public void customDialogConfirm() {
+        if (!(this.industry instanceof ConstructionGrid)) {
+            return;
+        }
+
         if (!(this.data instanceof ProjectListPlugin)
                 || !(this.data2 instanceof DropdownPluginV2)
                 || !(this.data3 instanceof TextFieldPluginV2)
@@ -203,10 +206,6 @@ public class DevelopmentDialogDelegate extends BaseCustomDialogDelegate {
         float orbitDays = Float.parseFloat(((TextFieldPluginV2) this.data5).getText());
 
         if (project == null || orbitFocus == null || startAngle < 0 || orbitRadius < 100 || orbitDays < 100) {
-            return;
-        }
-
-        if (!(this.industry instanceof ConstructionGrid)) {
             return;
         }
 
