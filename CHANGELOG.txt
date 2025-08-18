@@ -1,3 +1,9 @@
+### 2.8.4
+- Add options to add or remove stellar shades and mirrors in stellar manufactory
+- Add options to upgrade makeshift relays
+- Update TME structure descriptions
+- Add related entries to TME structures codex
+
 ### 2.8.0a
 - Release 2.8.0a
 - Update Jar file
