@@ -109,18 +109,15 @@ public class DevelopmentIndustryOptionProvider extends BaseIndustryOptionProvide
 
     @Override
     public void optionSelected(IndustryOptionData opt, DialogCreatorUI ui) {
-        if (opt.id == CUSTOM_PLUGIN && Objects.equals(opt.ind.getId(), TMEIds.CONSTRUCTION_GRID)) {
+        if (opt.id == CUSTOM_PLUGIN) {
             if (!opt.ind.isUpgrading()) {
-                DevelopmentDialogDelegate dialogDelegate = new DevelopmentDialogDelegate(800f, 464f, true, (BaseDevelopmentIndustry) opt.ind);
-                ui.showDialog(dialogDelegate.width, dialogDelegate.height, dialogDelegate);
-            } else {
-                ConfirmDialogDelegate dialogDelegate = new ConfirmDialogDelegate(opt.ind, ((BaseDevelopmentIndustry) opt.ind).getProject().cost * Utils.BUILD_COST_MULTIPLIER);
-                ui.showDialog(ConfirmDialogDelegate.WIDTH, ConfirmDialogDelegate.HEIGHT, dialogDelegate);
-            }
-        } else {
-            if (!opt.ind.isUpgrading()) {
-                TerraformingDialogDelegate dialogDelegate = new TerraformingDialogDelegate(800f, 464f, false, (BaseDevelopmentIndustry) opt.ind);
-                ui.showDialog(dialogDelegate.width, dialogDelegate.height, dialogDelegate);
+                if (Objects.equals(opt.ind.getId(), TMEIds.CONSTRUCTION_GRID)) {
+                    DevelopmentDialogDelegate dialogDelegate = new DevelopmentDialogDelegate(800f, 464f, true, (BaseDevelopmentIndustry) opt.ind);
+                    ui.showDialog(dialogDelegate.width, dialogDelegate.height, dialogDelegate);
+                } else {
+                    TerraformingDialogDelegate dialogDelegate = new TerraformingDialogDelegate(800f, 464f, false, (BaseDevelopmentIndustry) opt.ind);
+                    ui.showDialog(dialogDelegate.width, dialogDelegate.height, dialogDelegate);
+                }
             } else {
                 ConfirmDialogDelegate dialogDelegate = new ConfirmDialogDelegate(opt.ind, ((BaseDevelopmentIndustry) opt.ind).getProject().cost * Utils.BUILD_COST_MULTIPLIER);
                 ui.showDialog(ConfirmDialogDelegate.WIDTH, ConfirmDialogDelegate.HEIGHT, dialogDelegate);
