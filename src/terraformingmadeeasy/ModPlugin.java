@@ -48,20 +48,18 @@ public class ModPlugin extends BaseModPlugin {
                             String newExpression = String.format(
                                     "needOne:%s|%s|%s|%s, ",
                                     "mining",
-                                    "fracking",
-                                    "mining_megaplex",
+                                    "aotd_plasma_harvester",
+                                    "aotd_mining_megaplex",
                                     "pluto_station");
                             needOne.append(newExpression);
                             break;
                         }
                         case Industries.REFINING: {
                             String newExpression = String.format(
-                                    "needOne:%s|%s|%s|%s|%s, ",
+                                    "needOne:%s|%s|%s, ",
                                     "refining",
-                                    "crystalizator",
-                                    "isotope_separator",
-                                    "policrystalizator",
-                                    "cascade_reprocesor");
+                                    "aotd_crystalizator",
+                                    "aotd_enrichment_facility");
                             needOne.append(newExpression);
                             break;
                         }
@@ -69,8 +67,8 @@ public class ModPlugin extends BaseModPlugin {
                             String newExpression = String.format(
                                     "needOne:%s|%s|%s|%s, ",
                                     "lightindustry",
-                                    "hightech",
-                                    "druglight",
+                                    "aotd_hightech_industry",
+                                    "aotd_druglight",
                                     "consumerindustry");
                             needOne.append(newExpression);
                             break;
@@ -78,9 +76,10 @@ public class ModPlugin extends BaseModPlugin {
                         case Industries.ORBITALWORKS:
                         case Industries.HEAVYINDUSTRY: {
                             String newExpression = String.format(
-                                    "needOne:%s|%s|%s|%s|%s|%s|%s|%s, ",
+                                    "needOne:%s|%s|%s|%s|%s|%s|%s|%s|%s, ",
                                     "orbitalworks",
                                     "supplyheavy",
+                                    "aotd_macro_industrial_complex",
                                     "weaponheavy",
                                     "triheavy",
                                     "hegeheavy",
@@ -92,10 +91,11 @@ public class ModPlugin extends BaseModPlugin {
                         }
                         case Industries.FARMING: {
                             String newExpression = String.format(
-                                    "needOne:%s|%s|%s, ",
+                                    "needOne:%s|%s|%s|%s, ",
                                     "farming",
-                                    "artifarming",
-                                    "subfarming");
+                                    "aotd_artisanal_farming",
+                                    "aotd_subsidised_farming",
+                                    "aotd_fishing_harbour");
                             needOne.append(newExpression);
                             break;
                         }
@@ -103,7 +103,7 @@ public class ModPlugin extends BaseModPlugin {
                             String newExpression = String.format(
                                     "needOne:%s|%s, ",
                                     "fuelprod",
-                                    "blast_processing");
+                                    "aotd_fuel_refinery");
                             needOne.append(newExpression);
                             break;
                         }
