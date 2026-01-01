@@ -1,3 +1,7 @@
+### 2.8.4c
+- Release 2.8.4b
+- Revert unification center paradise world option to vanilla industry ids
+
 ### 2.8.4b
 - Release 2.8.4b
 - Exclude converting terraforming options if it contains ids from AoTD VoK already
