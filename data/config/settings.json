@@ -1,40 +1,40 @@
 {
   # This values will be multiplied to the build time of a terraforming or megastructure option.
-# Fast - 0.5
-# Normal - 1.0
-# Slow - 2.0
-# Custom - Uses the custom build time multiplier field
-"tme_build_time_setting": "normal", # Replace text with the above options
-"tme_custom_build_time_multiplier": 1.0,
-# This values will be multiplied to the build cost of a terraforming or megastructure option.
-# Low - 0.5
-# Normal - 1.0
-# High - 2.0
-# Custom - Uses the custom build cost multiplier field
-"tme_build_cost_setting": "normal", # Replace text with the above options
-"tme_custom_build_cost_multiplier": 1.0,
-"graphics": {
-"ui_icons_tech_tree": {
-"tme_global_centralization": "graphics/icons/tech/tme_global_centralization.png",
-"tme_atmospheric_regulation": "graphics/icons/tech/tme_atmospheric_regulation.png",
-"tme_surface_restructuring": "graphics/icons/tech/tme_surface_restructuring.png",
-"tme_stellar_topography": "graphics/icons/tech/tme_stellar_topography.png",
-"tme_climate_reformation": "graphics/icons/tech/tme_climate_reformation.png",
-"tme_agricultural_enrichment": "graphics/icons/tech/tme_agricultural_enrichment.png",
-"tme_core_manipulation": "graphics/icons/tech/tme_core_manipulation.png",
-"tme_mineral_compression": "graphics/icons/tech/tme_mineral_compression.png",
-"tme_element_nucleosynthesis": "graphics/icons/tech/tme_element_nucleosynthesis.png",
-"tme_megastructure_engineering": "graphics/icons/tech/tme_megastructure_engineering.png",
-"tme_agricultural_laboratory_sub": "graphics/icons/tech/tme_agricultural_laboratory_sub.png",
-"tme_atmosphere_regulator_sub": "graphics/icons/tech/tme_atmosphere_regulator_sub.png",
-"tme_construction_grid_sub": "graphics/icons/tech/tme_orbital_construction_sub.png",
-"tme_element_synthesizer_sub": "graphics/icons/tech/tme_element_synthesizer_sub.png",
-"tme_geomorphology_station_sub": "graphics/icons/tech/tme_geomorphology_station_sub.png",
-"tme_mineral_replicator_sub": "graphics/icons/tech/tme_mineral_replicator_sub.png",
-"tme_planetary_hologram_sub": "graphics/icons/tech/tme_planetary_hologram_sub.png",
-"tme_stellar_manufactory_sub": "graphics/icons/tech/tme_stellar_manufactory_sub.png",
-"tme_terrestrial_engine_sub": "graphics/icons/tech/tme_terrestrial_engine_sub.png",
-"tme_unification_center_sub": "graphics/icons/tech/tme_unification_center_sub.png"
-}
-}
+  # Fast - 0.5
+  # Normal - 1.0
+  # Slow - 2.0
+  # Custom - Uses the custom build time multiplier field
+  "tme_build_time_setting": "normal", # Replace text with the above options
+  "tme_custom_build_time_multiplier": 1,
+  # This values will be multiplied to the build cost of a terraforming or megastructure option.
+  # Low - 0.5
+  # Normal - 1.0
+  # High - 2.0
+  # Custom - Uses the custom build cost multiplier field
+  "tme_build_cost_setting": "normal", # Replace text with the above options
+  "tme_custom_build_cost_multiplier": 1,
+  "graphics": {
+    "ui_icons_tech_tree": {
+      "tme_global_centralization": "graphics/icons/tech/tme_global_centralization.png",
+      "tme_atmospheric_regulation": "graphics/icons/tech/tme_atmospheric_regulation.png",
+      "tme_surface_restructuring": "graphics/icons/tech/tme_surface_restructuring.png",
+      "tme_stellar_topography": "graphics/icons/tech/tme_stellar_topography.png",
+      "tme_climate_reformation": "graphics/icons/tech/tme_climate_reformation.png",
+      "tme_agricultural_enrichment": "graphics/icons/tech/tme_agricultural_enrichment.png",
+      "tme_core_manipulation": "graphics/icons/tech/tme_core_manipulation.png",
+      "tme_mineral_compression": "graphics/icons/tech/tme_mineral_compression.png",
+      "tme_element_nucleosynthesis": "graphics/icons/tech/tme_element_nucleosynthesis.png",
+      "tme_megastructure_engineering": "graphics/icons/tech/tme_megastructure_engineering.png",
+      "tme_agricultural_laboratory_sub": "graphics/icons/tech/tme_agricultural_laboratory_sub.png",
+      "tme_atmosphere_regulator_sub": "graphics/icons/tech/tme_atmosphere_regulator_sub.png",
+      "tme_construction_grid_sub": "graphics/icons/tech/tme_orbital_construction_sub.png",
+      "tme_element_synthesizer_sub": "graphics/icons/tech/tme_element_synthesizer_sub.png",
+      "tme_geomorphology_station_sub": "graphics/icons/tech/tme_geomorphology_station_sub.png",
+      "tme_mineral_replicator_sub": "graphics/icons/tech/tme_mineral_replicator_sub.png",
+      "tme_planetary_hologram_sub": "graphics/icons/tech/tme_planetary_hologram_sub.png",
+      "tme_stellar_manufactory_sub": "graphics/icons/tech/tme_stellar_manufactory_sub.png",
+      "tme_terrestrial_engine_sub": "graphics/icons/tech/tme_terrestrial_engine_sub.png",
+      "tme_unification_center_sub": "graphics/icons/tech/tme_unification_center_sub.png"
+    }
+  }
 }
