@@ -1,5 +1,10 @@
+### 2.8.4b
+- Release 2.8.4b
+- Exclude converting terraforming options if it contains ids from AoTD VoK already
+
 ### 2.8.4a
 - Release 2.8.4a
+- Update AoTD industry ids
 
 ### 2.8.4
 - Release 2.8.4
