@@ -1,2 +1,0 @@
-bar event id,tags,freq,prob,min dur,max dur,min timeout,max timeout,min accepted timeout,max accepted timeout,plugin
-tmeIntro,"priority, non_repeatable",0,0,30,40,15,20,10000,10000,terraformingmadeeasy.missions.TMEIntro

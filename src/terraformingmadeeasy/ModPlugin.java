@@ -4,7 +4,7 @@ import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
-import com.fs.starfarer.api.campaign.econ.Industry;
+import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Entities;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.codex.CodexDataV2;
@@ -13,12 +13,10 @@ import com.fs.starfarer.api.util.Misc;
 import lunalib.lunaSettings.LunaSettings;
 import terraformingmadeeasy.codex.TMECodexEntry;
 import terraformingmadeeasy.ids.TMEIds;
-import terraformingmadeeasy.ids.TMEPeople;
 import terraformingmadeeasy.listeners.DeathWorldScript;
 import terraformingmadeeasy.listeners.DevelopmentIndustryOptionProvider;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ModPlugin extends BaseModPlugin {
     @Override
@@ -161,7 +159,6 @@ public class ModPlugin extends BaseModPlugin {
 
         DeathWorldScript.register();
         DevelopmentIndustryOptionProvider.register();
-        TMEPeople.register();
 
         if (Utils.isLunaLibEnabled()) {
             Utils.loadLunaSettings();
