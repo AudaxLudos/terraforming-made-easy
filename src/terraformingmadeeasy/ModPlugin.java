@@ -4,9 +4,11 @@ import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
+import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.impl.campaign.ids.Entities;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.codex.CodexDataV2;
+import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.util.Misc;
 import lunalib.lunaSettings.LunaSettings;
 import terraformingmadeeasy.codex.TMECodexEntry;
@@ -15,9 +17,8 @@ import terraformingmadeeasy.ids.TMEPeople;
 import terraformingmadeeasy.listeners.DeathWorldScript;
 import terraformingmadeeasy.listeners.DevelopmentIndustryOptionProvider;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ModPlugin extends BaseModPlugin {
     @Override
@@ -40,7 +41,16 @@ public class ModPlugin extends BaseModPlugin {
             for (Utils.ProjectData condition : projectsCopy) {
                 StringBuilder needOne = new StringBuilder();
                 StringBuilder needAll = new StringBuilder("needAll:");
-                String[] ids = Utils.getUniqueIds(condition.likedIndustries);
+                Set<String> ids = Utils.getUniqueIds(condition.likedIndustries);
+
+                // Skip the project conversion if the data contains aotd_vok industry ids already
+                boolean skip = Global.getSettings().getAllIndustrySpecs().stream()
+                        .filter(s -> s.getSourceMod() != null && Objects.equals(s.getSourceMod().getId(), "aotd_vok"))
+                        .map(IndustrySpecAPI::getId)
+                        .anyMatch(ids::contains);
+                if (skip) {
+                    continue;
+                }
 
                 for (String id : ids) {
                     switch (id) {

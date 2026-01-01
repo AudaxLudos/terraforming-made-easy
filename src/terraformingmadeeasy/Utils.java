@@ -122,7 +122,7 @@ public class Utils {
         return !(canAfford && canBuild);
     }
 
-    public static String[] getUniqueIds(String text) {
+    public static Set<String> getUniqueIds(String text) {
         StringBuilder tempText = new StringBuilder();
         String[] expressions = text.split(",");
 
@@ -136,8 +136,7 @@ public class Utils {
         }
 
         String[] ids = tempText.toString().split("\\|");
-        Set<String> setIds = new HashSet<>(Arrays.asList(ids));
-        return setIds.toArray(new String[0]);
+        return new HashSet<>(Arrays.asList(ids));
     }
 
     public static boolean evaluateExpression(String text, Map<String, Boolean> values) {
