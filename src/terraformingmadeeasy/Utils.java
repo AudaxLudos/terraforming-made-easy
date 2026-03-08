@@ -8,24 +8,16 @@ import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.characters.MarketConditionSpecAPI;
 import com.fs.starfarer.api.impl.campaign.procgen.PlanetGenDataSpec;
-import com.fs.starfarer.api.ui.*;
-import com.fs.starfarer.api.util.Misc;
+import com.fs.starfarer.api.ui.ButtonAPI;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.industries.BaseDevelopmentIndustry;
 import terraformingmadeeasy.industries.BaseTerraformingIndustry;
 import terraformingmadeeasy.industries.ConstructionGrid;
-import terraformingmadeeasy.ui.dialogs.TMEBaseDialogDelegate;
-import terraformingmadeeasy.ui.plugins.SelectButtonPlugin;
-import terraformingmadeeasy.ui.tooltips.MegastructureTooltip;
-import terraformingmadeeasy.ui.tooltips.TerraformTooltip;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.*;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -251,66 +243,6 @@ public class Utils {
         } else {
             button.unhighlight();
         }
-    }
-
-    public static CustomPanelAPI addCustomButton(CustomPanelAPI panel, Object data, Object industry, List<ButtonAPI> buttons, float width, TMEBaseDialogDelegate delegate) {
-        float columnOneWidth = width / 3f + 100f;
-        float columnWidth = (width - columnOneWidth) / 2f;
-
-        Utils.ProjectData project = (Utils.ProjectData) data;
-        String name = project.name;
-        String prefix = "";
-        String suffix = "";
-        String icon = project.icon;
-        float cost = Math.round(project.cost * Settings.BUILD_COST_MULTIPLIER);
-        float buildTime = Math.round(project.buildTime * Settings.BUILD_TIME_MULTIPLIER);
-        boolean canAfford = Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= cost;
-        boolean canAffordAndBuild = !Utils.canAffordAndBuild((BaseDevelopmentIndustry) industry, project);
-        TooltipMakerAPI.TooltipCreator tooltip = null;
-
-        if (industry instanceof ConstructionGrid) {
-            prefix = "Construct ";
-            tooltip = new MegastructureTooltip(project);
-        } else if (industry instanceof BaseTerraformingIndustry ind) {
-            prefix = ind.getMarket().hasCondition(project.id) ? "Remove " : "Add ";
-            if (Objects.equals(ind.getId(), TMEIds.PLANETARY_HOLOGRAM)) {
-                prefix = "Set Visual to ";
-                suffix = " World";
-            }
-            tooltip = new TerraformTooltip(project, ind);
-        }
-
-        CustomPanelAPI optionPanel = panel.createCustomPanel(width, 44f, new SelectButtonPlugin(delegate));
-
-        TooltipMakerAPI optionButtonElement = optionPanel.createUIElement(width, 44f, false);
-        ButtonAPI optionButton = optionButtonElement.addButton("", data, new Color(0, 195, 255, 190), new Color(0, 0, 0, 255), Alignment.MID, CutStyle.NONE, width, 44f, 0f);
-        Utils.setButtonEnabledOrHighlighted(optionButton, canAffordAndBuild, !canAffordAndBuild);
-        optionButtonElement.addTooltipTo(tooltip, optionButton, TooltipMakerAPI.TooltipLocation.RIGHT);
-        optionButtonElement.getPosition().setXAlignOffset(-10f);
-        optionPanel.addUIElement(optionButtonElement);
-
-        TooltipMakerAPI optionNameElement = optionPanel.createUIElement(columnOneWidth, 40f, false);
-        TooltipMakerAPI optionImage = optionNameElement.beginImageWithText(icon, 40f);
-        optionImage.addPara(prefix + name + suffix, canAffordAndBuild ? Misc.getBasePlayerColor() : Misc.getNegativeHighlightColor(), 0f);
-        optionNameElement.addImageWithText(0f);
-        optionNameElement.getPosition().setXAlignOffset(-8f).setYAlignOffset(2f);
-        optionPanel.addUIElement(optionNameElement);
-
-        TooltipMakerAPI optionBuildTimeElement = optionPanel.createUIElement(columnWidth, 40f, false);
-        optionBuildTimeElement.addPara(Misc.getWithDGS(buildTime), Misc.getHighlightColor(), 12f).setAlignment(Alignment.MID);
-        optionBuildTimeElement.getPosition().rightOfMid(optionNameElement, 0f);
-        optionPanel.addUIElement(optionBuildTimeElement);
-
-        TooltipMakerAPI optionCostElement = optionPanel.createUIElement(columnWidth, 40f, false);
-        optionCostElement.addPara(Misc.getDGSCredits(cost), canAfford ? Misc.getHighlightColor() : Misc.getNegativeHighlightColor(), 12f).setAlignment(Alignment.MID);
-        optionCostElement.getPosition().rightOfMid(optionBuildTimeElement, 0f);
-        optionPanel.addUIElement(optionCostElement);
-
-        if (canAffordAndBuild) {
-            buttons.add(optionButton);
-        }
-
-        return optionPanel;
     }
 
     public static class SortCanAffordAndBuild implements Comparator<Utils.ProjectData> {
