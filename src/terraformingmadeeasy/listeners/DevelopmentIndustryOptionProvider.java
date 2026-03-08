@@ -20,8 +20,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class DevelopmentIndustryOptionProvider extends BaseIndustryOptionProvider {
-    public static List<String> tmeIndustries = new ArrayList<>();
-    public static Object CUSTOM_PLUGIN = new Object();
+    public static final List<String> tmeIndustries = new ArrayList<>();
+    public static final Object CUSTOM_PLUGIN = new Object();
 
     static {
         tmeIndustries.add(TMEIds.AGRICULTURAL_LABORATORY);

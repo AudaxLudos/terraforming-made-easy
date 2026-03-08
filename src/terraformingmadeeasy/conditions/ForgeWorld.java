@@ -10,14 +10,14 @@ import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.Settings;
 
 public class ForgeWorld extends BaseMarketConditionPlugin {
-    public static float FLEET_QUALITY_MOD = 0.50f;
-    public static float CUSTOM_PRODUCTION_MULT = 0.50f;
-    public static int MAX_INDUSTRIES_BONUS = 1;
-    public static int SUPPLY_BONUS = 1;
-    public String[] industryIds = {
+    public static final float FLEET_QUALITY_MOD = 0.50f;
+    public static final float CUSTOM_PRODUCTION_MULT = 0.50f;
+    public static final int MAX_INDUSTRIES_BONUS = 1;
+    public static final int SUPPLY_BONUS = 1;
+    public final String[] industryIds = {
             Industries.ORBITALWORKS, Industries.MINING, Industries.REFINING, Industries.FUELPROD
     };
-    public String[] aotdVokIndustryIds = {
+    public final String[] aotdVokIndustryIds = {
             "supplyheavy", "weaponheavy", "triheavy", "hegeheavy", "orbitalheavy", "stella_manufactorium", "nidavelir_complex",
             "fracking", "mining_megaplex", "pluto_station",
             "crystalizator", "isotope_separator", "policrystalizator", "cascade_reprocesor",

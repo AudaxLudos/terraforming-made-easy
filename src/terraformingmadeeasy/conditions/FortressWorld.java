@@ -11,14 +11,14 @@ import terraformingmadeeasy.Settings;
 import java.util.Objects;
 
 public class FortressWorld extends BaseMarketConditionPlugin {
-    public static float FLEET_SIZE_MULT = 0.50f;
-    public static float GROUND_DEFENSE_MULT = 0.50f;
-    public static int HEAVY_PATROL_BONUS = 1;
-    public static int SUPPLY_BONUS = 1;
-    public String[] industryIds = {
+    public static final float FLEET_SIZE_MULT = 0.50f;
+    public static final float GROUND_DEFENSE_MULT = 0.50f;
+    public static final int HEAVY_PATROL_BONUS = 1;
+    public static final int SUPPLY_BONUS = 1;
+    public final String[] industryIds = {
             Industries.POPULATION, Industries.ORBITALWORKS, Industries.HIGHCOMMAND, Industries.FUELPROD
     };
-    public String[] aotdVokIndustryIds = {
+    public final String[] aotdVokIndustryIds = {
             "supplyheavy", "weaponheavy", "triheavy", "hegeheavy", "orbitalheavy", "stella_manufactorium", "nidavelir_complex",
             "blast_processing"
     };

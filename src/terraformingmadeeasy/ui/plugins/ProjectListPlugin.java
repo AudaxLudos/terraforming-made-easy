@@ -17,9 +17,9 @@ import java.util.List;
 import java.util.Objects;
 
 public class ProjectListPlugin extends BaseCustomUIPanelPlugin {
-    public CustomPanelAPI panel;
+    public final CustomPanelAPI panel;
     public Utils.ProjectData selected;
-    public List<ButtonAPI> buttons = new ArrayList<>();
+    public final List<ButtonAPI> buttons = new ArrayList<>();
 
     public ProjectListPlugin(CustomPanelAPI panel, BaseDevelopmentIndustry industry, String industryId, List<Utils.ProjectData> projects, float width, float height, boolean isForCodex) {
         float columnOneWidth = width / 3f + 100f;

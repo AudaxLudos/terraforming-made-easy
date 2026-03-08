@@ -12,8 +12,8 @@ import java.awt.*;
 import java.util.Objects;
 
 public class TerraformTooltip extends BaseTooltipCreator {
-    public Utils.ProjectData project;
-    public BaseDevelopmentIndustry industry;
+    public final Utils.ProjectData project;
+    public final BaseDevelopmentIndustry industry;
 
     public TerraformTooltip(Utils.ProjectData condition, BaseDevelopmentIndustry industry) {
         this.project = condition;

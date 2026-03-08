@@ -10,9 +10,9 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import java.util.List;
 
 public class TextFieldPlugin extends BaseCustomUIPanelPlugin {
-    public CustomPanelAPI panel;
-    public CustomPanelAPI textFieldPanel;
-    public TextFieldAPI textField;
+    public final CustomPanelAPI panel;
+    public final CustomPanelAPI textFieldPanel;
+    public final TextFieldAPI textField;
     public float width = 0f;
     public float height = 0f;
     public boolean shouldRecaptureFocus = false;

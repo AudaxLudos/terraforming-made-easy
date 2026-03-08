@@ -8,14 +8,14 @@ import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.Settings;
 
 public class ParadiseWorld extends BaseMarketConditionPlugin {
-    public static float INCOME_MULT = 0.50f;
-    public static float ACCESSIBILITY_MOD = 0.50f;
-    public static int STABILITY_BONUS = 4;
-    public static int SUPPLY_BONUS = 1;
-    public String[] industryIds = {
+    public static final float INCOME_MULT = 0.50f;
+    public static final float ACCESSIBILITY_MOD = 0.50f;
+    public static final int STABILITY_BONUS = 4;
+    public static final int SUPPLY_BONUS = 1;
+    public final String[] industryIds = {
             Industries.POPULATION, Industries.FARMING, Industries.AQUACULTURE, Industries.LIGHTINDUSTRY
     };
-    public String[] aotdVokIndustryIds = {
+    public final String[] aotdVokIndustryIds = {
             "artifarming", "subfarming",
             "hightech", "druglight", "consumerindustry"
     };

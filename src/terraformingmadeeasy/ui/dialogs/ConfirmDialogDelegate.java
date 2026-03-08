@@ -13,8 +13,8 @@ import java.awt.*;
 public class ConfirmDialogDelegate extends BaseCustomDialogDelegate {
     public static final float WIDTH = 564f;
     public static final float HEIGHT = 104f;
-    public Industry industry;
-    public float cost;
+    public final Industry industry;
+    public final float cost;
 
     public ConfirmDialogDelegate(Industry industry, float cost) {
         this.industry = industry;

@@ -3,7 +3,7 @@ package terraformingmadeeasy.ui.tooltips;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 
 public class TextTooltip implements TooltipMakerAPI.TooltipCreator {
-    protected String text;
+    protected final String text;
 
     public TextTooltip(String text) {
         this.text = text;

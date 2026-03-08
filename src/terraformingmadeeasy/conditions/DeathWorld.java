@@ -14,16 +14,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DeathWorld extends BaseMarketConditionPlugin {
-    public static int SUPPRESS_CONDITION_PER_MONTH_MOD = 6;
-    public static float MARINES_TO_TRAIN_MULT = 0.05f;
-    public static float GROUND_DEFENSE_MULT = 0.50f;
-    public static int SUPPLY_BONUS = 1;
-    public List<MarketConditionAPI> suppressedConditions = new ArrayList<>();
+    public static final int SUPPRESS_CONDITION_PER_MONTH_MOD = 6;
+    public static final float MARINES_TO_TRAIN_MULT = 0.05f;
+    public static final float GROUND_DEFENSE_MULT = 0.50f;
+    public static final int SUPPLY_BONUS = 1;
+    public final List<MarketConditionAPI> suppressedConditions = new ArrayList<>();
     public int monthsActive = 0;
-    public String[] industryIds = {
+    public final String[] industryIds = {
             Industries.POPULATION, Industries.ORBITALWORKS, Industries.HIGHCOMMAND, Industries.MINING,
     };
-    public String[] aotdVokIndustryIds = {
+    public final String[] aotdVokIndustryIds = {
             "supplyheavy", "weaponheavy", "triheavy", "hegeheavy", "orbitalheavy", "stella_manufactorium", "nidavelir_complex",
             "fracking", "mining_megaplex", "pluto_station"
     };

@@ -10,7 +10,7 @@ import terraformingmadeeasy.ids.TMEIds;
 import java.util.Objects;
 
 public class MegastructureTooltip extends BaseTooltipCreator {
-    public Utils.ProjectData project;
+    public final Utils.ProjectData project;
 
     public MegastructureTooltip(Utils.ProjectData project) {
         this.project = project;

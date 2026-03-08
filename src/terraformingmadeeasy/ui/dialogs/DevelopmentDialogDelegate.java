@@ -23,10 +23,10 @@ import java.util.List;
 import java.util.Map;
 
 public class DevelopmentDialogDelegate extends BaseCustomDialogDelegate {
-    public float width;
-    public float height;
+    public final float width;
+    public final float height;
     public boolean hasCustomInputs;
-    public BaseDevelopmentIndustry industry;
+    public final BaseDevelopmentIndustry industry;
     public Object data = null;
     public Object data2 = null;
     public Object data3 = null;

@@ -25,8 +25,8 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
     protected UIPanelAPI relatedEntries;
     protected UIPanelAPI box;
     protected CodexDialogAPI codex;
-    protected IndustrySpecAPI spec;
-    protected List<Utils.ProjectData> projects;
+    protected final IndustrySpecAPI spec;
+    protected final List<Utils.ProjectData> projects;
 
     public TMECodexEntry(String id, String title, String icon, Object param, Object param2) {
         super(id, title, icon, param);

@@ -246,7 +246,7 @@ public class Utils {
     }
 
     public static class SortCanAffordAndBuild implements Comparator<Utils.ProjectData> {
-        BaseDevelopmentIndustry industry;
+        final BaseDevelopmentIndustry industry;
 
         public SortCanAffordAndBuild(BaseDevelopmentIndustry industry) {
             this.industry = industry;
@@ -259,10 +259,10 @@ public class Utils {
     }
 
     public static class OrbitData {
-        public SectorEntityToken entity;
-        public float orbitAngle;
-        public float orbitRadius;
-        public float orbitDays;
+        public final SectorEntityToken entity;
+        public final float orbitAngle;
+        public final float orbitRadius;
+        public final float orbitDays;
 
         public OrbitData(SectorEntityToken entity, float orbitAngle, float orbitRadius, float orbitDays) {
             this.entity = entity;
@@ -273,11 +273,11 @@ public class Utils {
     }
 
     public static class ProjectData {
-        public String id;
-        public String name;
+        public final String id;
+        public final String name;
         public String icon;
-        public float cost;
-        public float buildTime;
+        public final float cost;
+        public final float buildTime;
         public boolean canChangeGasGiants;
         public String likedConditions;
         public String likedIndustries;

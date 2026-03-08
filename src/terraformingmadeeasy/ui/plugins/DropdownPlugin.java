@@ -13,14 +13,14 @@ import java.util.List;
 import java.util.Map;
 
 public class DropdownPlugin extends BaseCustomUIPanelPlugin {
-    public CustomPanelAPI panel;
-    public CustomPanelAPI menuPanel;
-    public ButtonAPI button;
-    public LabelAPI label;
+    public final CustomPanelAPI panel;
+    public final CustomPanelAPI menuPanel;
+    public final ButtonAPI button;
+    public final LabelAPI label;
     public boolean isDropped = false;
     public boolean isRendered = false;
-    public Map<String, Object> options;
-    public List<ButtonAPI> buttons = new ArrayList<>();
+    public final Map<String, Object> options;
+    public final List<ButtonAPI> buttons = new ArrayList<>();
     public Object selected;
 
     public DropdownPlugin(CustomPanelAPI panel, float width, float height, Map<String, Object> options) {
