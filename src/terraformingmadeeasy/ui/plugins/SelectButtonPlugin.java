@@ -35,8 +35,7 @@ public class SelectButtonPlugin extends BaseCustomUIPanelPlugin {
             this.delegate.selected = null;
         }
 
-        if (this.delegate instanceof MegastructureDialogDelegate) {
-            MegastructureDialogDelegate megastructureDelegate = (MegastructureDialogDelegate) this.delegate;
+        if (this.delegate instanceof MegastructureDialogDelegate megastructureDelegate) {
             megastructureDelegate.startAngleTextFieldPlugin.textField.setText("0");
             megastructureDelegate.orbitRadiusTextFieldPlugin.textField.setText("1000");
             megastructureDelegate.orbitDaysTextFieldPlugin.textField.setText("100");

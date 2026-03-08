@@ -7,7 +7,6 @@ import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.Settings;
-import terraformingmadeeasy.Utils;
 
 import java.util.Objects;
 

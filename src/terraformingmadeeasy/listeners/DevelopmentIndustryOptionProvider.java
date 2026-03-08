@@ -11,7 +11,6 @@ import terraformingmadeeasy.Settings;
 import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.industries.BaseDevelopmentIndustry;
-import terraformingmadeeasy.industries.BaseTerraformingIndustry;
 import terraformingmadeeasy.ui.dialogs.ConfirmDialogDelegate;
 import terraformingmadeeasy.ui.dialogs.DevelopmentDialogDelegate;
 import terraformingmadeeasy.ui.dialogs.TerraformingDialogDelegate;

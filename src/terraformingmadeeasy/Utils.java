@@ -10,7 +10,6 @@ import com.fs.starfarer.api.characters.MarketConditionSpecAPI;
 import com.fs.starfarer.api.impl.campaign.procgen.PlanetGenDataSpec;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
-import lunalib.lunaSettings.LunaSettings;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,15 +55,15 @@ public class Utils {
     public static boolean canAffordAndBuild(BaseDevelopmentIndustry industry, Utils.ProjectData project) {
         boolean canAfford = Global.getSettings().isInCampaignState() && Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= project.cost * Settings.BUILD_COST_MULTIPLIER;
         boolean canBuild = true;
-        if (industry instanceof BaseTerraformingIndustry) {
+        if (industry instanceof BaseTerraformingIndustry ind) {
             MarketAPI market = industry.getMarket();
             boolean canBeRemoved = market.hasCondition(project.id);
-            canBuild = ((BaseTerraformingIndustry) industry).canTerraformCondition(project) || canBeRemoved;
+            canBuild = ind.canTerraformCondition(project) || canBeRemoved;
             if (market.getPrimaryEntity() instanceof PlanetAPI && ((PlanetAPI) market.getPrimaryEntity()).isGasGiant()) {
                 canBuild = canBuild && project.canChangeGasGiants;
             }
-        } else if (industry instanceof ConstructionGrid) {
-            canBuild = ((ConstructionGrid) industry).canBuildMegastructure(project.id);
+        } else if (industry instanceof ConstructionGrid ind) {
+            canBuild = ind.canBuildMegastructure(project.id);
         }
         return !(canAfford && canBuild);
     }
@@ -272,8 +271,7 @@ public class Utils {
         if (industry instanceof ConstructionGrid) {
             prefix = "Construct ";
             tooltip = new MegastructureTooltip(project);
-        } else if (industry instanceof BaseTerraformingIndustry) {
-            BaseTerraformingIndustry ind = (BaseTerraformingIndustry) industry;
+        } else if (industry instanceof BaseTerraformingIndustry ind) {
             prefix = ind.getMarket().hasCondition(project.id) ? "Remove " : "Add ";
             if (Objects.equals(ind.getId(), TMEIds.PLANETARY_HOLOGRAM)) {
                 prefix = "Set Visual to ";

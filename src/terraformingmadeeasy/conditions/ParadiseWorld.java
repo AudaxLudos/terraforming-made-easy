@@ -6,7 +6,6 @@ import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.Settings;
-import terraformingmadeeasy.Utils;
 
 public class ParadiseWorld extends BaseMarketConditionPlugin {
     public static float INCOME_MULT = 0.50f;

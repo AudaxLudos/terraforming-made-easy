@@ -24,7 +24,6 @@ import terraformingmadeeasy.conditions.DeathWorld;
 import terraformingmadeeasy.ids.TMEIds;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -102,13 +101,7 @@ public class DeathWorldScript implements EconomyTickListener, ColonyInteractionL
         marineData.savedXP = marineData.xp;
 
         if (withDroppedOff) {
-            Iterator<PlayerFleetPersonnelTracker.PersonnelAtEntity> itr = tracker.getDroppedOff().iterator();
-            while (itr.hasNext()) {
-                PlayerFleetPersonnelTracker.PersonnelAtEntity pae = itr.next();
-                if (!pae.entity.isAlive() || pae.data.num <= 0 || pae.data.xp <= 0) {
-                    itr.remove();
-                }
-            }
+            tracker.getDroppedOff().removeIf(pae -> !pae.entity.isAlive() || pae.data.num <= 0 || pae.data.xp <= 0);
         }
     }
 
@@ -134,8 +127,7 @@ public class DeathWorldScript implements EconomyTickListener, ColonyInteractionL
             tracker.data.num = marineCount;
             tracker.data.addXP(marineCount * DeathWorld.MARINES_TO_TRAIN_MULT);
 
-            if (m.getCondition(TMEIds.DEATH_WORLD).getPlugin() instanceof DeathWorld) {
-                DeathWorld conditionPlugin = (DeathWorld) m.getCondition(TMEIds.DEATH_WORLD).getPlugin();
+            if (m.getCondition(TMEIds.DEATH_WORLD).getPlugin() instanceof DeathWorld conditionPlugin) {
 
                 ++conditionPlugin.monthsActive;
                 if (conditionPlugin.monthsActive >= DeathWorld.SUPPRESS_CONDITION_PER_MONTH_MOD) {

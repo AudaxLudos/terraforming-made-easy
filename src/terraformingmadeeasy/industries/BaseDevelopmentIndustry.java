@@ -15,7 +15,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.Objects;
 
-public class BaseDevelopmentIndustry extends BaseIndustry {
+public abstract class BaseDevelopmentIndustry extends BaseIndustry {
     public static final Logger log = Global.getLogger(BaseDevelopmentIndustry.class);
     public static final float GAMMA_BUILD_TIME_MULT = 0.20f;
     public static final float BETA_BUILD_TIME_MULT = 0.30f;
@@ -244,18 +244,12 @@ public class BaseDevelopmentIndustry extends BaseIndustry {
         }
 
         float mult = UPKEEP_MULT;
-        String name = "AI Core assigned";
-        switch (this.aiCoreId) {
-            case Commodities.ALPHA_CORE:
-                name = "Alpha Core assigned";
-                break;
-            case Commodities.BETA_CORE:
-                name = "Beta Core assigned";
-                break;
-            case Commodities.GAMMA_CORE:
-                name = "Gamma Core assigned";
-                break;
-        }
+        String name = switch (this.aiCoreId) {
+            case Commodities.ALPHA_CORE -> "Alpha Core assigned";
+            case Commodities.BETA_CORE -> "Beta Core assigned";
+            case Commodities.GAMMA_CORE -> "Gamma Core assigned";
+            default -> "AI Core assigned";
+        };
 
         getUpkeep().modifyMult("ind_core", mult, name);
     }
@@ -276,9 +270,7 @@ public class BaseDevelopmentIndustry extends BaseIndustry {
         this.project = option;
     }
 
-    public void completeProject() {
-    }
+    public abstract void completeProject();
 
-    public void sendCompletedMessage() {
-    }
+    public abstract void sendCompletedMessage();
 }

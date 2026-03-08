@@ -9,7 +9,6 @@ import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.Settings;
-import terraformingmadeeasy.Utils;
 
 import java.util.ArrayList;
 import java.util.List;

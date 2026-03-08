@@ -8,7 +8,6 @@ import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.Settings;
-import terraformingmadeeasy.Utils;
 
 public class ForgeWorld extends BaseMarketConditionPlugin {
     public static float FLEET_QUALITY_MOD = 0.50f;
