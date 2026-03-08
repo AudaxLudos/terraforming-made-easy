@@ -138,7 +138,7 @@ public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
 
         tooltip.addPara(spec.getDesc(), initPad);
         String optionsText = "Terraforming";
-        String optionsDesc = "Planetary conditions can be added or removed at any time. Once a terraforming project is completed, the planet will be terraformed immediately based on its current conditions.";
+        String optionsDesc = "Planetary conditions can be added or removed at any time. Once a terraforming project is completed, the planet will be terraformed immediately based on its current conditions. Removing planetary conditions costs 80% less";
         String nameTooltipText = "Name of the condition to terraform on a planet";
         String timeTooltipText = "Build time, in days. Until the terraforming project finishes.";
         String costTooltipText = "One-time cost to begin terraforming project, in credits";
