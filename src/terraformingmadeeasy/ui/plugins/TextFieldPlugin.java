@@ -13,8 +13,6 @@ public class TextFieldPlugin extends BaseCustomUIPanelPlugin {
     public final CustomPanelAPI panel;
     public final CustomPanelAPI textFieldPanel;
     public final TextFieldAPI textField;
-    public float width = 0f;
-    public float height = 0f;
     public boolean shouldRecaptureFocus = false;
 
     public TextFieldPlugin(CustomPanelAPI panel, float width, float height) {

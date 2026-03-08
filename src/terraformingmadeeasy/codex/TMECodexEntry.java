@@ -21,12 +21,12 @@ import java.util.Objects;
 import java.util.Set;
 
 public class TMECodexEntry extends CodexEntryV2 implements CustomUIPanelPlugin {
+    protected final IndustrySpecAPI spec;
+    protected final List<Utils.ProjectData> projects;
     protected CustomPanelAPI panel;
     protected UIPanelAPI relatedEntries;
     protected UIPanelAPI box;
     protected CodexDialogAPI codex;
-    protected final IndustrySpecAPI spec;
-    protected final List<Utils.ProjectData> projects;
 
     public TMECodexEntry(String id, String title, String icon, Object param, Object param2) {
         super(id, title, icon, param);

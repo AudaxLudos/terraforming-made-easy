@@ -245,39 +245,23 @@ public class Utils {
         }
     }
 
-    public static class SortCanAffordAndBuild implements Comparator<Utils.ProjectData> {
-        final BaseDevelopmentIndustry industry;
-
-        public SortCanAffordAndBuild(BaseDevelopmentIndustry industry) {
-            this.industry = industry;
-        }
+    public record SortCanAffordAndBuild(BaseDevelopmentIndustry industry) implements Comparator<ProjectData> {
 
         @Override
-        public int compare(Utils.ProjectData o1, Utils.ProjectData o2) {
+        public int compare(ProjectData o1, ProjectData o2) {
             return Boolean.compare(canAffordAndBuild(this.industry, o1), canAffordAndBuild(this.industry, o2));
         }
     }
 
-    public static class OrbitData {
-        public final SectorEntityToken entity;
-        public final float orbitAngle;
-        public final float orbitRadius;
-        public final float orbitDays;
-
-        public OrbitData(SectorEntityToken entity, float orbitAngle, float orbitRadius, float orbitDays) {
-            this.entity = entity;
-            this.orbitAngle = orbitAngle;
-            this.orbitRadius = orbitRadius;
-            this.orbitDays = orbitDays;
-        }
+    public record OrbitData(SectorEntityToken entity, float orbitAngle, float orbitRadius, float orbitDays) {
     }
 
     public static class ProjectData {
         public final String id;
         public final String name;
-        public String icon;
         public final float cost;
         public final float buildTime;
+        public String icon;
         public boolean canChangeGasGiants;
         public String likedConditions;
         public String likedIndustries;

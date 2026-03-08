@@ -18,8 +18,8 @@ import java.util.Objects;
 
 public class ProjectListPlugin extends BaseCustomUIPanelPlugin {
     public final CustomPanelAPI panel;
-    public Utils.ProjectData selected;
     public final List<ButtonAPI> buttons = new ArrayList<>();
+    public Utils.ProjectData selected;
 
     public ProjectListPlugin(CustomPanelAPI panel, BaseDevelopmentIndustry industry, String industryId, List<Utils.ProjectData> projects, float width, float height, boolean isForCodex) {
         float columnOneWidth = width / 3f + 100f;
@@ -36,7 +36,7 @@ public class ProjectListPlugin extends BaseCustomUIPanelPlugin {
             float buildTime = Math.round(project.buildTime * Settings.BUILD_TIME_MULTIPLIER);
             float baseCost = project.cost;
             boolean isConditionForRemoval = industry != null && industry.getMarket().hasCondition(project.id);
-            float conditionRemovalMult = !isConditionForRemoval ? 1f : 0.2f;
+            float conditionRemovalMult = !isConditionForRemoval ? 1f : Settings.REMOVAL_COST_MULTIPLIER;
             float totalCost = Math.round(baseCost * conditionRemovalMult * Settings.BUILD_COST_MULTIPLIER);
 
             boolean canAfford = Global.getSettings().isInCampaignState() && Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= totalCost;

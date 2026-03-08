@@ -19,7 +19,6 @@ public class DeathWorld extends BaseMarketConditionPlugin {
     public static final float GROUND_DEFENSE_MULT = 0.50f;
     public static final int SUPPLY_BONUS = 1;
     public final List<MarketConditionAPI> suppressedConditions = new ArrayList<>();
-    public int monthsActive = 0;
     public final String[] industryIds = {
             Industries.POPULATION, Industries.ORBITALWORKS, Industries.HIGHCOMMAND, Industries.MINING,
     };
@@ -27,6 +26,7 @@ public class DeathWorld extends BaseMarketConditionPlugin {
             "supplyheavy", "weaponheavy", "triheavy", "hegeheavy", "orbitalheavy", "stella_manufactorium", "nidavelir_complex",
             "fracking", "mining_megaplex", "pluto_station"
     };
+    public int monthsActive = 0;
 
     @Override
     public void apply(String id) {

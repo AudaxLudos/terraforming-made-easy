@@ -2,13 +2,7 @@ package terraformingmadeeasy.ui.tooltips;
 
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 
-public class TextTooltip implements TooltipMakerAPI.TooltipCreator {
-    protected final String text;
-
-    public TextTooltip(String text) {
-        this.text = text;
-    }
-
+public record TextTooltip(String text) implements TooltipMakerAPI.TooltipCreator {
     @Override
     public boolean isTooltipExpandable(Object tooltipParam) {
         return false;

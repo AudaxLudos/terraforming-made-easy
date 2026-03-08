@@ -25,8 +25,8 @@ import java.util.Map;
 public class DevelopmentDialogDelegate extends BaseCustomDialogDelegate {
     public final float width;
     public final float height;
-    public boolean hasCustomInputs;
     public final BaseDevelopmentIndustry industry;
+    public boolean hasCustomInputs;
     public Object data = null;
     public Object data2 = null;
     public Object data3 = null;

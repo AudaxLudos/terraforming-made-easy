@@ -86,10 +86,10 @@ public class ConstructionGrid extends BaseDevelopmentIndustry {
     public void buildMegastructure() {
         StarSystemAPI system = getMarket().getStarSystem();
         String customEntityId = this.project.id;
-        SectorEntityToken orbitEntity = this.orbitData.entity;
-        float orbitAngle = this.orbitData.orbitAngle;
-        float orbitRadius = this.orbitData.orbitRadius;
-        float orbitDays = this.orbitData.orbitDays;
+        SectorEntityToken orbitEntity = this.orbitData.entity();
+        float orbitAngle = this.orbitData.orbitAngle();
+        float orbitRadius = this.orbitData.orbitRadius();
+        float orbitDays = this.orbitData.orbitDays();
         if (Objects.equals(customEntityId, Entities.CORONAL_TAP)) {
             SectorEntityToken coronalTap = system.addCustomEntity(null, null, Entities.CORONAL_TAP, Factions.NEUTRAL);
             coronalTap.setCircularOrbit(orbitEntity, orbitAngle, orbitRadius, orbitDays);

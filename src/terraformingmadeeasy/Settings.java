@@ -6,9 +6,9 @@ import lunalib.lunaSettings.LunaSettingsListener;
 import terraformingmadeeasy.ids.TMEIds;
 
 public class Settings implements LunaSettingsListener {
+    public static final float REMOVAL_COST_MULTIPLIER = 0.2f;
     public static float BUILD_TIME_MULTIPLIER = 1.0f;
     public static float BUILD_COST_MULTIPLIER = 1.0f;
-    public static float REMOVAL_COST_MULTIPLIER = 0.2f;
 
     public static void load() {
         loadSettings();
@@ -24,7 +24,6 @@ public class Settings implements LunaSettingsListener {
     public static void setSettings() {
         BUILD_TIME_MULTIPLIER = getBuildCostValue(getString("tme_build_time_settings"), "tme_custom_build_time_settings");
         BUILD_COST_MULTIPLIER = getBuildCostValue(getString("tme_build_cost_settings"), "tme_custom_build_cost_settings");
-        REMOVAL_COST_MULTIPLIER = getFloat("tme_removal_cost_setting");
     }
 
     public static float getBuildCostValue(String setting, String customFieldId) {

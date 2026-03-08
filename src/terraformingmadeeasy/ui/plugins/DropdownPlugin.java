@@ -17,10 +17,10 @@ public class DropdownPlugin extends BaseCustomUIPanelPlugin {
     public final CustomPanelAPI menuPanel;
     public final ButtonAPI button;
     public final LabelAPI label;
-    public boolean isDropped = false;
-    public boolean isRendered = false;
     public final Map<String, Object> options;
     public final List<ButtonAPI> buttons = new ArrayList<>();
+    public boolean isDropped = false;
+    public boolean isRendered = false;
     public Object selected;
 
     public DropdownPlugin(CustomPanelAPI panel, float width, float height, Map<String, Object> options) {
@@ -42,23 +42,25 @@ public class DropdownPlugin extends BaseCustomUIPanelPlugin {
 
         this.menuPanel = this.panel.createCustomPanel(width, height * 3.5f, null);
         TooltipMakerAPI menuElement = this.menuPanel.createUIElement(width, height * 3.5f - 1f, true);
-        for (Map.Entry<String, Object> entry : this.options.entrySet()) {
-            CustomPanelAPI optionPanel = this.menuPanel.createCustomPanel(width, height, this);
+        if (this.options != null) {
+            for (Map.Entry<String, Object> entry : this.options.entrySet()) {
+                CustomPanelAPI optionPanel = this.menuPanel.createCustomPanel(width, height, this);
 
-            TooltipMakerAPI optionButtonElement = optionPanel.createUIElement(width, height, false);
-            ButtonAPI optionButton = optionButtonElement.addButton("", entry.getValue(), new Color(0, 195, 255, 190), new Color(0, 0, 0, 255), Alignment.MID, CutStyle.NONE, width, height, 0f);
-            optionButtonElement.getPosition().setXAlignOffset(-10f);
-            optionPanel.addUIElement(optionButtonElement);
+                TooltipMakerAPI optionButtonElement = optionPanel.createUIElement(width, height, false);
+                ButtonAPI optionButton = optionButtonElement.addButton("", entry.getValue(), new Color(0, 195, 255, 190), new Color(0, 0, 0, 255), Alignment.MID, CutStyle.NONE, width, height, 0f);
+                optionButtonElement.getPosition().setXAlignOffset(-10f);
+                optionPanel.addUIElement(optionButtonElement);
 
-            TooltipMakerAPI optionNameElement = optionPanel.createUIElement(width, height, false);
-            LabelAPI optionName = optionNameElement.addPara(entry.getKey(), Misc.getBasePlayerColor(), 0f);
-            float yOptionPad = height / 2f - optionName.computeTextHeight(optionName.getText()) / 2f;
-            optionName.getPosition().inTL(0f, yOptionPad);
-            optionPanel.addUIElement(optionNameElement);
+                TooltipMakerAPI optionNameElement = optionPanel.createUIElement(width, height, false);
+                LabelAPI optionName = optionNameElement.addPara(entry.getKey(), Misc.getBasePlayerColor(), 0f);
+                float yOptionPad = height / 2f - optionName.computeTextHeight(optionName.getText()) / 2f;
+                optionName.getPosition().inTL(0f, yOptionPad);
+                optionPanel.addUIElement(optionNameElement);
 
-            menuElement.addCustom(optionPanel, 0f);
+                menuElement.addCustom(optionPanel, 0f);
 
-            this.buttons.add(optionButton);
+                this.buttons.add(optionButton);
+            }
         }
         this.menuPanel.setOpacity(0f);
         this.menuPanel.addUIElement(menuElement);

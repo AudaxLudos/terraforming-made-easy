@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="EntryPointsManager">
+    <entry_points version="2.0">
+      <entry_point TYPE="field" FQNAME="terraformingmadeeasy.codex.TMECodexEntry codex" />
+      <entry_point TYPE="field" FQNAME="terraformingmadeeasy.codex.TMECodexEntry relatedEntries" />
+    </entry_points>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_17" project-jdk-name="ms-17" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>

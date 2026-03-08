@@ -95,7 +95,7 @@ public class DevelopmentIndustryOptionProvider extends BaseIndustryOptionProvide
             Utils.ProjectData project = ((BaseDevelopmentIndustry) opt.ind).getProject();
             float baseCost = project.cost;
             boolean isConditionForRemoval = opt.ind != null && opt.ind.getMarket().hasCondition(project.id);
-            float conditionRemovalMult = !isConditionForRemoval ? 1f : 0.2f;
+            float conditionRemovalMult = !isConditionForRemoval ? 1f : Settings.REMOVAL_COST_MULTIPLIER;
             refundCost = Math.round(baseCost * conditionRemovalMult * Settings.BUILD_COST_MULTIPLIER);
             text = refundText;
         }
@@ -120,7 +120,7 @@ public class DevelopmentIndustryOptionProvider extends BaseIndustryOptionProvide
                 Utils.ProjectData project = ((BaseDevelopmentIndustry) opt.ind).getProject();
                 float baseCost = project.cost;
                 boolean isConditionForRemoval = opt.ind != null && opt.ind.getMarket().hasCondition(project.id);
-                float conditionRemovalMult = !isConditionForRemoval ? 1f : 0.2f;
+                float conditionRemovalMult = !isConditionForRemoval ? 1f : Settings.REMOVAL_COST_MULTIPLIER;
                 float totalCost = Math.round(baseCost * conditionRemovalMult * Settings.BUILD_COST_MULTIPLIER);
 
                 ConfirmDialogDelegate dialogDelegate = new ConfirmDialogDelegate(opt.ind, totalCost);
