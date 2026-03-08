@@ -11,7 +11,7 @@ import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.industries.BaseDevelopmentIndustry;
 import terraformingmadeeasy.industries.PlanetaryHologram;
 import terraformingmadeeasy.industries.StellarManufactory;
-import terraformingmadeeasy.ui.plugins.DropdownPluginV2;
+import terraformingmadeeasy.ui.plugins.DropdownPlugin;
 import terraformingmadeeasy.ui.plugins.ProjectListPlugin;
 import terraformingmadeeasy.ui.tooltips.TextTooltip;
 
@@ -57,9 +57,9 @@ public class TerraformingDialogDelegate extends DevelopmentDialogDelegate {
         mirrorOptions.put("Add Three", StellarManufactory.StellarMirrorOptions.ADD_THREE);
         mirrorOptions.put("Add Five", StellarManufactory.StellarMirrorOptions.ADD_FIVE);
         mirrorOptions.put("Remove All", StellarManufactory.StellarMirrorOptions.REMOVE_ALL);
-        this.data2 = new DropdownPluginV2(mirrorOptionsPanel, 190f, 25f, mirrorOptions);
-        ((DropdownPluginV2) this.data2).setSelected(StellarManufactory.StellarMirrorOptions.NONE);
-        mirrorOptionsElement.addCustom(((DropdownPluginV2) this.data2).panel, 0f);
+        this.data2 = new DropdownPlugin(mirrorOptionsPanel, 190f, 25f, mirrorOptions);
+        ((DropdownPlugin) this.data2).setSelected(StellarManufactory.StellarMirrorOptions.NONE);
+        mirrorOptionsElement.addCustom(((DropdownPlugin) this.data2).panel, 0f);
         mirrorOptionsPanel.addUIElement(mirrorOptionsElement);
         inputsElement.addCustom(mirrorOptionsPanel, 0f);
         inputsElement.addTooltipTo(new TextTooltip("How many stellar mirrors will be created or removed in orbit"), mirrorOptionsPanel, TooltipMakerAPI.TooltipLocation.BELOW);
@@ -76,9 +76,9 @@ public class TerraformingDialogDelegate extends DevelopmentDialogDelegate {
         shadeOptions.put("Add One", StellarManufactory.StellarMirrorOptions.ADD_ONE);
         shadeOptions.put("Add Three", StellarManufactory.StellarMirrorOptions.ADD_THREE);
         shadeOptions.put("Remove All", StellarManufactory.StellarMirrorOptions.REMOVE_ALL);
-        this.data3 = new DropdownPluginV2(shadeOptionsPanel, 190f, 25f, shadeOptions);
-        ((DropdownPluginV2) this.data3).setSelected(StellarManufactory.StellarMirrorOptions.NONE);
-        shadeOptionsElement.addCustom(((DropdownPluginV2) this.data3).panel, 0f);
+        this.data3 = new DropdownPlugin(shadeOptionsPanel, 190f, 25f, shadeOptions);
+        ((DropdownPlugin) this.data3).setSelected(StellarManufactory.StellarMirrorOptions.NONE);
+        shadeOptionsElement.addCustom(((DropdownPlugin) this.data3).panel, 0f);
         shadeOptionsPanel.addUIElement(shadeOptionsElement);
         inputsElement.addCustom(shadeOptionsPanel, 0f).getPosition().rightOfMid(mirrorOptionsPanel, 0f);
         inputsElement.addTooltipTo(new TextTooltip("How many stellar mirrors will be created or removed in orbit"), shadeOptionsPanel, TooltipMakerAPI.TooltipLocation.BELOW);
@@ -100,12 +100,12 @@ public class TerraformingDialogDelegate extends DevelopmentDialogDelegate {
         }
 
         if (Objects.equals(this.industry.getId(), TMEIds.STELLAR_MANUFACTORY)) {
-            if (!(this.data2 instanceof DropdownPluginV2) || !(this.data3 instanceof DropdownPluginV2)) {
+            if (!(this.data2 instanceof DropdownPlugin) || !(this.data3 instanceof DropdownPlugin)) {
                 return;
             }
 
-            StellarManufactory.StellarMirrorOptions mirrorData = (StellarManufactory.StellarMirrorOptions) ((DropdownPluginV2) this.data2).getSelected();
-            StellarManufactory.StellarMirrorOptions shadeData = (StellarManufactory.StellarMirrorOptions) ((DropdownPluginV2) this.data3).getSelected();
+            StellarManufactory.StellarMirrorOptions mirrorData = (StellarManufactory.StellarMirrorOptions) ((DropdownPlugin) this.data2).getSelected();
+            StellarManufactory.StellarMirrorOptions shadeData = (StellarManufactory.StellarMirrorOptions) ((DropdownPlugin) this.data3).getSelected();
 
             if (mirrorData == null || shadeData == null) {
                 return;

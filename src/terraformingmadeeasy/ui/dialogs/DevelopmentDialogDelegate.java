@@ -12,9 +12,9 @@ import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.industries.BaseDevelopmentIndustry;
 import terraformingmadeeasy.industries.ConstructionGrid;
-import terraformingmadeeasy.ui.plugins.DropdownPluginV2;
+import terraformingmadeeasy.ui.plugins.DropdownPlugin;
 import terraformingmadeeasy.ui.plugins.ProjectListPlugin;
-import terraformingmadeeasy.ui.plugins.TextFieldPluginV2;
+import terraformingmadeeasy.ui.plugins.TextFieldPlugin;
 import terraformingmadeeasy.ui.tooltips.*;
 
 import java.util.Collections;
@@ -129,9 +129,9 @@ public class DevelopmentDialogDelegate extends BaseCustomDialogDelegate {
         for (SectorEntityToken planet : this.industry.getMarket().getStarSystem().getPlanets()) {
             options.put(planet.getName(), planet);
         }
-        this.data2 = new DropdownPluginV2(orbitFocusPanel, 190f, 25f, options);
-        ((DropdownPluginV2) this.data2).setSelected(this.industry.getMarket().getPrimaryEntity());
-        orbitFocusElement.addCustom(((DropdownPluginV2) this.data2).panel, 0f);
+        this.data2 = new DropdownPlugin(orbitFocusPanel, 190f, 25f, options);
+        ((DropdownPlugin) this.data2).setSelected(this.industry.getMarket().getPrimaryEntity());
+        orbitFocusElement.addCustom(((DropdownPlugin) this.data2).panel, 0f);
         orbitFocusPanel.addUIElement(orbitFocusElement);
         inputsBodyElement.addComponent(orbitFocusPanel).setXAlignOffset(-5f);
         inputsBodyElement.addTooltipTo(new OrbitFocusFieldTooltip(), orbitFocusPanel, TooltipMakerAPI.TooltipLocation.BELOW);
@@ -143,10 +143,10 @@ public class DevelopmentDialogDelegate extends BaseCustomDialogDelegate {
         startAngleElement.setParaSmallInsignia();
         startAngleElement.addSpacer(3f);
         // Start angle input text field
-        this.data3 = new TextFieldPluginV2(startAnglePanel, 190f, 25f);
-        ((TextFieldPluginV2) this.data3).textField.setMaxChars(7);
-        ((TextFieldPluginV2) this.data3).textField.setText("0");
-        startAngleElement.addCustom(((TextFieldPluginV2) this.data3).textFieldPanel, 0f);
+        this.data3 = new TextFieldPlugin(startAnglePanel, 190f, 25f);
+        ((TextFieldPlugin) this.data3).textField.setMaxChars(7);
+        ((TextFieldPlugin) this.data3).textField.setText("0");
+        startAngleElement.addCustom(((TextFieldPlugin) this.data3).textFieldPanel, 0f);
         startAnglePanel.addUIElement(startAngleElement);
         inputsBodyElement.addComponent(startAnglePanel).rightOfMid(orbitFocusPanel, 0f);
         inputsBodyElement.addTooltipTo(new StartingAngleFieldTooltip(), startAnglePanel, TooltipMakerAPI.TooltipLocation.BELOW);
@@ -158,10 +158,10 @@ public class DevelopmentDialogDelegate extends BaseCustomDialogDelegate {
         orbitRadiusElement.setParaSmallInsignia();
         orbitRadiusElement.addSpacer(3f);
         // Orbit radius input text field
-        this.data4 = new TextFieldPluginV2(orbitRadiusPanel, 190f, 25f);
-        ((TextFieldPluginV2) this.data4).textField.setMaxChars(7);
-        ((TextFieldPluginV2) this.data4).textField.setText("1000");
-        orbitRadiusElement.addCustom(((TextFieldPluginV2) this.data4).textFieldPanel, 0f);
+        this.data4 = new TextFieldPlugin(orbitRadiusPanel, 190f, 25f);
+        ((TextFieldPlugin) this.data4).textField.setMaxChars(7);
+        ((TextFieldPlugin) this.data4).textField.setText("1000");
+        orbitRadiusElement.addCustom(((TextFieldPlugin) this.data4).textFieldPanel, 0f);
         orbitRadiusPanel.addUIElement(orbitRadiusElement);
         inputsBodyElement.addComponent(orbitRadiusPanel).rightOfMid(startAnglePanel, 0f);
         inputsBodyElement.addTooltipTo(new OrbitRadiusFieldTooltip(), orbitRadiusPanel, TooltipMakerAPI.TooltipLocation.BELOW);
@@ -173,10 +173,10 @@ public class DevelopmentDialogDelegate extends BaseCustomDialogDelegate {
         orbitDaysElement.setParaSmallInsignia();
         orbitDaysElement.addSpacer(3f);
         // Orbit days input text field
-        this.data5 = new TextFieldPluginV2(orbitDaysPanel, 190f, 25f);
-        ((TextFieldPluginV2) this.data5).textField.setMaxChars(7);
-        ((TextFieldPluginV2) this.data5).textField.setText("100");
-        orbitDaysElement.addCustom(((TextFieldPluginV2) this.data5).textFieldPanel, 0f);
+        this.data5 = new TextFieldPlugin(orbitDaysPanel, 190f, 25f);
+        ((TextFieldPlugin) this.data5).textField.setMaxChars(7);
+        ((TextFieldPlugin) this.data5).textField.setText("100");
+        orbitDaysElement.addCustom(((TextFieldPlugin) this.data5).textFieldPanel, 0f);
         orbitDaysPanel.addUIElement(orbitDaysElement);
         inputsBodyElement.addComponent(orbitDaysPanel).rightOfMid(orbitRadiusPanel, 0f);
         inputsBodyElement.addTooltipTo(new OrbitDaysFieldTooltip(), orbitDaysPanel, TooltipMakerAPI.TooltipLocation.BELOW);
@@ -192,18 +192,18 @@ public class DevelopmentDialogDelegate extends BaseCustomDialogDelegate {
         }
 
         if (!(this.data instanceof ProjectListPlugin)
-                || !(this.data2 instanceof DropdownPluginV2)
-                || !(this.data3 instanceof TextFieldPluginV2)
-                || !(this.data4 instanceof TextFieldPluginV2)
-                || !(this.data5 instanceof TextFieldPluginV2)) {
+                || !(this.data2 instanceof DropdownPlugin)
+                || !(this.data3 instanceof TextFieldPlugin)
+                || !(this.data4 instanceof TextFieldPlugin)
+                || !(this.data5 instanceof TextFieldPlugin)) {
             return;
         }
 
         Utils.ProjectData project = ((ProjectListPlugin) this.data).selected;
-        SectorEntityToken orbitFocus = (SectorEntityToken) ((DropdownPluginV2) this.data2).getSelected();
-        float startAngle = Float.parseFloat(((TextFieldPluginV2) this.data3).getText());
-        float orbitRadius = Float.parseFloat(((TextFieldPluginV2) this.data4).getText());
-        float orbitDays = Float.parseFloat(((TextFieldPluginV2) this.data5).getText());
+        SectorEntityToken orbitFocus = (SectorEntityToken) ((DropdownPlugin) this.data2).getSelected();
+        float startAngle = Float.parseFloat(((TextFieldPlugin) this.data3).getText());
+        float orbitRadius = Float.parseFloat(((TextFieldPlugin) this.data4).getText());
+        float orbitDays = Float.parseFloat(((TextFieldPlugin) this.data5).getText());
 
         if (project == null || orbitFocus == null || startAngle < 0 || orbitRadius < 100 || orbitDays < 100) {
             return;

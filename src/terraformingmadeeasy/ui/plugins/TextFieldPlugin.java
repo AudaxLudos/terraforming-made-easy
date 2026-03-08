@@ -1,41 +1,38 @@
 package terraformingmadeeasy.ui.plugins;
 
-import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.BaseCustomUIPanelPlugin;
 import com.fs.starfarer.api.input.InputEventAPI;
+import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.Fonts;
 import com.fs.starfarer.api.ui.TextFieldAPI;
+import com.fs.starfarer.api.ui.TooltipMakerAPI;
 
 import java.util.List;
 
 public class TextFieldPlugin extends BaseCustomUIPanelPlugin {
-    public TextFieldAPI field = Global.getSettings().createTextField("", Fonts.DEFAULT_SMALL);
+    public CustomPanelAPI panel;
+    public CustomPanelAPI textFieldPanel;
+    public TextFieldAPI textField;
     public float width = 0f;
     public float height = 0f;
     public boolean shouldRecaptureFocus = false;
 
-    public void setTextField(TextFieldAPI field, float width, float height) {
-        if (field == null) {
-            return;
-        }
-        this.field = field;
-        this.width = width;
-        this.height = height;
-    }
-
-    protected boolean clickedOutsideTextArea(InputEventAPI event) {
-        return !this.field.getTextLabelAPI().getPosition().containsEvent(event);
+    public TextFieldPlugin(CustomPanelAPI panel, float width, float height) {
+        this.panel = panel;
+        this.textFieldPanel = this.panel.createCustomPanel(width, height, this);
+        TooltipMakerAPI textFieldElement = this.textFieldPanel.createUIElement(width, height, false);
+        this.textFieldPanel.addUIElement(textFieldElement);
+        this.textField = textFieldElement.addTextField(width, height, Fonts.DEFAULT_SMALL, 0f);
     }
 
     @Override
     public void advance(float amount) {
-        this.field.setText(this.field.getText().replaceAll("[^0-9]", ""));
+        this.textField.setText(this.textField.getText().replaceAll("[^0-9]", ""));
     }
 
     @Override
     public void processInput(List<InputEventAPI> events) {
-        this.field.getTextLabelAPI().getPosition().setSize(this.width, this.height);
-        if (this.field.hasFocus() && !this.shouldRecaptureFocus) {
+        if (this.textField.hasFocus() && !this.shouldRecaptureFocus) {
             this.shouldRecaptureFocus = true;
         }
         for (InputEventAPI event : events) {
@@ -50,5 +47,13 @@ public class TextFieldPlugin extends BaseCustomUIPanelPlugin {
                 this.shouldRecaptureFocus = false;
             }
         }
+    }
+
+    protected boolean clickedOutsideTextArea(InputEventAPI event) {
+        return !this.textField.getTextLabelAPI().getPosition().containsEvent(event);
+    }
+
+    public String getText() {
+        return this.textField.getText();
     }
 }

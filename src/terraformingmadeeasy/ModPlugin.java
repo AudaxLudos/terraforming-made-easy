@@ -4,7 +4,6 @@ import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
-import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Entities;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.codex.CodexDataV2;
@@ -16,7 +15,10 @@ import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.listeners.DeathWorldScript;
 import terraformingmadeeasy.listeners.DevelopmentIndustryOptionProvider;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 public class ModPlugin extends BaseModPlugin {
     @Override

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class DropdownPluginV2 extends BaseCustomUIPanelPlugin {
+public class DropdownPlugin extends BaseCustomUIPanelPlugin {
     public CustomPanelAPI panel;
     public CustomPanelAPI menuPanel;
     public ButtonAPI button;
@@ -23,7 +23,7 @@ public class DropdownPluginV2 extends BaseCustomUIPanelPlugin {
     public List<ButtonAPI> buttons = new ArrayList<>();
     public Object selected;
 
-    public DropdownPluginV2(CustomPanelAPI panel, float width, float height, Map<String, Object> options) {
+    public DropdownPlugin(CustomPanelAPI panel, float width, float height, Map<String, Object> options) {
         this.options = options;
         this.panel = panel.createCustomPanel(width, height, this);
         TooltipMakerAPI dropdownElement = this.panel.createUIElement(width, height, false);

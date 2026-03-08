@@ -12,13 +12,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class StellarManufactory extends BaseTerraformingIndustry {
-    public enum StellarMirrorOptions {
-        NONE,
-        ADD_ONE,
-        ADD_THREE,
-        ADD_FIVE,
-        REMOVE_ALL
-    }
     public StellarMirrorOptions stellarMirrorData = StellarMirrorOptions.NONE;
     public StellarMirrorOptions stellarShadeData = StellarMirrorOptions.NONE;
 
@@ -97,5 +90,13 @@ public class StellarManufactory extends BaseTerraformingIndustry {
                 system.removeEntity(mirror);
             }
         }
+    }
+
+    public enum StellarMirrorOptions {
+        NONE,
+        ADD_ONE,
+        ADD_THREE,
+        ADD_FIVE,
+        REMOVE_ALL
     }
 }

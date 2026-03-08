@@ -25,8 +25,8 @@ import terraformingmadeeasy.ui.tooltips.TerraformTooltip;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.List;
 import java.util.*;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
