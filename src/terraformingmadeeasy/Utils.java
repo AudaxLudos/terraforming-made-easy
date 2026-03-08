@@ -43,60 +43,6 @@ public class Utils {
     public static List<Utils.ProjectData> STELLAR_MANUFACTORY_OPTIONS = new ArrayList<>();
     public static List<Utils.ProjectData> TERRESTRIAL_ENGINE_OPTIONS = new ArrayList<>();
     public static List<Utils.ProjectData> UNIFICATION_CENTER_OPTIONS = new ArrayList<>();
-    public static float BUILD_TIME_MULTIPLIER = 1.0f;
-    public static float BUILD_COST_MULTIPLIER = 1.0f;
-    public static float REMOVAL_COST_MULTIPLIER = 0.2f;
-
-    public static void loadLunaSettings() {
-        BUILD_TIME_MULTIPLIER = getBuildCostSettingValue(getSettingsString("tme_build_time_settings"), "tme_custom_build_time_settings");
-        BUILD_COST_MULTIPLIER = getBuildCostSettingValue(getSettingsString("tme_build_cost_settings"), "tme_custom_build_cost_settings");
-    }
-
-    public static float getBuildCostSettingValue(String setting, String customFieldId) {
-        float value = 1f;
-        switch (setting.toLowerCase()) {
-            case "low":
-            case "fast":
-                value = 0.5f;
-                break;
-            case "high":
-            case "slow":
-                value = 2.0f;
-                break;
-            case "custom":
-                if (isLunaLibEnabled()) {
-                    value = getSettingsFloat(customFieldId);
-                } else {
-                    value = Global.getSettings().getFloat(customFieldId);
-                }
-                break;
-        }
-        return value;
-    }
-
-    public static float getSettingsFloat(String fieldId) {
-        Float val = LunaSettings.getFloat(TMEIds.MOD_ID, fieldId);
-        if (val == null) {
-            return 1f;
-        }
-        return val;
-    }
-
-    public static String getSettingsString(String fieldId) {
-        String val = LunaSettings.getString(TMEIds.MOD_ID, fieldId);
-        if (val == null || val.isEmpty()) {
-            return "normal";
-        }
-        return val;
-    }
-
-    public static boolean isLunaLibEnabled() {
-        return Global.getSettings().getModManager().isModEnabled("lunalib");
-    }
-
-    public static boolean isAOTDVOKEnabled() {
-        return Global.getSettings().getModManager().isModEnabled("aotd_vok");
-    }
 
     public static boolean isAllTrue(boolean[] array) {
         for (boolean b : array) {
@@ -108,7 +54,7 @@ public class Utils {
     }
 
     public static boolean canAffordAndBuild(BaseDevelopmentIndustry industry, Utils.ProjectData project) {
-        boolean canAfford = Global.getSettings().isInCampaignState() && Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= project.cost * Utils.BUILD_COST_MULTIPLIER;
+        boolean canAfford = Global.getSettings().isInCampaignState() && Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= project.cost * Settings.BUILD_COST_MULTIPLIER;
         boolean canBuild = true;
         if (industry instanceof BaseTerraformingIndustry) {
             MarketAPI market = industry.getMarket();
@@ -317,8 +263,8 @@ public class Utils {
         String prefix = "";
         String suffix = "";
         String icon = project.icon;
-        float cost = Math.round(project.cost * Utils.BUILD_COST_MULTIPLIER);
-        float buildTime = Math.round(project.buildTime * Utils.BUILD_TIME_MULTIPLIER);
+        float cost = Math.round(project.cost * Settings.BUILD_COST_MULTIPLIER);
+        float buildTime = Math.round(project.buildTime * Settings.BUILD_TIME_MULTIPLIER);
         boolean canAfford = Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= cost;
         boolean canAffordAndBuild = !Utils.canAffordAndBuild((BaseDevelopmentIndustry) industry, project);
         TooltipMakerAPI.TooltipCreator tooltip = null;

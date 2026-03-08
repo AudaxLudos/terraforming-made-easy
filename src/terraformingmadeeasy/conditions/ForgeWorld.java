@@ -7,6 +7,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import terraformingmadeeasy.Settings;
 import terraformingmadeeasy.Utils;
 
 public class ForgeWorld extends BaseMarketConditionPlugin {
@@ -38,7 +39,7 @@ public class ForgeWorld extends BaseMarketConditionPlugin {
             ind.getSupplyBonusFromOther().modifyFlat(id, SUPPLY_BONUS, "Forge World");
         }
 
-        if (Utils.isAOTDVOKEnabled()) {
+        if (Settings.isAoTDVoKEnabled()) {
             for (String industryId : this.aotdVokIndustryIds) {
                 if (!this.market.hasIndustry(industryId)) {
                     continue;
@@ -63,7 +64,7 @@ public class ForgeWorld extends BaseMarketConditionPlugin {
             ind.getSupplyBonusFromOther().unmodify(id);
         }
 
-        if (Utils.isAOTDVOKEnabled()) {
+        if (Settings.isAoTDVoKEnabled()) {
             for (String industryId : this.aotdVokIndustryIds) {
                 if (!this.market.hasIndustry(industryId)) {
                     continue;

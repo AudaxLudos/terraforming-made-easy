@@ -8,6 +8,7 @@ import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import terraformingmadeeasy.Settings;
 import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.industries.BaseDevelopmentIndustry;
@@ -211,7 +212,7 @@ public class DevelopmentDialogDelegate extends BaseCustomDialogDelegate {
         ((ConstructionGrid) this.industry).orbitData = new Utils.OrbitData(orbitFocus, startAngle, orbitRadius, orbitDays);
         this.industry.setProject(project);
         this.industry.startUpgrading();
-        Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(project.cost * Utils.BUILD_COST_MULTIPLIER);
+        Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(project.cost * Settings.BUILD_COST_MULTIPLIER);
         Global.getSoundPlayer().playSound("ui_upgrade_industry", 1f, 1f, Global.getSoundPlayer().getListenerPos(), Misc.ZERO);
     }
 

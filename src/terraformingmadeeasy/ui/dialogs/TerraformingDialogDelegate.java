@@ -6,6 +6,7 @@ import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import org.lwjgl.util.vector.Vector2f;
+import terraformingmadeeasy.Settings;
 import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.industries.BaseDevelopmentIndustry;
@@ -121,7 +122,7 @@ public class TerraformingDialogDelegate extends DevelopmentDialogDelegate {
         float baseCost = project.cost;
         boolean isConditionForRemoval = industry != null && industry.getMarket().hasCondition(project.id);
         float conditionRemovalMult = !isConditionForRemoval ? 1f : 0.2f;
-        float totalCost = Math.round(baseCost * conditionRemovalMult * Utils.BUILD_COST_MULTIPLIER);
+        float totalCost = Math.round(baseCost * conditionRemovalMult * Settings.BUILD_COST_MULTIPLIER);
 
         Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(totalCost);
         Global.getSoundPlayer().playSound("ui_upgrade_industry", 1f, 1f, Global.getSoundPlayer().getListenerPos(), new Vector2f());

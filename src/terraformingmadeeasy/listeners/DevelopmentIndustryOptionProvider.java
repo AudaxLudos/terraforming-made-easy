@@ -7,6 +7,7 @@ import com.fs.starfarer.api.campaign.listeners.DialogCreatorUI;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import terraformingmadeeasy.Settings;
 import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.industries.BaseDevelopmentIndustry;
@@ -86,23 +87,21 @@ public class DevelopmentIndustryOptionProvider extends BaseIndustryOptionProvide
         if (Objects.equals(opt.ind.getId(), TMEIds.CONSTRUCTION_GRID)) {
             description = "A large structural grid for constructing Megastructures.";
             refundText = "Cancel the Megastructure project for a %s refund.";
-            if (opt.ind.isUpgrading()) {
-                refundCost = ((BaseDevelopmentIndustry) opt.ind).getProject().cost * Utils.BUILD_COST_MULTIPLIER;
-            }
         } else if (Objects.equals(opt.ind.getId(), TMEIds.PLANETARY_HOLOGRAM)) {
             description = "A specialized structure that can change a planet's visual to a different planet type.";
             refundText = "Cancel the planet visual change for a %s refund.";
-            if (opt.ind.isUpgrading()) {
-                refundCost = ((BaseTerraformingIndustry) opt.ind).getProject().cost * Utils.BUILD_COST_MULTIPLIER;
-            }
-        } else {
-            if (opt.ind.isUpgrading()) {
-                refundCost = ((BaseTerraformingIndustry) opt.ind).getProject().cost * Utils.BUILD_COST_MULTIPLIER;
-            }
+        }
+        String text = description;
+        if (opt.ind.isUpgrading()) {
+            Utils.ProjectData project = ((BaseDevelopmentIndustry) opt.ind).getProject();
+            float baseCost = project.cost;
+            boolean isConditionForRemoval = opt.ind != null && opt.ind.getMarket().hasCondition(project.id);
+            float conditionRemovalMult = !isConditionForRemoval ? 1f : 0.2f;
+            refundCost = Math.round(baseCost * conditionRemovalMult * Settings.BUILD_COST_MULTIPLIER);
+            text = refundText;
         }
 
         if (opt.id == CUSTOM_PLUGIN) {
-            String text = opt.ind.isUpgrading() ? refundText : description;
             tooltip.addPara(text, 0f, Misc.getHighlightColor(), Misc.getDGSCredits(refundCost));
         }
     }
@@ -123,7 +122,7 @@ public class DevelopmentIndustryOptionProvider extends BaseIndustryOptionProvide
                 float baseCost = project.cost;
                 boolean isConditionForRemoval = opt.ind != null && opt.ind.getMarket().hasCondition(project.id);
                 float conditionRemovalMult = !isConditionForRemoval ? 1f : 0.2f;
-                float totalCost = Math.round(baseCost * conditionRemovalMult * Utils.BUILD_COST_MULTIPLIER);
+                float totalCost = Math.round(baseCost * conditionRemovalMult * Settings.BUILD_COST_MULTIPLIER);
 
                 ConfirmDialogDelegate dialogDelegate = new ConfirmDialogDelegate(opt.ind, totalCost);
                 ui.showDialog(ConfirmDialogDelegate.WIDTH, ConfirmDialogDelegate.HEIGHT, dialogDelegate);

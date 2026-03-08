@@ -15,10 +15,7 @@ import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.listeners.DeathWorldScript;
 import terraformingmadeeasy.listeners.DevelopmentIndustryOptionProvider;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class ModPlugin extends BaseModPlugin {
     @Override
@@ -35,7 +32,7 @@ public class ModPlugin extends BaseModPlugin {
         Utils.TERRESTRIAL_ENGINE_OPTIONS = Utils.getTerraformingOptions(TMEIds.TERRESTRIAL_ENGINE);
         Utils.UNIFICATION_CENTER_OPTIONS = Utils.getTerraformingOptions(TMEIds.UNIFICATION_CENTER);
 
-        if (Utils.isAOTDVOKEnabled()) {
+        if (Settings.isAoTDVoKEnabled()) {
             List<Utils.ProjectData> projectsCopy = new ArrayList<>(Utils.UNIFICATION_CENTER_OPTIONS);
 
             for (Utils.ProjectData condition : projectsCopy) {
@@ -145,29 +142,13 @@ public class ModPlugin extends BaseModPlugin {
 
     @Override
     public void onGameLoad(boolean newGame) {
-        // Fix for coronal taps made from this that are stuck on repairing
-        for (StarSystemAPI system : Misc.getPlayerSystems(false)) {
-            List<SectorEntityToken> entities = system.getAllEntities();
-            for (SectorEntityToken entity : entities) {
-                if (!Objects.equals(entity.getCustomEntityType(), Entities.CORONAL_TAP)) {
-                    continue;
-                }
-                if (!entity.getMemoryWithoutUpdate().getBoolean("$usable") && !entity.getMemoryWithoutUpdate().getBoolean("$beingRepaired")) {
-                    continue;
-                }
-                entity.getMemoryWithoutUpdate().set("$beingRepaired", true, 5f);
-            }
-        }
+        loadModSettings();
 
         DeathWorldScript.register();
         DevelopmentIndustryOptionProvider.register();
+    }
 
-        if (Utils.isLunaLibEnabled()) {
-            Utils.loadLunaSettings();
-            LunaSettings.addSettingsListener(new TMELunaSettingsListener());
-        } else {
-            Utils.BUILD_TIME_MULTIPLIER = Utils.getBuildCostSettingValue(Global.getSettings().getString("tme_build_time_setting"), "tme_custom_build_time_settings");
-            Utils.BUILD_COST_MULTIPLIER = Utils.getBuildCostSettingValue(Global.getSettings().getString("tme_build_cost_setting"), "tme_custom_build_cost_settings");
-        }
+    public void loadModSettings() {
+        Settings.load();
     }
 }

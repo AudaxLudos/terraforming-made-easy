@@ -6,6 +6,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import terraformingmadeeasy.Settings;
 import terraformingmadeeasy.Utils;
 
 import java.util.Objects;
@@ -43,7 +44,7 @@ public class FortressWorld extends BaseMarketConditionPlugin {
                 this.market.getStats().getDynamic().getMod(Stats.PATROL_NUM_HEAVY_MOD).modifyFlat(id, HEAVY_PATROL_BONUS);
             }
         }
-        if (Utils.isAOTDVOKEnabled()) {
+        if (Settings.isAoTDVoKEnabled()) {
             for (String industryId : this.aotdVokIndustryIds) {
                 if (!this.market.hasIndustry(industryId)) {
                     continue;
@@ -68,7 +69,7 @@ public class FortressWorld extends BaseMarketConditionPlugin {
             Industry ind = this.market.getIndustry(industryId);
             ind.getSupplyBonusFromOther().unmodify(id);
         }
-        if (Utils.isAOTDVOKEnabled()) {
+        if (Settings.isAoTDVoKEnabled()) {
             for (String industryId : this.aotdVokIndustryIds) {
                 if (!this.market.hasIndustry(industryId)) {
                     continue;

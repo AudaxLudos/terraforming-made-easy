@@ -4,6 +4,7 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.BaseCustomUIPanelPlugin;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
+import terraformingmadeeasy.Settings;
 import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.industries.BaseDevelopmentIndustry;
@@ -32,11 +33,11 @@ public class ProjectListPlugin extends BaseCustomUIPanelPlugin {
             String suffix = "";
             String icon = project.icon;
 
-            float buildTime = Math.round(project.buildTime * Utils.BUILD_TIME_MULTIPLIER);
+            float buildTime = Math.round(project.buildTime * Settings.BUILD_TIME_MULTIPLIER);
             float baseCost = project.cost;
             boolean isConditionForRemoval = industry != null && industry.getMarket().hasCondition(project.id);
             float conditionRemovalMult = !isConditionForRemoval ? 1f : 0.2f;
-            float totalCost = Math.round(baseCost * conditionRemovalMult * Utils.BUILD_COST_MULTIPLIER);
+            float totalCost = Math.round(baseCost * conditionRemovalMult * Settings.BUILD_COST_MULTIPLIER);
 
             boolean canAfford = Global.getSettings().isInCampaignState() && Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= totalCost;
             boolean canAffordAndBuild = !Utils.canAffordAndBuild(industry, project);

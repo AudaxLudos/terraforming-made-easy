@@ -8,6 +8,7 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import org.apache.log4j.Logger;
+import terraformingmadeeasy.Settings;
 import terraformingmadeeasy.Utils;
 
 import java.awt.*;
@@ -124,7 +125,7 @@ public class BaseDevelopmentIndustry extends BaseIndustry {
             this.building = true;
             this.buildProgress = 0;
             this.isAICoreBuildTimeMultApplied = false;
-            this.buildTime = this.project.buildTime * Utils.BUILD_TIME_MULTIPLIER;
+            this.buildTime = this.project.buildTime * Settings.BUILD_TIME_MULTIPLIER;
         }
     }
 
@@ -139,7 +140,7 @@ public class BaseDevelopmentIndustry extends BaseIndustry {
 
     @Override
     public boolean isAvailableToBuild() {
-        if (Utils.isAOTDVOKEnabled()) {
+        if (Settings.isAoTDVoKEnabled()) {
             return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(getAOTDVOKTechId(), this.market) && this.market.getPlanetEntity() != null && super.isAvailableToBuild();
         }
         return this.market.getPlanetEntity() != null && super.isAvailableToBuild();
@@ -155,7 +156,7 @@ public class BaseDevelopmentIndustry extends BaseIndustry {
 
     @Override
     public boolean showWhenUnavailable() {
-        if (Utils.isAOTDVOKEnabled()) {
+        if (Settings.isAoTDVoKEnabled()) {
             return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(getAOTDVOKTechId(), this.market) && this.market.getPlanetEntity() != null && super.showWhenUnavailable();
         }
         return super.showWhenUnavailable();

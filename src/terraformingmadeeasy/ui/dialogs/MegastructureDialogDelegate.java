@@ -7,6 +7,7 @@ import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import terraformingmadeeasy.Settings;
 import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.industries.ConstructionGrid;
 import terraformingmadeeasy.ui.plugins.DropdownPlugin;
@@ -180,7 +181,7 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
                 Float.parseFloat(this.orbitRadiusTextFieldPlugin.getText().trim()),
                 Float.parseFloat(this.orbitDaysTextFieldPlugin.getText().trim()));
         this.industry.startUpgrading();
-        Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(((Utils.ProjectData) this.selected).cost * Utils.BUILD_COST_MULTIPLIER);
+        Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(((Utils.ProjectData) this.selected).cost * Settings.BUILD_COST_MULTIPLIER);
         Global.getSoundPlayer().playSound("ui_upgrade_industry", 1f, 1f, Global.getSoundPlayer().getListenerPos(), Misc.ZERO);
     }
 }

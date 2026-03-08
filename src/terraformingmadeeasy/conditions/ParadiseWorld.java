@@ -5,6 +5,7 @@ import com.fs.starfarer.api.impl.campaign.econ.BaseMarketConditionPlugin;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import terraformingmadeeasy.Settings;
 import terraformingmadeeasy.Utils;
 
 public class ParadiseWorld extends BaseMarketConditionPlugin {
@@ -33,7 +34,7 @@ public class ParadiseWorld extends BaseMarketConditionPlugin {
             Industry ind = this.market.getIndustry(industryId);
             ind.getSupplyBonusFromOther().modifyFlat(id, SUPPLY_BONUS, "Paradise World");
         }
-        if (Utils.isAOTDVOKEnabled()) {
+        if (Settings.isAoTDVoKEnabled()) {
             for (String industryId : this.aotdVokIndustryIds) {
                 if (!this.market.hasIndustry(industryId)) {
                     continue;
@@ -57,7 +58,7 @@ public class ParadiseWorld extends BaseMarketConditionPlugin {
             Industry ind = this.market.getIndustry(industryId);
             ind.getSupplyBonusFromOther().unmodify(id);
         }
-        if (Utils.isAOTDVOKEnabled()) {
+        if (Settings.isAoTDVoKEnabled()) {
             for (String industryId : this.aotdVokIndustryIds) {
                 if (!this.market.hasIndustry(industryId)) {
                     continue;

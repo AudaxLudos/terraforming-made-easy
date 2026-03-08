@@ -19,6 +19,7 @@ import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
+import terraformingmadeeasy.Settings;
 import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.ids.TMEIds;
 
@@ -36,7 +37,7 @@ public class ConstructionGrid extends BaseDevelopmentIndustry {
             this.buildProgress = 0;
             this.aiCoreBuildProgressRemoved = 0f;
             this.isAICoreBuildTimeMultApplied = false;
-            this.buildTime = this.project.buildTime * Utils.BUILD_TIME_MULTIPLIER;
+            this.buildTime = this.project.buildTime * Settings.BUILD_TIME_MULTIPLIER;
         }
     }
 

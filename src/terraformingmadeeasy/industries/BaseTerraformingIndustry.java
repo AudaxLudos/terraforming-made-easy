@@ -15,6 +15,7 @@ import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
+import terraformingmadeeasy.Settings;
 import terraformingmadeeasy.Utils;
 
 import java.util.*;
@@ -320,7 +321,7 @@ public class BaseTerraformingIndustry extends BaseDevelopmentIndustry {
     }
 
     public void updateFarmingOrAquaculture() {
-        if (Utils.isAOTDVOKEnabled()) {
+        if (Settings.isAoTDVoKEnabled()) {
             if (!this.market.hasCondition(Conditions.WATER_SURFACE)) {
                 if (this.market.hasIndustry(Industries.AQUACULTURE)) {
                     this.market.removeIndustry(Industries.AQUACULTURE, null, false);

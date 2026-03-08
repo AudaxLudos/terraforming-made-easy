@@ -8,6 +8,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import terraformingmadeeasy.Settings;
 import terraformingmadeeasy.Utils;
 
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public class DeathWorld extends BaseMarketConditionPlugin {
             ind.getSupplyBonusFromOther().modifyFlat(id, SUPPLY_BONUS, "Death World");
         }
 
-        if (Utils.isAOTDVOKEnabled()) {
+        if (Settings.isAoTDVoKEnabled()) {
             for (String industryId : this.aotdVokIndustryIds) {
                 if (!this.market.hasIndustry(industryId)) {
                     continue;
@@ -67,7 +68,7 @@ public class DeathWorld extends BaseMarketConditionPlugin {
             Industry ind = this.market.getIndustry(industryId);
             ind.getSupplyBonusFromOther().unmodify(id);
         }
-        if (Utils.isAOTDVOKEnabled()) {
+        if (Settings.isAoTDVoKEnabled()) {
             for (String industryId : this.aotdVokIndustryIds) {
                 if (!this.market.hasIndustry(industryId)) {
                     continue;
