@@ -31,9 +31,14 @@ public class ProjectListPlugin extends BaseCustomUIPanelPlugin {
             String prefix = "";
             String suffix = "";
             String icon = project.icon;
-            float cost = Math.round(project.cost * Utils.BUILD_COST_MULTIPLIER);
+
             float buildTime = Math.round(project.buildTime * Utils.BUILD_TIME_MULTIPLIER);
-            boolean canAfford = Global.getSettings().isInCampaignState() && Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= cost;
+            float baseCost = project.cost;
+            boolean isConditionForRemoval = industry != null && industry.getMarket().hasCondition(project.id);
+            float conditionRemovalMult = !isConditionForRemoval ? 1f : 0.2f;
+            float totalCost = Math.round(baseCost * conditionRemovalMult * Utils.BUILD_COST_MULTIPLIER);
+
+            boolean canAfford = Global.getSettings().isInCampaignState() && Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= totalCost;
             boolean canAffordAndBuild = !Utils.canAffordAndBuild(industry, project);
             TooltipMakerAPI.TooltipCreator tooltip = new TerraformTooltip(project, industry);
 
@@ -49,7 +54,7 @@ public class ProjectListPlugin extends BaseCustomUIPanelPlugin {
                 }
             } else {
                 if (industry != null) {
-                    prefix = industry.getMarket().hasCondition(project.id) ? "Remove " : "Add ";
+                    prefix = isConditionForRemoval ? "Remove " : "Add ";
                 }
             }
 
@@ -83,7 +88,7 @@ public class ProjectListPlugin extends BaseCustomUIPanelPlugin {
             optionPanel.addUIElement(optionBuildTimeElement);
 
             TooltipMakerAPI optionCostElement = optionPanel.createUIElement(columnWidth, 40f, false);
-            optionCostElement.addPara(Misc.getDGSCredits(cost), canAfford || isForCodex ? Misc.getHighlightColor() : Misc.getNegativeHighlightColor(), 12f).setAlignment(Alignment.MID);
+            optionCostElement.addPara(Misc.getDGSCredits(totalCost), canAfford || isForCodex ? Misc.getHighlightColor() : Misc.getNegativeHighlightColor(), 12f).setAlignment(Alignment.MID);
             optionCostElement.getPosition().rightOfMid(optionBuildTimeElement, 0f);
             optionPanel.addUIElement(optionCostElement);
 

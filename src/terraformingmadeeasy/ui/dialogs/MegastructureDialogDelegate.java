@@ -13,7 +13,6 @@ import terraformingmadeeasy.ui.plugins.DropdownPlugin;
 import terraformingmadeeasy.ui.plugins.TextFieldPlugin;
 import terraformingmadeeasy.ui.tooltips.*;
 
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,7 +72,7 @@ public class MegastructureDialogDelegate extends TMEBaseDialogDelegate {
         TooltipMakerAPI optionsBodyElement = optionsPanel.createUIElement(WIDTH, rowHeight - 22f, true);
         optionsPanel.addUIElement(optionsBodyElement);
         List<Utils.ProjectData> projects = this.industry.getProjects();
-        Collections.sort(projects, new Utils.SortCanAffordAndBuild(this.industry));
+        projects.sort(new Utils.SortCanAffordAndBuild(this.industry));
         for (Utils.ProjectData project : projects) {
             CustomPanelAPI optionPanel = Utils.addCustomButton(panel, project, this.industry, this.buttons, WIDTH, this);
             optionsBodyElement.addCustom(optionPanel, 0f);

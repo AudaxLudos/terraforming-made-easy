@@ -45,6 +45,7 @@ public class Utils {
     public static List<Utils.ProjectData> UNIFICATION_CENTER_OPTIONS = new ArrayList<>();
     public static float BUILD_TIME_MULTIPLIER = 1.0f;
     public static float BUILD_COST_MULTIPLIER = 1.0f;
+    public static float REMOVAL_COST_MULTIPLIER = 0.2f;
 
     public static void loadLunaSettings() {
         BUILD_TIME_MULTIPLIER = getBuildCostSettingValue(getSettingsString("tme_build_time_settings"), "tme_custom_build_time_settings");

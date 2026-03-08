@@ -117,7 +117,13 @@ public class TerraformingDialogDelegate extends DevelopmentDialogDelegate {
 
         this.industry.setProject(project);
         this.industry.startUpgrading();
-        Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(project.cost * Utils.BUILD_COST_MULTIPLIER);
+
+        float baseCost = project.cost;
+        boolean isConditionForRemoval = industry != null && industry.getMarket().hasCondition(project.id);
+        float conditionRemovalMult = !isConditionForRemoval ? 1f : 0.2f;
+        float totalCost = Math.round(baseCost * conditionRemovalMult * Utils.BUILD_COST_MULTIPLIER);
+
+        Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(totalCost);
         Global.getSoundPlayer().playSound("ui_upgrade_industry", 1f, 1f, Global.getSoundPlayer().getListenerPos(), new Vector2f());
     }
 

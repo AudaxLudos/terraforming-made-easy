@@ -119,7 +119,13 @@ public class DevelopmentIndustryOptionProvider extends BaseIndustryOptionProvide
                     ui.showDialog(dialogDelegate.width, dialogDelegate.height, dialogDelegate);
                 }
             } else {
-                ConfirmDialogDelegate dialogDelegate = new ConfirmDialogDelegate(opt.ind, ((BaseDevelopmentIndustry) opt.ind).getProject().cost * Utils.BUILD_COST_MULTIPLIER);
+                Utils.ProjectData project = ((BaseDevelopmentIndustry) opt.ind).getProject();
+                float baseCost = project.cost;
+                boolean isConditionForRemoval = opt.ind != null && opt.ind.getMarket().hasCondition(project.id);
+                float conditionRemovalMult = !isConditionForRemoval ? 1f : 0.2f;
+                float totalCost = Math.round(baseCost * conditionRemovalMult * Utils.BUILD_COST_MULTIPLIER);
+
+                ConfirmDialogDelegate dialogDelegate = new ConfirmDialogDelegate(opt.ind, totalCost);
                 ui.showDialog(ConfirmDialogDelegate.WIDTH, ConfirmDialogDelegate.HEIGHT, dialogDelegate);
             }
         }

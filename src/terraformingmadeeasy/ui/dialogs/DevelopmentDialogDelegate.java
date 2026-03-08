@@ -17,7 +17,6 @@ import terraformingmadeeasy.ui.plugins.ProjectListPlugin;
 import terraformingmadeeasy.ui.plugins.TextFieldPlugin;
 import terraformingmadeeasy.ui.tooltips.*;
 
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,7 +93,7 @@ public class DevelopmentDialogDelegate extends BaseCustomDialogDelegate {
         projectsPanel.addUIElement(projectsElement).inTL(0f, 0f);
         tooltip.addCustom(projectsPanel, 0f);
         List<Utils.ProjectData> projects = this.industry.getProjects();
-        Collections.sort(projects, new Utils.SortCanAffordAndBuild(this.industry));
+        projects.sort(new Utils.SortCanAffordAndBuild(this.industry));
         this.data = new ProjectListPlugin(panel, this.industry, this.industry.getId(), projects, this.width, height - 23f, false);
         tooltip.addCustom(((ProjectListPlugin) this.data).panel, 0f);
     }
