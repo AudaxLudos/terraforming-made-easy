@@ -71,7 +71,7 @@ public class PlanetaryHologram extends BaseTerraformingIndustry {
         this.originalPlanetSpec = (PlanetSpec) Global.getSettings().getSpec(PlanetSpec.class, this.market.getPlanetEntity().getSpec().getPlanetType(), false);
         this.originalIsGasGiant = this.market.getPlanetEntity().getSpec().isGasGiant();
         this.fakePlanetSpec = (PlanetSpec) Global.getSettings().getSpec(PlanetSpec.class, planetTypeId, false);
-        if (this.project != null && this.project.planetSpecOverride != null) {
+        if (hasOngoingProject() && this.project.planetSpecOverride != null) {
             this.fakePlanetSpec = (PlanetSpec) Global.getSettings().getSpec(PlanetSpec.class, this.project.planetSpecOverride, false);
         }
         String name = this.fakePlanetSpec.getName();

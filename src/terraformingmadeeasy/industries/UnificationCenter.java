@@ -41,13 +41,13 @@ public class UnificationCenter extends BaseTerraformingIndustry {
         if (mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP || mode == AICoreDescriptionMode.MANAGE_CORE_TOOLTIP) {
             CommoditySpecAPI coreSpec = Global.getSettings().getCommoditySpec(this.aiCoreId);
             TooltipMakerAPI text = tooltip.beginImageWithText(coreSpec.getIconName(), 48);
-            text.addPara(pre + "Reduces upkeep cost by %s. Reduces demand by %s unit. Reduces " + getBuildingText() + " time by %s.", oPad, highlight,
+            text.addPara(pre + "Reduces upkeep cost by %s. Reduces demand by %s unit. Reduces " + getProgressText() + " time by %s.", oPad, highlight,
                     (int) ((1f - UPKEEP_MULT) * 100f) + "%", "" + DEMAND_REDUCTION, (int) (ALPHA_BUILD_TIME_MULT * 100f) + "%");
             tooltip.addImageWithText(oPad);
             return;
         }
 
-        tooltip.addPara(pre + "Reduces upkeep cost by %s. Reduces demand by %s unit. Reduces " + getBuildingText() + " time by %s.", oPad, highlight,
+        tooltip.addPara(pre + "Reduces upkeep cost by %s. Reduces demand by %s unit. Reduces " + getProgressText() + " time by %s.", oPad, highlight,
                 (int) ((1f - UPKEEP_MULT) * 100f) + "%", "" + DEMAND_REDUCTION, (int) (ALPHA_BUILD_TIME_MULT * 100f) + "%");
     }
 
@@ -63,13 +63,13 @@ public class UnificationCenter extends BaseTerraformingIndustry {
         if (mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP || mode == AICoreDescriptionMode.MANAGE_CORE_TOOLTIP) {
             CommoditySpecAPI coreSpec = Global.getSettings().getCommoditySpec(this.aiCoreId);
             TooltipMakerAPI text = tooltip.beginImageWithText(coreSpec.getIconName(), 48);
-            text.addPara(pre + "Reduces upkeep cost by %s. Reduces demand by %s unit. Reduces " + getBuildingText() + " time by %s.", oPad, highlight,
+            text.addPara(pre + "Reduces upkeep cost by %s. Reduces demand by %s unit. Reduces " + getProgressText() + " time by %s.", oPad, highlight,
                     (int) ((1f - UPKEEP_MULT) * 100f) + "%", "" + DEMAND_REDUCTION, (int) (BETA_BUILD_TIME_MULT * 100f) + "%");
             tooltip.addImageWithText(oPad);
             return;
         }
 
-        tooltip.addPara(pre + "Reduces upkeep cost by %s. Reduces demand by %s unit. Reduces " + getBuildingText() + " time by %s.", oPad, highlight,
+        tooltip.addPara(pre + "Reduces upkeep cost by %s. Reduces demand by %s unit. Reduces " + getProgressText() + " time by %s.", oPad, highlight,
                 (int) ((1f - UPKEEP_MULT) * 100f) + "%", "" + DEMAND_REDUCTION, (int) (BETA_BUILD_TIME_MULT * 100f) + "%");
     }
 
@@ -85,13 +85,13 @@ public class UnificationCenter extends BaseTerraformingIndustry {
         if (mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP || mode == AICoreDescriptionMode.MANAGE_CORE_TOOLTIP) {
             CommoditySpecAPI coreSpec = Global.getSettings().getCommoditySpec(this.aiCoreId);
             TooltipMakerAPI text = tooltip.beginImageWithText(coreSpec.getIconName(), 48);
-            text.addPara(pre + "Reduces upkeep cost by %s. Reduces demand by %s unit. Reduces " + getBuildingText() + " time by %s.", oPad, highlight,
+            text.addPara(pre + "Reduces upkeep cost by %s. Reduces demand by %s unit. Reduces " + getProgressText() + " time by %s.", oPad, highlight,
                     (int) ((1f - UPKEEP_MULT) * 100f) + "%", "" + DEMAND_REDUCTION, (int) (GAMMA_BUILD_TIME_MULT * 100f) + "%");
             tooltip.addImageWithText(oPad);
             return;
         }
 
-        tooltip.addPara(pre + "Reduces upkeep cost by %s. Reduces demand by %s unit. Reduces " + getBuildingText() + " time by %s.", oPad, highlight,
+        tooltip.addPara(pre + "Reduces upkeep cost by %s. Reduces demand by %s unit. Reduces " + getProgressText() + " time by %s.", oPad, highlight,
                 (int) ((1f - UPKEEP_MULT) * 100f) + "%", "" + DEMAND_REDUCTION, (int) (GAMMA_BUILD_TIME_MULT * 100f) + "%");
     }
 

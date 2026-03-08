@@ -64,9 +64,13 @@ public class BaseDevelopmentIndustry extends BaseIndustry {
         }
     }
 
+    public boolean hasOngoingProject() {
+        return this.project != null;
+    }
+
     @Override
     public boolean isUpgrading() {
-        return this.building && this.project != null;
+        return isBuilding() && hasOngoingProject();
     }
 
     @Override
@@ -93,10 +97,10 @@ public class BaseDevelopmentIndustry extends BaseIndustry {
             days = "day";
         }
 
-        return getBuildingText() + ": " + left + " " + days + " left";
+        return getProgressText() + ": " + left + " " + days + " left";
     }
 
-    protected String getBuildingText() {
+    protected String getProgressText() {
         return "building";
     }
 
@@ -106,7 +110,7 @@ public class BaseDevelopmentIndustry extends BaseIndustry {
         this.buildProgress = 0;
         this.buildTime = 1f;
         this.isAICoreBuildTimeMultApplied = false;
-        if (this.project != null) {
+        if (hasOngoingProject()) {
             completeProject();
         } else {
             buildingFinished();
@@ -116,7 +120,7 @@ public class BaseDevelopmentIndustry extends BaseIndustry {
 
     @Override
     public void startUpgrading() {
-        if (this.project != null) {
+        if (hasOngoingProject()) {
             this.building = true;
             this.buildProgress = 0;
             this.isAICoreBuildTimeMultApplied = false;
@@ -169,13 +173,13 @@ public class BaseDevelopmentIndustry extends BaseIndustry {
         if (mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP || mode == AICoreDescriptionMode.MANAGE_CORE_TOOLTIP) {
             CommoditySpecAPI coreSpec = Global.getSettings().getCommoditySpec(this.aiCoreId);
             TooltipMakerAPI text = tooltip.beginImageWithText(coreSpec.getIconName(), 48);
-            text.addPara(pre + "Reduces upkeep cost by %s. Reduces " + getBuildingText() + " time by %s.", oPad, highlight,
+            text.addPara(pre + "Reduces upkeep cost by %s. Reduces " + getProgressText() + " time by %s.", oPad, highlight,
                     (int) ((1f - UPKEEP_MULT) * 100f) + "%", (int) (ALPHA_BUILD_TIME_MULT * 100f) + "%");
             tooltip.addImageWithText(oPad);
             return;
         }
 
-        tooltip.addPara(pre + "Reduces upkeep cost by %s. Reduces " + getBuildingText() + " time by %s.", oPad, highlight,
+        tooltip.addPara(pre + "Reduces upkeep cost by %s. Reduces " + getProgressText() + " time by %s.", oPad, highlight,
                 (int) ((1f - UPKEEP_MULT) * 100f) + "%", (int) (ALPHA_BUILD_TIME_MULT * 100f) + "%");
     }
 
@@ -191,13 +195,13 @@ public class BaseDevelopmentIndustry extends BaseIndustry {
         if (mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP || mode == AICoreDescriptionMode.MANAGE_CORE_TOOLTIP) {
             CommoditySpecAPI coreSpec = Global.getSettings().getCommoditySpec(this.aiCoreId);
             TooltipMakerAPI text = tooltip.beginImageWithText(coreSpec.getIconName(), 48);
-            text.addPara(pre + "Reduces upkeep cost by %s. Reduces " + getBuildingText() + " time by %s.", oPad, highlight,
+            text.addPara(pre + "Reduces upkeep cost by %s. Reduces " + getProgressText() + " time by %s.", oPad, highlight,
                     (int) ((1f - UPKEEP_MULT) * 100f) + "%", (int) (BETA_BUILD_TIME_MULT * 100f) + "%");
             tooltip.addImageWithText(oPad);
             return;
         }
 
-        tooltip.addPara(pre + "Reduces upkeep cost by %s. Reduces " + getBuildingText() + " time by %s.", oPad, highlight,
+        tooltip.addPara(pre + "Reduces upkeep cost by %s. Reduces " + getProgressText() + " time by %s.", oPad, highlight,
                 (int) ((1f - UPKEEP_MULT) * 100f) + "%", (int) (BETA_BUILD_TIME_MULT * 100f) + "%");
     }
 
@@ -213,13 +217,13 @@ public class BaseDevelopmentIndustry extends BaseIndustry {
         if (mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP || mode == AICoreDescriptionMode.MANAGE_CORE_TOOLTIP) {
             CommoditySpecAPI coreSpec = Global.getSettings().getCommoditySpec(this.aiCoreId);
             TooltipMakerAPI text = tooltip.beginImageWithText(coreSpec.getIconName(), 48);
-            text.addPara(pre + "Reduces upkeep cost by %s. Reduces " + getBuildingText() + " time by %s.", oPad, highlight,
+            text.addPara(pre + "Reduces upkeep cost by %s. Reduces " + getProgressText() + " time by %s.", oPad, highlight,
                     (int) ((1f - UPKEEP_MULT) * 100f) + "%", (int) (GAMMA_BUILD_TIME_MULT * 100f) + "%");
             tooltip.addImageWithText(oPad);
             return;
         }
 
-        tooltip.addPara(pre + "Reduces upkeep cost by %s. Reduces " + getBuildingText() + " time by %s.", oPad, highlight,
+        tooltip.addPara(pre + "Reduces upkeep cost by %s. Reduces " + getProgressText() + " time by %s.", oPad, highlight,
                 (int) ((1f - UPKEEP_MULT) * 100f) + "%", (int) (GAMMA_BUILD_TIME_MULT * 100f) + "%");
     }
 

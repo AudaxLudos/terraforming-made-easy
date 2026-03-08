@@ -31,7 +31,7 @@ public class ConstructionGrid extends BaseDevelopmentIndustry {
 
     @Override
     public void startUpgrading() {
-        if (this.project != null && this.orbitData != null) {
+        if (hasOngoingProject() && this.orbitData != null) {
             this.building = true;
             this.buildProgress = 0;
             this.aiCoreBuildProgressRemoved = 0f;

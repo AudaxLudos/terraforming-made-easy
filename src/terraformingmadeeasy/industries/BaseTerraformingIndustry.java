@@ -21,7 +21,10 @@ import java.util.*;
 
 public class BaseTerraformingIndustry extends BaseDevelopmentIndustry {
     @Override
-    protected String getBuildingText() {
+    protected String getProgressText() {
+        if (isBuilding() && !hasOngoingProject()) {
+            return super.getProgressText();
+        }
         return "terraforming";
     }
 
