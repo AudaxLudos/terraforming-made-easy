@@ -120,7 +120,7 @@ public class TerraformingDialogDelegate extends DevelopmentDialogDelegate {
         this.industry.startUpgrading();
 
         float baseCost = project.cost;
-        boolean isConditionForRemoval = industry.getMarket().hasCondition(project.id);
+        boolean isConditionForRemoval = this.industry.getMarket().hasCondition(project.id);
         float conditionRemovalMult = !isConditionForRemoval ? 1f : Settings.REMOVAL_COST_MULTIPLIER;
         float totalCost = Math.round(baseCost * conditionRemovalMult * Settings.BUILD_COST_MULTIPLIER);
 

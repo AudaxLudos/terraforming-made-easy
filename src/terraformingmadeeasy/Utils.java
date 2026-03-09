@@ -2,19 +2,14 @@ package terraformingmadeeasy;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomEntitySpecAPI;
-import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.campaign.PlanetSpecAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
-import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.characters.MarketConditionSpecAPI;
 import com.fs.starfarer.api.impl.campaign.procgen.PlanetGenDataSpec;
 import com.fs.starfarer.api.ui.ButtonAPI;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import terraformingmadeeasy.industries.BaseDevelopmentIndustry;
-import terraformingmadeeasy.industries.BaseTerraformingIndustry;
-import terraformingmadeeasy.industries.ConstructionGrid;
 
 import java.io.IOException;
 import java.util.*;
@@ -42,22 +37,6 @@ public class Utils {
             }
         }
         return true;
-    }
-
-    public static boolean canAffordAndBuild(BaseDevelopmentIndustry industry, Utils.ProjectData project) {
-        boolean canAfford = Global.getSettings().isInCampaignState() && Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= project.cost * Settings.BUILD_COST_MULTIPLIER;
-        boolean canBuild = true;
-        if (industry instanceof BaseTerraformingIndustry ind) {
-            MarketAPI market = industry.getMarket();
-            boolean canBeRemoved = market.hasCondition(project.id);
-            canBuild = ind.canTerraformCondition(project) || canBeRemoved;
-            if (market.getPrimaryEntity() instanceof PlanetAPI && ((PlanetAPI) market.getPrimaryEntity()).isGasGiant()) {
-                canBuild = canBuild && project.canChangeGasGiants;
-            }
-        } else if (industry instanceof ConstructionGrid ind) {
-            canBuild = ind.canBuildMegastructure(project.id);
-        }
-        return !(canAfford && canBuild);
     }
 
     public static Set<String> getUniqueIds(String text) {
@@ -242,14 +221,6 @@ public class Utils {
             button.highlight();
         } else {
             button.unhighlight();
-        }
-    }
-
-    public record SortCanAffordAndBuild(BaseDevelopmentIndustry industry) implements Comparator<ProjectData> {
-
-        @Override
-        public int compare(ProjectData o1, ProjectData o2) {
-            return Boolean.compare(canAffordAndBuild(this.industry, o1), canAffordAndBuild(this.industry, o2));
         }
     }
 

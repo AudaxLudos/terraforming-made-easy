@@ -94,9 +94,18 @@ public class DevelopmentDialogDelegate extends BaseCustomDialogDelegate {
         projectsPanel.addUIElement(projectsElement).inTL(0f, 0f);
         tooltip.addCustom(projectsPanel, 0f);
         List<Utils.ProjectData> projects = this.industry.getProjects();
-        projects.sort(new Utils.SortCanAffordAndBuild(this.industry));
+        projects.sort((o1, o2) -> Boolean.compare(canAffordAndBuild(o2), canAffordAndBuild(o1)));
         this.data = new ProjectListPlugin(panel, this.industry, this.industry.getId(), projects, this.width, height - 23f, false);
         tooltip.addCustom(((ProjectListPlugin) this.data).panel, 0f);
+    }
+
+    private boolean canAffordAndBuild(Utils.ProjectData project) {
+        float baseCost = project.cost;
+        boolean isConditionForRemoval = this.industry.getMarket().hasCondition(project.id);
+        float conditionRemovalMult = !isConditionForRemoval ? 1f : Settings.REMOVAL_COST_MULTIPLIER;
+        float totalCost = Math.round(baseCost * conditionRemovalMult * Settings.BUILD_COST_MULTIPLIER);
+
+        return ProjectListPlugin.canAfford(totalCost) && ProjectListPlugin.canBuild(this.industry, project);
     }
 
     @SuppressWarnings("RedundantArrayCreation")

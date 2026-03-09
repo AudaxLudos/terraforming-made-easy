@@ -2,12 +2,16 @@ package terraformingmadeeasy.ui.plugins;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.BaseCustomUIPanelPlugin;
+import com.fs.starfarer.api.campaign.PlanetAPI;
+import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.Settings;
 import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.industries.BaseDevelopmentIndustry;
+import terraformingmadeeasy.industries.BaseTerraformingIndustry;
+import terraformingmadeeasy.industries.ConstructionGrid;
 import terraformingmadeeasy.ui.tooltips.MegastructureTooltip;
 import terraformingmadeeasy.ui.tooltips.TerraformTooltip;
 
@@ -39,8 +43,8 @@ public class ProjectListPlugin extends BaseCustomUIPanelPlugin {
             float conditionRemovalMult = !isConditionForRemoval ? 1f : Settings.REMOVAL_COST_MULTIPLIER;
             float totalCost = Math.round(baseCost * conditionRemovalMult * Settings.BUILD_COST_MULTIPLIER);
 
-            boolean canAfford = Global.getSettings().isInCampaignState() && Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= totalCost;
-            boolean canAffordAndBuild = !Utils.canAffordAndBuild(industry, project);
+            boolean canAfford = canAfford(totalCost);
+            boolean canAffordAndBuild = canAfford && canBuild(industry, project);
             TooltipMakerAPI.TooltipCreator tooltip = new TerraformTooltip(project, industry);
 
             if (industryId.equals(TMEIds.CONSTRUCTION_GRID)) {
@@ -104,6 +108,25 @@ public class ProjectListPlugin extends BaseCustomUIPanelPlugin {
         if (isForCodex) {
             this.panel.getPosition().setSize(width, projectsElement.getHeightSoFar() + this.panel.getPosition().getHeight());
         }
+    }
+
+    public static boolean canAfford(float cost) {
+        return Global.getSettings().isInCampaignState() && Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= cost;
+    }
+
+    public static boolean canBuild(BaseDevelopmentIndustry industry, Utils.ProjectData project) {
+        boolean canBuild = true;
+        if (industry instanceof BaseTerraformingIndustry ind) {
+            MarketAPI market = industry.getMarket();
+            boolean canBeRemoved = market.hasCondition(project.id);
+            canBuild = ind.canTerraformCondition(project) || canBeRemoved;
+            if (market.getPrimaryEntity() instanceof PlanetAPI && ((PlanetAPI) market.getPrimaryEntity()).isGasGiant()) {
+                canBuild = canBuild && project.canChangeGasGiants;
+            }
+        } else if (industry instanceof ConstructionGrid ind) {
+            canBuild = ind.canBuildMegastructure(project.id);
+        }
+        return canBuild;
     }
 
     @Override
