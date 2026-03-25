@@ -94,7 +94,7 @@ public class HiveWorld extends BaseMarketConditionPlugin implements MarketImmigr
     public void modifyIncoming(MarketAPI market, PopulationComposition incoming) {
         float bonus = getImmigrationBonus();
         if (bonus > 0) {
-            incoming.add(Factions.PLAYER, bonus);
+            incoming.add(this.market.getFactionId(), bonus);
             incoming.getWeight().modifyFlat(getModId(), bonus, "Hive World");
         }
     }
