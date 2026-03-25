@@ -15,7 +15,7 @@ import terraformingmadeeasy.Settings;
 public class HiveWorld extends BaseMarketConditionPlugin implements MarketImmigrationModifier {
     public static final int MAX_MARKET_SIZE_MOD = 1;
     public static final int SUPPLY_MOD = 1;
-    public static final float IMMIGRATION_MOD = 20f;
+    public static final float IMMIGRATION_MOD = 10f;
     public final String[] industryIds = {
             Industries.POPULATION, Industries.FARMING, Industries.MINING, Industries.LIGHTINDUSTRY, Industries.HEAVYINDUSTRY
     };
