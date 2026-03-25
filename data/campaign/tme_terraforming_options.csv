@@ -65,4 +65,5 @@ tme_unification_center,tme_death_world,6000000,180,false,needAll:thin_atmosphere
 tme_unification_center,tme_forge_world,6000000,180,false,needAll:ore_ultrarich|rare_ore_ultrarich,needAll:tme_fortress_world|tme_paradise_world,needAll:megaport|orbitalworks|mining|refining,,
 tme_unification_center,tme_fortress_world,6000000,180,false,needAll:habitable|volatiles_plentiful,needAll:tme_forge_world|tme_paradise_world,needAll:megaport|orbitalworks|highcommand|fuelprod,,
 tme_unification_center,tme_paradise_world,6000000,180,false,needAll:habitable|mild_climate,needAll:tme_forge_world|tme_fortress_world,needAll:megaport|farming|lightindustry|commerce,,
+tme_unification_center,tme_hive_world,6000000,180,false,needAll:habitable|pollution,needAll:tme_forge_world|tme_fortress_world|tme_paradise_world,needAll:megaport|farming|lightindustry|mining|heavyindustry,,
 ,,,,,,,,,

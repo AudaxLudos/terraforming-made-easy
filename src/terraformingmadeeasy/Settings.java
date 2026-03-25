@@ -74,6 +74,6 @@ public class Settings implements LunaSettingsListener {
 
     @Override
     public void settingsChanged(String s) {
-
+        setSettings();
     }
 }
