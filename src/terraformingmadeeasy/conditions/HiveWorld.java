@@ -29,7 +29,16 @@ public class HiveWorld extends BaseMarketConditionPlugin implements MarketImmigr
     @Override
     public void apply(String id) {
         for (MarketAPI market : Misc.getMarketsInLocation(this.market.getContainingLocation(), Factions.PLAYER)) {
-            market.addTransientImmigrationModifier(this);
+            boolean hasHiveWorldBonus = false;
+            for (MarketImmigrationModifier modifier : market.getTransientImmigrationModifiers()) {
+                if (modifier instanceof HiveWorld) {
+                    hasHiveWorldBonus = true;
+                    break;
+                }
+            }
+            if (!hasHiveWorldBonus) {
+                market.addTransientImmigrationModifier(this);
+            }
         }
 
         this.market.getStats().getDynamic().getStat(Stats.MAX_MARKET_SIZE).modifyFlat(id, MAX_MARKET_SIZE_MOD);
