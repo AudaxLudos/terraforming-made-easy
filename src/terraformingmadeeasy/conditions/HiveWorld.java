@@ -41,7 +41,7 @@ public class HiveWorld extends BaseMarketConditionPlugin implements MarketImmigr
             }
         }
 
-        this.market.getStats().getDynamic().getStat(Stats.MAX_MARKET_SIZE).modifyFlat(id, MAX_MARKET_SIZE_MOD);
+        this.market.getStats().getDynamic().getMod(Stats.MAX_MARKET_SIZE).modifyFlat(id, MAX_MARKET_SIZE_MOD);
 
         for (String industryId : this.industryIds) {
             if (!this.market.hasIndustry(industryId)) {
@@ -68,7 +68,7 @@ public class HiveWorld extends BaseMarketConditionPlugin implements MarketImmigr
             market.removeTransientImmigrationModifier(this);
         }
 
-        this.market.getStats().getDynamic().getStat(Stats.MAX_MARKET_SIZE).unmodify(id);
+        this.market.getStats().getDynamic().getMod(Stats.MAX_MARKET_SIZE).unmodify(id);
 
         for (String industryId : this.industryIds) {
             if (!this.market.hasIndustry(industryId)) {
