@@ -80,6 +80,6 @@ public class ForgeWorld extends BaseMarketConditionPlugin {
         tooltip.addPara("%s ship quality", 10f, Misc.getHighlightColor(), "+" + Math.round(FLEET_QUALITY_MOD * 100f) + "%");
         tooltip.addPara("%s maximum value of custom ship and weapon production per month", 10f, Misc.getHighlightColor(), "+" + Math.round(CUSTOM_PRODUCTION_MULT * 100f) + "%");
         tooltip.addPara("%s maximum number of industries", 10f, Misc.getHighlightColor(), "+" + MAX_INDUSTRIES_BONUS);
-        tooltip.addPara("%s production to orbital works, refining, mining and fuel production. Applies to all similar structures.", 10f, Misc.getHighlightColor(), "+" + SUPPLY_BONUS);
+        tooltip.addPara("%s production to orbital works, refining, mining and fuel production. Applies to all similar structures", 10f, Misc.getHighlightColor(), "+" + SUPPLY_BONUS);
     }
 }

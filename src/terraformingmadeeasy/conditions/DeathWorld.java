@@ -87,7 +87,7 @@ public class DeathWorld extends BaseMarketConditionPlugin {
         tooltip.addPara("%s a random hazardous condition once every %s months", oPad, Misc.getHighlightColor(), "Suppresses", SUPPRESS_CONDITION_PER_MONTH_MOD + "");
         tooltip.addPara("Trains %s of marines in the market's stockpile every %s", oPad, Misc.getHighlightColor(), Math.round(MARINES_TO_TRAIN_MULT * 100f) + "%", "month");
         tooltip.addPara("%s ground defense", oPad, Misc.getHighlightColor(), "+" + Math.round(GROUND_DEFENSE_MULT * 100f) + "%");
-        tooltip.addPara("%s production to population & infrastructure, orbital works, high command, and mining. Applies to all similar structures.", oPad, Misc.getHighlightColor(), "+" + SUPPLY_BONUS);
+        tooltip.addPara("%s production to population & infrastructure, orbital works, high command, and mining. Applies to all similar structures", oPad, Misc.getHighlightColor(), "+" + SUPPLY_BONUS);
         tooltip.beginTable2(this.market.getFaction(), 20f, true, true,
                 new Object[]{"Suppressed Conditions", tooltip.getWidthSoFar() / 2f});
         tooltip.addTableHeaderTooltip(0, "Name of the suppressed conditions");

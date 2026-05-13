@@ -74,6 +74,6 @@ public class ParadiseWorld extends BaseMarketConditionPlugin {
         tooltip.addPara("%s income", 10f, Misc.getHighlightColor(), "+" + Math.round(INCOME_MULT * 100f) + "%");
         tooltip.addPara("%s accessibility", 10f, Misc.getHighlightColor(), "+" + Math.round(ACCESSIBILITY_MOD * 100f) + "%");
         tooltip.addPara("%s stability", 10f, Misc.getHighlightColor(), "+" + STABILITY_BONUS);
-        tooltip.addPara("%s production to population & infrastructure, farming, and light industry. Applies to all similar structures.", 10f, Misc.getHighlightColor(), "+" + SUPPLY_BONUS);
+        tooltip.addPara("%s production to population & infrastructure, farming, and light industry. Applies to all similar structures", 10f, Misc.getHighlightColor(), "+" + SUPPLY_BONUS);
     }
 }

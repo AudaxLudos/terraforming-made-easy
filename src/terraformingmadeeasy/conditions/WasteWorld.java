@@ -1,6 +1,5 @@
 package terraformingmadeeasy.conditions;
 
-import com.fs.starfarer.api.campaign.LocationAPI;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.econ.BaseMarketConditionPlugin;
@@ -79,9 +78,9 @@ public class WasteWorld extends BaseMarketConditionPlugin {
     @Override
     protected void createTooltipAfterDescription(TooltipMakerAPI tooltip, boolean expanded) {
         tooltip.addPara("%s hazard rating", 10f, Misc.getHighlightColor(), "+" + Math.round(MARKET_HAZARD_MOD * 100f) + "%");
-        tooltip.addPara("%s tech mining finds", 10f, Misc.getHighlightColor(), "+" + Math.round(TECH_MINING_MULT * 100f)  + "%");
-        tooltip.addPara("%s accessibility bonus to all markets in the system", 10f, Misc.getHighlightColor(), "+" + Math.round(OTHER_MARKET_ACCESS_MOD * 100f)  + "%");
-        tooltip.addPara("%s hazard rating to all markets in the system", 10f, Misc.getHighlightColor(), "-" + Math.round(OTHER_MARKET_HAZARD_MOD * 100f)  + "%");
-        tooltip.addPara("%s production to population & infrastructure, refining, heavy industry and similar.", 10f, Misc.getHighlightColor(), "+" + SUPPLY_MOD);
+        tooltip.addPara("%s tech mining finds", 10f, Misc.getHighlightColor(), "+" + Math.round(TECH_MINING_MULT * 100f) + "%");
+        tooltip.addPara("%s accessibility bonus to all markets in the system", 10f, Misc.getHighlightColor(), "+" + Math.round(OTHER_MARKET_ACCESS_MOD * 100f) + "%");
+        tooltip.addPara("%s hazard rating to all markets in the system", 10f, Misc.getHighlightColor(), "-" + Math.round(OTHER_MARKET_HAZARD_MOD * 100f) + "%");
+        tooltip.addPara("%s production to population & infrastructure, refining, heavy industry and similar", 10f, Misc.getHighlightColor(), "+" + SUPPLY_MOD);
     }
 }
