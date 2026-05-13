@@ -1,5 +1,5 @@
 ### 2.8.26
-- Release 2.8.4b
+- Release 2.8.4c
 - Revert unification center paradise world option to vanilla industry ids
 
 ### 2.8.24
