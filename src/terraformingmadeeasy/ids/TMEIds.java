@@ -6,6 +6,8 @@ public class TMEIds {
     public static final String FORGE_WORLD = "tme_forge_world";
     public static final String FORTRESS_WORLD = "tme_fortress_world";
     public static final String PARADISE_WORLD = "tme_paradise_world";
+    public static final String HIVE_WORLD = "tme_hive_world";
+    public static final String WASTE_WORLD = "tme_waste_world";
     // TME industries
     public static final String AGRICULTURAL_LABORATORY = "tme_agricultural_laboratory";
     public static final String ATMOSPHERE_REGULATOR = "tme_atmosphere_regulator";

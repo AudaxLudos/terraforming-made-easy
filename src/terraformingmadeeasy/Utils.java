@@ -2,11 +2,14 @@ package terraformingmadeeasy;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomEntitySpecAPI;
+import com.fs.starfarer.api.campaign.LocationAPI;
 import com.fs.starfarer.api.campaign.PlanetSpecAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
+import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.characters.MarketConditionSpecAPI;
 import com.fs.starfarer.api.impl.campaign.procgen.PlanetGenDataSpec;
 import com.fs.starfarer.api.ui.ButtonAPI;
+import com.fs.starfarer.api.util.Misc;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -222,6 +225,23 @@ public class Utils {
         } else {
             button.unhighlight();
         }
+    }
+
+    public static MarketAPI getLargestMarketWithCondition(LocationAPI location, String factionId, String conditionId) {
+        MarketAPI result = null;
+        int max = 0;
+
+        for (MarketAPI market : Misc.getMarketsInLocation(location, factionId)) {
+            if (!market.hasCondition(conditionId)) {
+                continue;
+            }
+            if (market.getSize() > max) {
+                max = market.getSize();
+                result = market;
+            }
+        }
+
+        return result;
     }
 
     public record OrbitData(SectorEntityToken entity, float orbitAngle, float orbitRadius, float orbitDays) {
