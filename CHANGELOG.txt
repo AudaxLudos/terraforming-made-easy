@@ -1,27 +1,27 @@
-### 2.8.4c
+### 2.8.26
 - Release 2.8.4b
 - Revert unification center paradise world option to vanilla industry ids
 
-### 2.8.4b
+### 2.8.24
 - Release 2.8.4b
 - Exclude converting terraforming options if it contains ids from AoTD VoK already
 
-### 2.8.4a
+### 2.8.22
 - Release 2.8.4a
 - Update AoTD industry ids
 
-### 2.8.4
+### 2.8.20
 - Release 2.8.4
 - Add options to add or remove stellar shades and mirrors in stellar manufactory
 - Add options to upgrade makeshift relays
 - Update TME structure descriptions
 - Add related entries to TME structures codex
 
-### 2.8.0a
+### 2.8.1
 - Release 2.8.0a
 - Update Jar file
 
-### 2.8.0
+### 2.8.0 (257)
 - Release 2.8.0
 - Add dialog delegate credits tooltip
 - Add planetary hologram specific texts
@@ -43,49 +43,49 @@
 - Ensure undesirable planet types are removed when evaluating category
 - Use vanilla methods to display terraforming options list
 
-### 2.6.5j
+### 2.6.62
 - Release 2.6.5j
 - Fix death world marine training script not working when reloading save
 
-### 2.6.5i
+### 2.6.60
 - Release 2.6.5i
 - Update JAR file
 
-### 2.6.5h
+### 2.6.58
 - Release 2.6.5h
 - Fix coronal tap being repaired bugfix not being applied on old saves
 - Remove TME prefix on structure names
 
-### 2.6.5f
+### 2.6.55
 - Release 2.6.5f
 - Fix megastructure coronal tap stuck on being repaired
 - Fix gamma core upkeep reduction not applying to tme structures
 
-### 2.6.5d
+### 2.6.52
 - Release 2.6.5d
 - Prevent ice giants from forming on hot gas giants
 - Prevent tundra worlds from forming on hot habitable planets
 - Prevent cold barren worlds from forming on hot barren planets
 
-### 2.6.5a
+### 2.6.47
 - Release 2.6.5a
 - Update game version to 0.98a from 0.97a
 - Update java version to 17 from 7
 
-### 2.6.4g
+### 2.6.44
 - Release 2.6.4g
 - Update tme conditions to work on AoTD-VoK experimental structures
 - Update unification center to include AoTD-VoK experimental structures
 
-### 2.6.4e
+### 2.6.41
 - Release 2.6.4e
 - Fix stellar manufactory solar mirrors not properly added in non-orbiting planets
 
-### 2.6.4d
+### 2.6.39
 - Release 2.6.4d
 - Fix construction grid consuming installed items when it finishes
 
-### 2.6.4c
+### 2.6.37
 - Release 2.6.4c
 - Fix farming/aquaculture structures not changing when terraforming into a water world with AoTD
 - Update changing of planet types to remove lobsters from barren worlds
@@ -93,17 +93,17 @@
 - Update changing of planet types functionality to include modded conditions
 - Update luna mod settings build cost details
 
-### 2.6.3d
+### 2.6.25
 - Release 2.6.3d
 - Fix vanilla mod settings not applying properly
 
-### 2.6.3c
+### 2.6.23
 - Release 2.6.3c
 - Update luna settings details
 - Update reformat tooltip for construction grid
 - Update reformat tooltip TMEBaseIndustry
 
-### 2.6.3b
+### 2.6.19
 - Release 2.6.3b
 - Add vanilla time and cost multiplier settings
 - Update apply luna settings to terraforming and megastructure options
@@ -111,23 +111,23 @@
 - Add initial soft compatibility with lunalib mod
 - Update moved options files to ../data/campaign folder
 
-### 2.6.1
+### 2.6.9
 - Release 2.6.1
 - Update reduced most terraforming and megastructure options time and cost by around 50%
 - Update switch icons of agricultural enrichment and climate reformation tech
 
-### 2.6.0c
+### 2.6.6
 - Release 2.6.0c
 - Fix crash issue when there is no hated or liked conditions or industries of terraforming options
 - Update fetching of data to trim and remove whitespaces of strings
 - Fix planetary hologram options not showing up
 
-### 2.6.0b
+### 2.6.3
 - Release 2.6.0b
 - Fix issue with construction grid options not showing up
 - Update the max character limit for megastructure ui inputs
 
-### 2.6.0a
+### 2.6.0 (173)
 - Release 2.6.0a
 - Fix crash when viewing planetary hologram tooltip in Aotd Research menu
 - Update research tech ids for AotD-VoK
@@ -141,23 +141,23 @@
 - Update terraforming required conditions and industries format and functionality
 - Add AoTD-VOK research compatibility for structures
 
-### 2.5.3
+### 2.5.11
 - Release 2.5.3
 - Add solar shades and mirrors when completing stellar manufactory terraforming
 - Fix lag spike during endgame when opening terraforming options
 
-### 2.5.1a
+### 2.5.6
 - Release 2.5.2
 - Update fortress world ground defense mult to 50% from 100%
 - Update supply bonus for tme conditions to 1 from 3
 - Add aquaculture to paradise world industries with supply bonus
 
-### 2.5.0a
+### 2.5.2
 - Release 2.5.0a
 - Fix crash issue when canceling projects in construction grid
 - Fix issue where constructed gates can't be selected as a jump location
 
-### 2.5.0
+### 2.5.0 (149)
 - Release 2.5.0
 - Add unification center AI core reduced demand of 1 effect
 - Update industries tooltip descriptions
@@ -165,17 +165,17 @@
 - Add unification center income value of 6
 - Update unification center build time to 180 from 360
 
-### 2.4.7a
+### 2.4.21
 - Release 2.4.7a
 - Fix megastructure ui showing the same text field titles
 
-### 2.4.7
+### 2.4.18
 - Release 2.4.7
 - Update GitHub action script
 - Add death world condition to unification center
 - Add death world condition
 
-### 2.4.5
+### 2.4.13
 - Release 2.4.5
 - Add planetary hologram sprite
 - Update planetary hologram tooltip ui
@@ -185,30 +185,30 @@
 - Update planetary hologram to be enabled
 - Update grammar of industry descriptions
 
-### 2.4.1
+### 2.4.6
 - Release 2.4.1
 - Update reduce cost and build time for all terraforming & megatsructure options by 30%-50%
 - Fix bug where AI core effects would instantly finish the structure/project
 - Add unification center sprite
 - Add planetary hologram industry (disabled)
 
-### 2.4.0
+### 2.4.0 (112)
 - Release 2.4.0
 - Add megastructure project section for tooltip when hovering industry
 
-### 2.3.9
+### 2.3.24
 - Release 2.3.9
 - Fix bug where days left in terraforming project section tooltip is not reflected properly
 
-### 2.3.8
+### 2.3.23
 - Release 2.3.8
 - Add terraforming project section for tooltip when hovering industry
 
-### 2.3.6
+### 2.3.19
 - Release 2.3.6
 - Update directDownloadURL link in version file
 
-### 2.3.5
+### 2.3.18
 - Release 2.3.5
 - Fix issue filtering of unknown industries specs not working
 - Fix bug terraforming options list not getting sorted
@@ -218,16 +218,16 @@
 - Update disabled samples in terraforming options csv
 - Add planet type override option after a terraforming project
 
-### 2.3.2
+### 2.3.7
 - Release 2.3.2
 - Update jar file
 - Fix crash when building stations in a system without a constellation
 
-### 2.3.1
+### 2.3.2
 - Release 2.3.1
 - Update jar file
 
-### 2.3.0
+### 2.3.0 (84)
 - Release 2.3.0
 - Update construction grid can now construct entities from other mods
 - Update terraforming structures can now add conditions from other mods
@@ -240,18 +240,18 @@
 - Add csv file for megastructure options
 - Add csv file for terraforming options
 
-### 2.1.1
+### 2.1.4
 - Release 2.1.1
 - Update orbital station build time to 720 from 5
 
-### 2.1.0
+### 2.1.0 (71)
 - Release 2.1.0
 - Fix bug that instantly increases recently finished stations colony size to 5-6
 - Add ability to build stations for construction grid
 - Move hidden conditions to unification center
 - Add unification center structure
 
-### 2.0.0
+### 2.0.0 (61)
 - Release 2.0.0
 - Update code structure and format for dialogs
 - Update construction grid implementation
@@ -261,7 +261,7 @@
 - Release 1.1.1
 - Update mod game version to latest
 
-### 1.1.0
+### 1.1.0 (50)
 - Release 1.1.0
 - Update terraform options tooltip text
 - Update farming industry when terraforming to a water or non water world
@@ -270,16 +270,16 @@
 - Update geomorphology station terraform options requirements and restrictions
 - Update modifiable conditions data
 
-### 1.0.2
+### 1.0.4
 - Release 1.0.2
 - Update files to match latest version
 - Update CHANGELOG.txt
 
-### 1.0.1
+### 1.0.3
 - Release 1.0.1
 - Update CHANGELOG.txt
 
-### 1.0.0
+### 1.0.0 (43)
 - Release 1.0.0
 - Update fix ui text name for condition not showing up
 - Update removed unused java classes
@@ -290,7 +290,7 @@
 - Update renamed TMEModPlugin to ModPlugin
 - Update mod_info.json
 
-### 0.9.3
+### 0.9.3 (40)
 - Release 0.9.3
 - Add temporary planet type conditions
 - Add solar array modifiable condition to stellar manufactory
@@ -311,7 +311,7 @@
 - Update jar file
 - Update mod version to latest
 
-### 0.7.4
+### 0.7.4 (31)
 - Release 0.7.4
 - Update rename some of the industries
 - Add full implementation of tme conditions
@@ -335,7 +335,7 @@
 - Add version check files
 - Update CHANGELOG, CREDITS & mod_info
 
-### 0.5.0
+### 0.5.0 (8)
 - Add README.md
 - Update modifiable conditions cost and build time
 - Update UI implementation
