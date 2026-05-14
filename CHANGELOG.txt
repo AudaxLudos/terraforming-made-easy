@@ -1,3 +1,14 @@
+### 2.9.0
+- Update unification center terraforming options requirements
+- Add waste world condition
+- Add hive world market condition
+- Update terraforming project codex option description
+- Lower terraforming cost when removing conditions
+- Fix structure in-progress text showing wrong context
+- Remove unused code and dialogues
+- Require solar array for bountiful and rich farmland options
+- Rename option files to have tme prefix
+
 ### 2.8.26
 - Release 2.8.4c
 - Revert unification center paradise world option to vanilla industry ids
