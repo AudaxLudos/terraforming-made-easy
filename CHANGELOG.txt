@@ -1,3 +1,7 @@
+### 2.9.3
+- Add hive world icon
+- Fix hive world codex entry error
+
 ### 2.9.0
 - Update unification center terraforming options requirements
 - Add waste world condition
