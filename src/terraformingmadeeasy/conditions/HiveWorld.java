@@ -107,13 +107,25 @@ public class HiveWorld extends BaseMarketConditionPlugin implements MarketImmigr
 
     protected float getImmigrationBonus() {
         MarketAPI market = Utils.getLargestMarketWithCondition(this.market.getContainingLocation(), this.market.getFactionId(), TMEIds.HIVE_WORLD);
-        return IMMIGRATION_MOD * market.getSize();
+        float size = 3f;
+        if (market != null) {
+            size = market.getSize();
+        }
+        return IMMIGRATION_MOD * size;
     }
 
     @Override
     protected void createTooltipAfterDescription(TooltipMakerAPI tooltip, boolean expanded) {
         tooltip.addPara("%s immigration bonus to all markets in the system, based on the largest market size with hive world", 10f, Misc.getHighlightColor(), "+" + Math.round(getImmigrationBonus()));
-        tooltip.addPara("%s max market size, this market can reach up to a colony size of %s", 10f, Misc.getHighlightColor(), "+" + MAX_MARKET_SIZE_MOD, "" + Misc.getMaxMarketSize(this.market));
+        tooltip.addPara("%s max market size, this market can reach up to a colony size of %s", 10f, Misc.getHighlightColor(), "+" + MAX_MARKET_SIZE_MOD, "" + getMaxMarketSize(this.market));
         tooltip.addPara("%s production to population & infrastructure, farming, light industry, heavy industry and similar", 10f, Misc.getHighlightColor(), "+" + SUPPLY_MOD);
+    }
+
+    protected int getMaxMarketSize(MarketAPI market) {
+        int maxSize = 7;
+        if (market != null) {
+            maxSize = Misc.getMaxMarketSize(market);
+        }
+        return maxSize;
     }
 }
