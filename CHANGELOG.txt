@@ -1,5 +1,5 @@
 ### 2.9.3
-- Add hive world icon
+- Add waste world icon
 - Fix hive world codex entry error
 
 ### 2.9.0
