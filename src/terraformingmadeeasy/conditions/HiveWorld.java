@@ -4,18 +4,12 @@ import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.MarketImmigrationModifier;
 import com.fs.starfarer.api.impl.campaign.econ.BaseMarketConditionPlugin;
-import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.impl.campaign.population.PopulationComposition;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import terraformingmadeeasy.Settings;
 import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.ids.TMEIds;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class HiveWorld extends BaseMarketConditionPlugin implements MarketImmigrationModifier {
     public static final int MAX_MARKET_SIZE_MOD = 1;
