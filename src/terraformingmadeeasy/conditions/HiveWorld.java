@@ -21,19 +21,6 @@ public class HiveWorld extends BaseMarketConditionPlugin implements MarketImmigr
     public static final int MAX_MARKET_SIZE_MOD = 1;
     public static final float IMMIGRATION_MOD = 10f;
     public static final int SUPPLY_MOD = 1;
-    public static List<String> INDUSTRIES_WITH_SUPPLY_MOD = new ArrayList<>();
-
-    static {
-        INDUSTRIES_WITH_SUPPLY_MOD.addAll(Arrays.asList(
-                Industries.POPULATION, Industries.FARMING, Industries.MINING, Industries.LIGHTINDUSTRY, Industries.HEAVYINDUSTRY));
-        if (Settings.isAoTDVoKEnabled()) {
-            INDUSTRIES_WITH_SUPPLY_MOD.addAll(Arrays.asList(
-                    "artifarming", "subfarming",
-                    "fracking", "mining_megaplex", "pluto_station",
-                    "hightech", "druglight", "consumerindustry",
-                    "supplyheavy", "weaponheavy", "triheavy", "hegeheavy", "orbitalheavy", "stella_manufactorium", "nidavelir_complex"));
-        }
-    }
 
     @Override
     public void apply(String id) {
@@ -55,13 +42,8 @@ public class HiveWorld extends BaseMarketConditionPlugin implements MarketImmigr
 
         this.market.getStats().getDynamic().getMod(Stats.MAX_MARKET_SIZE).modifyFlat(id, MAX_MARKET_SIZE_MOD);
 
-        for (String industryId : INDUSTRIES_WITH_SUPPLY_MOD) {
-            if (!this.market.hasIndustry(industryId)) {
-                continue;
-            }
-
-            Industry ind = this.market.getIndustry(industryId);
-            ind.getSupplyBonusFromOther().modifyFlat(id, SUPPLY_MOD, "Hive World");
+        for (Industry industry : this.market.getIndustries()) {
+            industry.getSupplyBonusFromOther().modifyFlat(id, SUPPLY_MOD, "Hive World");
         }
     }
 
@@ -81,13 +63,8 @@ public class HiveWorld extends BaseMarketConditionPlugin implements MarketImmigr
 
         this.market.getStats().getDynamic().getMod(Stats.MAX_MARKET_SIZE).unmodify(id);
 
-        for (String industryId : INDUSTRIES_WITH_SUPPLY_MOD) {
-            if (!this.market.hasIndustry(industryId)) {
-                continue;
-            }
-
-            Industry ind = this.market.getIndustry(industryId);
-            ind.getSupplyBonusFromOther().unmodify(id);
+        for (Industry industry : this.market.getIndustries()) {
+            industry.getSupplyBonusFromOther().unmodify(id);
         }
     }
 
@@ -118,7 +95,7 @@ public class HiveWorld extends BaseMarketConditionPlugin implements MarketImmigr
     protected void createTooltipAfterDescription(TooltipMakerAPI tooltip, boolean expanded) {
         tooltip.addPara("%s immigration bonus to all markets in the system, based on the largest market size with hive world", 10f, Misc.getHighlightColor(), "+" + Math.round(getImmigrationBonus()));
         tooltip.addPara("%s max market size, this market can reach up to a colony size of %s", 10f, Misc.getHighlightColor(), "+" + MAX_MARKET_SIZE_MOD, "" + getMaxMarketSize(this.market));
-        tooltip.addPara("%s production to population & infrastructure, farming, light industry, heavy industry and similar", 10f, Misc.getHighlightColor(), "+" + SUPPLY_MOD);
+        tooltip.addPara("%s production to all applicable industries", 10f, Misc.getHighlightColor(), "+" + SUPPLY_MOD);
     }
 
     protected int getMaxMarketSize(MarketAPI market) {
