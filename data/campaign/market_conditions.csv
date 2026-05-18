@@ -4,7 +4,7 @@ Forge World,tme_forge_world,show_in_codex,TRUE,,terraformingmadeeasy.conditions.
 Fortress World,tme_fortress_world,show_in_codex,TRUE,,terraformingmadeeasy.conditions.FortressWorld,A world dedicated to defending star systems and staging attacks against hostiles.,graphics/icons/markets/military_base.png,
 Paradise World,tme_paradise_world,show_in_codex,TRUE,,terraformingmadeeasy.conditions.ParadiseWorld,"A world dedicated to commerce and trade, mostly inhabited by executives and nobility.",graphics/icons/markets/terran_world.png,
 Hive World,tme_hive_world,show_in_codex,TRUE,,terraformingmadeeasy.conditions.HiveWorld,A world dedicated to increasing the population as fast and as much as possible.,graphics/icons/markets/capital.png,
-Waste World,tme_waste_world,show_in_codex,TRUE,,terraformingmadeeasy.conditions.WasteWorld,A world dedicated to being a dumping ground for waste from other worlds.,graphics/icons/market/tme_hive_world.png,
+Waste World,tme_waste_world,show_in_codex,TRUE,,terraformingmadeeasy.conditions.WasteWorld,A world dedicated to being a dumping ground for waste from other worlds.,graphics/icons/market/tme_waste_world.png,
 ,,,,,,,,
 ,,,,,,,,
 ,,,,,,,,
