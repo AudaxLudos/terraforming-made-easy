@@ -244,7 +244,18 @@ public class Utils {
         return result;
     }
 
-    public record OrbitData(SectorEntityToken entity, float orbitAngle, float orbitRadius, float orbitDays) {
+    public static class OrbitData {
+        public SectorEntityToken entity;
+        public float orbitAngle;
+        public float orbitRadius;
+        public float orbitDays;
+
+        public OrbitData(SectorEntityToken entity, float orbitAngle, float orbitRadius, float orbitDays) {
+            this.entity = entity;
+            this.orbitAngle =orbitAngle;
+            this.orbitRadius = orbitRadius;
+            this.orbitDays = orbitDays;
+        }
     }
 
     public static class ProjectData {
