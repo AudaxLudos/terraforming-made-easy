@@ -1,3 +1,6 @@
+### 2.9.5
+- Fix save error when deconstructing construction grid with ongoing project
+
 ### 2.9.3
 - Add waste world icon
 - Fix hive world codex entry error
