@@ -208,8 +208,11 @@ public class BaseTerraformingIndustry extends BaseDevelopmentIndustry {
 
     public String evaluatePlanetCategory() {
         PlanetGenDataSpec spec = (PlanetGenDataSpec) Global.getSettings()
-                .getSpec(PlanetGenDataSpec.class, this.market.getPlanetEntity().getTypeId(), false);
-        String result = spec.getCategory();
+                .getSpec(PlanetGenDataSpec.class, this.market.getPlanetEntity().getTypeId(), true);
+        String result = "";
+        if (spec != null) {
+             result = spec.getCategory();
+        }
 
         if (this.market.hasCondition(Conditions.HABITABLE)) {
             result = "cat_hab4";
