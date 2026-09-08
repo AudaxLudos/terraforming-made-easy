@@ -61,10 +61,11 @@ public class ModPlugin extends BaseModPlugin {
                         }
                         case Industries.REFINING: {
                             String newExpression = String.format(
-                                    "needOne:%s|%s|%s, ",
+                                    "needOne:%s|%s|%s|%s, ",
                                     "refining",
                                     "aotd_crystalizator",
-                                    "aotd_enrichment_facility");
+                                    "aotd_enrichment_facility",
+                                    "pluto_station");
                             needOne.append(newExpression);
                             break;
                         }
@@ -74,7 +75,7 @@ public class ModPlugin extends BaseModPlugin {
                                     "lightindustry",
                                     "aotd_hightech_industry",
                                     "aotd_druglight",
-                                    "consumerindustry");
+                                    "aotd_commercial_manu");
                             needOne.append(newExpression);
                             break;
                         }
@@ -112,15 +113,33 @@ public class ModPlugin extends BaseModPlugin {
                             needOne.append(newExpression);
                             break;
                         }
-                        case Industries.HIGHCOMMAND:
-                        case Industries.COMMERCE:
+                        case Industries.COMMERCE: {
+                            String newExpression = String.format(
+                                    "needOne:%s|%s, ",
+                                    "commerce",
+                                    "aotd_underworld");
+                            needOne.append(newExpression);
+                            break;
+                        }
                         case Industries.MEGAPORT: {
+                            String newExpression = String.format(
+                                    "needOne:%s|%s, ",
+                                    "megaport",
+                                    "aotd_daedalus_array");
+                            needOne.append(newExpression);
+                            break;
+                        }
+                        case Industries.HIGHCOMMAND: {
                             needAll.append(id).append("|");
                         }
                     }
                 }
 
-                condition.likedIndustries = needOne.append(needAll.toString().replaceFirst(".$", "")).toString().replaceAll("\\s", "").trim();
+                if (needAll.length() > "needAll:".length()) {
+                    condition.likedIndustries = needOne.append(needAll.toString().replaceFirst(".$", "")).toString().replaceAll("\\s", "").trim();
+                } else {
+                    condition.likedIndustries = needOne.toString().replaceAll("\\s", "").trim();
+                }
             }
             Utils.UNIFICATION_CENTER_OPTIONS = projectsCopy;
         }
