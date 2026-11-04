@@ -13,9 +13,13 @@ import com.fs.starfarer.api.util.Misc;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.lwjgl.opengl.GL11;
+import terraformingmadeeasy.loading.specs.TerraformingProjectSpec;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -242,6 +246,102 @@ public class Utils {
         }
 
         return result;
+    }
+
+    public static boolean canAfford(float cost) {
+        return Global.getSettings().isInCampaignState() && Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= cost;
+    }
+
+    public static boolean canPerformProject(MarketAPI market, TerraformingProjectSpec project) {
+        if (market == null) {
+            return false;
+        }
+        return canTerraformCondition(market, project);
+    }
+
+    public static Boolean canTerraformCondition(MarketAPI market, TerraformingProjectSpec project) {
+        return hasRequiredConditions(market, project) && hasRequiredIndustries(market, project);
+    }
+
+    public static boolean hasRequiredConditions(MarketAPI market, TerraformingProjectSpec project) {
+        String text = project.getLikedConditions();
+
+        if (text == null || text.isEmpty()) {
+            return true;
+        }
+
+        String[] expressions = text.split(",");
+        boolean[] expressionsResult = new boolean[expressions.length];
+
+        for (int i = 0; i < expressions.length; i++) {
+            String expression = expressions[i];
+            if (expression.contains("needAll")) {
+                expression = expression.replaceAll("needAll:", "").replaceAll("\\|", "&&");
+            } else if (expression.contains("needOne")) {
+                expression = expression.replaceAll("needOne:", "").replaceAll("\\|", "||");
+            }
+
+            String[] ids = expression.split("&&|\\|\\|");
+            Map<String, Boolean> values = new HashMap<>();
+            for (String id : ids) {
+                values.put(id, market.hasCondition(id));
+            }
+            expressionsResult[i] = evaluateExpression(expression, values);
+        }
+
+        return isAllTrue(expressionsResult);
+    }
+
+    public static boolean hasRequiredIndustries(MarketAPI market, TerraformingProjectSpec condition) {
+        String text = condition.getLikedIndustries();
+
+        if (text == null || text.isEmpty()) {
+            return true;
+        }
+
+        String[] expressions = text.split(",");
+        boolean[] expressionsResult = new boolean[expressions.length];
+
+        for (int i = 0; i < expressions.length; i++) {
+            String expression = expressions[i];
+            if (expression.contains("needAll")) {
+                expression = expression.replaceAll("needAll:", "").replaceAll("\\|", "&&");
+            } else if (expression.contains("needOne")) {
+                expression = expression.replaceAll("needOne:", "").replaceAll("\\|", "||");
+            }
+
+            String[] ids = expression.split("&&|\\|\\|");
+            Map<String, Boolean> values = new HashMap<>();
+            for (String id : ids) {
+                values.put(id, market.hasIndustry(id));
+            }
+            expressionsResult[i] = evaluateExpression(expression, values);
+        }
+
+        return isAllTrue(expressionsResult);
+    }
+
+    public static void renderQuadBorder(float x, float y, float width, float height, Color color, float alphaMult, float thickness) {
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ZERO);
+
+        GL11.glColor4f(
+                color.getRed() / 255f,
+                color.getGreen() / 255f,
+                color.getBlue() / 255f,
+                (color.getAlpha() / 255f) * alphaMult
+        );
+        GL11.glLineWidth(thickness);
+        GL11.glBegin(GL11.GL_LINE_LOOP);
+        {
+            float offset = thickness / 2f;
+            GL11.glVertex2f(x + offset, y + offset);
+            GL11.glVertex2f(x + offset, y + height - offset);
+            GL11.glVertex2f(x + width - offset, y + height - offset);
+            GL11.glVertex2f(x + width - offset, y + offset);
+        }
+        GL11.glEnd();
     }
 
     public static class OrbitData {

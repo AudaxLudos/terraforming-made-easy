@@ -2,13 +2,15 @@ package terraformingmadeeasy;
 
 import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.SectorAPI;
+import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.codex.CodexDataV2;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import terraformingmadeeasy.codex.TMECodexEntry;
 import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.listeners.DeathWorldScript;
-import terraformingmadeeasy.listeners.DevelopmentIndustryOptionProvider;
+import terraformingmadeeasy.listeners.TerraformingIndustryOptionProvider;
 import terraformingmadeeasy.loading.SpecStore;
 
 import java.util.ArrayList;
@@ -166,13 +168,24 @@ public class ModPlugin extends BaseModPlugin {
 
     @Override
     public void onGameLoad(boolean newGame) {
-        loadModSettings();
-
-        DeathWorldScript.register();
-        DevelopmentIndustryOptionProvider.register();
+        addModSettings();
+        addScriptsIfNeeded();
     }
 
-    public void loadModSettings() {
+    public void addScriptsIfNeeded() {
+        SectorAPI sector = Global.getSector();
+
+        // Add listeners
+        ListenerManagerAPI listenerManager = sector.getListenerManager();
+        if (!listenerManager.hasListenerOfClass(DeathWorldScript.class)) {
+            listenerManager.addListener(new DeathWorldScript(), true);
+        }
+        if (!listenerManager.hasListenerOfClass(TerraformingIndustryOptionProvider.class)) {
+            listenerManager.addListener(new TerraformingIndustryOptionProvider(), true);
+        }
+    }
+
+    public void addModSettings() {
         Settings.load();
     }
 }

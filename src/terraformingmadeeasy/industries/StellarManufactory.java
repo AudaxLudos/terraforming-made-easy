@@ -5,25 +5,13 @@ import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Entities;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.util.Misc;
-import terraformingmadeeasy.Utils;
-import terraformingmadeeasy.ids.TMEIds;
 
 import java.util.List;
 import java.util.Objects;
 
-public class StellarManufactory extends BaseTerraformingIndustry {
+public class StellarManufactory extends TerraformingIndustry {
     public StellarMirrorOptions stellarMirrorData = StellarMirrorOptions.NONE;
     public StellarMirrorOptions stellarShadeData = StellarMirrorOptions.NONE;
-
-    @Override
-    public String getAOTDVOKTechId() {
-        return TMEIds.STELLAR_MANUFACTORY_TECH;
-    }
-
-    @Override
-    public List<Utils.ProjectData> getProjects() {
-        return Utils.STELLAR_MANUFACTORY_OPTIONS;
-    }
 
     @Override
     public void completeProject() {

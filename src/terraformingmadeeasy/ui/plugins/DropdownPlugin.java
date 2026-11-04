@@ -4,8 +4,7 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.BaseCustomUIPanelPlugin;
 import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.ui.*;
-import com.fs.starfarer.api.util.Misc;
-import org.lwjgl.opengl.GL11;
+import terraformingmadeeasy.Utils;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -13,89 +12,85 @@ import java.util.List;
 import java.util.Map;
 
 public class DropdownPlugin extends BaseCustomUIPanelPlugin {
-    public final CustomPanelAPI panel;
-    public final CustomPanelAPI menuPanel;
-    public final ButtonAPI button;
-    public final LabelAPI label;
-    public final Map<String, Object> options;
-    public final List<ButtonAPI> buttons = new ArrayList<>();
-    public boolean isDropped = false;
-    public boolean isRendered = false;
-    public Object selected;
+    protected TooltipMakerAPI parentTooltip;
+    protected Map<String, Object> options;
+    protected float width;
+    protected CustomPanelAPI mainPanel;
+    protected TooltipMakerAPI mainElem;
+    protected ButtonAPI dropdownButton;
+    protected LabelAPI dropdownLabel;
+    protected CustomPanelAPI menuPanel;
+    protected TooltipMakerAPI menuElem;
+    protected List<ButtonAPI> optionButtons = new ArrayList<>();
+    protected boolean openMenu = false;
+    protected Object selectedOption;
 
-    public DropdownPlugin(CustomPanelAPI panel, float width, float height, Map<String, Object> options) {
+    public DropdownPlugin(TooltipMakerAPI parentTooltip, Map<String, Object> options, float width) {
+        this.parentTooltip = parentTooltip;
         this.options = options;
-        this.panel = panel.createCustomPanel(width, height, this);
-        TooltipMakerAPI dropdownElement = this.panel.createUIElement(width, height, false);
+        this.width = width;
 
-        String name = "";
-        Object data = null;
-        if (options != null && !options.isEmpty()) {
-            Map.Entry<String, Object> entry = options.entrySet().iterator().next();
-            name = entry.getKey();
-            data = entry.getValue();
+        this.mainPanel = Global.getSettings().createCustom(width, 25f, this);
+        createUI();
+    }
+
+    public void createUI() {
+        String optionId = "";
+        if (this.options != null && !this.options.isEmpty()) {
+            Map.Entry<String, Object> entry = this.options.entrySet().iterator().next();
+            optionId = entry.getKey();
         }
-        this.button = dropdownElement.addButton("", data, new Color(0, 195, 255, 190), new Color(0, 0, 0, 255), Alignment.MID, CutStyle.NONE, width, height, 0f);
-        this.label = dropdownElement.addPara(name, Misc.getBrightPlayerColor(), 0f);
-        float yPad = height / 2f - this.label.computeTextHeight(this.label.getText()) / 2f;
-        this.label.getPosition().inTL(10f, yPad);
 
-        this.menuPanel = this.panel.createCustomPanel(width, height * 3.5f, null);
-        TooltipMakerAPI menuElement = this.menuPanel.createUIElement(width, height * 3.5f - 1f, true);
+        this.mainElem = this.mainPanel.createUIElement(this.width, 25f, false);
+
+        // Dropdown button elem START
+        CustomPanelAPI dropdownButtonPanel = this.mainPanel.createCustomPanel(this.width, 25f, this);
+        TooltipMakerAPI dropdownButtonElem = dropdownButtonPanel.createUIElement(this.width, 25f, false);
+        this.dropdownButton = dropdownButtonElem.addButton("", optionId, new Color(0, 195, 255, 190), new Color(0, 0, 0, 255), Alignment.MID, CutStyle.NONE, this.width, 25f, 0f);
+        dropdownButtonPanel.addUIElement(dropdownButtonElem).setXAlignOffset(-5f);
+
+        TooltipMakerAPI dropdownLabelElem = dropdownButtonPanel.createUIElement(this.width, 25f, false);
+        this.dropdownLabel = dropdownLabelElem.addPara(optionId, com.fs.starfarer.api.util.Misc.getBasePlayerColor(), 0f);
+        this.dropdownLabel.getPosition().setSize(this.width, 25f);
+        this.dropdownLabel.setAlignment(Alignment.MID);
+        dropdownButtonPanel.addUIElement(dropdownLabelElem).setXAlignOffset(-5f);
+        this.mainElem.addCustom(dropdownButtonPanel, 0f);
+        // Dropdown button elem END
+
+        // Dropdown menu elem START
+        this.menuPanel = this.mainPanel.createCustomPanel(this.width, 25f * 3.5f, this);
+        this.menuElem = this.menuPanel.createUIElement(this.width, 25f * 3.5f, true);
         if (this.options != null) {
             for (Map.Entry<String, Object> entry : this.options.entrySet()) {
-                CustomPanelAPI optionPanel = this.menuPanel.createCustomPanel(width, height, this);
+                CustomPanelAPI optionPanel = this.menuPanel.createCustomPanel(this.width, 25f, this);
 
-                TooltipMakerAPI optionButtonElement = optionPanel.createUIElement(width, height, false);
-                ButtonAPI optionButton = optionButtonElement.addButton("", entry.getValue(), new Color(0, 195, 255, 190), new Color(0, 0, 0, 255), Alignment.MID, CutStyle.NONE, width, height, 0f);
-                optionButtonElement.getPosition().setXAlignOffset(-10f);
-                optionPanel.addUIElement(optionButtonElement);
+                TooltipMakerAPI optionButtonElement = optionPanel.createUIElement(this.width, 25f, false);
+                ButtonAPI optionButton = optionButtonElement.addButton("", entry.getKey(), new Color(0, 195, 255, 190), new Color(0, 0, 0, 255), Alignment.MID, CutStyle.NONE, this.width, 25f, 0f);
+                optionPanel.addUIElement(optionButtonElement).setXAlignOffset(-10f);
 
-                TooltipMakerAPI optionNameElement = optionPanel.createUIElement(width, height, false);
-                LabelAPI optionName = optionNameElement.addPara(entry.getKey(), Misc.getBasePlayerColor(), 0f);
-                float yOptionPad = height / 2f - optionName.computeTextHeight(optionName.getText()) / 2f;
-                optionName.getPosition().inTL(0f, yOptionPad);
-                optionPanel.addUIElement(optionNameElement);
+                TooltipMakerAPI optionNameElement = optionPanel.createUIElement(this.width, 25f, false);
+                LabelAPI optionLabel = optionNameElement.addPara(entry.getKey(), com.fs.starfarer.api.util.Misc.getBasePlayerColor(), 0f);
+                optionLabel.getPosition().setSize(this.width, 25f);
+                optionLabel.setAlignment(Alignment.MID);
+                optionPanel.addUIElement(optionNameElement).setXAlignOffset(-10f);
 
-                menuElement.addCustom(optionPanel, 0f);
+                this.menuElem.addCustom(optionPanel, 0f);
 
-                this.buttons.add(optionButton);
+                this.optionButtons.add(optionButton);
             }
         }
         this.menuPanel.setOpacity(0f);
-        this.menuPanel.addUIElement(menuElement);
-        dropdownElement.addCustom(this.menuPanel, 0f).getPosition().setXAlignOffset(-5f).setYAlignOffset(-8f);
+        this.menuPanel.addUIElement(this.menuElem);
+        this.mainElem.addCustomDoNotSetPosition(this.menuPanel).getPosition().belowMid(dropdownButtonPanel, 3f);
+        // Dropdown menu elem END
 
-        this.panel.addUIElement(dropdownElement).inTL(0f, 0f);
-    }
-
-    public static void renderQuadBorder(float x, float y, float width, float height, Color color, float alphaMult, float thickness) {
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ZERO);
-
-        GL11.glColor4f(
-                color.getRed() / 255f,
-                color.getGreen() / 255f,
-                color.getBlue() / 255f,
-                (color.getAlpha() / 255f) * alphaMult
-        );
-        GL11.glLineWidth(thickness);
-        GL11.glBegin(GL11.GL_LINE_LOOP);
-        {
-            float offset = thickness / 2f;
-            GL11.glVertex2f(x + offset, y + offset);
-            GL11.glVertex2f(x + offset, y + height - offset);
-            GL11.glVertex2f(x + width - offset, y + height - offset);
-            GL11.glVertex2f(x + width - offset, y + offset);
-        }
-        GL11.glEnd();
+        this.mainPanel.addUIElement(this.mainElem).setXAlignOffset(-5f);
     }
 
     @Override
     public void render(float alphaMult) {
-        if (this.button != null) {
-            PositionAPI position = this.button.getPosition();
+        if (this.dropdownButton != null) {
+            PositionAPI position = this.dropdownButton.getPosition();
             float width = position.getWidth();
             float height = position.getHeight();
             float x = position.getX();
@@ -104,75 +99,51 @@ public class DropdownPlugin extends BaseCustomUIPanelPlugin {
             sprite.setHeight(height);
             sprite.render(x + position.getWidth() - height, y);
 
-            renderQuadBorder(x, y, width, height, Misc.getDarkPlayerColor(), alphaMult, 1f);
+            Utils.renderQuadBorder(x, y, width, height, com.fs.starfarer.api.util.Misc.getDarkPlayerColor(), alphaMult, 1f);
         }
-        if (this.isDropped && !this.isRendered) {
-            this.isRendered = true;
-            this.menuPanel.setOpacity(1f);
-        }
-        if (this.isRendered) {
+        if (this.openMenu && this.menuPanel != null) {
             PositionAPI position = this.menuPanel.getPosition();
             float width = position.getWidth();
             float height = position.getHeight();
             float x = position.getX();
             float y = position.getY();
 
-            renderQuadBorder(x, y, width, height, Misc.getDarkPlayerColor(), alphaMult, 1f);
+            Utils.renderQuadBorder(x, y, width, height, com.fs.starfarer.api.util.Misc.getDarkPlayerColor(), alphaMult, 1f);
         }
     }
 
     @Override
     public void buttonPressed(Object buttonId) {
-        this.isDropped = !this.isDropped;
-        if (this.isDropped) {
-            this.button.highlight();
+        this.openMenu = !this.openMenu;
+        if (this.openMenu) {
+            this.dropdownButton.highlight();
+            this.menuPanel.setOpacity(1f);
         } else {
-            this.button.unhighlight();
-            this.isRendered = false;
-        }
-
-        for (Map.Entry<String, Object> entry : this.options.entrySet()) {
-            if (entry.getValue() == buttonId) {
-                this.label.setText(entry.getKey());
-                this.selected = buttonId;
-                this.button.setCustomData(this.selected);
-                float yPad = this.button.getPosition().getHeight() / 2f - this.label.computeTextHeight(this.label.getText()) / 2f;
-                this.label.getPosition().inTL(10f, yPad);
-                this.isRendered = false;
-                for (ButtonAPI button : this.buttons) {
-                    if (button.getCustomData() == buttonId) {
-                        button.highlight();
-                        continue;
-                    }
-                    if (button.isHighlighted()) {
-                        button.unhighlight();
-                    }
-                }
-                break;
-            }
-        }
-
-        if (!this.isRendered) {
+            this.dropdownButton.unhighlight();
             this.menuPanel.setOpacity(0f);
         }
-    }
 
-    public Object getSelected() {
-        return this.selected;
-    }
-
-    public void setSelected(Object data) {
-        if (this.label == null || this.button == null) {
-            return;
-        }
-
-        for (Map.Entry<String, Object> entry : this.options.entrySet()) {
-            if (entry.getValue() == data) {
-                this.button.setCustomData(data);
-                this.selected = data;
-                this.label.setText(entry.getKey());
-                return;
+        if (buttonId instanceof String data) {
+            for (ButtonAPI button : this.optionButtons) {
+                if (button.getCustomData() == buttonId) {
+                    this.dropdownButton.setCustomData(data);
+                    this.dropdownLabel.setText(data);
+                    this.selectedOption = this.options.get(data);
+                    button.highlight();
+                    continue;
+                }
+                if (button.isHighlighted()) {
+                    button.unhighlight();
+                }
             }
         }
+    }
+
+    public CustomPanelAPI getMainPanel() {
+        return this.mainPanel;
+    }
+
+    public Object getSelectedOption() {
+        return this.selectedOption;
     }
 }
