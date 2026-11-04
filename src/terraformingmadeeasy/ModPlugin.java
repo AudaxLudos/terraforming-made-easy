@@ -9,6 +9,7 @@ import terraformingmadeeasy.codex.TMECodexEntry;
 import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.listeners.DeathWorldScript;
 import terraformingmadeeasy.listeners.DevelopmentIndustryOptionProvider;
+import terraformingmadeeasy.loading.SpecStore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,11 @@ import java.util.Objects;
 import java.util.Set;
 
 public class ModPlugin extends BaseModPlugin {
+    @Override
+    public void onApplicationLoad() throws Exception {
+        SpecStore.loadTerraformingProjectSpecs();
+    }
+
     @Override
     public void onCodexDataGenerated() {
         // Have to set it here as planet specs are not loaded yet if I do it outside

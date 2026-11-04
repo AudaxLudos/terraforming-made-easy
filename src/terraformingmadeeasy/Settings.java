@@ -4,6 +4,10 @@ import com.fs.starfarer.api.Global;
 import lunalib.lunaSettings.LunaSettings;
 import lunalib.lunaSettings.LunaSettingsListener;
 import terraformingmadeeasy.ids.TMEIds;
+import terraformingmadeeasy.loading.specs.TerraformingProjectSpec;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Settings {
     public static final float REMOVAL_COST_MULTIPLIER = 0.2f;
@@ -63,6 +67,14 @@ public class Settings {
 
     public static boolean isAoTDVoKEnabled() {
         return Global.getSettings().getModManager().isModEnabled("aotd_vok");
+    }
+
+    public static List<TerraformingProjectSpec> getAllTerraformingProjectSpecs() {
+        return new ArrayList<>(Global.getSettings().getAllSpecs(TerraformingProjectSpec.class));
+    }
+
+    public static TerraformingProjectSpec getTerraformingProjectSpec(String id) {
+        return (TerraformingProjectSpec) Global.getSettings().getSpec(TerraformingProjectSpec.class, id, true);
     }
 
     public static class TMELunaSettingsListener implements LunaSettingsListener {
