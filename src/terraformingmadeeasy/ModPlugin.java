@@ -20,6 +20,7 @@ public class ModPlugin extends BaseModPlugin {
     @Override
     public void onApplicationLoad() throws Exception {
         SpecStore.loadTerraformingProjectSpecs();
+        SpecStore.loadMegastructureProjectSpecs();
     }
 
     @Override

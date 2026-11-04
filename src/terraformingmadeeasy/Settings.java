@@ -4,6 +4,7 @@ import com.fs.starfarer.api.Global;
 import lunalib.lunaSettings.LunaSettings;
 import lunalib.lunaSettings.LunaSettingsListener;
 import terraformingmadeeasy.ids.TMEIds;
+import terraformingmadeeasy.loading.specs.MegastructureProjectSpec;
 import terraformingmadeeasy.loading.specs.TerraformingProjectSpec;
 
 import java.util.ArrayList;
@@ -75,6 +76,14 @@ public class Settings {
 
     public static TerraformingProjectSpec getTerraformingProjectSpec(String id) {
         return (TerraformingProjectSpec) Global.getSettings().getSpec(TerraformingProjectSpec.class, id, true);
+    }
+
+    public static List<MegastructureProjectSpec> getAllMegastructureProjectSpecs() {
+        return new ArrayList<>(Global.getSettings().getAllSpecs(MegastructureProjectSpec.class));
+    }
+
+    public static MegastructureProjectSpec getMegastructureProjectSpec(String id) {
+        return (MegastructureProjectSpec) Global.getSettings().getSpec(MegastructureProjectSpec.class, id, true);
     }
 
     public static class TMELunaSettingsListener implements LunaSettingsListener {

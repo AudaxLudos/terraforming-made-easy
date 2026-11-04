@@ -1,0 +1,14 @@
+id,customEntityId,unlocked,cost,buildTime,buildLimit
+#required,#required,,#required,#required,#not used
+#unique id for the project,#id that will be used to identify and spawn the entity,,,,
+#note that custom entities from other mods might not work or crash the game,#ids can be found in data/config/custom_entities.json of starsector or mod folder,,,,
+#remove hash tags below to see it work,,,,,
+,,,,,
+#tme_rat_abyss_fabrication,rat_abyss_fabrication,TRUE,1,1,1
+#tme_rat_abyss_research,rat_abyss_research,TRUE,1,1,1
+,,,,,
+tme_coronal_tap,coronal_tap,TRUE,10000000,540,1
+tme_derelict_cryosleeper,derelict_cryosleeper,TRUE,6000000,360,1
+tme_inactive_gate,inactive_gate,TRUE,6000000,360,1
+tme_tme_station,tme_station,TRUE,4000000,180,3
+,,,,,
