@@ -106,7 +106,7 @@ public class TerraformingDialogDelegate extends BaseCustomDialogDelegate {
             inputsPanel.addUIElement(shadeOptionsElem).rightOfTop(mirrorOptionsElem, 20f);
             // Shade options elem END
 
-            this.mainElem.addCustom(inputsPanel, 10f);
+            this.mainElem.addCustom(inputsPanel, 8f);
         }
         // Mirror inputs elem END
 

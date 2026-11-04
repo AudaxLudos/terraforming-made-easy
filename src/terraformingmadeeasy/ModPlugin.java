@@ -10,6 +10,7 @@ import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import terraformingmadeeasy.codex.TMECodexEntry;
 import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.listeners.DeathWorldScript;
+import terraformingmadeeasy.listeners.MegastructureIndustryOptionProvider;
 import terraformingmadeeasy.listeners.TerraformingIndustryOptionProvider;
 import terraformingmadeeasy.loading.SpecStore;
 
@@ -182,6 +183,9 @@ public class ModPlugin extends BaseModPlugin {
         }
         if (!listenerManager.hasListenerOfClass(TerraformingIndustryOptionProvider.class)) {
             listenerManager.addListener(new TerraformingIndustryOptionProvider(), true);
+        }
+        if (!listenerManager.hasListenerOfClass(MegastructureIndustryOptionProvider.class)) {
+            listenerManager.addListener(new MegastructureIndustryOptionProvider(), true);
         }
     }
 
