@@ -4,166 +4,32 @@ import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.SectorAPI;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
-import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.codex.CodexDataV2;
-import com.fs.starfarer.api.loading.IndustrySpecAPI;
-import terraformingmadeeasy.codex.TMECodexEntry;
+import terraformingmadeeasy.codex.TerraformingIndustryCodexEntry;
 import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.listeners.DeathWorldScript;
 import terraformingmadeeasy.listeners.MegastructureIndustryOptionProvider;
 import terraformingmadeeasy.listeners.TerraformingIndustryOptionProvider;
 import terraformingmadeeasy.loading.SpecStore;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-
 public class ModPlugin extends BaseModPlugin {
     @Override
-    public void onApplicationLoad() throws Exception {
+    public void onApplicationLoad() {
         SpecStore.loadTerraformingProjectSpecs();
         SpecStore.loadMegastructureProjectSpecs();
     }
 
     @Override
     public void onCodexDataGenerated() {
-        // Have to set it here as planet specs are not loaded yet if I do it outside
-        Utils.AGRICULTURAL_LABORATORY_OPTIONS = Utils.getTerraformingOptions(TMEIds.AGRICULTURAL_LABORATORY);
-        Utils.ATMOSPHERE_REGULATOR_OPTIONS = Utils.getTerraformingOptions(TMEIds.ATMOSPHERE_REGULATOR);
-        Utils.CONSTRUCTION_GRID_OPTIONS = Utils.getMegastructureOptions();
-        Utils.ELEMENT_SYNTHESIZER_OPTIONS = Utils.getTerraformingOptions(TMEIds.ELEMENT_SYNTHESIZER);
-        Utils.GEOMORPHOLOGY_STATION_OPTIONS = Utils.getTerraformingOptions(TMEIds.GEOMORPHOLOGY_STATION);
-        Utils.MINERAL_REPLICATOR_OPTIONS = Utils.getTerraformingOptions(TMEIds.MINERAL_REPLICATOR);
-        Utils.PLANETARY_HOLOGRAM_OPTIONS = Utils.getPlanetaryHologramOptions();
-        Utils.STELLAR_MANUFACTORY_OPTIONS = Utils.getTerraformingOptions(TMEIds.STELLAR_MANUFACTORY);
-        Utils.TERRESTRIAL_ENGINE_OPTIONS = Utils.getTerraformingOptions(TMEIds.TERRESTRIAL_ENGINE);
-        Utils.UNIFICATION_CENTER_OPTIONS = Utils.getTerraformingOptions(TMEIds.UNIFICATION_CENTER);
-
-        if (Settings.isAoTDVoKEnabled()) {
-            List<Utils.ProjectData> projectsCopy = new ArrayList<>(Utils.UNIFICATION_CENTER_OPTIONS);
-
-            for (Utils.ProjectData condition : projectsCopy) {
-                StringBuilder needOne = new StringBuilder();
-                StringBuilder needAll = new StringBuilder("needAll:");
-                Set<String> ids = Utils.getUniqueIds(condition.likedIndustries);
-
-                // Skip the project conversion if the data contains aotd_vok industry ids already
-                boolean skip = Global.getSettings().getAllIndustrySpecs().stream()
-                        .filter(s -> s.getSourceMod() != null && Objects.equals(s.getSourceMod().getId(), "aotd_vok"))
-                        .map(IndustrySpecAPI::getId)
-                        .anyMatch(ids::contains);
-                if (skip) {
-                    continue;
-                }
-
-                for (String id : ids) {
-                    switch (id) {
-                        case Industries.MINING: {
-                            String newExpression = String.format(
-                                    "needOne:%s|%s|%s|%s, ",
-                                    "mining",
-                                    "aotd_plasma_harvester",
-                                    "aotd_mining_megaplex",
-                                    "pluto_station");
-                            needOne.append(newExpression);
-                            break;
-                        }
-                        case Industries.REFINING: {
-                            String newExpression = String.format(
-                                    "needOne:%s|%s|%s|%s, ",
-                                    "refining",
-                                    "aotd_crystalizator",
-                                    "aotd_enrichment_facility",
-                                    "pluto_station");
-                            needOne.append(newExpression);
-                            break;
-                        }
-                        case Industries.LIGHTINDUSTRY: {
-                            String newExpression = String.format(
-                                    "needOne:%s|%s|%s|%s, ",
-                                    "lightindustry",
-                                    "aotd_hightech_industry",
-                                    "aotd_druglight",
-                                    "aotd_commercial_manu");
-                            needOne.append(newExpression);
-                            break;
-                        }
-                        case Industries.ORBITALWORKS:
-                        case Industries.HEAVYINDUSTRY: {
-                            String newExpression = String.format(
-                                    "needOne:%s|%s|%s|%s|%s|%s|%s|%s|%s, ",
-                                    "orbitalworks",
-                                    "supplyheavy",
-                                    "aotd_macro_industrial_complex",
-                                    "weaponheavy",
-                                    "triheavy",
-                                    "hegeheavy",
-                                    "orbitalheavy",
-                                    "stella_manufactorium",
-                                    "nidavelir_complex");
-                            needOne.append(newExpression);
-                            break;
-                        }
-                        case Industries.FARMING: {
-                            String newExpression = String.format(
-                                    "needOne:%s|%s|%s|%s, ",
-                                    "farming",
-                                    "aotd_artisanal_farming",
-                                    "aotd_subsidised_farming",
-                                    "aotd_fishing_harbour");
-                            needOne.append(newExpression);
-                            break;
-                        }
-                        case Industries.FUELPROD: {
-                            String newExpression = String.format(
-                                    "needOne:%s|%s, ",
-                                    "fuelprod",
-                                    "aotd_fuel_refinery");
-                            needOne.append(newExpression);
-                            break;
-                        }
-                        case Industries.COMMERCE: {
-                            String newExpression = String.format(
-                                    "needOne:%s|%s, ",
-                                    "commerce",
-                                    "aotd_underworld");
-                            needOne.append(newExpression);
-                            break;
-                        }
-                        case Industries.MEGAPORT: {
-                            String newExpression = String.format(
-                                    "needOne:%s|%s, ",
-                                    "megaport",
-                                    "aotd_daedalus_array");
-                            needOne.append(newExpression);
-                            break;
-                        }
-                        case Industries.HIGHCOMMAND: {
-                            needAll.append(id).append("|");
-                        }
-                    }
-                }
-
-                if (needAll.length() > "needAll:".length()) {
-                    condition.likedIndustries = needOne.append(needAll.toString().replaceFirst(".$", "")).toString().replaceAll("\\s", "").trim();
-                } else {
-                    condition.likedIndustries = needOne.toString().replaceAll("\\s", "").trim();
-                }
-            }
-            Utils.UNIFICATION_CENTER_OPTIONS = projectsCopy;
-        }
-
-        TMECodexEntry.replaceTMEIndustryCodex(TMEIds.AGRICULTURAL_LABORATORY, Utils.AGRICULTURAL_LABORATORY_OPTIONS);
-        TMECodexEntry.replaceTMEIndustryCodex(TMEIds.ATMOSPHERE_REGULATOR, Utils.ATMOSPHERE_REGULATOR_OPTIONS);
-        TMECodexEntry.replaceTMEIndustryCodex(TMEIds.CONSTRUCTION_GRID, Utils.CONSTRUCTION_GRID_OPTIONS);
-        TMECodexEntry.replaceTMEIndustryCodex(TMEIds.ELEMENT_SYNTHESIZER, Utils.ELEMENT_SYNTHESIZER_OPTIONS);
-        TMECodexEntry.replaceTMEIndustryCodex(TMEIds.GEOMORPHOLOGY_STATION, Utils.GEOMORPHOLOGY_STATION_OPTIONS);
-        TMECodexEntry.replaceTMEIndustryCodex(TMEIds.MINERAL_REPLICATOR, Utils.MINERAL_REPLICATOR_OPTIONS);
-        TMECodexEntry.replaceTMEIndustryCodex(TMEIds.PLANETARY_HOLOGRAM, Utils.PLANETARY_HOLOGRAM_OPTIONS);
-        TMECodexEntry.replaceTMEIndustryCodex(TMEIds.STELLAR_MANUFACTORY, Utils.STELLAR_MANUFACTORY_OPTIONS);
-        TMECodexEntry.replaceTMEIndustryCodex(TMEIds.TERRESTRIAL_ENGINE, Utils.TERRESTRIAL_ENGINE_OPTIONS);
-        TMECodexEntry.replaceTMEIndustryCodex(TMEIds.UNIFICATION_CENTER, Utils.UNIFICATION_CENTER_OPTIONS);
+        TerraformingIndustryCodexEntry.replaceIndustryCodex(TMEIds.AGRICULTURAL_LABORATORY);
+        TerraformingIndustryCodexEntry.replaceIndustryCodex(TMEIds.ATMOSPHERE_REGULATOR);
+        TerraformingIndustryCodexEntry.replaceIndustryCodex(TMEIds.ELEMENT_SYNTHESIZER);
+        TerraformingIndustryCodexEntry.replaceIndustryCodex(TMEIds.GEOMORPHOLOGY_STATION);
+        TerraformingIndustryCodexEntry.replaceIndustryCodex(TMEIds.MINERAL_REPLICATOR);
+        TerraformingIndustryCodexEntry.replaceIndustryCodex(TMEIds.PLANETARY_HOLOGRAM);
+        TerraformingIndustryCodexEntry.replaceIndustryCodex(TMEIds.STELLAR_MANUFACTORY);
+        TerraformingIndustryCodexEntry.replaceIndustryCodex(TMEIds.TERRESTRIAL_ENGINE);
+        TerraformingIndustryCodexEntry.replaceIndustryCodex(TMEIds.UNIFICATION_CENTER);
         CodexDataV2.linkRelatedEntries();
     }
 
