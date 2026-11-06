@@ -1,6 +1,8 @@
 package terraformingmadeeasy;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.impl.campaign.ids.Industries;
+import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import lunalib.lunaSettings.LunaSettings;
 import lunalib.lunaSettings.LunaSettingsListener;
 import terraformingmadeeasy.ids.TMEIds;
@@ -9,6 +11,8 @@ import terraformingmadeeasy.loading.specs.TerraformingProjectSpec;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 public class Settings {
     public static final float REMOVAL_COST_MULTIPLIER = 0.2f;
@@ -84,6 +88,122 @@ public class Settings {
 
     public static MegastructureProjectSpec getMegastructureProjectSpec(String id) {
         return (MegastructureProjectSpec) Global.getSettings().getSpec(MegastructureProjectSpec.class, id, true);
+    }
+
+    public static void makeTerraformingSpecsCompatibleWithAoTD() {
+        // Have to set it here as planet specs are not loaded yet if I do it outside
+        if (Settings.isAoTDVoKEnabled()) {
+            List<TerraformingProjectSpec> projectSpecs = Settings.getAllTerraformingProjectSpecs().stream().filter(p -> p.getStructureId().equals(TMEIds.UNIFICATION_CENTER)).toList();
+
+            for (TerraformingProjectSpec project : projectSpecs) {
+                StringBuilder needOne = new StringBuilder();
+                StringBuilder needAll = new StringBuilder("needAll:");
+                Set<String> ids = Utils.getUniqueIds(project.getLikedIndustries());
+
+                // Skip the project conversion if the data contains aotd_vok industry ids already
+                boolean skip = Global.getSettings().getAllIndustrySpecs().stream()
+                        .filter(s -> s.getSourceMod() != null && Objects.equals(s.getSourceMod().getId(), "aotd_vok"))
+                        .map(IndustrySpecAPI::getId)
+                        .anyMatch(ids::contains);
+                if (skip) {
+                    continue;
+                }
+
+                for (String id : ids) {
+                    switch (id) {
+                        case Industries.MINING: {
+                            String newExpression = String.format(
+                                    "needOne:%s|%s|%s|%s, ",
+                                    "mining",
+                                    "aotd_plasma_harvester",
+                                    "aotd_mining_megaplex",
+                                    "pluto_station");
+                            needOne.append(newExpression);
+                            break;
+                        }
+                        case Industries.REFINING: {
+                            String newExpression = String.format(
+                                    "needOne:%s|%s|%s|%s, ",
+                                    "refining",
+                                    "aotd_crystalizator",
+                                    "aotd_enrichment_facility",
+                                    "pluto_station");
+                            needOne.append(newExpression);
+                            break;
+                        }
+                        case Industries.LIGHTINDUSTRY: {
+                            String newExpression = String.format(
+                                    "needOne:%s|%s|%s|%s, ",
+                                    "lightindustry",
+                                    "aotd_hightech_industry",
+                                    "aotd_druglight",
+                                    "aotd_commercial_manu");
+                            needOne.append(newExpression);
+                            break;
+                        }
+                        case Industries.ORBITALWORKS:
+                        case Industries.HEAVYINDUSTRY: {
+                            String newExpression = String.format(
+                                    "needOne:%s|%s|%s|%s|%s|%s|%s|%s|%s, ",
+                                    "orbitalworks",
+                                    "supplyheavy",
+                                    "aotd_macro_industrial_complex",
+                                    "weaponheavy",
+                                    "triheavy",
+                                    "hegeheavy",
+                                    "orbitalheavy",
+                                    "stella_manufactorium",
+                                    "nidavelir_complex");
+                            needOne.append(newExpression);
+                            break;
+                        }
+                        case Industries.FARMING: {
+                            String newExpression = String.format(
+                                    "needOne:%s|%s|%s|%s, ",
+                                    "farming",
+                                    "aotd_artisanal_farming",
+                                    "aotd_subsidised_farming",
+                                    "aotd_fishing_harbour");
+                            needOne.append(newExpression);
+                            break;
+                        }
+                        case Industries.FUELPROD: {
+                            String newExpression = String.format(
+                                    "needOne:%s|%s, ",
+                                    "fuelprod",
+                                    "aotd_fuel_refinery");
+                            needOne.append(newExpression);
+                            break;
+                        }
+                        case Industries.COMMERCE: {
+                            String newExpression = String.format(
+                                    "needOne:%s|%s, ",
+                                    "commerce",
+                                    "aotd_underworld");
+                            needOne.append(newExpression);
+                            break;
+                        }
+                        case Industries.MEGAPORT: {
+                            String newExpression = String.format(
+                                    "needOne:%s|%s, ",
+                                    "megaport",
+                                    "aotd_daedalus_array");
+                            needOne.append(newExpression);
+                            break;
+                        }
+                        case Industries.HIGHCOMMAND: {
+                            needAll.append(id).append("|");
+                        }
+                    }
+                }
+
+                if (needAll.length() > "needAll:".length()) {
+                    project.setLikedIndustries(needOne.append(needAll.toString().replaceFirst(".$", "")).toString().replaceAll("\\s", "").trim());
+                } else {
+                    project.setLikedIndustries(needOne.toString().replaceAll("\\s", "").trim());
+                }
+            }
+        }
     }
 
     public static class TMELunaSettingsListener implements LunaSettingsListener {

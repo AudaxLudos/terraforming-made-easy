@@ -22,6 +22,7 @@ public class ModPlugin extends BaseModPlugin {
 
     @Override
     public void onCodexDataGenerated() {
+        Settings.makeTerraformingSpecsCompatibleWithAoTD();
         TerraformingIndustryCodexEntry.replaceCodexEntry(TMEIds.AGRICULTURAL_LABORATORY);
         TerraformingIndustryCodexEntry.replaceCodexEntry(TMEIds.ATMOSPHERE_REGULATOR);
         TerraformingIndustryCodexEntry.replaceCodexEntry(TMEIds.ELEMENT_SYNTHESIZER);
