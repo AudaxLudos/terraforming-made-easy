@@ -8,9 +8,8 @@ import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.Settings;
 import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.industries.MegastructureIndustry;
-import terraformingmadeeasy.industries.TerraformingIndustry;
 import terraformingmadeeasy.loading.specs.MegastructureProjectSpec;
-import terraformingmadeeasy.loading.specs.TerraformingProjectSpec;
+import terraformingmadeeasy.ui.tooltips.MegastructureProjectTooltip;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -66,6 +65,7 @@ public class MegastructureOptionsPlugin extends RefreshableUIPlugin {
             if (!this.forCodex) {
                 Utils.setButtonEnabledOrHighlighted(rowButton, canAffordAndBuild, !canAffordAndBuild);
             }
+            rowButtonElem.addTooltipTo(new MegastructureProjectTooltip(project), rowButtonElem, TooltipMakerAPI.TooltipLocation.RIGHT);
             rowPanel.addUIElement(rowButtonElem).setXAlignOffset(-10f);
 
             TooltipMakerAPI colNameElem = rowPanel.createUIElement(columnOneWidth, 44f, false);

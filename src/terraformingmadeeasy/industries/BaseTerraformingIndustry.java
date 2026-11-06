@@ -211,7 +211,7 @@ public class BaseTerraformingIndustry extends BaseDevelopmentIndustry {
                 .getSpec(PlanetGenDataSpec.class, this.market.getPlanetEntity().getTypeId(), true);
         String result = "";
         if (spec != null) {
-             result = spec.getCategory();
+            result = spec.getCategory();
         }
 
         if (this.market.hasCondition(Conditions.HABITABLE)) {

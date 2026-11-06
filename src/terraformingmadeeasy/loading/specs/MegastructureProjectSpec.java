@@ -2,7 +2,6 @@ package terraformingmadeeasy.loading.specs;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomEntitySpecAPI;
-import com.fs.starfarer.api.characters.MarketConditionSpecAPI;
 
 public class MegastructureProjectSpec {
     private String id;

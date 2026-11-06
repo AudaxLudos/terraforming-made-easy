@@ -352,7 +352,7 @@ public class Utils {
 
         public OrbitData(SectorEntityToken entity, float orbitAngle, float orbitRadius, float orbitDays) {
             this.entity = entity;
-            this.orbitAngle =orbitAngle;
+            this.orbitAngle = orbitAngle;
             this.orbitRadius = orbitRadius;
             this.orbitDays = orbitDays;
         }
