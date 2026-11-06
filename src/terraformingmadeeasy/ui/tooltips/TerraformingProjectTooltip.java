@@ -51,10 +51,11 @@ public class TerraformingProjectTooltip extends BaseTooltipCreator {
     }
 
     public void displayPreferences(TooltipMakerAPI tooltip, String textExpression, boolean isHated, boolean isCondition, float pad) {
+        boolean conditionForRemoval = this.market != null && this.market.hasCondition(this.project.getConditionId());
         String titlePrefix = isHated ? "Removes " : "Required ";
         String titleSuffix = isCondition ? "Conditions" : "Industries";
 
-        if (textExpression == null || textExpression.isEmpty()) {
+        if (textExpression == null || textExpression.isEmpty() || conditionForRemoval) {
             tooltip.addPara(titlePrefix + titleSuffix + ": %s", pad, Misc.getHighlightColor(), "None");
             return;
         }

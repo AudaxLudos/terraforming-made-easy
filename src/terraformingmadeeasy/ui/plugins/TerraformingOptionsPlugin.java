@@ -59,15 +59,15 @@ public class TerraformingOptionsPlugin extends RefreshableUIPlugin {
 
         for (TerraformingProjectSpec project : filteredProjects) {
             MarketConditionSpecAPI spec = Global.getSettings().getMarketConditionSpec(project.getConditionId());
-            boolean marketHasCondition = this.market != null && this.market.hasCondition(spec.getId());
+            boolean conditionForRemoval = this.market != null && this.market.hasCondition(spec.getId());
             float buildTime = Math.round(project.getBuildTime() * Settings.BUILD_TIME_MULTIPLIER);
             float baseCost = project.getCost();
-            float removalCostMult = !marketHasCondition ? 1f : Settings.REMOVAL_COST_MULTIPLIER;
+            float removalCostMult = !conditionForRemoval ? 1f : Settings.REMOVAL_COST_MULTIPLIER;
             float totalCost = Math.round(baseCost * removalCostMult * Settings.BUILD_COST_MULTIPLIER);
             boolean canAfford = Utils.canAfford(totalCost);
-            boolean canAffordAndBuild = canAfford && Utils.canPerformProject(this.market, project);
+            boolean canAffordAndBuild = canAfford && (conditionForRemoval || Utils.canPerformProject(this.market, project));
             String name = spec.getName();
-            String prefix = marketHasCondition ? "Remove " : "Add ";
+            String prefix = conditionForRemoval ? "Remove " : "Add ";
             String suffix = "";
             String icon = spec.getIcon();
 
