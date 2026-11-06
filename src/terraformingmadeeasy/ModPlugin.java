@@ -5,6 +5,7 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.SectorAPI;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
 import com.fs.starfarer.api.impl.codex.CodexDataV2;
+import terraformingmadeeasy.codex.MegastructureIndustryCodexEntry;
 import terraformingmadeeasy.codex.TerraformingIndustryCodexEntry;
 import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.listeners.DeathWorldScript;
@@ -21,15 +22,17 @@ public class ModPlugin extends BaseModPlugin {
 
     @Override
     public void onCodexDataGenerated() {
-        TerraformingIndustryCodexEntry.replaceIndustryCodex(TMEIds.AGRICULTURAL_LABORATORY);
-        TerraformingIndustryCodexEntry.replaceIndustryCodex(TMEIds.ATMOSPHERE_REGULATOR);
-        TerraformingIndustryCodexEntry.replaceIndustryCodex(TMEIds.ELEMENT_SYNTHESIZER);
-        TerraformingIndustryCodexEntry.replaceIndustryCodex(TMEIds.GEOMORPHOLOGY_STATION);
-        TerraformingIndustryCodexEntry.replaceIndustryCodex(TMEIds.MINERAL_REPLICATOR);
-        TerraformingIndustryCodexEntry.replaceIndustryCodex(TMEIds.PLANETARY_HOLOGRAM);
-        TerraformingIndustryCodexEntry.replaceIndustryCodex(TMEIds.STELLAR_MANUFACTORY);
-        TerraformingIndustryCodexEntry.replaceIndustryCodex(TMEIds.TERRESTRIAL_ENGINE);
-        TerraformingIndustryCodexEntry.replaceIndustryCodex(TMEIds.UNIFICATION_CENTER);
+        TerraformingIndustryCodexEntry.replaceCodexEntry(TMEIds.AGRICULTURAL_LABORATORY);
+        TerraformingIndustryCodexEntry.replaceCodexEntry(TMEIds.ATMOSPHERE_REGULATOR);
+        TerraformingIndustryCodexEntry.replaceCodexEntry(TMEIds.ELEMENT_SYNTHESIZER);
+        TerraformingIndustryCodexEntry.replaceCodexEntry(TMEIds.GEOMORPHOLOGY_STATION);
+        TerraformingIndustryCodexEntry.replaceCodexEntry(TMEIds.MINERAL_REPLICATOR);
+        TerraformingIndustryCodexEntry.replaceCodexEntry(TMEIds.PLANETARY_HOLOGRAM);
+        TerraformingIndustryCodexEntry.replaceCodexEntry(TMEIds.STELLAR_MANUFACTORY);
+        TerraformingIndustryCodexEntry.replaceCodexEntry(TMEIds.TERRESTRIAL_ENGINE);
+        TerraformingIndustryCodexEntry.replaceCodexEntry(TMEIds.UNIFICATION_CENTER);
+
+        MegastructureIndustryCodexEntry.replaceCodexEntry(TMEIds.CONSTRUCTION_GRID);
         CodexDataV2.linkRelatedEntries();
     }
 

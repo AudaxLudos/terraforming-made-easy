@@ -1,5 +1,9 @@
 package terraformingmadeeasy.loading.specs;
 
+import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.CustomEntitySpecAPI;
+import com.fs.starfarer.api.characters.MarketConditionSpecAPI;
+
 public class MegastructureProjectSpec {
     private String id;
     private String customEntityId;
@@ -9,6 +13,10 @@ public class MegastructureProjectSpec {
     private float cost;
     private float buildTime;
     private float buildLimit;
+
+    public CustomEntitySpecAPI getCustomEntitySpec() {
+        return Global.getSettings().getCustomEntitySpec(this.customEntityId);
+    }
 
     public String getId() {
         return this.id;

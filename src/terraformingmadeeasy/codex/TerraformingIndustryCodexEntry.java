@@ -42,7 +42,7 @@ public class TerraformingIndustryCodexEntry extends CodexEntryV2 implements Cust
         }
     }
 
-    public static void replaceIndustryCodex(String industryId) {
+    public static void replaceCodexEntry(String industryId) {
         IndustrySpecAPI spec = Global.getSettings().getIndustrySpec(industryId);
 
         // Remove existing entry from parent
