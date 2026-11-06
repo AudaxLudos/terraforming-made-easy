@@ -8,6 +8,7 @@ import terraformingmadeeasy.Settings;
 import terraformingmadeeasy.Utils;
 import terraformingmadeeasy.industries.TerraformingIndustry;
 import terraformingmadeeasy.loading.specs.TerraformingProjectSpec;
+import terraformingmadeeasy.ui.tooltips.TerraformingProjectTooltip;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -82,6 +83,7 @@ public class TerraformingOptionsPlugin extends RefreshableUIPlugin {
             if (!this.forCodex) {
                 Utils.setButtonEnabledOrHighlighted(rowButton, canAffordAndBuild, !canAffordAndBuild);
             }
+            rowButtonElem.addTooltipTo(new TerraformingProjectTooltip(project, this.market), rowButtonElem, TooltipMakerAPI.TooltipLocation.RIGHT);
             rowPanel.addUIElement(rowButtonElem).setXAlignOffset(-10f);
 
             TooltipMakerAPI colNameElem = rowPanel.createUIElement(columnOneWidth, 44f, false);
