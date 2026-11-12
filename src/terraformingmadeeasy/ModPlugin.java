@@ -32,7 +32,6 @@ public class ModPlugin extends BaseModPlugin {
         TerraformingIndustryCodexEntry.replaceCodexEntry(TMEIds.STELLAR_MANUFACTORY);
         TerraformingIndustryCodexEntry.replaceCodexEntry(TMEIds.TERRESTRIAL_ENGINE);
         TerraformingIndustryCodexEntry.replaceCodexEntry(TMEIds.UNIFICATION_CENTER);
-
         MegastructureIndustryCodexEntry.replaceCodexEntry(TMEIds.CONSTRUCTION_GRID);
         CodexDataV2.linkRelatedEntries();
     }
@@ -41,6 +40,10 @@ public class ModPlugin extends BaseModPlugin {
     public void onGameLoad(boolean newGame) {
         addModSettings();
         addScriptsIfNeeded();
+    }
+
+    public void addModSettings() {
+        Settings.load();
     }
 
     public void addScriptsIfNeeded() {
@@ -57,9 +60,5 @@ public class ModPlugin extends BaseModPlugin {
         if (!listenerManager.hasListenerOfClass(MegastructureIndustryOptionProvider.class)) {
             listenerManager.addListener(new MegastructureIndustryOptionProvider(), true);
         }
-    }
-
-    public void addModSettings() {
-        Settings.load();
     }
 }

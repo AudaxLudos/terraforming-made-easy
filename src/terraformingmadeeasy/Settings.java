@@ -20,10 +20,6 @@ public class Settings {
     public static float BUILD_COST_MULTIPLIER = 1.0f;
 
     public static void load() {
-        loadSettings();
-    }
-
-    public static void loadSettings() {
         if (isLunaLibEnabled()) {
             LunaSettings.addSettingsListener(new TMELunaSettingsListener());
         }
@@ -31,11 +27,11 @@ public class Settings {
     }
 
     public static void setSettings() {
-        BUILD_TIME_MULTIPLIER = getBuildCostValue(getString("tme_build_time_settings"), "tme_custom_build_time_settings");
-        BUILD_COST_MULTIPLIER = getBuildCostValue(getString("tme_build_cost_settings"), "tme_custom_build_cost_settings");
+        BUILD_TIME_MULTIPLIER = getBuildCostOrTimeMult(getString("tme_build_time_multiplier"), "tme_custom_build_time_multiplier");
+        BUILD_COST_MULTIPLIER = getBuildCostOrTimeMult(getString("tme_build_cost_multiplier"), "tme_custom_build_cost_multiplier");
     }
 
-    public static float getBuildCostValue(String setting, String customFieldId) {
+    public static float getBuildCostOrTimeMult(String setting, String customFieldId) {
         return switch (setting.toLowerCase()) {
             case "low", "fast" -> 0.5f;
             case "high", "slow" -> 2.0f;
