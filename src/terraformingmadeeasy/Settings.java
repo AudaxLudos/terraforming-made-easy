@@ -5,7 +5,7 @@ import lunalib.lunaSettings.LunaSettings;
 import lunalib.lunaSettings.LunaSettingsListener;
 import terraformingmadeeasy.ids.TMEIds;
 
-public class Settings implements LunaSettingsListener {
+public class Settings {
     public static final float REMOVAL_COST_MULTIPLIER = 0.2f;
     public static float BUILD_TIME_MULTIPLIER = 1.0f;
     public static float BUILD_COST_MULTIPLIER = 1.0f;
@@ -16,7 +16,7 @@ public class Settings implements LunaSettingsListener {
 
     public static void loadSettings() {
         if (isLunaLibEnabled()) {
-            LunaSettings.addSettingsListener(new Settings());
+            LunaSettings.addSettingsListener(new TMELunaSettingsListener());
         }
         setSettings();
     }
@@ -27,29 +27,19 @@ public class Settings implements LunaSettingsListener {
     }
 
     public static float getBuildCostValue(String setting, String customFieldId) {
-        float value = 1f;
-        switch (setting.toLowerCase()) {
-            case "low":
-            case "fast":
-                value = 0.5f;
-                break;
-            case "high":
-            case "slow":
-                value = 2.0f;
-                break;
-            case "custom":
-                if (isLunaLibEnabled()) {
-                    value = getFloat(customFieldId);
-                } else {
-                    value = Global.getSettings().getFloat(customFieldId);
-                }
-                break;
-        }
-        return value;
+        return switch (setting.toLowerCase()) {
+            case "low", "fast" -> 0.5f;
+            case "high", "slow" -> 2.0f;
+            case "custom" -> getFloat(customFieldId);
+            default -> 1f; // Normal setting
+        };
     }
 
     public static float getFloat(String fieldId) {
-        Float val = LunaSettings.getFloat(TMEIds.MOD_ID, fieldId);
+        Float val = Global.getSettings().getFloat(fieldId);
+        if (isLunaLibEnabled()) {
+            val = LunaSettings.getFloat(TMEIds.MOD_ID, fieldId);
+        }
         if (val == null) {
             return 1f;
         }
@@ -57,9 +47,12 @@ public class Settings implements LunaSettingsListener {
     }
 
     public static String getString(String fieldId) {
-        String val = LunaSettings.getString(TMEIds.MOD_ID, fieldId);
+        String val = Global.getSettings().getString(fieldId);
+        if (isLunaLibEnabled()) {
+            val = LunaSettings.getString(TMEIds.MOD_ID, fieldId);
+        }
         if (val == null || val.isEmpty()) {
-            return "normal";
+            return "";
         }
         return val;
     }
@@ -72,8 +65,10 @@ public class Settings implements LunaSettingsListener {
         return Global.getSettings().getModManager().isModEnabled("aotd_vok");
     }
 
-    @Override
-    public void settingsChanged(String s) {
-        setSettings();
+    public static class TMELunaSettingsListener implements LunaSettingsListener {
+        @Override
+        public void settingsChanged(String s) {
+            Settings.setSettings();
+        }
     }
 }
