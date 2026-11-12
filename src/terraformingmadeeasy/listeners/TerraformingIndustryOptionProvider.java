@@ -5,7 +5,7 @@ import com.fs.starfarer.api.campaign.listeners.BaseIndustryOptionProvider;
 import com.fs.starfarer.api.campaign.listeners.DialogCreatorUI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import terraformingmadeeasy.ids.TMEIds;
+import terraformingmadeeasy.TMEIds;
 import terraformingmadeeasy.industries.TerraformingIndustry;
 import terraformingmadeeasy.ui.dialogs.ConfirmDialogDelegate;
 import terraformingmadeeasy.ui.dialogs.TerraformingDialogDelegate;

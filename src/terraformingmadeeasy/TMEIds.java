@@ -1,4 +1,4 @@
-package terraformingmadeeasy.ids;
+package terraformingmadeeasy;
 
 public class TMEIds {
     // TME conditions

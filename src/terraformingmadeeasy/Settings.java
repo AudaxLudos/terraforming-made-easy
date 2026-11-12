@@ -5,7 +5,6 @@ import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import lunalib.lunaSettings.LunaSettings;
 import lunalib.lunaSettings.LunaSettingsListener;
-import terraformingmadeeasy.ids.TMEIds;
 import terraformingmadeeasy.loading.specs.MegastructureProjectSpec;
 import terraformingmadeeasy.loading.specs.TerraformingProjectSpec;
 

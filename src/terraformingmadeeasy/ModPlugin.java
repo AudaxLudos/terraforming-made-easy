@@ -7,8 +7,7 @@ import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
 import com.fs.starfarer.api.impl.codex.CodexDataV2;
 import terraformingmadeeasy.codex.MegastructureIndustryCodexEntry;
 import terraformingmadeeasy.codex.TerraformingIndustryCodexEntry;
-import terraformingmadeeasy.ids.TMEIds;
-import terraformingmadeeasy.listeners.DeathWorldScript;
+import terraformingmadeeasy.listeners.DeathWorldListener;
 import terraformingmadeeasy.listeners.MegastructureIndustryOptionProvider;
 import terraformingmadeeasy.listeners.TerraformingIndustryOptionProvider;
 import terraformingmadeeasy.loading.SpecStore;
@@ -18,6 +17,7 @@ public class ModPlugin extends BaseModPlugin {
     public void onApplicationLoad() {
         SpecStore.loadTerraformingProjectSpecs();
         SpecStore.loadMegastructureProjectSpecs();
+        Settings.load();
     }
 
     @Override
@@ -38,12 +38,7 @@ public class ModPlugin extends BaseModPlugin {
 
     @Override
     public void onGameLoad(boolean newGame) {
-        addModSettings();
         addScriptsIfNeeded();
-    }
-
-    public void addModSettings() {
-        Settings.load();
     }
 
     public void addScriptsIfNeeded() {
@@ -51,8 +46,8 @@ public class ModPlugin extends BaseModPlugin {
 
         // Add listeners
         ListenerManagerAPI listenerManager = sector.getListenerManager();
-        if (!listenerManager.hasListenerOfClass(DeathWorldScript.class)) {
-            listenerManager.addListener(new DeathWorldScript(), true);
+        if (!listenerManager.hasListenerOfClass(DeathWorldListener.class)) {
+            listenerManager.addListener(new DeathWorldListener(), true);
         }
         if (!listenerManager.hasListenerOfClass(TerraformingIndustryOptionProvider.class)) {
             listenerManager.addListener(new TerraformingIndustryOptionProvider(), true);

@@ -25,7 +25,7 @@ import com.fs.starfarer.api.util.WeightedRandomPicker;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import org.apache.log4j.Logger;
 import terraformingmadeeasy.Settings;
-import terraformingmadeeasy.ids.TMEIds;
+import terraformingmadeeasy.TMEIds;
 import terraformingmadeeasy.loading.specs.MegastructureProjectSpec;
 
 import java.awt.*;

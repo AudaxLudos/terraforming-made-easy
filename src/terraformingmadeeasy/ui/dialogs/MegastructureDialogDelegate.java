@@ -11,7 +11,7 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import org.lwjgl.util.vector.Vector2f;
 import terraformingmadeeasy.Settings;
-import terraformingmadeeasy.ids.TMEIds;
+import terraformingmadeeasy.TMEIds;
 import terraformingmadeeasy.industries.MegastructureIndustry;
 import terraformingmadeeasy.loading.specs.MegastructureProjectSpec;
 import terraformingmadeeasy.ui.plugins.DropdownPlugin;

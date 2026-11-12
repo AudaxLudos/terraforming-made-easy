@@ -8,8 +8,8 @@ import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.impl.campaign.population.PopulationComposition;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import terraformingmadeeasy.TMEIds;
 import terraformingmadeeasy.Utils;
-import terraformingmadeeasy.ids.TMEIds;
 
 public class HiveWorld extends BaseMarketConditionPlugin implements MarketImmigrationModifier {
     public static final int MAX_MARKET_SIZE_MOD = 1;

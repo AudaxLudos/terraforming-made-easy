@@ -7,8 +7,8 @@ import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import terraformingmadeeasy.TMEIds;
 import terraformingmadeeasy.Utils;
-import terraformingmadeeasy.ids.TMEIds;
 
 public class WasteWorld extends BaseMarketConditionPlugin {
     public static final float OTHER_MARKET_ACCESS_MOD = 0.25f;

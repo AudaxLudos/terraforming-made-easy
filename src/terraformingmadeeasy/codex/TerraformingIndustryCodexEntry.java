@@ -12,7 +12,7 @@ import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import terraformingmadeeasy.Settings;
-import terraformingmadeeasy.ids.TMEIds;
+import terraformingmadeeasy.TMEIds;
 import terraformingmadeeasy.loading.specs.TerraformingProjectSpec;
 import terraformingmadeeasy.ui.plugins.TerraformingOptionsPlugin;
 
