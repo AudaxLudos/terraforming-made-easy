@@ -1,5 +1,14 @@
+### 2.10.0
+#### Not Save Compatible with versions below 2.9.8
+- Update game version to 0.98.5a
+- Fix memory leak caused by duplicate listener registration when reloading saves
+- Fix crash caused by mismatched mod vanilla setting ID references
+- Remove requirements when removing planetary conditions
+- Update UI and implementations for terraforming and construction grid industries using reworked project data
+- Rework terraforming and megastructure project data
+- Fix startup crash caused by an unintended LunaLib dependency
+
 ### 2.9.8
-- Release 2.9.8
 - Update aotd mod compatibility
 - Fix crash when terraforming from unknown planet type
 
