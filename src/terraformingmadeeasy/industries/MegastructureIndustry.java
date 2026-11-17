@@ -419,10 +419,7 @@ public class MegastructureIndustry extends BaseIndustry {
             market.getConnectedEntities().add(station);
             station.getMemoryWithoutUpdate().set("$hasStation", true);
             Global.getSector().getEconomy().addMarket(market, true);
-            // Needed to fix bug where market size instantly raises to max
-            Global.getSector().getCampaignUI().showInteractionDialog(station);
-            Global.getSector().getCampaignUI().getCurrentInteractionDialog().getTextPanel().clear();
-            Global.getSector().getCampaignUI().getCurrentInteractionDialog().getTextPanel().addPara("Sorry, I have to force open a dialog to fix a bug that instantly increases the population size of a recently finished Orbital Station Megastructure to 6 (haven't found any other solutions)", Misc.getHighlightColor());
+            Global.getSector().getEconomy().doubleStep(); // Fixes bug where market size instantly raises to max
         } else {
             SectorEntityToken entity = system.addCustomEntity(null, null, customEntityId, Factions.NEUTRAL);
             entity.setCircularOrbit(orbitEntity, orbitAngle, orbitRadius, orbitDays);
