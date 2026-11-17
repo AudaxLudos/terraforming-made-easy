@@ -142,6 +142,9 @@ public class MegastructureIndustry extends BaseIndustry {
     }
 
     protected String getProgressText() {
+        if (hasOngoingProject()) {
+            return "constructing";
+        }
         return "building";
     }
 
