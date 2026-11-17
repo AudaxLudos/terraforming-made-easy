@@ -3,7 +3,9 @@ package terraformingmadeeasy.ui.plugins;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.BaseCustomUIPanelPlugin;
 import com.fs.starfarer.api.graphics.SpriteAPI;
+import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
+import org.lwjgl.input.Keyboard;
 import terraformingmadeeasy.Utils;
 
 import java.awt.*;
@@ -110,6 +112,28 @@ public class DropdownPlugin extends BaseCustomUIPanelPlugin {
             float y = position.getY();
 
             Utils.renderQuadBorder(x, y, width, height, com.fs.starfarer.api.util.Misc.getDarkPlayerColor(), alphaMult, 1f);
+        }
+    }
+
+    @Override
+    public void processInput(List<InputEventAPI> events) {
+        for (InputEventAPI event : events) {
+            if (!this.openMenu) {
+                continue;
+            }
+            if (event.isMouseMoveEvent()) {
+                continue;
+            }
+            if (event.getEventValue() == Keyboard.KEY_ESCAPE) {
+                buttonPressed(null);
+                event.consume();
+                continue;
+            }
+            if (event.isMouseEvent() && !this.menuPanel.getPosition().containsEvent(event)) {
+                buttonPressed(null);
+                event.consume();
+                continue;
+            }
         }
     }
 
