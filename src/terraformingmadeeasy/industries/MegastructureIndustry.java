@@ -47,22 +47,23 @@ public class MegastructureIndustry extends BaseIndustry {
     protected float aiCoreBuildProgressRemoved = 0f;
     protected String prevAICoreId = null;
 
-    public static boolean canBuildMegastructure(MarketAPI market, String customEntityId) {
-        if (market == null) {
+    public static boolean canBuildMegastructure(MarketAPI market, MegastructureProjectSpec project) {
+        if (market == null || project == null) {
             return true;
         }
+
         StarSystemAPI system = market.getStarSystem();
-        if (Objects.equals(customEntityId, Entities.CORONAL_TAP)) {
-            return system.getEntitiesWithTag(Tags.CORONAL_TAP).isEmpty() && Objects.equals(system.getStar().getTypeId(), StarTypes.BLUE_SUPERGIANT);
-        } else if (Objects.equals(customEntityId, Entities.DERELICT_CRYOSLEEPER)) {
-            return system.getEntitiesWithTag(Tags.CRYOSLEEPER).isEmpty();
-        } else if (Objects.equals(customEntityId, Entities.INACTIVE_GATE)) {
-            return system.getEntitiesWithTag(Tags.GATE).isEmpty();
-        } else if (Objects.equals(customEntityId, TMEIds.TME_STATION)) {
-            return system.getEntitiesWithTag(TMEIds.TME_STATION).size() < 3;
+        if (Objects.equals(project.getCustomEntityId(), Entities.CORONAL_TAP)) {
+            return system.getEntitiesWithTag(Tags.CORONAL_TAP).size() < project.getBuildLimit() && Objects.equals(system.getStar().getTypeId(), StarTypes.BLUE_SUPERGIANT);
+        } else if (Objects.equals(project.getCustomEntityId(), Entities.DERELICT_CRYOSLEEPER)) {
+            return system.getEntitiesWithTag(Tags.CRYOSLEEPER).size() < project.getBuildLimit();
+        } else if (Objects.equals(project.getCustomEntityId(), Entities.INACTIVE_GATE)) {
+            return system.getEntitiesWithTag(Tags.GATE).size() < project.getBuildLimit();
+        } else if (Objects.equals(project.getCustomEntityId(), TMEIds.TME_STATION)) {
+            return system.getEntitiesWithTag(TMEIds.TME_STATION).size() < project.getBuildLimit();
         }
 
-        return system.getEntitiesWithTag(customEntityId).isEmpty();
+        return false;
     }
 
     @Override

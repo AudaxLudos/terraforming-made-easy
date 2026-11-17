@@ -54,7 +54,7 @@ public class MegastructureOptionsPlugin extends RefreshableUIPlugin {
             float buildTime = Math.round(project.getBuildTime() * Settings.BUILD_TIME_MULTIPLIER);
             float totalCost = Math.round(project.getCost() * Settings.BUILD_COST_MULTIPLIER);
             boolean canAfford = Utils.canAfford(totalCost);
-            boolean canAffordAndBuild = canAfford && MegastructureIndustry.canBuildMegastructure(this.market, spec.getId());
+            boolean canAffordAndBuild = canAfford && MegastructureIndustry.canBuildMegastructure(this.market, project);
             String name = spec.getDefaultName();
             String icon = spec.getInteractionImage();
 

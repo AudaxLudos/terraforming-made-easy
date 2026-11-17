@@ -30,8 +30,8 @@ public class SpecStore {
                 spec.setUnlocked(rowData.optBoolean("unlocked"));
                 spec.setChangeGasGiants(rowData.optBoolean("changeGasGiants"));
 
-                spec.setCost((float) rowData.optDouble("cost", 1337f)); // Elite
-                spec.setBuildTime((float) rowData.optDouble("buildTime", 42f)); // Life
+                spec.setCost((float) rowData.optDouble("cost", 1f));
+                spec.setBuildTime((float) rowData.optDouble("buildTime", 1f));
 
                 spec.setLikedConditions(rowData.optString("likedConditions"));
                 spec.setHatedConditions(rowData.optString("hatedConditions"));
@@ -62,8 +62,9 @@ public class SpecStore {
 
                 spec.setUnlocked(rowData.optBoolean("unlocked"));
 
-                spec.setCost((float) rowData.optDouble("cost", 1337f)); // Elite
-                spec.setBuildTime((float) rowData.optDouble("buildTime", 42f)); // Life
+                spec.setCost((float) rowData.optDouble("cost", 1f));
+                spec.setBuildTime((float) rowData.optDouble("buildTime", 1f));
+                spec.setBuildLimit((float) rowData.optDouble("buildLimit", 1f));
 
                 Global.getSettings().putSpec(MegastructureProjectSpec.class, spec.getId(), spec);
             }
