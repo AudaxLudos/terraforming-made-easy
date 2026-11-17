@@ -39,6 +39,7 @@ public class DropdownPlugin extends BaseCustomUIPanelPlugin {
         if (this.options != null && !this.options.isEmpty()) {
             Map.Entry<String, Object> entry = this.options.entrySet().iterator().next();
             optionId = entry.getKey();
+            this.selectedOption = entry.getValue();
         }
 
         this.mainElem = this.mainPanel.createUIElement(this.width, 25f, false);
