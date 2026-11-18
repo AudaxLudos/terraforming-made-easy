@@ -1,5 +1,12 @@
+### 2.10.6
+#### Not compatible with saves on 2.9.8 or below
+- Fix orbital station project market reaching max size after completion
+- Fix crash when starting a megastructure project caused by an uninitialized orbit focus
+- Close dropdown menu when mouse input occurs outside the menu
+- Implement build limit data from megastructure project spec
+
 ### 2.10.0
-#### Not Save Compatible with versions below 2.9.8
+#### Not compatible with saves on 2.9.8 or below
 - Update game version to 0.98.5a
 - Fix memory leak caused by duplicate listener registration when reloading saves
 - Fix crash caused by mismatched mod vanilla setting ID references
